@@ -35,9 +35,37 @@ jobs:
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          # Publish the original entry point at the root for GitHub Pages (main / root).
-          cp -a website/. ./
-          git add website upstream-source
+          # Preserve the branded root page; collect files referenced dynamically by the player.
+          python3 - <<'PY'
+          import re, urllib.request, pathlib, urllib.parse, time
+          source = pathlib.Path('js/sidPlayer.js').read_text(encoding='utf-8')
+          base = 'https://level3.jojati.com/sidplayer/'
+          groups = {
+              'sids': sorted(set(re.findall(r'file:\\s*["\\']([^"\\']+\\.sid)["\\']', source, re.I))),
+              'images': sorted(set(re.findall(r'image:\\s*["\\']([^"\\']+\\.(?:gif|png|jpg))["\\']', source, re.I))),
+          }
+          for folder, names in groups.items():
+              pathlib.Path(folder).mkdir(exist_ok=True)
+              for name in names:
+                  if '/' in name or '..' in name: continue
+                  target = pathlib.Path(folder, name)
+                  if target.exists(): continue
+                  url = urllib.parse.urljoin(base, folder + '/' + urllib.parse.quote(name))
+                  try:
+                      req = urllib.request.Request(url, headers={'User-Agent':'Mozilla/5.0 (archival mirror)'})
+                      with urllib.request.urlopen(req, timeout=35) as resp:
+                          data = resp.read()
+                      if folder == 'sids' and not data.startswith((b'PSID',b'RSID')):
+                          raise ValueError('not a SID file')
+                      if folder == 'images' and not (data[:6] in (b'GIF87a', b'GIF89a') or data.startswith((b'\\x89PNG', b'\\xff\\xd8'))):
+                          raise ValueError('not a valid image')
+                      target.write_bytes(data)
+                      print('OK',target,len(data))
+                  except Exception as exc:
+                      print('MISSING',url,str(exc))
+              print(folder,'retrieved:',len(list(pathlib.Path(folder).iterdir())),'expected:',len(names))
+          PY
+          git add -A website upstream-source sids images
           git add -A . ':!.github'
           if ! git diff --cached --quiet; then
             git commit -m 'Archive original Jojati SID Player web assets and upstream source'
