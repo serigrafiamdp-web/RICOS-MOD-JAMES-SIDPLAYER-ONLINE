@@ -20,6 +20,11 @@ var SidPlayer = function() {
     { name: 'C64 Cyan', line: '#70d7c7', fill: 'rgba(112,215,199,0.55)', background: '#24244f' },
     { name: 'Retro Magenta', line: '#ff88d0', fill: 'rgba(255,95,183,0.5)', background: '#16091d' }
   ];
+  // TEST03: Automatic playlist based on documented subtune times.
+  this.autoAdvance = false;
+  this.autoElapsedSamples = 0;
+  this.autoFallbackSeconds = 180; // Some subtunes do not specify a duration.
+  this.autoLoading = false;
   this.songInfo = {};
   this.currentSubsong = 0;
   this.dialogManager = null;
@@ -1424,6 +1429,13 @@ SidPlayer.prototype = {
       sidPlayer.showChooseSid();
     });
 
+    $('#autoAdvanceButton').on('click', function() {
+      sidPlayer.autoAdvance = !sidPlayer.autoAdvance;
+      sidPlayer.updateAutoButton();
+      // Turning AUTO on starts from the currently playing subtune's elapsed time.
+      sidPlayer.checkAutoAdvance();
+    });
+
     $('#nextSid').on('click', function() {
       sidPlayer.nextSid();
     });
@@ -1619,6 +1631,7 @@ SidPlayer.prototype = {
   },
 
   loadSIDFile: function(file) {
+    this.autoLoading = true;
     this.initWebAudio();
     var sidPlayer = this;
     var fileReader = new FileReader();
@@ -1633,6 +1646,7 @@ SidPlayer.prototype = {
 
   },
   loadSID: function(filename) {
+    this.autoLoading = true;
     this.initWebAudio();
 
     var xhr = new XMLHttpRequest();
@@ -1643,14 +1657,21 @@ SidPlayer.prototype = {
     xhr.onload = function(e) {
       // response is unsigned 8 bit integer
       var data = new Uint8Array(this.response); 
-      sidPlayer.loadSIDData(data);
+      if(this.status >= 200 && this.status < 300 && this.response && this.response.byteLength > 0) {
+        sidPlayer.loadSIDData(data);
+      } else {
+        sidPlayer.autoLoading = false;
+        console.warn('Unable to load SID:', filename, this.status);
+      }
 
     };
+    xhr.onerror = function() { sidPlayer.autoLoading = false; };
      
     xhr.send();
   },
 
   stop: function() {
+    this.autoElapsedSamples = 0;
     this.isPaused = false;
     this.sidHasSamples = false;    
     SID.evalTrackOptions({ track: this.currentSubsong });      
@@ -1662,6 +1683,8 @@ SidPlayer.prototype = {
   },
 
   playSong: function(subSongIndex) {
+    this.autoElapsedSamples = 0;
+    this.autoLoading = false;
     this.sidHasSamples = false;   
     $('#voice4Control').hide();
 
@@ -1977,6 +2000,7 @@ SidPlayer.prototype = {
           }
         
           thisPlayer._currentPlaytime += outSize;  // keep track how long we are playing
+          thisPlayer.autoElapsedSamples += outSize;
        
         
         }
@@ -2226,7 +2250,47 @@ SidPlayer.prototype = {
     }
   },
 
+  updateAutoButton: function() {
+    $('#autoAdvanceButton').text(this.autoAdvance ? 'AUTO: ON' : 'AUTO: OFF')
+      .attr('aria-pressed', this.autoAdvance ? 'true' : 'false');
+  },
+
+  getAutoDurationSeconds: function() {
+    if(this.sidListIndex === false || !this.sidList[this.sidListIndex]) return this.autoFallbackSeconds;
+    var song = this.sidList[this.sidListIndex];
+    var info = song.subsongInfo && song.subsongInfo[this.currentSubsong];
+    var duration = info && info.duration;
+    if(typeof duration !== 'string') return this.autoFallbackSeconds;
+    var parts = duration.trim().split(':');
+    if(parts.length !== 2 && parts.length !== 3) return this.autoFallbackSeconds;
+    var seconds = 0;
+    for(var i = 0; i < parts.length; i++) {
+      var n = Number(parts[i]);
+      if(!isFinite(n) || n < 0 || Math.floor(n) !== n) return this.autoFallbackSeconds;
+      seconds = seconds * 60 + n;
+    }
+    return seconds > 0 ? seconds : this.autoFallbackSeconds;
+  },
+
+  checkAutoAdvance: function() {
+    if(!this.autoAdvance || !this.isPlaying || this.autoLoading || !this.sampleRate) return;
+    if(this.autoElapsedSamples / this.sampleRate < this.getAutoDurationSeconds()) return;
+    this.autoElapsedSamples = 0;
+    if(this.sidListIndex === false) {
+      // A local SID has no catalog duration; do not unexpectedly replace it.
+      this.autoAdvance = false;
+      this.updateAutoButton();
+      return;
+    }
+    if(this.currentSubsong < this.songInfo.maxSubsong) {
+      this.nextSubsong();
+    } else {
+      this.nextSid();
+    }
+  },
+
   render: function() {
+    this.checkAutoAdvance();
     if(this.oscilloscopeMode === 'filled') this.drawFilledWaves();
     else this.drawLines();
     this.updateVoiceInfo();
