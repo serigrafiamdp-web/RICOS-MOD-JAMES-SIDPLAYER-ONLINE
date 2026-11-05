@@ -41,8 +41,8 @@ jobs:
           source = pathlib.Path('js/sidPlayer.js').read_text(encoding='utf-8')
           base = 'https://level3.jojati.com/sidplayer/'
           groups = {
-              'sids': sorted(set(re.findall(r'file:\\s*["\\']([^"\\']+\\.sid)["\\']', source, re.I))),
-              'images': sorted(set(re.findall(r'image:\\s*["\\']([^"\\']+\\.(?:gif|png|jpg))["\\']', source, re.I))),
+              'sids': sorted(set(re.findall(r'file:\s*"([^"]+\.sid)"', source, re.I))),
+              'images': sorted(set(re.findall(r'image:\s*"([^"]+\.(?:gif|png|jpg))"', source, re.I))),
           }
           for folder, names in groups.items():
               pathlib.Path(folder).mkdir(exist_ok=True)
@@ -55,9 +55,9 @@ jobs:
                       req = urllib.request.Request(url, headers={'User-Agent':'Mozilla/5.0 (archival mirror)'})
                       with urllib.request.urlopen(req, timeout=35) as resp:
                           data = resp.read()
-                      if folder == 'sids' and not data.startswith((b'PSID',b'RSID')):
+                      if folder == 'images' and not (data[:6] in (b'GIF87a', b'GIF89a') or data.startswith((bytes.fromhex('89504e47'), bytes.fromhex('ffd8')))):
                           raise ValueError('not a SID file')
-                      if folder == 'images' and not (data[:6] in (b'GIF87a', b'GIF89a') or data.startswith((b'\\x89PNG', b'\\xff\\xd8'))):
+                      if folder == 'images' and not (data[:6] in (b'GIF87a', b'GIF89a') or data.startswith((bytes.fromhex('89504e47'), bytes.fromhex('ffd8')))):
                           raise ValueError('not a valid image')
                       target.write_bytes(data)
                       print('OK',target,len(data))
