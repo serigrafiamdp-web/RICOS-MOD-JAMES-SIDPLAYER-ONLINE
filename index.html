@@ -1,0 +1,324 @@
+<!DOCTYPE HTML>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Web SID Player</title>
+
+    <link rel="shortcut icon" type="image/png" href="images/icon16.png"/>
+    <meta property="og:image" content="http://level4.jojati.com/sidplayer/images/preview.png" />    
+    <meta name="description" content="The MOS Technology 6581/8580 SID is the built-in Programmable Sound Generator chip of the Commodore 64. This website plays music created for the SID."/>
+  </head>
+
+  <body>
+
+    <div id="Stats-output"></div>
+
+    <form id="openSIDForm" style="position: absolute; top: -400px">
+      <input type="file" name="sidfile" size="10" id="sidfile" accept=".sid"/>
+    </form>
+
+    <canvas id="sidDisplay" style="background-color: #000000;"></canvas>
+
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 20px; background-color: #666666; display: none" id="voiceInfo">
+    </div>
+
+
+    <div id="dialogBackground" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: black; z-index: 300; opacity: 0.4;">
+    </div>
+
+
+    <div id="chooseSidDialog" class="dialog" style="width: 430px; height: 480px">
+      <div class="title">Choose A SID</div>
+      <div class="content">
+
+        <div id="chooseSidInfo" style="position: absolute; top: 10px; height: 56px; left: 10px; right: 10px; background-color: #eeeeee; color: #333333; padding: 4px; font-size: 12px; border: 1px solid #555555">
+          <h2>SID Player</h2>
+          <p>
+            Choose a SID file below, or drag and drop a SID file into the window,<br/> or <a href="javascript: void(0)" id="sidFileOpen">Open a Local SID File...</a>
+          </p>
+        </div>
+        <div id="sidListHolder" style="position: absolute; top: 84px; bottom: 10px; left: 10px; right: 10px; overflow: auto; border: 1px solid #555555">
+          <div id="sidList"></div>
+        </div>
+
+      </div>
+
+      <div class="buttons">
+        <button id="chooseSidClose">Close</button>
+      </div>
+
+    </div>
+
+
+    <div id="aboutSIDDialog" class="dialog" style="width: 552px; height: 480px">
+      <div class="title">About</div>
+      <div class="content">
+        <div id="aboutSIDHolder" style="position: absolute; top: 10px; bottom: 10px; left: 10px; right: 10px; overflow: auto; border: 1px solid #555555; background-color: #eeeeee">
+          <div id="aboutSID">
+
+            <div id="aboutSIDContent">
+              <p>
+                The Following text contains extracts from the <a target="_blank" href="https://en.wikipedia.org/wiki/MOS_Technology_SID">MOS Technology SID</a> Wikipedia page
+              </p>
+
+              <h2>Overview</h2>
+              <p>
+                <img src="images/Commodore64.jpg" width="120" style="float: left; margin: 0 4px 4px 0"/>
+                The MOS Technology 6581/8580 SID (Sound Interface Device) is the built-in Programmable Sound Generator chip of Commodore's CBM-II, Commodore 64, Commodore 128 and Commodore MAX Machine home computers. It was one of the first sound chips of its kind to be included in a home computer prior to the digital sound revolution.              
+              </p>
+              <p>
+                The SID is a mixed-signal integrated circuit, featuring both digital and analog circuitry. All control ports are digital, while the output ports are analog. 
+              </p>
+              <h2>Design</h2>
+              <p>
+                <img src="images/sidblockdiagram.png" width="120" style="float: left; margin: 0 4px 4px 0"/>
+                The SID was devised by engineer Robert "Bob" Yannes, who later co-founded the Ensoniq digital synthesizer company. Yannes headed a team that included himself, two technicians and a CAD operator, who designed and completed the chip in five months, in the latter half of 1981. Yannes was inspired by previous work in the synthesizer industry and was not impressed by the current state of computer sound chips. Instead, he wanted a high-quality instrument chip, which is the reason why the SID has features like the envelope generator, previously not found in home computer sound chips.                
+              </p>
+              <h2>Waveforms</h2>
+              <p>
+                <img src="images/waveforms.png" width="120" style="float: left; margin: 0 4px 4px 0"/>
+
+                The SID features three-voice synthesis, where each voice may use one of at least five different waveforms: pulse wave (with variable duty cycle), triangle wave, sawtooth wave, pseudorandom noise (called white noise in documentation), and certain complex/combined waveforms when multiple waveforms are selected simultaneously. A voice playing Triangle waveform may be ring-modulated with one of the other voices, where the triangle waveform's bits are inverted when the modulating voice's msb is set, producing a discontinuity and change of direction with the Triangle's ramp.                
+              </p>
+              <p>
+                The original manual for the SID mentions that if several waveforms are enabled at the same time, the result will be a binary AND between them. What happens in reality is that the input to the waveform DAC pins receive several waveforms at once.
+              </p>
+              <h2>Filter</h2>                 
+              <p>
+                <img src="images/filter.png" width="120" style="float: left; margin: 0 4px 4px 0"/>
+
+                Each voice may be routed into a common, digitally controlled analog 12 dB/octave multimode filter, which is constructed with aid of external capacitors to the chip. The filter has lowpass, bandpass and highpass outputs, which can be individually selected for final output amplification via master volume register. Using a combined state of lowpass and highpass results in a notch (or inverted bandpass) output.[8] The programmer may vary the filter's cut-off frequency and resonance                
+              </p>
+              <h2>Sample Playback</h2>
+              <p>
+                Due to imperfect manufacturing technologies of the time and poor separation between the analog and digital parts of the chip, the 6581's output (before the amplifier stage) was always slightly biased from the zero level. Each time the volume register was altered, an audible click was produced. By quickly adjusting the amplifier's gain through the main 4-bit volume register, this bias could be modulated as PCM, resulting in a "virtual" fourth channel allowing 4-bit digital sample playback.                
+              </p>
+              <p>
+                Over time, other techniques have been created for sample playback.
+              </p>
+              <h2>Differences between 6581 and 8580</h2>
+              <p>
+                <img src="images/MOS_Technologies_6581.jpg" width="120" style="float: left; margin: 0 4px 4px 0"/>
+
+                The specifications for the chip were not used as a blueprint. Rather, they were written as the development work progressed, and not all planned features made it into the final product. Yannes claims he had a feature-list of which three quarters made it into the final design. This is the reason why some of the specifications for the first version (6581) were accidentally incorrect. The later revision (8580) was revised to match the specification. The 8580 expanded on the ability to perform a binary AND between two waveforms. The filter is also very different between the two models, with the 6581 cutoff range being a relatively straight line on a log scale, while the cutoff range on the 8580 is a straight line on a linear scale. The better manufacturing technology in the 8580 used in the later revisions of Commodore 64C and the Commodore 128DCR caused the bias to almost entirely disappear, causing the digitized sound samples to become very quiet.                 
+              </p>
+
+
+            <h2>Example Waveforms</h2>
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/triangle.png"/>
+              <div>Triangle</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/sawtooth.png"/>
+              <div>Sawtooth</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/pulse.png"/>
+              <div>Pulse</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/noise.png"/>
+              <div>Noise</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/trianglepulse.png"/>
+              <div>Triangle + Pulse</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/ringmod.png"/>
+              <div>Triangle + Ring Modulation</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/sample.png"/>
+              <div>Sample</div>
+            </div>
+
+            <div class="sidWaveform">              
+              <img width="160" src="waveforms/sawtoothlowbandpass.png"/>
+              <div>Sawtooth + Lowpass + Bandpass</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/pulselowpass.png"/>
+              <div>Pulse + Lowpass filter</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/pulselowpass2.png"/>
+              <div>Pulse + Lowpass filter</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/pulselowbandpass.png"/>
+              <div>Pulse + Lowpass + Bandpass filter</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/pulselowhighpass.png"/>
+              <div>Pulse + Lowpass + Highpass filter</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/noiselowpass.png"/>
+              <div>Noise + Lowpass filter</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/ringmodlowpass.png"/>
+              <div>Triangle + Ring Mod + Lowpass</div>
+            </div>
+
+            <div class="sidWaveform">
+             <img width="160" src="waveforms/ringmodlowbandpass.png"/>
+             <div>Tri + Ring Mod + Low + Band</div>
+            </div>
+
+            </div>
+
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="buttons">
+        <button id="aboutClose">Close</button>
+      </div>
+
+    </div>    
+
+
+
+    <div id="aboutDialog" class="dialog" style="width: 480px; height: 480px">
+      <div class="title">About</div>
+      <div class="content">
+        <div id="aboutHolder" style="position: absolute; top: 10px; bottom: 10px; left: 10px; right: 10px; overflow: auto; border: 1px solid #555555; background-color: #eeeeee">
+          <div id="about" style="padding: 4px">
+
+            <h2>About</h2>
+            <p>
+              This website is a player for SID Files.
+            </p>
+            <p>
+              You can follow this <a href="https://twitter.com/uniquename654">Twitter</a> for updates, etc
+            </p>
+            <p>
+              and go <a href="http://level4.jojati.com">here</a> for more stuff.
+            </p>
+
+
+            <h2>SID Files</h2>
+            <p>
+              SID files are part machine code, part data. At a minimum SID players emulate the Commodore 64 CPU and SID chip, executing the machine code, which sets values for the registers of the SID chip. The SID chip reads the registers and produces sound. 
+            </p>
+            <p>
+              SID Files can be found at the <a href="http://www.hvsc.c64.org/
+  ">High Voltage SID Collection<a>
+            </p>
+            <p>
+              SID Files from Commodore 64 Games can also be found by searching for the game on the 
+              <a href="http://www.lemon64.com/" target="_blank">Lemon 64</a> and <a href="http://www.c64.com/" target="_blank">C64.com</a> Websites
+            </p>
+
+
+            <h2>Source Code + Licence</h2>
+            <p>
+              This SID player uses code from 
+              <a href="https://github.com/wothke/websid" target="_blank">WebSid (Web version of Tiny'R'Sid)</a> by Juergen Wothke
+              which falls under a <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> licence. The author of WebSid has a live demo of his player <a href="http://www.wothke.ch/websid/" target="_blank">here</a>
+            </p>
+
+
+            <p>
+              The following modifications were made:
+              <ul>
+                <li>Allow extraction of individual voice data</li>
+                <li>Allow the filter to be disabled</li>
+                <li>Changes to the behaviour of the filter</li>
+              </ul>
+            </p>
+
+            <p>The modifications were hacks to the original code so I wouldn't recommend using the code with the modifications, but if you really want it, it can be downloaded <a href="src/sidplayersrc.zip">here</a>. Under the terms of the CC BY-NC-SA licence, the modified code also comes under the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> licence</p>
+
+            <p>
+              This is my second attempt at an oscillocope style SID player. The first can be found <a href="old/index.html">here</a>. The older version will give more information about the state of the SID's registers and will allow the songs to be slowed down.
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="buttons">
+        <button id="aboutClose">Close</button>
+      </div>
+
+    </div>    
+
+
+
+    <div id="songInfo"></div>
+
+    <div id="sidInfo" style="position: absolute; bottom: 21px; top: 20px; left: 0; width: 220px; background-color: #eeeeee; color: #222222; font-size: 10px; padding: 4px; border: 1px solid #444444; display: none">
+      <div id="" style="position: absolute; top: 0; left: 0; right: 0; height: 22px; background-color: #111111">
+        <div id="sidInfoTitle" style="position: absolute; top: 2px; left: 2px; width: 150px">
+        SID Info
+        </div>
+          <button style="position: absolute; right: 2px; top: 2px; " id="closeSidInfo">Close</button>
+      </div>
+      <div id="sidInfoContent" style="position: absolute; top: 22px; left: 0; right: 0; bottom: 0; overflow: auto; padding: 4px">
+      </div>
+    </div>
+
+
+    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 20px; background-color: #000000" id="sidControls">
+      <button type="button" id="chooseSid">Choose A SID...</button>
+      <button type="button" id="nextSid">Next SID &gt;</button>
+
+      <button type="button" id="stopButton" style="width: 40px">Stop</button>
+      <button type="button" id="playButton" style="width: 40px">Play</button>
+
+
+      <span id="subsongControls">
+        <button type="button" id="prevButton">&lt;</button>
+        <span id="subsongInfo"></span>
+        <button type="button" id="nextButton">&gt;</button>
+      </span>
+
+      <span>&nbsp;|&nbsp;</span>
+      <label><input checked="checked" id="voice1" class="voiceCheckbox" type="checkbox"> Voice 1</label>
+      <label><input checked="checked" id="voice2" class="voiceCheckbox"  type="checkbox"> Voice 2</label>
+      <label><input checked="checked" id="voice3" class="voiceCheckbox"  type="checkbox"> Voice 3</label>
+
+      <span id="voice4Control" style="display: none">
+        <label><input checked="checked" id="voice4" class="voiceCheckbox"  type="checkbox"> Voice 4</label>
+      </span>
+
+      <span>&nbsp;|&nbsp;</span>
+      <label><input checked="checked" id="filterEnabled" class="voiceCheckbox"  type="checkbox"> Filter Enabled</label>
+
+
+
+      <div style="position: absolute; right: 50px; bottom: 0">
+        <button type="button" id="aboutSIDButton">About the SID Chip...</button>
+      </div>
+
+      <div style="position: absolute; right: 0px; bottom: 0">
+        <button type="button" id="aboutButton">About...</button>
+      </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/stats.min.js"></script>
+    <script type="text/javascript" src="js/backend_tinysid.js"></script>
+    <script type="text/javascript" src="js/dialogManager.js"></script>
+    <script type="text/javascript" src="js/sidPlayer.js"></script>
+  </body>
+</html>
