@@ -1,0 +1,42 @@
+name: Preserve original Jojati SID Player
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/archive-sidplayer.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retrieve original public website and published source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p website upstream-source
+          wget --recursive --level=4 --page-requisites --convert-links --adjust-extension --no-parent --no-host-directories --directory-prefix=mirror --domains=level3.jojati.com --timeout=25 --tries=2 https://level3.jojati.com/sidplayer/ || true
+          if [ -d mirror/sidplayer ]; then cp -a mirror/sidplayer/. website/; fi
+          curl --fail --location --retry 2 --connect-timeout 20 --max-time 180 --output upstream-source/sidplayersrc.zip https://level3.jojati.com/sidplayer/src/sidplayersrc.zip || true
+          if [ -s upstream-source/sidplayersrc.zip ]; then
+            unzip -t upstream-source/sidplayersrc.zip >/dev/null || rm -f upstream-source/sidplayersrc.zip
+          fi
+          printf 'Preservation results: files in website: '
+          find website -type f | wc -l
+          find website -type f | sort | head -80
+          printf 'Source zip: '
+          ls -lh upstream-source/ || true
+          test -s website/index.html || { echo 'Main HTML was not recovered; workflow will not publish partial mirror'; exit 1; }
+      - name: Keep source and mirror in repository
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add website upstream-source
+          if ! git diff --cached --quiet; then
+            git commit -m 'Archive original Jojati SID Player web assets and upstream source'
+            git push
+          fi
