@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="js/three.80.js"></script>
+    <script type="text/javascript" src="js/oscilloscope.js"></script>
+    <script type="text/javascript" src="js/channelInfo.js"></script>
+    <script type="text/javascript" src="js/channelBarGraph.js"></script>
+    <script type="text/javascript" src="js/historyGraph.js"></script>
+    <script type="text/javascript" src="js/notes.js"></script>
+    <script type="text/javascript" src="js/jsSID.js"></script>
+    <script type="text/javascript" src="js/sidPlayer.js"></script>
+
+    <style>
+      body {  
+        margin: 0; overflow: hidden; 
+        font-family: arial, helvetica, sans-serif; 
+        font-size: 12px;
+        color: white;
+        background-color: white;
+      }
+
+      .sidChannelInfo {
+        color: #000000; 
+        background-color: #999999; 
+        padding: 2px 4px 2px 4px;
+        margin-right: 2px;
+        font-size: 8px;
+      }
+
+      .sidChannelInfoSpace {
+        margin-right: 6px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="WebGL-output"></div>
+
+
+
+    <div id="filterInfo" style="position: absolute; top: 200px; left: 0; right: 0; color: white;background-color: #555555; display: none">
+      filter info
+    </div>
+
+    <div style="position: absolute; bottom: 60px; height: 30px; left: 0; right: 0; color: white;background-color: #555555">
+      <button id="loadSIDButton">Load SID..</button>
+      <span id="sidInfo"></span>
+
+      <button id="sidPreviousSubtune">&lt;</button>
+      <span id="sidCurrentSubtune"></span>
+      <button id="sidNextSubtune">&gt;</button>
+
+
+    </div>
+
+    <form id="loadSIDForm"  style="position: absolute; top: -40px">
+      <input type="file" name="data" size="10" id="loadSID" accept=".sid"/>
+    </form>
+
+
+
+    <div style="position: absolute; height: 30px; bottom: 30px; left: 0; right: 0; color: white;background-color: #555555">
+
+      <button id="sidStopButton">Stop</button>
+      <button id="sidPlayButton">Play</button>
+
+
+
+      Speed: <label>
+      <input type="radio" name="playbackSpeed" value="original" checked="checked">Original</label>
+      <label><input type="radio" name="playbackSpeed" value="half">Half</label>
+      <label><input type="radio" name="playbackSpeed" value="quarter">Quarter</label>
+      <label><input type="radio" name="playbackSpeed" value="eighth">Eighth</label>
+      <label><input type="radio" name="playbackSpeed" value="sixteenth">Sixteenth</label>
+      &nbsp;&nbsp;&nbsp;
+      |
+      &nbsp;&nbsp;&nbsp;
+
+
+      <label><input type="checkbox" id="sidChannel1On" name="sidChannelOn" value="1" checked="checked"> Channel 1</label>
+      <label><input type="checkbox" id="sidChannel2On" name="sidChannelOn"  value="1" checked="checked"> Channel 2</label>
+      <label><input type="checkbox" id="sidChannel3On" name="sidChannelOn"  value="1" checked="checked"> Channel 3</label>
+
+      &nbsp;&nbsp;&nbsp;
+      |
+      &nbsp;&nbsp;&nbsp;
+
+      Model:
+      <label><input type="radio" name="sidMode" value="6581">6581</label>
+      &nbsp;
+      <label><input type="radio" name="sidMode" value="8580" checked="checked">8580</label>
+    </div>
+
+
+    <div style="position: absolute; height: 30px; bottom: 0px; left: 0; right: 0; color: white;background-color: #555555">
+      <label><input type="checkbox" id="showBarGraphs" checked="checked"> Bar Graphs</label>
+      <label><input type="checkbox" id="showADSREnvelope" checked="checked"> Volume Envelope</label>
+      <label><input type="checkbox" id="showWaveform" checked="checked"> Waveform</label>
+      <label><input type="checkbox" id="showChannelInfo" checked="checked"> Channel Info</label>
+
+      <button id="sidRecord">Record</button>
+      <button id="sidRecordStop">Record Stop</button>
+
+    </div>
+
+
+    <div id="sidCh1Info" style="position: absolute; top: 260px; left: 0; right: 0; color: white; font-size: 8px ">
+      ch1 info
+    </div>
+
+    <div id="sidCh2Info" style="position: absolute; top: 340px; left: 0; right: 0; color: white; ">
+      ch2 info
+    </div>
+
+    <div id="sidCh3Info" style="position: absolute; top: 420px; left: 0; right: 0; color: white;">
+      ch3 info
+    </div>
+
+
+
+
+
+
+
+    <script>
+        var scene = new THREE.Scene();
+//        var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+        var near = 1;
+        var far = 1000;
+        var width = 40;
+        var height = 40;
+        this.camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, near, far );
+
+        this.camera.position.z = 5;
+
+
+        var sidPlayer = new SidPlayer();
+        sidPlayer.init();
+
+        var renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
+        $('#WebGL-output').append(renderer.domElement);
+
+
+
+        function render() {
+          requestAnimationFrame( render );
+          sidPlayer.render();
+//          editor.render();
+        }
+        render();        
+
+    </script>
+
+
+  </body>
+</html>  
