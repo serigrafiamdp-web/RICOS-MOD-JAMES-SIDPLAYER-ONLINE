@@ -35,7 +35,10 @@ jobs:
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          # Publish the original entry point at the root for GitHub Pages (main / root).
+          cp -a website/. ./
           git add website upstream-source
+          git add -A . ':!.github'
           if ! git diff --cached --quiet; then
             git commit -m 'Archive original Jojati SID Player web assets and upstream source'
             git push
