@@ -9,6 +9,17 @@ var SidPlayer = function() {
   this.context = null;
   this.sidHasSamples = false;
   this.oscilloscopeMode = 'line';
+  this.colorModeIndex = 0;
+  this.colorModes = [
+    { name: 'Original', line: '#ffffff', fill: 'rgba(255,255,255,0.56)', background: '#000000' },
+    { name: 'Green Phosphor', line: '#78ff69', fill: 'rgba(65,255,88,0.55)', background: '#031208' },
+    { name: 'Amber', line: '#ffcb60', fill: 'rgba(255,173,40,0.55)', background: '#160b00' },
+    { name: 'Orange', line: '#ff7a28', fill: 'rgba(255,102,18,0.56)', background: '#130600' },
+    { name: 'P1 Phosphor', line: '#b3ff83', fill: 'rgba(165,255,105,0.52)', background: '#06170a' },
+    { name: 'C64 BASIC', line: '#a6a6ff', fill: 'rgba(166,166,255,0.52)', background: '#3836a6' },
+    { name: 'C64 Cyan', line: '#70d7c7', fill: 'rgba(112,215,199,0.55)', background: '#24244f' },
+    { name: 'Retro Magenta', line: '#ff88d0', fill: 'rgba(255,95,183,0.5)', background: '#16091d' }
+  ];
   this.songInfo = {};
   this.currentSubsong = 0;
   this.dialogManager = null;
@@ -1381,6 +1392,12 @@ SidPlayer.prototype = {
 
     var sidPlayer = this;
 //    this.audioBackend = new SIDBackendAdapter()
+    $('#oscilloscopeColorButton').on('click', function() {
+      sidPlayer.colorModeIndex = (sidPlayer.colorModeIndex + 1) % sidPlayer.colorModes.length;
+      sidPlayer.applyOscilloscopeColors();
+      sidPlayer.render();
+    });
+
     $('#oscilloscopeModeButton').on('click', function() {
       sidPlayer.oscilloscopeMode = sidPlayer.oscilloscopeMode === 'line' ? 'filled' : 'line';
       $(this).text(sidPlayer.oscilloscopeMode === 'filled' ? 'Wave: Filled' : 'Wave: Line');
@@ -1994,6 +2011,14 @@ SidPlayer.prototype = {
 */
   },
 
+  applyOscilloscopeColors: function() {
+    var palette = this.colorModes[this.colorModeIndex];
+    if(this.canvas) this.canvas.style.backgroundColor = palette.background;
+    $('#oscilloscopeColorButton').text('Color: ' + palette.name)
+      .attr('title', 'Change oscilloscope palette (next: ' +
+        this.colorModes[(this.colorModeIndex + 1) % this.colorModes.length].name + ')');
+  },
+
   drawLines: function() {
     var SCREEN_WIDTH = window.innerWidth;
     var SCREEN_HEIGHT = window.innerHeight;
@@ -2125,7 +2150,7 @@ SidPlayer.prototype = {
     }
 
 
-    this.context.strokeStyle = '#ffffff';
+    this.context.strokeStyle = this.colorModes[this.colorModeIndex].line;
     this.context.lineWidth = 2;
 
     this.context.stroke();
@@ -2189,13 +2214,13 @@ SidPlayer.prototype = {
       for(var j = 0; j < points.length; j++) ctx.lineTo(points[j][0], points[j][1]);
       ctx.lineTo(points[points.length - 1][0], centerY);
       ctx.closePath();
-      ctx.fillStyle = 'rgba(255,255,255,0.56)';
+      ctx.fillStyle = this.colorModes[this.colorModeIndex].fill;
       ctx.fill();
 
       ctx.beginPath();
       ctx.moveTo(points[0][0], points[0][1]);
       for(var k = 1; k < points.length; k++) ctx.lineTo(points[k][0], points[k][1]);
-      ctx.strokeStyle = '#ffffff';
+      ctx.strokeStyle = this.colorModes[this.colorModeIndex].line;
       ctx.lineWidth = 2;
       ctx.stroke();
     }
