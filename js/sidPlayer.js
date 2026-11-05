@@ -8,6 +8,7 @@ var SidPlayer = function() {
   this.canvas = null;
   this.context = null;
   this.sidHasSamples = false;
+  this.oscilloscopeMode = 'line';
   this.songInfo = {};
   this.currentSubsong = 0;
   this.dialogManager = null;
@@ -1380,6 +1381,13 @@ SidPlayer.prototype = {
 
     var sidPlayer = this;
 //    this.audioBackend = new SIDBackendAdapter()
+    $('#oscilloscopeModeButton').on('click', function() {
+      sidPlayer.oscilloscopeMode = sidPlayer.oscilloscopeMode === 'line' ? 'filled' : 'line';
+      $(this).text(sidPlayer.oscilloscopeMode === 'filled' ? 'Wave: Filled' : 'Wave: Line');
+      $(this).attr('aria-pressed', sidPlayer.oscilloscopeMode === 'filled' ? 'true' : 'false');
+      sidPlayer.render();
+    });
+
     $('#playButton').on('click', function() {
       sidPlayer.play();
     });
@@ -2124,8 +2132,78 @@ SidPlayer.prototype = {
 
   },
 
+  // TEST01: independent filled visualization. Original drawLines() is retained unchanged.
+  drawFilledWaves: function() {
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    var channelCount = this.sidHasSamples ? 4 : 3;
+    var channelHeight = (height - 40) / channelCount;
+    var xOffset = this.sidInfoVisible ? 220 : 0;
+    var channelWidth = width - xOffset;
+    var bufferSize = 882 * 2;
+    var displaySize = Math.floor(bufferSize / 2.8);
+    var halfDisplaySize = Math.floor(displaySize / 2);
+    var ctx = this.context;
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    for(var channel = 0; channel < 4; channel++) {
+      if(channel === 3 && !this.sidHasSamples) {
+        // Preserve the original detection of sampled fourth-voice audio.
+        var probe = SID.getChannelBuffer(4);
+        for(var p = 0; p < bufferSize; p++) {
+          if(SID.readFloatSample(probe, p) > 0) {
+            this.sidHasSamples = true;
+            $('#voice4Control').show();
+            break;
+          }
+        }
+        if(!this.sidHasSamples) continue;
+      }
+      var buffer = SID.getChannelBuffer(channel + 1);
+      var count = channel === 3 ? bufferSize : displaySize;
+      var triggerOffset = 0;
+      if(channel < 3) {
+        triggerOffset = halfDisplaySize;
+        var triggerSample = SID.readFloatSample(buffer, triggerOffset);
+        while(triggerSample < 0.004 && triggerOffset < bufferSize - displaySize) {
+          triggerOffset++;
+          triggerSample = SID.readFloatSample(buffer, triggerOffset);
+        }
+        while(triggerSample > 0.002990 && triggerOffset < bufferSize - displaySize) {
+          triggerOffset++;
+          triggerSample = SID.readFloatSample(buffer, triggerOffset);
+        }
+        if(triggerOffset > halfDisplaySize) triggerOffset -= halfDisplaySize;
+      }
+      var centerY = 20 + channelHeight / 2 + channel * channelHeight;
+      var amplitude = channelHeight * (channel === 3 ? 0.8 : 10);
+      var points = [];
+      for(var i = 0; i < count; i++) {
+        var sample = SID.readFloatSample(buffer, i + triggerOffset);
+        if(!this.isPlaying && !this.isPaused) sample = 0;
+        points.push([xOffset + i * channelWidth / count, centerY + sample * amplitude]);
+      }
+      if(!points.length) continue;
+      ctx.beginPath();
+      ctx.moveTo(points[0][0], centerY);
+      for(var j = 0; j < points.length; j++) ctx.lineTo(points[j][0], points[j][1]);
+      ctx.lineTo(points[points.length - 1][0], centerY);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(255,255,255,0.56)';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(points[0][0], points[0][1]);
+      for(var k = 1; k < points.length; k++) ctx.lineTo(points[k][0], points[k][1]);
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+  },
+
   render: function() {
-    this.drawLines();
+    if(this.oscilloscopeMode === 'filled') this.drawFilledWaves();
+    else this.drawLines();
     this.updateVoiceInfo();
 
   }
