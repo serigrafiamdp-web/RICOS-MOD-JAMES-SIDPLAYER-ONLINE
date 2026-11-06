@@ -405,3 +405,47 @@ left: 1px;
 .rico-live-title { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; flex:1; }
 .rico-live-current { color:#98ffc5; }
 .rico-live-empty { padding:18px; color:#9cabb1; }
+
+/* TEST08 – movable and vertically resizable playlist */
+#ricoLivePlaylist {
+  top:55px; right:10px; bottom:auto; left:auto;
+  width:315px; height:min(420px, calc(100vh - 110px));
+  min-height:110px; min-width:230px;
+  max-height:calc(100vh - 40px);
+  flex-direction:column;
+  box-sizing:border-box;
+}
+#ricoLivePlaylistHeader { cursor:move; touch-action:none; user-select:none; flex-shrink:0; }
+#ricoLiveClose { cursor:pointer; }
+#ricoLiveStatus:empty { display:none; }
+#ricoLivePlaylistItems { height:auto; min-height:0; flex:1 1 auto; }
+#ricoLiveResizeGrip {
+  flex:0 0 10px; height:10px; position:relative;
+  cursor:ns-resize; touch-action:none;
+  border-top:1px solid #32434d;
+  background:linear-gradient(180deg,#1a2831,#101820);
+}
+#ricoLiveResizeGrip:after { content:""; display:block; width:34px; height:3px;
+  border-top:1px solid #899eaa; border-bottom:1px solid #899eaa;
+  position:absolute; left:calc(50% - 17px); top:3px; opacity:.8; }
+/* TEST08 – common-size control buttons, including the old upper-right buttons */
+#sidControls {
+  position:fixed; bottom:0; left:0; right:0; z-index:190;
+  background:#000; color:#ddd; box-sizing:border-box;
+  display:flex; flex-wrap:wrap; align-items:center; gap:3px 5px;
+  min-height:30px; padding:3px 6px; height:auto; line-height:22px;
+}
+#sidControls button,
+#sidControls #oscilloscopeVisualButtons button {
+  box-sizing:border-box; height:23px; min-height:23px;
+  padding:0 8px; margin:0; font:normal 10px Tahoma,Arial,sans-serif;
+  line-height:21px; border-radius:4px; vertical-align:middle;
+  background:#101010; color:#ddd; border:1px solid #aaa; white-space:nowrap;
+}
+#sidControls #oscilloscopeVisualButtons { position:static; display:inline-flex; align-items:center; gap:5px; height:23px; }
+#sidControls #oscilloscopeVisualButtons button { font-size:10px; }
+#sidControls #subsongControls { display:inline-flex; align-items:center; height:23px; }
+#sidControls #subsongInfo { height:23px; line-height:23px; }
+#sidControls label { height:23px; line-height:23px; display:inline-flex; align-items:center; white-space:nowrap; }
+#sidControls .rico-bottom-about { display:inline-flex; gap:5px; align-items:center; margin-left:auto; }
+#sidControls #ricoPlaylistToggle.rico-playlist-on { background:#225d44; border-color:#70bc97; }
