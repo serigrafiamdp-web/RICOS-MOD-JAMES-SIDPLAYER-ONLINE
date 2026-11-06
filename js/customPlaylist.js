@@ -16,6 +16,8 @@
   var customActive = false;
   var importing = false;
   var liveVisible = false;
+  // The title belongs to the playlist currently loaded, not the text being edited.
+  var loadedPlaylistTitle = '';
 
   function escapeFilename(name) {
     return (name || '').replace(/\.[sS][iI][dD]$/, '')
@@ -71,6 +73,7 @@
     var holder = $('#ricoLivePlaylistItems').empty();
     var list = player.sidList || [];
     $('#ricoLiveCount').text('(' + list.length + ')');
+    $('#ricoLivePlaylistTitle').text(customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'PLAYLIST');
     if (!list.length) {
       $('<div>').addClass('rico-live-empty').text('No SID loaded. Use Choose A SID to add music.').appendTo(holder);
       return;
@@ -185,6 +188,7 @@
     player.autoElapsedSamples = 0;
     $('#playButton').text('Play');
     customActive = wantCustom;
+    if (!wantCustom) loadedPlaylistTitle = '';
     player.sidList = wantCustom ? custom : originalList;
     player.sidListIndex = false;
     player.songInfo = {};
@@ -288,6 +292,7 @@
     }
     importing = false;
     if (accepted) {
+      loadedPlaylistTitle = '';
       if (!customActive) activate('custom');
       else player.initFileSelection();
       if (player.sidListIndex === false) loadCustomIndex(0);
@@ -349,6 +354,7 @@
   $('#ricoCustomTab').on('click', function () { activate('custom'); });
   $('#ricoClearList').on('click', function () {
     custom.length = 0;
+    loadedPlaylistTitle = '';
     if (customActive) {
       player.isPlaying = false;
       player.sidListIndex = false;
@@ -473,6 +479,7 @@
       custom.length=0;
       Array.prototype.push.apply(custom,entries);
       nameEl.value=data.name.slice(0,100);
+      loadedPlaylistTitle=data.name.trim().slice(0,100);
       if (!customActive) activate('custom');
       else player.initFileSelection();
       loadCustomIndex(0);
@@ -563,6 +570,8 @@
       data.updatedAt=new Date().toISOString();
       await dbCall('readwrite',function(store){return store.put(data);});
       currentId=data.id;
+      loadedPlaylistTitle=data.name;
+      renderLivePlaylist();
       await refreshSaved();
       say('Saved locally: '+data.name+' ('+data.tracks.length+' SID).');
     });
