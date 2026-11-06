@@ -375,6 +375,172 @@
     $(this).addClass('rico-dragging');
   }).on('dragleave', function () { $(this).removeClass('rico-dragging'); });
 
+
+  // TEST09: self-contained JSON playlists, local IndexedDB storage.
+  // No server upload, changes to the SID emulation engine, or automatic disclosure.
+  (function playlistPersistence() {
+    var MAX_BYTES = 64 * 1024 * 1024;
+    var nameEl = document.getElementById('ricoSavedName');
+    var listEl = document.getElementById('ricoSavedSelect');
+    var fileEl = document.getElementById('ricoJsonImport');
+    var stateEl = document.getElementById('ricoSavedStatus');
+    var currentId = '';
+    if (!nameEl || !listEl || !fileEl || !stateEl) return;
+
+    function say(text) { stateEl.textContent = text; }
+    function openDatabase() {
+      return new Promise(function(resolve, reject) {
+        if (!window.indexedDB) return reject(Error('Local database unavailable'));
+        var request = indexedDB.open('ricos-sid-playlists', 1);
+        request.onupgradeneeded = function() {
+          if (!request.result.objectStoreNames.contains('playlists'))
+            request.result.createObjectStore('playlists', {keyPath:'id'});
+        };
+        request.onsuccess = function(){resolve(request.result);};
+        request.onerror = function(){reject(request.error || Error('Database error'));};
+      });
+    }
+    async function dbCall(mode, operation) {
+      var db = await openDatabase();
+      return new Promise(function(resolve, reject) {
+        var tx = db.transaction('playlists', mode);
+        var request = operation(tx.objectStore('playlists'));
+        var result;
+        request.onsuccess = function(){result = request.result;};
+        request.onerror = function(){reject(request.error || Error('Database request failed'));};
+        tx.oncomplete = function(){db.close();resolve(result);};
+        tx.onabort = function(){db.close();reject(tx.error || Error('Database transaction failed'));};
+      });
+    }
+    function encode(bytes) {
+      var chunks=[];
+      for (var i=0; i<bytes.length; i+=8192)
+        chunks.push(String.fromCharCode.apply(null,bytes.subarray(i,i+8192)));
+      return btoa(chunks.join(''));
+    }
+    function decode(encoded) {
+      if (typeof encoded !== 'string' || encoded.length > MAX_BYTES*2 ||
+          !encoded.length || !/^[A-Za-z0-9+/]*={0,2}$/.test(encoded))
+        throw Error('Invalid SID data.');
+      var binary = atob(encoded), out = new Uint8Array(binary.length);
+      for (var i=0; i<binary.length; i++) out[i]=binary.charCodeAt(i);
+      return out;
+    }
+    function makePlaylist() {
+      var name = nameEl.value.trim();
+      if (!name) throw Error('Enter a playlist name.');
+      if (!custom.length) throw Error('CUSTOM playlist is empty.');
+      return {
+        format:'ricos-sid-playlist', version:1, name:name,
+        createdAt:new Date().toISOString(), tracks:custom.map(function(item) {
+          return {file:item.file || 'track.sid', sidBase64:encode(item.localBytes)};
+        })
+      };
+    }
+    function validatedEntries(data) {
+      if (!data || data.format !== 'ricos-sid-playlist' || data.version !== 1 ||
+          typeof data.name !== 'string' || !data.name.trim() ||
+          !Array.isArray(data.tracks) || !data.tracks.length || data.tracks.length > 2000)
+        throw Error('Unsupported playlist JSON.');
+      var entries=[], total=0;
+      data.tracks.forEach(function(track, index){
+        if (!track || typeof track.file !== 'string' || !track.file ||
+            track.file.length > 255) throw Error('Invalid track filename.');
+        var bytes=decode(track.sidBase64);
+        total+=bytes.length;
+        if (total>MAX_BYTES) throw Error('Playlist exceeds 64 MB.');
+        var entry=parseSID(bytes,{name:track.file,size:bytes.length});
+        if (!entry) throw Error('Invalid SID in track ' + (index+1));
+        entry.id='local-'+index;
+        entries.push(entry);
+      });
+      return entries;
+    }
+    function loadPlaylist(data) {
+      // Validate everything before changing the currently loaded playlist.
+      var entries=validatedEntries(data);
+      player.isPlaying=false;
+      player.isPaused=false;
+      custom.length=0;
+      Array.prototype.push.apply(custom,entries);
+      nameEl.value=data.name.slice(0,100);
+      if (!customActive) activate('custom');
+      else player.initFileSelection();
+      loadCustomIndex(0);
+      showLivePlaylist(true);
+    }
+    async function refreshSaved() {
+      var rows=await dbCall('readonly',function(store){return store.getAll();});
+      rows.sort(function(a,b){return (b.updatedAt||'').localeCompare(a.updatedAt||'');});
+      listEl.textContent='';
+      var blank=document.createElement('option');
+      blank.value='';blank.textContent='Saved playlists ('+rows.length+')';
+      listEl.appendChild(blank);
+      rows.forEach(function(item){
+        var option=document.createElement('option');
+        option.value=item.id;
+        option.textContent=item.name+' ('+item.tracks.length+' SID)';
+        listEl.appendChild(option);
+      });
+      listEl.value=rows.some(function(row){return row.id===currentId;}) ? currentId : '';
+    }
+    function run(id,action) {
+      document.getElementById(id).addEventListener('click',function(){
+        Promise.resolve().then(action).catch(function(error){
+          say(error.message || 'Playlist operation failed');
+          console.error('Playlist operation failed',error);
+        });
+      });
+    }
+    listEl.addEventListener('change',function(){currentId=this.value;});
+    run('ricoSaveList',async function(){
+      var data=makePlaylist();
+      var prior=await dbCall('readonly',function(store){return store.getAll();});
+      var match=prior.find(function(item){return item.name===data.name;});
+      data.id=match ? match.id : 'list-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);
+      data.updatedAt=new Date().toISOString();
+      await dbCall('readwrite',function(store){return store.put(data);});
+      currentId=data.id;
+      await refreshSaved();
+      say('Saved locally: '+data.name+' ('+data.tracks.length+' SID).');
+    });
+    run('ricoLoadList',async function(){
+      if (!listEl.value) throw Error('Select a saved playlist.');
+      var data=await dbCall('readonly',function(store){return store.get(listEl.value);});
+      if (!data) throw Error('Playlist not found.');
+      loadPlaylist(data);
+      say('Loaded: '+data.name+'.');
+    });
+    run('ricoDownloadList',function(){
+      var data=makePlaylist();
+      var filename=data.name.toLowerCase().replace(/[^a-z0-9_-]+/g,'-').slice(0,70) || 'playlist';
+      var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+      var url=URL.createObjectURL(blob);
+      var a=document.createElement('a');
+      a.href=url;a.download=filename+'.json';
+      document.body.appendChild(a);
+      a.click();a.remove();
+      setTimeout(function(){URL.revokeObjectURL(url);},1000);
+      say('JSON downloaded: '+data.name+'.');
+    });
+    run('ricoImportList',function(){fileEl.click();});
+    fileEl.addEventListener('change',async function(){
+      var file=this.files && this.files[0];
+      this.value='';
+      if (!file) return;
+      try {
+        if (file.size > MAX_BYTES*2) throw Error('JSON file is too large.');
+        var data=JSON.parse(await file.text());
+        loadPlaylist(data);
+        say('Imported '+data.name+' ('+data.tracks.length+' SID). Use SAVE LIST to keep it locally.');
+      } catch(error) {
+        say(error.message || 'Invalid JSON playlist.');
+        console.error('JSON import failed',error);
+      }
+    });
+    refreshSaved().catch(function(error){say('Local saving unavailable: '+error.message);});
+  })();
+
   refreshTabs();
   player.initFileSelection();
   renderLivePlaylist();
