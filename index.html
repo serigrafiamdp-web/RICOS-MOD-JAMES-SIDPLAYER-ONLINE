@@ -40,10 +40,12 @@
             <button type="button" id="ricoCustomTab">CUSTOM <span id="ricoCustomCount">0 SID</span></button>
           </div>
           <div id="ricoDropZone">
-            Drop SID files or folder here
-            <button type="button" id="ricoAddFiles">ADD SID FILES</button>
-            <button type="button" id="ricoAddFolder">ADD FOLDER</button>
-            <button type="button" id="ricoClearList">CLEAR CUSTOM</button>
+            <div class="rico-drop-row">
+              <span class="rico-drop-label">Drop SID files or folder here</span>
+              <button type="button" id="ricoAddFiles">ADD SID FILES</button>
+              <button type="button" id="ricoAddFolder">ADD FOLDER</button>
+              <button type="button" id="ricoClearList">CLEAR CUSTOM</button>
+            </div>
           </div>
           <div id="ricoPlaylistOptions">
             <label>Unknown duration / AUTO: <input id="ricoFallback" type="number" min="5" max="3600" step="1" value="180"/> seconds</label>
@@ -280,6 +282,14 @@
 
     <div id="songInfo"></div>
 
+    <aside id="ricoLivePlaylist" aria-label="Active SID playlist" style="display:none;">
+      <div id="ricoLivePlaylistHeader">
+        <span>PLAYLIST <span id="ricoLiveCount"></span></span>
+        <button type="button" id="ricoLiveClose" aria-label="Hide playlist">×</button>
+      </div>
+      <div id="ricoLivePlaylistItems"></div>
+    </aside>
+
     <div id="sidInfo" style="position: absolute; bottom: 21px; top: 20px; left: 0; width: 220px; background-color: #eeeeee; color: #222222; font-size: 10px; padding: 4px; border: 1px solid #444444; display: none">
       <div id="" style="position: absolute; top: 0; left: 0; right: 0; height: 22px; background-color: #111111">
         <div id="sidInfoTitle" style="position: absolute; top: 2px; left: 2px; width: 150px">
@@ -295,6 +305,7 @@
     <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 20px; background-color: #000000" id="sidControls">
       <button type="button" id="chooseSid">Choose A SID...</button>
       <button type="button" id="nextSid">Next SID &gt;</button>
+      <button type="button" id="ricoPlaylistToggle" aria-pressed="false" title="Show or hide active playlist">PLAYLIST</button>
       <button type="button" id="autoAdvanceButton" aria-pressed="false" title="Advance through subtunes and then the next SID using listed durations">AUTO: OFF</button>
 
       <button type="button" id="stopButton" style="width: 40px">Stop</button>
@@ -338,6 +349,6 @@
     <script type="text/javascript" src="js/backend_tinysid.js"></script>
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test03"></script>
-    <script type="text/javascript" src="js/customPlaylist.js?v=test04"></script>
+    <script type="text/javascript" src="js/customPlaylist.js?v=test05"></script>
   </body>
 </html>
