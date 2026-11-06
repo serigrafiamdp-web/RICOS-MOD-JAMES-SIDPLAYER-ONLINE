@@ -613,7 +613,7 @@
     var communityTab=document.getElementById('ricoCommunityTab');
     var communityPanel=document.getElementById('ricoCommunityPanel');
     var communityItems=document.getElementById('ricoCommunityItems');
-    var localPanel=document.getElementById('ricoLocalPanel');
+    var localPanel=document.getElementById('sidListHolder');
     var communityActive=false;
     function showCommunity(visible) {
       communityActive=visible;
@@ -663,7 +663,11 @@
         });
       } catch(error){communityItems.textContent='Could not load USER PLAYLISTS: '+error.message;}
     }
-    if(communityTab) communityTab.addEventListener('click',function(){showCommunity(!communityActive);});
+    if(communityTab) communityTab.addEventListener('click',function(){showCommunity(true);});
+    ['ricoDefaultTab','ricoCustomTab'].forEach(function(id) {
+      var tab=document.getElementById(id);
+      if(tab) tab.addEventListener('click',function(){showCommunity(false);});
+    });
     refreshSaved().catch(function(error){say('Local saving unavailable: '+error.message);});
   })();
 
