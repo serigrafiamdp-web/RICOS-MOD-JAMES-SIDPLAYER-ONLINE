@@ -147,7 +147,15 @@
     player.setPath('');
     player.autoLoading = true;
     try {
-      player.loadSIDData(item.localBytes);
+      var loaded = player.loadSIDData(item.localBytes);
+      if (loaded === false) {
+        $('#ricoPlaylistStatus').text('Unsupported by SID engine: ' + item.file + ' (' + item.sidFormat + '). Select another SID.');
+        $('#ricoLiveStatus').text('Cannot play: ' + item.file + ' — unsupported by current SID engine.');
+        player.initFileSelection();
+        renderLivePlaylist();
+        return;
+      }
+      $('#ricoLiveStatus').text('');
       // Engine determines actual initial subtune from the SID header.
       player.initFileSelection();
       renderLivePlaylist();
@@ -156,6 +164,7 @@
       player.isPlaying = false;
       console.error('Local SID load failed', item.file, error);
       $('#ricoPlaylistStatus').text('Could not play ' + item.file);
+      $('#ricoLiveStatus').text('Could not play ' + item.file);
     }
   }
   player.nextSid = function () {
@@ -199,7 +208,7 @@
   async function importFiles(inputFiles) {
     if (importing) return;
     var files = Array.from(inputFiles || []).filter(function (file) {
-      return file && (file.name.toLowerCase().endsWith('.sid') || !file.name.includes('.'));
+      return file && file.size >= 118; // Validate actual PSID/RSID header, not extension.
     });
     if (!files.length) {
       $('#ricoPlaylistStatus').text('No SID files found.');
@@ -212,7 +221,7 @@
       try {
         var buf = new Uint8Array(await files[i].arrayBuffer());
         var parsed = parseSID(buf, files[i]);
-        if (!parsed) { rejected++; continue; }
+        if (!parsed) { rejected++; console.warn('Not a supported PSID/RSID header:', files[i].name); continue; }
         parsed.id = 'local-' + (custom.length + accepted);
         custom.push(parsed);
         accepted++;
