@@ -386,6 +386,15 @@
     var stateEl = document.getElementById('ricoSavedStatus');
     var currentId = '';
     if (!nameEl || !listEl || !fileEl || !stateEl) return;
+    // Original player calls preventDefault on window mousedown, blocking text-field focus.
+    // Isolate this editable field from that legacy mouse handler without changing SID playback.
+    ['mousedown','mouseup','pointerdown','pointerup','click','dblclick'].forEach(function(type) {
+      nameEl.addEventListener(type,function(event){event.stopPropagation();});
+    });
+    ['keyup','keydown','keypress'].forEach(function(type) {
+      nameEl.addEventListener(type,function(event){event.stopPropagation();});
+    });
+    var libraryEl = document.getElementById('ricoSavedLibrary');
 
     function say(text) { stateEl.textContent = text; }
     function openDatabase() {
@@ -483,6 +492,36 @@
         listEl.appendChild(option);
       });
       listEl.value=rows.some(function(row){return row.id===currentId;}) ? currentId : '';
+      if (libraryEl) {
+        libraryEl.textContent='';
+        if (!rows.length) {
+          var empty=document.createElement('div');
+          empty.textContent='No saved playlists yet. Load SID files and click SAVE LIST.';
+          empty.style.padding='6px'; libraryEl.appendChild(empty);
+        }
+        rows.forEach(function(item){
+          var btn=document.createElement('button');
+          btn.type='button';
+          btn.style.cssText='display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;background:#f2f5f6;color:#222;border:1px solid #bdc7cd;margin:2px 0;padding:5px 7px;cursor:pointer;font-size:11px;';
+          var title=document.createElement('span');
+          title.textContent=item.name;
+          var tracks=document.createElement('span');
+          tracks.textContent=item.tracks.length+' SID  ·  LOAD';
+          tracks.style.cssText='font-size:10px;color:#285d45;margin-left:8px;white-space:nowrap;';
+          btn.appendChild(title);btn.appendChild(tracks);
+          btn.addEventListener('click',async function(){
+            try {
+              currentId=item.id;
+              listEl.value=item.id;
+              var stored=await dbCall('readonly',function(store){return store.get(item.id);});
+              if (!stored) throw Error('Playlist not found.');
+              loadPlaylist(stored);
+              say('Loaded: '+stored.name+' ('+stored.tracks.length+' SID).');
+            } catch(error){say(error.message || 'Failed to load playlist.');}
+          });
+          libraryEl.appendChild(btn);
+        });
+      }
     }
     function run(id,action) {
       document.getElementById(id).addEventListener('click',function(){
