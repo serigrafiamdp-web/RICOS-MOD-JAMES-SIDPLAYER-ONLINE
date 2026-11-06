@@ -37,6 +37,7 @@ https://github.com/serigrafiamdp-web/RICOS-MOD-JAMES-SIDPLAYER-ONLINE
 - PSID/RSID metadata reading, including song title, author, release information and subtune count.
 - Compact playlist display without thumbnails for managing larger music collections.
 - Show/hide PLAYLIST panel with direct song selection and active-track highlighting.
+- Movable PLAYLIST window with adjustable height and consistent bottom-aligned Wave, Color and playback controls (TEST08).
 - Preservation of the original default SID collection, with the option to switch between DEFAULT and CUSTOM playlists.
 
 The original SID emulation engine remains the foundation of the project.
