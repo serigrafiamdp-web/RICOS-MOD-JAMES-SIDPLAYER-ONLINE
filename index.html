@@ -53,7 +53,7 @@
           </div>
           <div id="ricoPlaylistStatus" role="status">Original 22 SID playlist.</div>
           <div id="ricoSavedPlaylistControls" style="border-top:1px solid #aab5bc;margin-top:7px;padding-top:7px;">
-            <div style="font-weight:bold;font-size:12px;margin-bottom:5px;">MY PLAYLISTS · TEST11</div>
+            <div style="font-weight:bold;font-size:12px;margin-bottom:5px;">MY PLAYLISTS · TEST12</div>
             <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
               <label for="ricoSavedName" style="font-weight:bold;">Playlist name:</label>
               <input id="ricoSavedName" type="text" maxlength="100" value="My SID Playlist" autocomplete="off" aria-label="Playlist name" placeholder="Type your playlist name here" style="flex:1;min-width:180px;height:27px;box-sizing:border-box;padding:3px 7px;border:2px solid #326a85;background:white;color:#111;font-size:13px;cursor:text;" />
@@ -345,7 +345,7 @@
 
     <aside id="ricoLivePlaylist" aria-label="Active SID playlist" style="display:none;">
       <div id="ricoLivePlaylistHeader">
-        <span>PLAYLIST <span id="ricoLiveCount"></span></span>
+        <span style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span id="ricoLivePlaylistTitle" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;max-width:230px;" title="Current playlist">PLAYLIST</span>&nbsp;<span id="ricoLiveCount" style="flex:none;"></span></span>
         <button type="button" id="ricoLiveClose" aria-label="Hide playlist">×</button>
       </div>
       <div id="ricoLiveStatus" role="status" style="padding:3px 8px;color:#ffb6a9;font-size:11px;"></div>
@@ -409,6 +409,6 @@
     <script type="text/javascript" src="js/backend_tinysid.js"></script>
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test07"></script>
-    <script type="text/javascript" src="js/customPlaylist.js?v=test11"></script>
+    <script type="text/javascript" src="js/customPlaylist.js?v=test12"></script>
   </body>
 </html>
