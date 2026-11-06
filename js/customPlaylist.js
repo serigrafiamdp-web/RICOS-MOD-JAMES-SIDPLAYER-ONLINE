@@ -99,11 +99,67 @@
 
   function showLivePlaylist(visible) {
     liveVisible = !!visible;
-    $('#ricoLivePlaylist').toggle(liveVisible);
+    // A flex column keeps the playlist scrolling inside a shorter panel.
+    $('#ricoLivePlaylist').css('display', liveVisible ? 'flex' : 'none');
     $('#ricoPlaylistToggle').attr('aria-pressed', liveVisible ? 'true' : 'false')
       .toggleClass('rico-playlist-on', liveVisible);
     if (liveVisible) renderLivePlaylist();
   }
+
+  // TEST08: Drag by the title bar; resize vertically by the bottom handle.
+  // Only the playlist panel is touched; audio and SID routines are unchanged.
+  (function initMovablePlaylist() {
+    var panel = document.getElementById('ricoLivePlaylist');
+    var header = document.getElementById('ricoLivePlaylistHeader');
+    var grip = document.getElementById('ricoLiveResizeGrip');
+    if (!panel || !header || !grip) return;
+    var movement = null;
+    function clamp(value, minimum, maximum) {
+      return Math.max(minimum, Math.min(maximum, value));
+    }
+    function start(event, mode) {
+      if (event.button !== 0 || (event.target && event.target.closest && event.target.closest('button'))) return;
+      event.preventDefault();
+      event.stopPropagation();
+      var rect = panel.getBoundingClientRect();
+      movement = { id:event.pointerId, mode:mode, x:event.clientX, y:event.clientY,
+        left:rect.left, top:rect.top, width:rect.width, height:rect.height };
+      // Resolve right/bottom anchoring to explicit positions for free dragging.
+      panel.style.left = rect.left + 'px';
+      panel.style.top = rect.top + 'px';
+      panel.style.right = 'auto';
+      panel.style.bottom = 'auto';
+      panel.style.width = rect.width + 'px';
+      panel.style.height = rect.height + 'px';
+    }
+    header.addEventListener('pointerdown', function(event) { start(event, 'move'); });
+    grip.addEventListener('pointerdown', function(event) { start(event, 'resize'); });
+    window.addEventListener('pointermove', function(event) {
+      if (!movement || event.pointerId !== movement.id) return;
+      event.preventDefault();
+      var maxTop = Math.max(0, window.innerHeight - 110 - 30);
+      if (movement.mode === 'move') {
+        var x = clamp(movement.left + event.clientX - movement.x, 0,
+          Math.max(0, window.innerWidth - movement.width));
+        var y = clamp(movement.top + event.clientY - movement.y, 0, maxTop);
+        panel.style.left = x + 'px';
+        panel.style.top = y + 'px';
+        // Keep the panel fully visible if dragged near the bottom edge.
+        panel.style.height = Math.min(movement.height, Math.max(110, window.innerHeight - y - 30)) + 'px';
+      } else {
+        var h = clamp(movement.height + event.clientY - movement.y, 110,
+          Math.max(110, window.innerHeight - movement.top - 30));
+        panel.style.height = h + 'px';
+      }
+    }, {passive:false});
+    function finish(event) {
+      if (movement && event.pointerId === movement.id) movement = null;
+    }
+    window.addEventListener('pointerup', finish);
+    window.addEventListener('pointercancel', finish);
+    // Avoid passing drag events into the existing oscilloscope mouse handlers.
+    $('#ricoLivePlaylist').on('mousedown', function(event) { event.stopPropagation(); });
+  })();
   $('#ricoPlaylistToggle').on('click', function () {
     showLivePlaylist(!liveVisible);
   });
