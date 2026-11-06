@@ -149,10 +149,10 @@
     try {
       var loaded = player.loadSIDData(item.localBytes);
       if (loaded === false) {
-        $('#ricoPlaylistStatus').text('Unsupported by SID engine: ' + item.file + ' (' + item.sidFormat + '). Select another SID.');
-        $('#ricoLiveStatus').text('Cannot play: ' + item.file + ' — unsupported by current SID engine.');
         player.initFileSelection();
         renderLivePlaylist();
+        $('#ricoPlaylistStatus').text('Unsupported by SID engine: ' + item.file + ' (' + item.sidFormat + '). Select another SID.');
+        $('#ricoLiveStatus').text('Cannot play: ' + item.file + ' — unsupported by current SID engine.');
         return;
       }
       $('#ricoLiveStatus').text('');
