@@ -502,7 +502,7 @@
         rows.forEach(function(item){
           var btn=document.createElement('button');
           btn.type='button';
-          btn.style.cssText='display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;background:#f2f5f6;color:#222;border:1px solid #bdc7cd;margin:2px 0;padding:5px 7px;cursor:pointer;font-size:11px;';
+          btn.style.cssText='display:flex;flex:1;min-width:0;align-items:center;justify-content:space-between;text-align:left;background:#f2f5f6;color:#222;border:1px solid #bdc7cd;margin:0;padding:5px 7px;cursor:pointer;font-size:11px;';
           var title=document.createElement('span');
           title.textContent=item.name;
           var tracks=document.createElement('span');
@@ -519,7 +519,30 @@
               say('Loaded: '+stored.name+' ('+stored.tracks.length+' SID).');
             } catch(error){say(error.message || 'Failed to load playlist.');}
           });
-          libraryEl.appendChild(btn);
+          var row=document.createElement('div');
+          row.style.cssText='display:flex;align-items:stretch;gap:5px;margin:3px 0;';
+          var del=document.createElement('button');
+          del.type='button';
+          del.textContent='DELETE';
+          del.title='Delete saved playlist: '+item.name;
+          del.setAttribute('aria-label','Delete saved playlist '+item.name);
+          del.style.cssText='flex:none;margin:0;padding:4px 8px;background:#702828;color:white;border:1px solid #b56a6a;cursor:pointer;font-size:10px;';
+          del.addEventListener('click',async function(event){
+            event.stopPropagation();
+            if (!window.confirm('Delete saved playlist "'+item.name+'"? This cannot be undone.')) return;
+            try {
+              await dbCall('readwrite',function(store){return store.delete(item.id);});
+              if (currentId===item.id) currentId='';
+              await refreshSaved();
+              say('Deleted saved playlist: '+item.name+'. Current playback was not changed.');
+            } catch(error) {
+              say(error.message || 'Could not delete playlist.');
+              console.error('Playlist deletion failed',error);
+            }
+          });
+          row.appendChild(btn);
+          row.appendChild(del);
+          libraryEl.appendChild(row);
         });
       }
     }
