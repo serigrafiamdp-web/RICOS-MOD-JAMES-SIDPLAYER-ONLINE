@@ -348,3 +348,22 @@ left: 1px;
   outline: 1px solid slategrey;
 }
 
+
+/* TEST04 – compact custom SID playlist, no thumbnail images */
+#ricoListTabs { display:flex; gap:6px; margin:4px 0; }
+#ricoListTabs button { font-size:11px; padding:4px 9px; background:#29303b; color:white; border:1px solid #78899b; }
+#ricoListTabs button.rico-selected-tab { background:#31684e; border-color:#469b71; }
+#ricoDropZone { margin-top:5px; padding:7px; border:1px dashed #78899b; background:#e5eaf0; font-size:10px; }
+#ricoDropZone.rico-dragging { background:#ccf4dd; border-color:#228347; }
+#ricoDropZone button { font-size:10px; padding:3px 6px; background:#1d2935; color:white; border:1px solid #68808d; }
+#ricoPlaylistOptions { font-size:10px; margin-top:4px; }
+#ricoFallback { width:52px; padding:1px; }
+#ricoPlaylistStatus { margin-top:4px; font-size:10px; color:#424d59; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.rico-local-row { display:flex; align-items:center; min-height:23px; padding:3px 6px; gap:7px; border-bottom:1px solid #c9d0d7; cursor:pointer; font-size:11px; background:#eee; color:#222; }
+.rico-local-row:hover { background:#d9e2f2; }
+.rico-local-row.rico-active-row { background:#bce6d0; }
+.rico-row-index { width:24px; color:#777; flex-shrink:0; font-variant-numeric:tabular-nums; }
+.rico-row-title { font-weight:bold; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; flex:1; min-width:50px; }
+.rico-row-author { max-width:34%; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; color:#555; }
+.rico-row-subs { white-space:nowrap; font-size:10px; color:#555; }
+.rico-empty { padding:18px; font-size:12px; color:#555; text-align:center; }
