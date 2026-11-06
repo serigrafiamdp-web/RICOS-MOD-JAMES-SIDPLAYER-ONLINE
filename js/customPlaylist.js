@@ -642,7 +642,7 @@
           var row=document.createElement('div');
           row.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px;border-bottom:1px solid #aaa;';
           var label=document.createElement('span');
-          label.textContent=item.title+' — '+(item.author||'Unknown')+' · '+(Number(item.tracks)||0)+' SID';
+          label.textContent=item.title+' — Playlist by '+(item.author||item.createdBy||'Unknown')+' · '+(Number(item.tracks)||0)+' SID';
           var button=document.createElement('button');
           button.type='button';button.textContent='LOAD';
           button.addEventListener('click',async function(){
