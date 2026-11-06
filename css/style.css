@@ -456,3 +456,7 @@ left: 1px;
 .rico-live-track .rico-live-title { display:block; font-weight:bold; flex:none; }
 .rico-live-artist { display:block; font-size:10px; color:#a6bac9; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 #ricoLivePlaylistItems .rico-live-active .rico-live-artist { color:#a9dfc5; }
+
+/* TEST17 — compact single-line song title and artist */
+#ricoLivePlaylistItems .rico-live-row { min-height:29px; }
+#ricoLivePlaylistItems .rico-live-title { display:block; flex:1; min-width:0; font-weight:normal; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
