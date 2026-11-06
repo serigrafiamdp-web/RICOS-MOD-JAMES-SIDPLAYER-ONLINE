@@ -609,6 +609,61 @@
         console.error('JSON import failed',error);
       }
     });
+    // Closed beta community catalog: read-only and hosted on the same Pages origin.
+    var communityTab=document.getElementById('ricoCommunityTab');
+    var communityPanel=document.getElementById('ricoCommunityPanel');
+    var communityItems=document.getElementById('ricoCommunityItems');
+    var localPanel=document.getElementById('ricoLocalPanel');
+    var communityActive=false;
+    function showCommunity(visible) {
+      communityActive=visible;
+      if (communityPanel) communityPanel.style.display=visible?'block':'none';
+      if (localPanel) localPanel.style.display=visible?'none':'block';
+      if (communityTab) communityTab.classList.toggle('rico-selected-tab',visible);
+      if (visible) loadCommunityCatalog();
+    }
+    async function loadCommunityCatalog() {
+      if (!communityItems) return;
+      communityItems.textContent='Loading community playlists...';
+      try {
+        var response=await fetch('community/playlists.json',{cache:'no-store'});
+        if(!response.ok) throw Error('Catalog unavailable ('+response.status+').');
+        var catalog=await response.json();
+        if (!catalog || catalog.format!=='ricos-community-catalog' || catalog.version!==1 ||
+            !Array.isArray(catalog.playlists)) throw Error('Unsupported community catalog.');
+        communityItems.textContent='';
+        if(!catalog.playlists.length) {
+          communityItems.textContent='No shared playlists published yet. Closed beta: Rico and invited testers only.';
+          return;
+        }
+        catalog.playlists.forEach(function(item){
+          if(!item || typeof item.title!=='string' || typeof item.file!=='string' ||
+             !/^community\/playlists\/[a-zA-Z0-9_-]+\.json$/.test(item.file)) return;
+          var row=document.createElement('div');
+          row.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px;border-bottom:1px solid #aaa;';
+          var label=document.createElement('span');
+          label.textContent=item.title+' — '+(item.author||'Unknown')+' · '+(Number(item.tracks)||0)+' SID';
+          var button=document.createElement('button');
+          button.type='button';button.textContent='LOAD';
+          button.addEventListener('click',async function(){
+            button.disabled=true;
+            try {
+              var result=await fetch(item.file,{cache:'no-store'});
+              if(!result.ok) throw Error('Playlist unavailable.');
+              var body=await result.text();
+              if(body.length>90*1024*1024) throw Error('Playlist too large.');
+              var data=JSON.parse(body);
+              loadPlaylist(data);
+              showCommunity(false);
+              say('Community playlist loaded: '+data.name);
+            }catch(error){communityItems.setAttribute('data-error',error.message);say(error.message);}
+            finally{button.disabled=false;}
+          });
+          row.appendChild(label);row.appendChild(button);communityItems.appendChild(row);
+        });
+      } catch(error){communityItems.textContent='Could not load USER PLAYLISTS: '+error.message;}
+    }
+    if(communityTab) communityTab.addEventListener('click',function(){showCommunity(!communityActive);});
     refreshSaved().catch(function(error){say('Local saving unavailable: '+error.message);});
   })();
 
