@@ -347,17 +347,17 @@
     </div>
 
 
-    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 20px; background-color: #000000" id="sidControls">
+    <div id="sidControls">
       <button type="button" id="chooseSid">Choose A SID...</button>
       <button type="button" id="nextSid">Next SID &gt;</button>
       <button type="button" id="ricoPlaylistToggle" aria-pressed="false" title="Show or hide active playlist">PLAYLIST</button>
       <button type="button" id="autoAdvanceButton" aria-pressed="false" title="Advance through subtunes and then the next SID using listed durations">AUTO: OFF</button>
 
-      <button type="button" id="stopButton" style="width: 40px">Stop</button>
-      <button type="button" id="playButton" style="width: 40px">Play</button>
-      <span id="oscilloscopeVisualButtons" style="position:fixed;top:10px;right:12px;z-index:200;display:flex;gap:6px;align-items:center;">
-        <button type="button" id="oscilloscopeModeButton" aria-pressed="false" title="Switch between line and filled waveform" style="background:#101010;color:#fff;border:1px solid #aaa;border-radius:5px;padding:6px 10px;cursor:pointer;font-size:12px;">Wave: Line</button>
-        <button type="button" id="oscilloscopeColorButton" title="Cycle retro oscilloscope color palettes" style="background:#101010;color:#fff;border:1px solid #aaa;border-radius:5px;padding:6px 10px;cursor:pointer;font-size:12px;">Color: Original</button>
+      <button type="button" id="stopButton">Stop</button>
+      <button type="button" id="playButton">Play</button>
+      <span id="oscilloscopeVisualButtons">
+        <button type="button" id="oscilloscopeModeButton" aria-pressed="false" title="Switch between line and filled waveform">Wave: Line</button>
+        <button type="button" id="oscilloscopeColorButton" title="Cycle retro oscilloscope color palettes">Color: Original</button>
       </span>
 
 
@@ -381,11 +381,8 @@
 
 
 
-      <div style="position: absolute; right: 50px; bottom: 0">
+      <div class="rico-bottom-about">
         <button type="button" id="aboutSIDButton">About the SID Chip...</button>
-      </div>
-
-      <div style="position: absolute; right: 0px; bottom: 0">
         <button type="button" id="aboutButton">About...</button>
       </div>
     </div>
