@@ -83,9 +83,9 @@
       var active = index === player.sidListIndex;
       if (active) row.addClass('rico-live-active').attr('aria-current', 'true');
       $('<span>').addClass('rico-live-number').text(index + 1).appendTo(row);
-      var trackInfo = $('<span>').addClass('rico-live-track').appendTo(row);
-      $('<span>').addClass('rico-live-title').text(item.name || item.file || 'SID ' + (index + 1)).appendTo(trackInfo);
-      $('<span>').addClass('rico-live-artist').text(item.author || 'Unknown artist').appendTo(trackInfo);
+      var songTitle = item.name || item.file || 'SID ' + (index + 1);
+      var songArtist = item.author || 'Unknown artist';
+      $('<span>').addClass('rico-live-title').text(songTitle + ' — ' + songArtist).appendTo(row);
       row.attr('title', (item.name || item.file || 'SID ' + (index + 1)) + ' — ' + (item.author || 'Unknown artist'));
       if (active) $('<span>').addClass('rico-live-current').text('▶').appendTo(row);
       row.on('click', function () {
