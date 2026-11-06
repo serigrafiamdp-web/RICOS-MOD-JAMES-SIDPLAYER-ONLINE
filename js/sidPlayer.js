@@ -1615,9 +1615,17 @@ SidPlayer.prototype = {
   loadSIDData: function(data) {
     this.dialogManager.hideDialog();
 
-    SID.loadMusicData(this.sampleRate, '', '', data);
+    var loadResult = SID.loadMusicData(this.sampleRate, '', '', data);
+    if(loadResult !== 0) {
+      this.autoLoading = false;
+      this.isPlaying = false;
+      this.isPaused = false;
+      $('#playButton').html('Play');
+      console.warn('SID engine rejected file; error code:', loadResult);
+      return false;
+    }
 
-    result = {};
+    var result = {};
     SID.updateSongInfo('', result); 
 
     var actualSubsong = 0;
@@ -1627,6 +1635,7 @@ SidPlayer.prototype = {
 
     this.playSong(actualSubsong);
     this.setSongInfo(result);
+    return true;
 
   },
 
