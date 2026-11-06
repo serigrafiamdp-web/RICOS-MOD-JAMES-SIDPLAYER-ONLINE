@@ -29,11 +29,11 @@
     </div>
 
 
-    <div id="chooseSidDialog" class="dialog" style="width: 560px; height: 540px">
+    <div id="chooseSidDialog" class="dialog" style="width: 600px; height: 620px">
       <div class="title">Choose A SID</div>
       <div class="content">
 
-        <div id="chooseSidInfo" style="position:absolute;top:10px;height:265px;left:10px;right:10px;background:#eee;color:#333;padding:7px;font-size:12px;border:1px solid #555;">
+        <div id="chooseSidInfo" style="position:absolute;top:10px;height:305px;left:10px;right:10px;background:#eee;color:#333;padding:7px;font-size:12px;border:1px solid #555;">
           <h2 style="margin:0 0 5px 0;">RICOS MOD - JAMES SIDPLAYER ONLINE</h2>
           <div id="ricoListTabs">
             <button type="button" id="ricoDefaultTab" class="rico-selected-tab">DEFAULT (22)</button>
@@ -52,18 +52,26 @@
             <a href="javascript:void(0)" id="sidFileOpen" style="display:none;">Open a Local SID File</a>
           </div>
           <div id="ricoPlaylistStatus" role="status">Original 22 SID playlist.</div>
-          <div id="ricoSavedPlaylistControls" style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:5px;">
-            <input id="ricoSavedName" type="text" maxlength="100" value="My SID Playlist" aria-label="Playlist name" placeholder="Playlist name" style="width:125px;height:24px;box-sizing:border-box;" />
-            <button type="button" id="ricoSaveList">SAVE LIST</button>
-            <select id="ricoSavedSelect" aria-label="Saved playlists" style="max-width:145px;height:24px;"><option value="">Saved playlists</option></select>
-            <button type="button" id="ricoLoadList">LOAD LIST</button>
-            <button type="button" id="ricoDownloadList">DOWNLOAD JSON</button>
-            <button type="button" id="ricoImportList">IMPORT JSON</button>
-            <input type="file" id="ricoJsonImport" accept=".json,application/json" style="display:none;" />
+          <div id="ricoSavedPlaylistControls" style="border-top:1px solid #aab5bc;margin-top:7px;padding-top:7px;">
+            <div style="font-weight:bold;font-size:12px;margin-bottom:5px;">MY PLAYLISTS · TEST10</div>
+            <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
+              <label for="ricoSavedName" style="font-weight:bold;">Playlist name:</label>
+              <input id="ricoSavedName" type="text" maxlength="100" value="My SID Playlist" autocomplete="off" aria-label="Playlist name" placeholder="Type your playlist name here" style="flex:1;min-width:180px;height:27px;box-sizing:border-box;padding:3px 7px;border:2px solid #326a85;background:white;color:#111;font-size:13px;cursor:text;" />
+              <button type="button" id="ricoSaveList">SAVE LIST</button>
+              <button type="button" id="ricoDownloadList">DOWNLOAD JSON</button>
+              <button type="button" id="ricoImportList">IMPORT JSON</button>
+              <input type="file" id="ricoJsonImport" accept=".json,application/json" style="display:none;" />
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:7px;">
+              <strong style="font-size:11px;">SAVED PLAYLISTS</strong>
+              <select id="ricoSavedSelect" aria-label="Saved playlists" style="display:none;"><option value="">Saved playlists</option></select>
+              <button type="button" id="ricoLoadList" style="display:none;">LOAD LIST</button>
+            </div>
+            <div id="ricoSavedLibrary" role="list" style="height:67px;overflow-y:auto;border:1px solid #adb7c0;background:white;padding:3px;color:#222;font-size:11px;">No saved playlists yet.</div>
+            <div id="ricoSavedStatus" role="status" style="font-size:11px;min-height:14px;margin-top:4px;color:#333;">Enter a name, SAVE LIST, then select a saved playlist to load it.</div>
           </div>
-          <div id="ricoSavedStatus" role="status" style="font-size:11px;min-height:14px;margin-top:3px;color:#333;">Save CUSTOM playlists locally or export portable JSON.</div>
         </div>
-        <div id="sidListHolder" style="position:absolute;top:287px;bottom:10px;left:10px;right:10px;overflow:auto;border:1px solid #555;">
+        <div id="sidListHolder" style="position:absolute;top:327px;bottom:10px;left:10px;right:10px;overflow:auto;border:1px solid #555;">
           <div id="sidList"></div>
         </div>
 
@@ -401,6 +409,6 @@
     <script type="text/javascript" src="js/backend_tinysid.js"></script>
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test07"></script>
-    <script type="text/javascript" src="js/customPlaylist.js?v=test09"></script>
+    <script type="text/javascript" src="js/customPlaylist.js?v=test10"></script>
   </body>
 </html>
