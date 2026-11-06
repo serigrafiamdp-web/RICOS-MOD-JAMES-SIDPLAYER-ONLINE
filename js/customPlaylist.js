@@ -15,6 +15,7 @@
   var custom = [];
   var customActive = false;
   var importing = false;
+  var liveVisible = false;
 
   function escapeFilename(name) {
     return (name || '').replace(/\.[sS][iI][dD]$/, '')
@@ -63,7 +64,50 @@
   player.displaySongInfo = function () {
     originalDisplayInfo.apply(this, arguments);
     customInfo();
+    renderLivePlaylist();
   };
+
+  function renderLivePlaylist() {
+    var holder = $('#ricoLivePlaylistItems').empty();
+    var list = player.sidList || [];
+    $('#ricoLiveCount').text('(' + list.length + ')');
+    if (!list.length) {
+      $('<div>').addClass('rico-live-empty').text('No SID loaded. Use Choose A SID to add music.').appendTo(holder);
+      return;
+    }
+    list.forEach(function (item, index) {
+      var row = $('<button type="button">').addClass('rico-live-row');
+      var active = index === player.sidListIndex;
+      if (active) row.addClass('rico-live-active').attr('aria-current', 'true');
+      $('<span>').addClass('rico-live-number').text(index + 1).appendTo(row);
+      $('<span>').addClass('rico-live-title').text(item.name || item.file || 'SID ' + (index + 1)).appendTo(row);
+      if (active) $('<span>').addClass('rico-live-current').text('▶').appendTo(row);
+      row.on('click', function () {
+        if (customActive) loadCustomIndex(index);
+        else {
+          player.sidListIndex = index;
+          player.loadSID('sids/' + originalList[index].file);
+          player.setPath(originalList[index].id);
+        }
+        renderLivePlaylist();
+      });
+      row.appendTo(holder);
+    });
+    var currentRow = holder.find('.rico-live-active');
+    if (currentRow.length && liveVisible) currentRow[0].scrollIntoView({block:'nearest'});
+  }
+
+  function showLivePlaylist(visible) {
+    liveVisible = !!visible;
+    $('#ricoLivePlaylist').toggle(liveVisible);
+    $('#ricoPlaylistToggle').attr('aria-pressed', liveVisible ? 'true' : 'false')
+      .toggleClass('rico-playlist-on', liveVisible);
+    if (liveVisible) renderLivePlaylist();
+  }
+  $('#ricoPlaylistToggle').on('click', function () {
+    showLivePlaylist(!liveVisible);
+  });
+  $('#ricoLiveClose').on('click', function () { showLivePlaylist(false); });
 
   function refreshTabs() {
     $('#ricoDefaultTab').toggleClass('rico-selected-tab', !customActive);
@@ -91,6 +135,7 @@
     player.setPath('');
     player.showSIDInfo(false);
     player.initFileSelection();
+    renderLivePlaylist();
     refreshTabs();
   }
   function loadCustomIndex(index) {
@@ -105,6 +150,7 @@
       player.loadSIDData(item.localBytes);
       // Engine determines actual initial subtune from the SID header.
       player.initFileSelection();
+      renderLivePlaylist();
     } catch (error) {
       player.autoLoading = false;
       player.isPlaying = false;
@@ -118,6 +164,7 @@
       loadCustomIndex(player.sidListIndex === false ? 0 : (player.sidListIndex + 1) % custom.length);
     } else {
       defaultNextSid.apply(player, arguments);
+      renderLivePlaylist();
     }
   };
   player.popPath = function () {
@@ -126,6 +173,7 @@
   player.initFileSelection = function () {
     if (!customActive) {
       defaultRenderList.call(player);
+      renderLivePlaylist();
       refreshTabs();
       return;
     }
@@ -143,6 +191,7 @@
       row.on('click', function () { loadCustomIndex(index); });
       row.appendTo(holder);
     });
+    renderLivePlaylist();
     refreshTabs();
   };
 
@@ -177,6 +226,8 @@
       if (!customActive) activate('custom');
       else player.initFileSelection();
       if (player.sidListIndex === false) loadCustomIndex(0);
+      renderLivePlaylist();
+      showLivePlaylist(true);
     }
     $('#ricoPlaylistStatus').text(accepted + ' SID imported' + (rejected ? ' · ' + rejected + ' skipped' : '') + '. Session only.');
   }
@@ -238,6 +289,7 @@
       player.sidListIndex = false;
       $('#playButton').text('Play');
       player.initFileSelection();
+      renderLivePlaylist();
     }
     refreshTabs();
   });
@@ -260,4 +312,5 @@
 
   refreshTabs();
   player.initFileSelection();
+  renderLivePlaylist();
 })();
