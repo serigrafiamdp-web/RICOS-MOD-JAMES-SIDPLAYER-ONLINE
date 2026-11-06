@@ -1,29 +1,31 @@
-# RICOS MOD JAMES SIDPLAYER ONLINE
+# RICOS MOD - JAMES SIDPLAYER ONLINE
 
-Repositorio destinado a preservar y estudiar el reproductor SID original:
+Archivo funcional y modificaciones del reproductor web SID originalmente alojado en http://level3.jojati.com/sidplayer/.
 
-- Sitio: http://level3.jojati.com/sidplayer/
-- Código modificado publicado por el autor: https://level3.jojati.com/sidplayer/src/sidplayersrc.zip
-- Motor base: https://github.com/wothke/websid
+## Reproductor
 
-## Estado
+GitHub Pages: https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/
 
-**Archivo en preparación.** Todavía NO contiene una copia funcional del reproductor original.
+- 22 SID originales preservados con sus imágenes y tiempos documentados.
+- Osciloscopio original o con relleno, y paletas retro.
+- AUTO ON/OFF: avanza subtunes y SID según duración conocida o tiempo de respaldo.
+- TEST04: CUSTOM playlist de múltiples archivos SID locales, sin miniaturas; seleccionar archivos múltiples, carpeta de SID (Chrome/Edge) o arrastrar archivos/carpetas.
+- Lectura de metadata PSID/RSID (título, autor, año/copyright, cantidad de subtunes y subtune inicial).
+- DEFAULT restaura la lista original; CUSTOM usa los archivos locales en memoria.
+- Los archivos locales NO se suben a este repositorio ni a un servidor y se pierden al recargar la página.
+- Los encabezados PSID/RSID **no incluyen duración de reproducción**: AUTO para CUSTOM usa el tiempo de respaldo configurable (180 segundos inicialmente) hasta incorporar una fuente de duraciones fiable.
 
-El sitio indica que emplea WebSid (basado en Tiny'R'Sid), de Juergen Wothke. Su autor declara modificaciones para extraer datos de voces individuales, desactivar el filtro y modificar su comportamiento.
+## Respaldo de pruebas
 
-Para preservar la web completa deben verificarse y reunir HTML, CSS, JavaScript, recursos estáticos y el motor de reproducción, manteniendo las rutas locales. No se debe confundir el ZIP de modificaciones con el proyecto web completo.
+Rama: `pass-test03-before-custom-playlist`. Es una copia previa al TEST04 para recuperar la versión anterior.
 
-## Licencias y atribución
+## Código original y créditos
 
-El sitio identifica WebSid y las modificaciones como **CC BY-NC-SA 4.0** (atribución, no comercial, compartir igual). Mantener créditos y avisos de licencia en cualquier adaptación. Los derechos sobre otras bibliotecas y sobre archivos SID pueden ser distintos; verificar cada uno antes de redistribuirlos.
+- Web original: http://level3.jojati.com/sidplayer/
+- Fuente modificada publicada allí: `src/sidplayersrc.zip`.
+- Motor de SID: WebSid (Tiny'R'Sid), Juergen Wothke: https://github.com/wothke/websid.
+- Versión anterior del sitio: `old/`.
 
-Este repositorio es un trabajo de preservación / estudio independiente y no representa al autor original.
+Mantener los créditos originales y consultar las licencias indicadas en la página fuente. El sitio describe el código de WebSid y sus modificaciones como CC BY-NC-SA 4.0. Los derechos de los archivos musicales pueden tener condiciones adicionales.
 
-## Próximos pasos
-
-1. Recuperar los archivos originales completos y evaluar sus dependencias.
-2. Conservar una copia sin modificar antes de cualquier adaptación.
-3. Adaptar rutas relativas para GitHub Pages, sin sustituir el motor original.
-4. Comprobar carga de SID locales, reproducción, voces 1–4 y filtro.
-5. Documentar cambios y procedencia de cada recurso.
+Esta conservación y modificación es independiente de los autores originales.
