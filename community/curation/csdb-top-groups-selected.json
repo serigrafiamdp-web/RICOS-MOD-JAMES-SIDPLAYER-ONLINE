@@ -18,11 +18,12 @@
       "selectedBy": "RICO",
       "selectionStatus": "verified",
       "excludesGames": true,
-      "csdbGroupRank": 20,
-      "csdbGroupWeightedAverage": 9.14,
+      "csdbGroupRank": 11,
+      "csdbGroupWeightedAverage": 9.24,
       "csdbGroupVotes": 97,
       "csdbRankingUrl": "https://csdb.dk/toplist.php?type=group",
-      "rankVerifiedOn": "2026-11-07"
+      "rankVerifiedOn": "2026-11-07",
+      "rankSourceNote": "CSDb Top Groups indexed snapshot retrieved 2026-11-07, rank may change"
     }
   ]
 }
