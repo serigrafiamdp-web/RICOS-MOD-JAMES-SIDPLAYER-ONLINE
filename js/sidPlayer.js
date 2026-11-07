@@ -23,8 +23,8 @@ var SidPlayer = function() {
   ];
   // TEST24: choose a fresh theme on every opening (no persistent preference).
   this.colorModeIndex = Math.floor(Math.random() * this.colorModes.length);
-  // TEST03: Automatic playlist based on documented subtune times.
-  this.autoAdvance = false;
+  // TEST26: enabled from the start; switches between SID files only.
+  this.autoAdvance = true;
   this.autoElapsedSamples = 0;
   this.autoFallbackSeconds = 180; // Some subtunes do not specify a duration.
   this.autoLoading = false;
@@ -2330,6 +2330,7 @@ var sidPlayer = new SidPlayer();
 sidPlayer.init();
 sidPlayer.initWebAudio();
 sidPlayer.applyOscilloscopeColors(); // TEST20: initialize UI palette, including the default.
+sidPlayer.updateAutoButton(); // TEST26: synchronize AUTO button with startup state.
 sidPlayer.popPath();
 
 
