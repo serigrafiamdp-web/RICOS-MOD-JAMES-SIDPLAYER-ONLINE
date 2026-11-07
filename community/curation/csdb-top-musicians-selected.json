@@ -31,6 +31,45 @@
       "releaseVotes": 21,
       "selectionMethod": "verified credit and SID on rated C64 demo",
       "selectionStatus": "verified"
+    },
+    {
+      "rank": 5,
+      "musician": "psych858o",
+      "sidTitle": "Like We Never Left",
+      "hvscPath": "/MUSICIANS/P/Psych858o/Like_We_Never_Left.sid",
+      "release": "Like We Never Left",
+      "releaseType": "C64 Music",
+      "source": "https://csdb.dk/release/?id=262142",
+      "releaseRating": 9.8,
+      "releaseVotes": 19,
+      "selectionStatus": "verified",
+      "selectionMethod": "CSDb artist credit and explicitly non-game C64 Music release"
+    },
+    {
+      "rank": 6,
+      "musician": "Jammer",
+      "sidTitle": "Floatee",
+      "hvscPath": "/MUSICIANS/J/Jammer/Floatee.sid",
+      "release": "Floatee",
+      "releaseType": "C64 Music",
+      "source": "https://csdb.dk/release/?id=33819",
+      "releaseRating": 9.5,
+      "releaseVotes": 8,
+      "selectionStatus": "verified",
+      "selectionMethod": "CSDb music credit and HVSC SID"
+    },
+    {
+      "rank": 7,
+      "musician": "Linus",
+      "sidTitle": "Auf Wiedersehen Linus",
+      "hvscPath": "/MUSICIANS/L/Linus/Auf_Wiedersehen_Linus.sid",
+      "release": "Auf Wiedersehen Linus",
+      "releaseType": "C64 Music",
+      "source": "https://csdb.dk/release/?id=262176",
+      "releaseRating": 9.8,
+      "releaseVotes": 18,
+      "selectionStatus": "verified",
+      "selectionMethod": "CSDb credited 2026 music release and HVSC SID"
     }
   ]
 }
