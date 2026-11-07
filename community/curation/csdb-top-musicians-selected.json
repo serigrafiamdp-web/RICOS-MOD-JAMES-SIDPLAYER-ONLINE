@@ -70,6 +70,19 @@
       "releaseVotes": 18,
       "selectionStatus": "verified",
       "selectionMethod": "CSDb credited 2026 music release and HVSC SID"
+    },
+    {
+      "rank": 36,
+      "musician": "PRI",
+      "sidTitle": "Multirock",
+      "hvscPath": "/MUSICIANS/P/PRI/Multirock.sid",
+      "release": "Multi Rock",
+      "releaseType": "C64 Music",
+      "source": "https://csdb.dk/release/?id=14889",
+      "releaseRating": 9.8,
+      "releaseVotes": 18,
+      "selectionStatus": "verified",
+      "selectionMethod": "CSDb original C64 Music compo release by PRI, no game origin"
     }
   ]
 }
