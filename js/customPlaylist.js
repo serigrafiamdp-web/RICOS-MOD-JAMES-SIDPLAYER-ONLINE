@@ -17,6 +17,7 @@
   var importing = false;
   var liveVisible = true; // TEST21: PLAYLIST ON at startup
   var landingPlaylists = true; // TEST22: RICO'S PLAYLISTS, not GAMES, is the initial home view.
+  var cancelPendingCommunityStartup = function() {};
   // The title belongs to the playlist currently loaded, not the text being edited.
   var loadedPlaylistTitle = '';
 
@@ -521,6 +522,7 @@
     function loadPlaylist(data) {
       // Validate everything before changing the currently loaded playlist.
       var entries=validatedEntries(data);
+      cancelPendingCommunityStartup();
       landingPlaylists = false;
       player.isPlaying=false;
       player.isPaused=false;
@@ -674,6 +676,7 @@
         startupPlaylistTimer=null;
       }
     }
+    cancelPendingCommunityStartup=cancelStartupPlaylist;
     function showCommunity(visible) {
       communityActive=visible;
       if (communityPanel) communityPanel.style.display=visible?'block':'none';
