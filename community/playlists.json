@@ -18,6 +18,14 @@
       "createdBy": "RICO",
       "tracks": 13,
       "file": "community/playlists/rico.json"
+    },
+    {
+      "id": "sid-mix-1",
+      "title": "SID MIX 1",
+      "author": "Various Artists",
+      "createdBy": "RICO",
+      "tracks": 36,
+      "file": "community/playlists/sid-mix-1.json"
     }
   ]
 }
