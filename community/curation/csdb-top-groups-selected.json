@@ -73,6 +73,36 @@
       "selectionStatus": "verified",
       "excludesGames": true,
       "selectionMethod": "CSDb C64 music released jointly by Censor Design, Genesis Project and MultiStyle Labs"
+    },
+    {
+      "group": "Oxyron",
+      "release": "Multi Rock",
+      "releaseType": "C64 Music",
+      "composer": "PRI",
+      "sidTitle": "Multirock",
+      "hvscPath": "/MUSICIANS/P/PRI/Multirock.sid",
+      "source": "https://csdb.dk/release/?id=14889",
+      "releaseRating": 9.8,
+      "releaseVotes": 18,
+      "selectedBy": "assistant",
+      "selectionStatus": "verified",
+      "excludesGames": true,
+      "selectionMethod": "CSDb release and SID credits, original scene production"
+    },
+    {
+      "group": "Performers",
+      "release": "Next Level",
+      "releaseType": "C64 Demo",
+      "composer": "dEViLOCk",
+      "sidTitle": "Next Level Main",
+      "hvscPath": "/MUSICIANS/D/Devilock/Next_Level_Main.sid",
+      "source": "https://csdb.dk/release/?id=232976",
+      "releaseRating": 9.7,
+      "releaseVotes": 189,
+      "selectedBy": "assistant",
+      "selectionStatus": "verified",
+      "excludesGames": true,
+      "selectionMethod": "CSDb release and SID credits, original scene production"
     }
   ]
 }
