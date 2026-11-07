@@ -460,3 +460,85 @@ left: 1px;
 /* TEST17 — compact single-line song title and artist */
 #ricoLivePlaylistItems .rico-live-row { min-height:29px; }
 #ricoLivePlaylistItems .rico-live-title { display:block; flex:1; min-width:0; font-weight:normal; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+
+/* TEST20 — oscilloscope theme also drives player playlist and dialog colors.
+   Color variables are assigned in applyOscilloscopeColors(). No layout changes. */
+:root {
+  --rico-theme-bg:#000000;
+  --rico-theme-fg:#ffffff;
+  --rico-theme-border:#ffffff;
+  --rico-theme-panel:#333333;
+  --rico-theme-hover:#555555;
+}
+#ricoLivePlaylist,
+.dialog {
+  background:var(--rico-theme-bg) !important;
+  color:var(--rico-theme-fg) !important;
+  border-color:var(--rico-theme-border) !important;
+}
+#ricoLivePlaylistHeader,
+.dialog .title,
+.dialog .buttons {
+  background:var(--rico-theme-panel) !important;
+  color:var(--rico-theme-fg) !important;
+  border-color:var(--rico-theme-border) !important;
+}
+#ricoLivePlaylistItems .rico-live-row {
+  background:transparent !important;
+  color:var(--rico-theme-fg) !important;
+  border-color:var(--rico-theme-panel) !important;
+}
+#ricoLivePlaylistItems .rico-live-row:hover,
+#ricoLivePlaylistItems .rico-live-active,
+#ricoLivePlaylistItems .rico-live-active:hover {
+  background:var(--rico-theme-hover) !important;
+  color:var(--rico-theme-fg) !important;
+}
+#ricoLivePlaylist .rico-live-number,
+#ricoLivePlaylist .rico-live-artist,
+#ricoLivePlaylist #ricoLiveStatus,
+#ricoLivePlaylist #ricoLiveClose,
+#ricoLivePlaylist .rico-live-current {
+  color:var(--rico-theme-fg) !important;
+}
+#ricoLiveResizeGrip { background:var(--rico-theme-panel) !important; border-color:var(--rico-theme-border) !important; }
+.dialog .content { color:var(--rico-theme-fg) !important; }
+#chooseSidInfo,
+#ricoCommunityPanel,
+#sidListHolder,
+#aboutSIDHolder {
+  background:var(--rico-theme-bg) !important;
+  color:var(--rico-theme-fg) !important;
+  border-color:var(--rico-theme-border) !important;
+}
+#ricoListTabs button,
+#ricoDropZone button,
+.dialog .buttons button {
+  background:var(--rico-theme-panel) !important;
+  color:var(--rico-theme-fg) !important;
+  border-color:var(--rico-theme-border) !important;
+}
+#ricoListTabs button.rico-selected-tab,
+#ricoListTabs button:hover,
+#ricoDropZone button:hover {
+  background:var(--rico-theme-hover) !important;
+}
+#ricoDropZone {
+  background:var(--rico-theme-panel) !important;
+  color:var(--rico-theme-fg) !important;
+  border-color:var(--rico-theme-border) !important;
+}
+#ricoPlaylistStatus, #ricoSavedStatus, #ricoSavedPlaylistControls,
+#ricoCommunityPanel strong, #ricoSavedLibrary {
+  border-color:var(--rico-theme-border) !important;
+}
+#ricoSavedStatus, #ricoPlaylistStatus { color:var(--rico-theme-fg) !important; }
+#ricoSavedLibrary { background:var(--rico-theme-panel) !important; color:var(--rico-theme-fg) !important; }
+#sidList .rico-local-row {
+  background:var(--rico-theme-bg) !important;
+  color:var(--rico-theme-fg) !important;
+  border-color:var(--rico-theme-border) !important;
+}
+#sidList .rico-local-row:hover,
+#sidList .rico-active-row { background:var(--rico-theme-hover) !important; }
+#sidList .rico-row-author, #sidList .rico-row-index, #sidList .rico-row-subs { color:var(--rico-theme-fg) !important; }
