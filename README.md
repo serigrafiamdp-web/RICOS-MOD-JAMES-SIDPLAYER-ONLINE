@@ -31,8 +31,13 @@ https://github.com/serigrafiamdp-web/RICOS-MOD-JAMES-SIDPLAYER-ONLINE
 - Switchable oscilloscope display with original line rendering and filled waveform visualization.
 - Retro oscilloscope color palettes, including green phosphor, amber, orange, Commodore 64 BASIC colors and additional combinations.
 - Automatic SID playback with optional AUTO ON/OFF control.
-- Automatic progression through subtunes and SID files using documented song durations or a configurable fallback.
+- Automatic progression between **SID files only** (not subtunes) using documented track duration or a configurable fallback; TEST18 PASS.
+- Background playback AUTO driven from the audio callback rather than `requestAnimationFrame`, so auto-switching continues when the browser tab is inactive; TEST19 PASS on user test.
+- Manual subtune navigation remains available using its own controls.
 - Custom SID playlists supporting multiple local files.
+- Named playlists saved locally in IndexedDB, with portable self-contained JSON export/import (TEST09–TEST12).
+- Read-only USER PLAYLISTS community catalog on GitHub Pages, with the first permanent collection **LOS PAT MORITAS**, playlist by **RICO**, containing 22 SIDs (TEST13–TEST15).
+- Song title and SID artist/composer displayed on one compact line in the floating playlist (TEST17); playlist curator is an independent attribution.
 - Folder selection and drag-and-drop loading of SID files.
 - PSID/RSID metadata reading, including song title, author, release information and subtune count.
 - Compact playlist display without thumbnails for managing larger music collections.
@@ -95,3 +100,7 @@ With respect and gratitude to James, Juergen Wothke, the SID composers and every
 Project: https://github.com/serigrafiamdp-web/RICOS-MOD-JAMES-SIDPLAYER-ONLINE
 
 Online Player: https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/
+
+## Stable checkpoint — 2026-11-06 (TEST19 PASS)
+
+The 2026-11-06 tested baseline is **TEST19 PASS**: AUTO switches to the next SID file, including while the browser tab is in the background; it does not cycle through subtunes automatically. Details, reproduction checklist and continuation notes: [docs/CHECKPOINT_TEST19_PASS_2026-11-06.md](docs/CHECKPOINT_TEST19_PASS_2026-11-06.md).
