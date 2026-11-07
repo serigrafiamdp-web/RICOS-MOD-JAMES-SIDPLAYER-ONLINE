@@ -25,7 +25,7 @@
     "David Whittaker"
   ],
   "eligibilityNote": "Only explicitly excluded known game-focused composers; other artists with both game and scene credits require song-level non-game checks.",
-  "verifiedSelections": 5,
+  "verifiedSelections": 6,
   "candidates": [
     {
       "csdbRank": 2,
@@ -222,7 +222,14 @@
       "csdbRank": 36,
       "musician": "PRI",
       "playlistPosition": 27,
-      "status": "pending_non_game_release_verification"
+      "status": "verified_selection",
+      "selection": {
+        "sidTitle": "Multirock",
+        "hvscPath": "/MUSICIANS/P/PRI/Multirock.sid",
+        "release": "Multi Rock",
+        "releaseType": "C64 Music",
+        "source": "https://csdb.dk/release/?id=14889"
+      }
     },
     {
       "csdbRank": 39,
