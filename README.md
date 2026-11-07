@@ -104,3 +104,14 @@ Online Player: https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONL
 ## Stable checkpoint — 2026-11-06 (TEST19 PASS)
 
 The 2026-11-06 tested baseline is **TEST19 PASS**: AUTO switches to the next SID file, including while the browser tab is in the background; it does not cycle through subtunes automatically. Details, reproduction checklist and continuation notes: [docs/CHECKPOINT_TEST19_PASS_2026-11-06.md](docs/CHECKPOINT_TEST19_PASS_2026-11-06.md).
+
+## Current playlist and browser status (TEST44, 2026-11-07)
+
+- **TEST42: PASS** — four browser tabs: RICO'S PLAYLISTS, GAMES (22), TOP 100 HVSC GAMES (100 SIDs), and USER LOCAL. Games, community playlists, and the HVSC ranking have matching visual text sizing.
+- **TEST43: published, awaiting playback verification** — browsing tabs no longer changes the active SID, playlist or audio; choosing a track or using LOAD changes playback. Auto-play follows the loaded playlist.
+- **TEST44: published, awaiting visual verification** — the original historical HVSC community poll from 2000 is labeled **TOP 100 HVSC GAMES**. This is a historical SID ranking, not a current DeepSID rating chart; all 100 original files are retained.
+- RICO'S PLAYLISTS catalog currently includes **LOS PAT MORITAS (34 SID, including named variants 1 and 2)**, **RICO (13 SID)** and **SID MIX 1 (36 SID)**.
+- **Planned, not published:** **TOP 100 CSDb MUSICIANS** (100 distinct composers, one non-game representative SID per composer) and **TOP 100 CSDb GROUPS** (100 distinct ranked scene groups, one composition documented in a demo/intro/music release from each group). CSDb rates musicians/groups, not automatically the chosen SID tracks; rankings and release/group credits require independent verification.
+- Source archives supplied for research: HVSC MUSICIANS and HVSC DEMOS. The DEMOS ZIP contains **3,058 SID files** (2,545 PSID and 513 RSID); many have no known composer attribution, so do not infer group credits solely from SID headers.
+- Official ranking references: https://csdb.dk/toplist.php?subtype=%287%29&type=scener and https://csdb.dk/toplist.php?type=group
+
