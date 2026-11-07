@@ -7,6 +7,19 @@
   if (!window.sidPlayer || !window.SID) return;
 
   var player = window.sidPlayer;
+  // TEST25: unlock Web Audio at the earliest user gesture, even before the
+  // 30-second automatic playlist selection. Never synthesize a fake click.
+  function unlockAudioFromGesture() {
+    if (!player.audioContext) player.initWebAudio();
+    if (player.audioContext && player.audioContext.state === 'suspended') {
+      var result=player.audioContext.resume();
+      if (result && result.catch) result.catch(function(error){
+        console.warn('Browser deferred audio until user interaction:',error);
+      });
+    }
+  }
+  document.addEventListener('pointerdown',unlockAudioFromGesture,{capture:true});
+  document.addEventListener('keydown',unlockAudioFromGesture,{capture:true});
   var originalList = player.sidList;
   var defaultRenderList = player.initFileSelection;
   var defaultNextSid = player.nextSid;
@@ -741,14 +754,24 @@
                 // Retain RICO'S PLAYLISTS as the home dialog, even after loadSIDData hides dialogs.
                 showCommunity(true);
                 player.dialogManager.showDialog('chooseSidDialog');
-                say('First playlist loaded: '+data.name+'. Playing first SID (browser may require a click to enable audio).');
-                // AudioContext autoplay is browser-controlled. Resume on the first real user gesture.
-                function enableAudio() {
-                  if(player.audioContext && player.audioContext.state==='suspended')
-                    player.audioContext.resume().catch(function(error){console.warn('Audio resume blocked:',error);});
+                // TEST25: actively attempt to start Web Audio at the 30-second mark.
+                // Modern browsers can still require a real user gesture.
+                if(!player.audioContext) player.initWebAudio();
+                if(player.audioContext && player.audioContext.state === 'suspended') {
+                  var resumed=player.audioContext.resume();
+                  if(resumed && resumed.then) resumed.then(function() {
+                    say('Playing first SID: '+data.name);
+                  }).catch(function(error) {
+                    console.warn('Automatic audio blocked by browser:',error);
+                    say('First SID loaded. Click PLAY to enable audio in this browser.');
+                  });
+                } else {
+                  say('Playing first SID: '+data.name);
                 }
-                document.addEventListener('pointerdown',enableAudio,{once:true});
-                document.addEventListener('keydown',enableAudio,{once:true});
+                if(player.audioContext && player.audioContext.state === 'suspended') {
+                  // resume() may remain pending until the user clicks; make the fallback visible.
+                  say('First SID loaded. If there is no sound, click PLAY once to enable audio.');
+                }
               } else {
                 showCommunity(false);
                 say('Community playlist loaded: '+data.name);
