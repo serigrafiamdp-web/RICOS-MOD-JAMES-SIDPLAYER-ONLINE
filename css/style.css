@@ -958,3 +958,38 @@ left: 1px;
  #chooseSidDialog.rico-view-games #sidList .rico-game-row {font-size:16px;}
  #ricoCommunityItems .rico-community-row {font-size:16px;}
 }
+
+/* TEST47: a moderately wider floating playlist while leaving the scope visible. */
+#ricoLivePlaylist {
+  width:min(510px,calc(100vw - 20px));
+  height:min(520px,calc(100vh - 110px));
+  max-width:calc(100vw - 20px);
+}
+#ricoLivePlaylistHeader {font-size:15px;min-height:39px;height:39px;}
+#ricoLivePlaylistCredits {min-height:43px;}
+#ricoLivePlaylistItems .rico-live-row {
+  min-height:40px;
+  padding:7px 11px;
+  font-size:13px;
+  line-height:1.35;
+}
+#ricoLivePlaylistItems .rico-live-group-row {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+  white-space:normal;
+  text-align:left;
+}
+#ricoLivePlaylistItems .rico-live-group-row .rico-live-number {flex:0 0 27px;}
+#ricoLivePlaylistItems .rico-live-group,
+#ricoLivePlaylistItems .rico-live-composer,
+#ricoLivePlaylistItems .rico-live-song {overflow-wrap:anywhere;min-width:0;}
+#ricoLivePlaylistItems .rico-live-group {font-weight:bold;}
+#ricoLivePlaylistItems .rico-live-composer::before,
+#ricoLivePlaylistItems .rico-live-song::before {content:"— ";font-weight:normal;}
+#ricoLivePlaylistItems .rico-live-group-row .rico-live-current {margin-left:auto;}
+@media(max-width:560px){
+ #ricoLivePlaylist {width:calc(100vw - 20px);}
+ #ricoLivePlaylistItems .rico-live-row {font-size:12px;padding:6px 7px;}
+}
