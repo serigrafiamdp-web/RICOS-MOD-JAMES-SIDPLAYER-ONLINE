@@ -1284,3 +1284,30 @@ left: 1px;
   overscroll-behavior:contain;
   scrollbar-width:auto;
 }
+
+/* TEST58: wrapped tabs on desktop previously overlaid the library's search row.
+   Place the library below the 2-row tab bar and keep its input fully visible. */
+#chooseSidDialog.rico-view-library #ricoLibraryPanel {
+  top:139px !important;
+}
+#ricoLibraryPanel .rico-library-controls {
+  flex-shrink:0;
+  position:relative;
+  z-index:2;
+}
+#ricoLibrarySearch {
+  flex:1 1 220px;
+  min-width:160px;
+  min-height:32px;
+  box-sizing:border-box;
+  font-size:14px;
+  cursor:text;
+  appearance:auto;
+}
+#ricoLibrarySearch:focus {
+  outline:2px solid var(--rico-theme-fg,#fff);
+  outline-offset:1px;
+}
+@media (max-width:560px) {
+  #chooseSidDialog.rico-view-library #ricoLibraryPanel {top:149px !important;}
+}
