@@ -127,12 +127,16 @@
     var list = player.sidList || [];
     $('#ricoLiveCount').text('(' + list.length + ')');
     $('#ricoLivePlaylistTitle').text(landingPlaylists ? "RICO'S PLAYLISTS" : (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'));
-    var credit = !landingPlaylists && customActive && loadedPlaylistTitle && loadedPlaylistCreator
-      ? 'Playlist by ' + loadedPlaylistCreator : '';
-    var showRatingPreview = !landingPlaylists && customActive && !!loadedPlaylistTitle;
-    $('#ricoLivePlaylistCreator').text(credit).css('display', credit ? 'inline' : 'none');
-    $('#ricoLivePlaylistStars').css('display', showRatingPreview ? 'inline' : 'none');
-    $('#ricoLivePlaylistCredits').css('display', (credit || showRatingPreview) ? 'flex' : 'none');
+    // TEST34: keep the creator/ratings strip visible while a playlist is loaded.
+    // Never confuse the playlist creator with each SID's composer.
+    var hasLoadedPlaylist = !!loadedPlaylistTitle && customActive;
+    var creatorText = hasLoadedPlaylist
+      ? 'Playlist by ' + (loadedPlaylistCreator || 'Unknown curator')
+      : (landingPlaylists ? 'Select a playlist' : 'Playlist by ' + (customActive ? 'You' : 'Original collection'));
+    $('#ricoLivePlaylistCreator').text(creatorText);
+    $('#ricoLivePlaylistCredits').attr('data-loaded', hasLoadedPlaylist ? 'true' : 'false');
+    $('#ricoLivePlaylistCredits').css('display','flex');
+    $('#ricoLivePlaylistStars').css('display', hasLoadedPlaylist ? 'inline-flex' : 'none');
     if (landingPlaylists) {
       $('<div>').addClass('rico-live-empty').text("Choose a playlist from RICO'S PLAYLISTS to start listening.").appendTo(holder);
       return;
