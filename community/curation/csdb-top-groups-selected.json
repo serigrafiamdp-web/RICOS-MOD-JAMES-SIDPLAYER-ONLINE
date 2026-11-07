@@ -41,6 +41,38 @@
       "csdbRankingUrl": "https://csdb.dk/toplist.php?type=group",
       "rankVerifiedOn": "2026-11-07",
       "rankSourceNote": "CSDb Top Groups indexed snapshot retrieved 2026-11-07, rank may change"
+    },
+    {
+      "group": "Booze Design",
+      "release": "Codeboys & Endians",
+      "releaseDate": "2025-02-03",
+      "releaseType": "C64 Demo",
+      "composer": "Dane",
+      "sidTitle": "Tour De Force",
+      "hvscPath": "/MUSICIANS/M/Mitch_and_Dane/Dane/Tour_De_Force.sid",
+      "source": "https://csdb.dk/release/index.php?id=249805",
+      "releaseRating": 9.7,
+      "releaseVotes": 137,
+      "selectedBy": "assistant",
+      "selectionStatus": "verified",
+      "excludesGames": true,
+      "selectionMethod": "CSDb demo by group, credited SID and music composer"
+    },
+    {
+      "group": "Censor Design",
+      "release": "Like We Never Left",
+      "releaseDate": "2026-06-05",
+      "releaseType": "C64 Music",
+      "composer": "psych858o",
+      "sidTitle": "Like We Never Left",
+      "hvscPath": "/MUSICIANS/P/Psych858o/Like_We_Never_Left.sid",
+      "source": "https://csdb.dk/release/?id=262142",
+      "releaseRating": 9.8,
+      "releaseVotes": 19,
+      "selectedBy": "assistant",
+      "selectionStatus": "verified",
+      "excludesGames": true,
+      "selectionMethod": "CSDb C64 music released jointly by Censor Design, Genesis Project and MultiStyle Labs"
     }
   ]
 }
