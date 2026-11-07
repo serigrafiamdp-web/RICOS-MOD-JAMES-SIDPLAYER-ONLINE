@@ -818,22 +818,44 @@
       try{await getRankData(kind);if(browserTab===kind)renderRankRows(kind);}
       catch(e){if(browserTab===kind)hvscStatus.textContent=e.message;}
     }
+    // Show CSDb scene aliases, never personal names from the SID author field.
+    function sceneAlias(value){
+      var v=(value||'').trim();
+      if(!v||v==='<?> ' .trim()||/^unknown(?: artist)?$/i.test(v))return '';
+      var matches=[...v.matchAll(/\(([^()]+)\)/g)];
+      if(matches.length)return matches[matches.length-1][1].trim();
+      // A single stage name/handle can be shown. Multiword real-name credits are withheld.
+      if(/^[^\s,&]+$/.test(v))return v;
+      return '';
+    }
     function renderRankRows(kind){
       var data=ricoRankCache[kind],entries=ricoRankEntries[kind];
       if(!data||!entries)return;
       hvscItems.textContent='';hvscStatus.textContent='100 SID · Click a song or press LOAD.';
       entries.forEach(function(item,index){
         var track=data.tracks[index]||{};
-        var composer=item.author||'';
-        if(composer==='<?> '||composer==='<?> ' .trim()||composer==='Unknown artist'||composer==='<?>')composer='';
         var group=kind==='groups'?(track.group||''):'';
-        var credit=[composer,group].filter(Boolean).join(' — ');
-        var row=document.createElement('button');row.type='button';row.className='rico-hvsc-row';
-        row.title=(index+1)+'. '+item.name+(credit?' — '+credit:'');
+        var alias=kind==='groups'?sceneAlias(item.author):(item.author||'Unknown artist');
+        var name=item.name||item.file;
+        var row=document.createElement('button');
+        row.type='button';
+        row.className='rico-hvsc-row'+(kind==='groups'?' rico-groups-row':'');
         var nr=document.createElement('span');nr.className='rico-hvsc-rank';nr.textContent=index+1;
-        var title=document.createElement('span');title.className='rico-hvsc-title';title.textContent=item.name||item.file;
-        var who=document.createElement('span');who.className='rico-hvsc-artist';who.textContent=credit||'Unknown artist';
-        row.appendChild(nr);row.appendChild(title);row.appendChild(who);
+        var title=document.createElement('span');title.className='rico-hvsc-title';title.textContent=name;
+        var who=document.createElement('span');who.className='rico-hvsc-artist';who.textContent=alias;
+        if(kind==='groups'){
+          var groupCell=document.createElement('span');
+          groupCell.className='rico-hvsc-group';
+          groupCell.textContent=group||'Scene group';
+          row.appendChild(nr);
+          row.appendChild(groupCell);
+          row.appendChild(who);
+          row.appendChild(title);
+          row.title=(index+1)+'. '+(group||'')+(alias?' — '+alias:'')+' — '+name;
+        }else{
+          row.appendChild(nr);row.appendChild(title);row.appendChild(who);
+          row.title=(index+1)+'. '+name+' — '+alias;
+        }
         row.addEventListener('click',function(){loadPlaylist(data,index);});
         hvscItems.appendChild(row);
       });
