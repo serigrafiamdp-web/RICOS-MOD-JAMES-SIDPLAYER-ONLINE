@@ -617,3 +617,31 @@ left: 1px;
 #ricoLivePlaylistItems::-webkit-scrollbar-thumb:hover {
   background: var(--rico-theme-fg, #ffffff);
 }
+
+/* TEST32: curator attribution and noninteractive, unrated five-star preview.
+   No clickable stars or simulated rating values. */
+#ricoLivePlaylistCredits {
+  display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center;
+  gap:3px 8px; padding:5px 9px;
+  color:var(--rico-theme-fg,#fff);
+  background:var(--rico-theme-panel,#222);
+  border-bottom:1px solid var(--rico-theme-border,#777);
+  font:11px Tahoma,Arial,sans-serif;
+}
+#ricoLivePlaylistCredits:has(> span[style*="display: none"]:first-child) {
+  /* Preview-only rating is still shown when a local list lacks creator metadata. */
+}
+#ricoLivePlaylistCredits:has(> span[style*="display: none"]:first-child) {
+  min-height:0;
+}
+#ricoLivePlaylistCredits:not(:has(> span:not([style*="display: none"]))) { display:none; }
+#ricoLivePlaylistStars {
+  white-space:nowrap;
+  color:var(--rico-theme-fg,#fff);
+  cursor:default;
+  user-select:none;
+}
+#ricoLivePlaylistStars > span[aria-hidden] {
+  font:16px Arial,sans-serif; letter-spacing:1px;
+}
+#ricoLivePlaylistStars .rico-rating-note {font-size:9px; opacity:.82; margin-left:3px;}
