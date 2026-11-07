@@ -322,6 +322,7 @@
     $('#ricoHvscTab').toggleClass('rico-selected-tab',browserTab==='hvsc');
     $('#ricoGroupsTab').toggleClass('rico-selected-tab',browserTab==='groups');
     $('#ricoMusiciansTab').toggleClass('rico-selected-tab',browserTab==='musicians');
+    $('#ricoLibraryTab').toggleClass('rico-selected-tab',browserTab==='library');
     $('#ricoCustomCount').text(custom.length + ' SID');
     $('#ricoFallback').val(formatAutoTime(player.autoFallbackSeconds));
     $('#ricoPlaylistStatus').text(customActive
@@ -807,6 +808,7 @@
     var communityItems=document.getElementById('ricoCommunityItems');
     var localPanel=document.getElementById('sidListHolder');
     var hvscPanel=document.getElementById('ricoHvscPanel');
+    var libraryPanel=document.getElementById('ricoLibraryPanel');
     var hvscItems=document.getElementById('ricoHvscItems');
     var hvscStatus=document.getElementById('ricoHvscStatus');
     var hvscLoad=document.getElementById('ricoHvscLoad');
@@ -841,6 +843,7 @@
       }
       if (communityPanel) communityPanel.style.display=visible?'block':'none';
       if (hvscPanel) hvscPanel.style.display='none';
+      if (libraryPanel) libraryPanel.style.display='none';
       if (localPanel) localPanel.style.display=visible?'none':'block';
       if(!visible) player.initFileSelection(); // Refresh the browser list only.
       refreshTabs();
@@ -868,6 +871,7 @@
       var dialog=document.getElementById('chooseSidDialog');
       if(dialog){dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local','rico-view-hvsc');dialog.classList.add('rico-view-hvsc');}
       if(communityPanel)communityPanel.style.display='none';
+      if(libraryPanel)libraryPanel.style.display='none';
       if(localPanel)localPanel.style.display='none';
       if(hvscPanel)hvscPanel.style.display='block';
       var cfg=ricoRankConfig[kind];
@@ -1074,6 +1078,144 @@
         showCommunity(false,choice[1]);
       });
     });
+
+    // TEST56: browse the immutable HVSC library, loading one pack on demand.
+    // The browser never changes source rankings or saved personal playlists.
+    (function initHVSCBrowser(){
+      var tab=document.getElementById('ricoLibraryTab');
+      var panel=libraryPanel;
+      if(!tab||!panel)return;
+      var shelvesEl=document.getElementById('ricoLibraryShelves');
+      var sectionsEl=document.getElementById('ricoLibrarySections');
+      var songsEl=document.getElementById('ricoLibrarySongs');
+      var searchEl=document.getElementById('ricoLibrarySearch');
+      var statusEl=document.getElementById('ricoLibraryStatus');
+      var manifest=null, category='musicians', shelf='', shelfData=null, selected=null, token=0;
+      var shelfCache={},packCache=new Map();
+      function status(message){statusEl.textContent=message;}
+      async function getManifest(){
+        if(manifest)return manifest;
+        var res=await fetch('library/index.json',{cache:'no-store'});
+        if(!res.ok)throw Error('Library not published yet. GitHub build pending ('+res.status+').');
+        var json=await res.json();
+        if(json.format!=='ricos-hvsc-library'||!json.categories)throw Error('Invalid library index.');
+        manifest=json;return json;
+      }
+      function makeButton(label,onClick,cls){
+        var b=document.createElement('button');b.type='button';b.textContent=label;
+        if(cls)b.className=cls;
+        b.addEventListener('click',onClick);return b;
+      }
+      function renderShelves(){
+        shelvesEl.textContent='';
+        var info=manifest.categories[category];
+        document.getElementById('ricoLibraryIntro').textContent=category.toUpperCase()+' · '+info.count.toLocaleString()+' SID · HVSC '+(manifest.source||'');
+        document.getElementById('ricoLibraryMusicians').classList.toggle('rico-selected-tab',category==='musicians');
+        document.getElementById('ricoLibraryDemos').classList.toggle('rico-selected-tab',category==='demos');
+        info.shelves.forEach(function(item){
+          var b=makeButton(item.name,()=>openShelf(item),'rico-library-shelf');
+          if(shelf===item.name)b.classList.add('rico-selected-tab');
+          shelvesEl.appendChild(b);
+        });
+      }
+      async function openShelf(item){
+        var request=++token;
+        shelf=item.name;selected=null;shelfData=null;
+        sectionsEl.textContent='';songsEl.textContent='';
+        renderShelves();status('Loading '+category.toUpperCase()+' / '+shelf+'...');
+        try{
+          var data=shelfCache[item.file];
+          if(!data){
+            var res=await fetch(item.file);
+            if(!res.ok)throw Error('Shelf unavailable ('+res.status+').');
+            data=await res.json();shelfCache[item.file]=data;
+          }
+          if(request!==token)return;
+          shelfData=data;searchEl.value='';
+          renderSections();
+        }catch(e){if(request===token)status(e.message);}
+      }
+      function renderSections(){
+        if(!shelfData)return;
+        var q=searchEl.value.trim().toLocaleLowerCase();
+        var matches=shelfData.sections.filter(function(g){
+          return !q||g.name.toLocaleLowerCase().includes(q)||g.tracks.some(x=>(x.title+' '+x.author+' '+x.file).toLocaleLowerCase().includes(q));
+        });
+        sectionsEl.textContent='';
+        matches.slice(0,140).forEach(function(section){
+          var b=makeButton(section.name+' ('+section.tracks.length+')',function(){selected=section;renderSections();renderSongs();},'rico-library-section');
+          if(selected&&selected.pack===section.pack)b.classList.add('rico-selected-tab');
+          sectionsEl.appendChild(b);
+        });
+        if(!matches.length){songsEl.textContent='No matches.';status('No matching musicians or tracks.');return;}
+        if(!selected||!matches.includes(selected)){selected=matches[0];}
+        renderSongs();
+        status(matches.length+' sections · '+(matches.length>140?'Showing first 140. Use search to narrow.':'Choose a song to play.'));
+      }
+      function renderSongs(){
+        songsEl.textContent='';
+        if(!selected)return;
+        var heading=document.createElement('div');heading.className='rico-library-heading';
+        heading.textContent=selected.name+' · '+selected.tracks.length+' SID';songsEl.appendChild(heading);
+        var q=searchEl.value.trim().toLocaleLowerCase();
+        selected.tracks.filter(function(track){return !q||selected.name.toLocaleLowerCase().includes(q)||(track.title+' '+track.author+' '+track.file).toLocaleLowerCase().includes(q);}).slice(0,250).forEach(function(track){
+          var b=makeButton(track.title+(track.author?' — '+track.author:''),()=>playTrack(selected,track),'rico-library-track');
+          b.title=track.file;songsEl.appendChild(b);
+        });
+      }
+      async function playTrack(section,track){
+        try {
+          status('Loading '+track.title+'...');
+          if(typeof JSZip==='undefined')throw Error('ZIP decoder unavailable; reload the page.');
+          var p=packCache.get(section.pack);
+          if(!p){
+            p=(async function(){
+              var res=await fetch(section.pack);
+              if(!res.ok)throw Error('SID pack unavailable ('+res.status+').');
+              return JSZip.loadAsync(await res.arrayBuffer());
+            })();
+            packCache.set(section.pack,p);
+            if(packCache.size>3)packCache.delete(packCache.keys().next().value);
+          }
+          var zip=await p;
+          var file=zip.file(track.file);
+          if(!file)throw Error('SID missing from pack.');
+          var bytes=await file.async('uint8array');
+          var entry=parseSID(bytes,{name:track.file,size:bytes.length});
+          if(!entry)throw Error('Invalid PSID/RSID data.');
+          cancelStartupPlaylist();
+          landingPlaylists=false;
+          player.isPlaying=false;player.isPaused=false;
+          custom.length=0;custom.push(entry);
+          loadedPlaylistTitle='HVSC '+category.toUpperCase();
+          loadedPlaylistCreator='HVSC Crew';
+          if(!customActive)activate('custom');else player.initFileSelection();
+          loadCustomIndex(0);showLivePlaylist(true);
+          status('Playing '+entry.name+' — '+entry.author);
+        }catch(e){status(e.message);console.error('HVSC library playback',e);}
+      }
+      async function openLibrary(){
+        cancelStartupPlaylist();
+        browserTab='library';communityActive=false;
+        var dialog=document.getElementById('chooseSidDialog');
+        if(dialog){dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local','rico-view-hvsc');dialog.classList.add('rico-view-library');}
+        if(communityPanel)communityPanel.style.display='none';
+        if(localPanel)localPanel.style.display='none';
+        if(hvscPanel)hvscPanel.style.display='none';
+        panel.style.display='block';refreshTabs();
+        try {
+          await getManifest();renderShelves();
+          var list=manifest.categories[category].shelves;
+          var next=list.find(x=>x.name===shelf)||list[0];
+          if(next)await openShelf(next);
+        }catch(e){status(e.message);}
+      }
+      document.getElementById('ricoLibraryMusicians').addEventListener('click',function(){category='musicians';shelf='';openLibrary();});
+      document.getElementById('ricoLibraryDemos').addEventListener('click',function(){category='demos';shelf='';openLibrary();});
+      searchEl.addEventListener('input',renderSections);
+      tab.addEventListener('click',openLibrary);
+    })();
+
     refreshSaved().catch(function(error){say('Local saving unavailable: '+error.message);});
     showCommunity(true); // TEST22: startup shows RICO'S PLAYLISTS, not the game list.
   })();
