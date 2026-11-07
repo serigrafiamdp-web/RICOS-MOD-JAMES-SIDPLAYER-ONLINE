@@ -275,7 +275,17 @@
   $('#ricoPlaylistToggle').on('click', function () {
     showLivePlaylist(!liveVisible);
   });
-  $('#ricoLiveClose').on('click', function () { showLivePlaylist(false); });
+  // TEST52: the large library browser stays hidden behind the primary playlist.
+  // Closing the floating playlist reveals Choose A SID only on a real user click.
+  $('#ricoLiveClose').on('click', function () {
+    showLivePlaylist(false);
+    cancelPendingCommunityStartup();
+    var manager=player.dialogManager;
+    if(manager && !manager.dialogShown) {
+      // The library is brought forward, centered by the original dialog manager.
+      manager.showDialog('chooseSidDialog');
+    }
+  });
 
 
   // TEST21: user-facing MM:SS; engine keeps its seconds-based fallback timer.
