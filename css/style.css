@@ -911,8 +911,8 @@ left: 1px;
 
 /* TEST46: roomy Choose A SID browser; large fonts and full scene credits. */
 #chooseSidDialog {
-  width:min(1120px,calc(100vw - 32px)) !important;
-  height:min(790px,calc(100vh - 32px)) !important;
+  width:min(1120px,calc(100vw - 32px));
+  height:min(790px,calc(100vh - 32px));
   box-sizing:border-box;
 }
 #chooseSidDialog .content { min-height:0; }
@@ -1082,8 +1082,8 @@ left: 1px;
 }
 .dialog {
   box-sizing:border-box;
-  width:min(560px,calc(100vw - 30px)) !important;
-  height:min(520px,calc(100vh - 64px)) !important;
+  width:min(560px,calc(100vw - 30px));
+  height:min(520px,calc(100vh - 64px));
   max-width:calc(100vw - 30px);
   max-height:calc(100vh - 64px);
 }
@@ -1115,8 +1115,8 @@ left: 1px;
   padding:4px 8px;
 }
 #chooseSidDialog {
-  width:min(680px,calc(100vw - 30px)) !important;
-  height:min(570px,calc(100vh - 64px)) !important;
+  width:min(680px,calc(100vw - 30px));
+  height:min(570px,calc(100vh - 64px));
 }
 #chooseSidDialog #chooseSidInfo {
   left:10px;
@@ -1198,3 +1198,9 @@ left: 1px;
     grid-template-columns:24px minmax(0,1fr) minmax(0,.8fr) minmax(0,1.35fr);
   }
 }
+
+/* TEST53: dialogs retain minimal default dimensions but allow resizing via their edge grips.
+   Inline dimensions from the dialog manager must override CSS (never !important). */
+.dialog {min-width:280px;min-height:180px;}
+#chooseSidDialog {min-width:min(420px,calc(100vw - 30px));min-height:300px;}
+.dialog .dialogResize {z-index:15;}
