@@ -201,6 +201,16 @@
     var widthGrip = document.getElementById('ricoLiveWidthGrip');
     if (!panel || !header || !grip || !widthGrip) return;
     var movement = null;
+    // TEST51: open the floating playlist centered, leaving the oscilloscope visible.
+    // The position remains fully user-adjustable by dragging the header.
+    var initialWidth=panel.getBoundingClientRect().width;
+    var initialHeight=panel.getBoundingClientRect().height;
+    if(initialWidth>0 && initialHeight>0) {
+      panel.style.left=Math.max(0,Math.round((window.innerWidth-initialWidth)/2))+'px';
+      panel.style.top=Math.max(8,Math.round((window.innerHeight-35-initialHeight)/2))+'px';
+      panel.style.right='auto';
+      panel.style.bottom='auto';
+    }
     function clamp(value, minimum, maximum) {
       return Math.max(minimum, Math.min(maximum, value));
     }
@@ -969,9 +979,11 @@
                 other.classList.toggle('rico-community-selected',other===row);
               });
               if(isStartup) {
-                // Retain RICO'S PLAYLISTS as the home dialog, even after loadSIDData hides dialogs.
+                // TEST51: AUTO loads music silently, without opening Choose A SID.
+                // Keep RICO'S PLAYLISTS selected for the next explicit browser opening.
                 showCommunity(true);
-                player.dialogManager.showDialog('chooseSidDialog');
+                if(player.dialogManager && player.dialogManager.dialogShown==='chooseSidDialog')
+                  player.dialogManager.hideDialog('chooseSidDialog');
                 // TEST25: actively attempt to start Web Audio at the 30-second mark.
                 // Modern browsers can still require a real user gesture.
                 if(!player.audioContext) player.initWebAudio();
