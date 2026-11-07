@@ -715,3 +715,59 @@ left: 1px;
   color:inherit;
   white-space:nowrap;
 }
+
+/* TEST37 — dedicated tabs. Import, timer, local storage and JSON tools
+   appear ONLY in USER LOCAL. Community and games use the full-height list. */
+#chooseSidDialog.rico-view-community #ricoDropZone,
+#chooseSidDialog.rico-view-community #ricoPlaylistOptions,
+#chooseSidDialog.rico-view-community #ricoPlaylistStatus,
+#chooseSidDialog.rico-view-community #ricoSavedPlaylistControls,
+#chooseSidDialog.rico-view-games #ricoDropZone,
+#chooseSidDialog.rico-view-games #ricoPlaylistOptions,
+#chooseSidDialog.rico-view-games #ricoPlaylistStatus,
+#chooseSidDialog.rico-view-games #ricoSavedPlaylistControls {
+  display:none !important;
+}
+#chooseSidDialog.rico-view-community #chooseSidInfo,
+#chooseSidDialog.rico-view-games #chooseSidInfo {
+  height:75px !important;
+}
+#chooseSidDialog.rico-view-community #ricoCommunityPanel,
+#chooseSidDialog.rico-view-games #sidListHolder {
+  top:101px !important;
+}
+#chooseSidDialog.rico-view-community #ricoCommunityPanel {display:block !important;}
+#chooseSidDialog.rico-view-community #sidListHolder {display:none !important;}
+#chooseSidDialog.rico-view-games #ricoCommunityPanel,
+#chooseSidDialog.rico-view-local #ricoCommunityPanel {display:none !important;}
+#chooseSidDialog.rico-view-games #sidListHolder,
+#chooseSidDialog.rico-view-local #sidListHolder {display:block !important;}
+#chooseSidDialog.rico-view-local #chooseSidInfo {height:305px !important;}
+#chooseSidDialog.rico-view-local #sidListHolder {top:327px !important;}
+/* GAMES metadata rows, no thumbnails, consistent with other text lists. */
+#chooseSidDialog #sidList .rico-game-row {
+  display:flex;
+  width:100%;
+  min-height:39px;
+  align-items:center;
+  gap:9px;
+  padding:6px 9px;
+  box-sizing:border-box;
+  text-align:left;
+  background:var(--rico-theme-bg,#000);
+  color:var(--rico-theme-fg,#fff);
+  border:0;
+  border-bottom:1px solid var(--rico-theme-border,#777);
+  cursor:pointer;
+  font:12px Tahoma,Arial,sans-serif;
+}
+#chooseSidDialog #sidList .rico-game-row:hover,
+#chooseSidDialog #sidList .rico-game-row:focus-visible,
+#chooseSidDialog #sidList .rico-game-row.rico-active-row {
+  color:var(--rico-theme-bg,#000);
+  background:var(--rico-theme-fg,#fff);
+}
+#chooseSidDialog .rico-game-number {width:25px;flex:0 0 25px;text-align:right;opacity:.8;}
+#chooseSidDialog .rico-game-title {flex:2 1 180px;min-width:0;font-weight:bold;}
+#chooseSidDialog .rico-game-author {flex:1 1 125px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#chooseSidDialog .rico-game-year {flex:0 0 auto;max-width:115px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.8;}
