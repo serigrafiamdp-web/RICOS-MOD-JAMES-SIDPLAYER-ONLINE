@@ -263,6 +263,7 @@
     $('#ricoCommunityTab').toggleClass('rico-selected-tab',browserTab==='community');
     $('#ricoDefaultTab').toggleClass('rico-selected-tab',browserTab==='games');
     $('#ricoCustomTab').toggleClass('rico-selected-tab',browserTab==='local');
+    $('#ricoHvscTab').toggleClass('rico-selected-tab',browserTab==='hvsc');
     $('#ricoCustomCount').text(custom.length + ' SID');
     $('#ricoFallback').val(formatAutoTime(player.autoFallbackSeconds));
     $('#ricoPlaylistStatus').text(customActive
@@ -599,7 +600,7 @@
       });
       return entries;
     }
-    function loadPlaylist(data) {
+    function loadPlaylist(data,startIndex) {
       // Validate everything before changing the currently loaded playlist.
       var entries=validatedEntries(data);
       cancelPendingCommunityStartup();
@@ -615,7 +616,7 @@
           ? data.author.trim().slice(0,100) : '');
       if (!customActive) activate('custom');
       else player.initFileSelection();
-      loadCustomIndex(0);
+      loadCustomIndex(Number.isInteger(startIndex) ? startIndex : 0);
       showLivePlaylist(true);
     }
     async function refreshSaved() {
@@ -747,6 +748,13 @@
     var communityPanel=document.getElementById('ricoCommunityPanel');
     var communityItems=document.getElementById('ricoCommunityItems');
     var localPanel=document.getElementById('sidListHolder');
+    var hvscPanel=document.getElementById('ricoHvscPanel');
+    var hvscItems=document.getElementById('ricoHvscItems');
+    var hvscStatus=document.getElementById('ricoHvscStatus');
+    var hvscLoad=document.getElementById('ricoHvscLoad');
+    var hvscData=null;
+    var hvscEntries=null;
+    var hvscPending=null;
     var communityActive=false;
     var startupPlaylistPending=true; // TEST24: allow 30 seconds for manual selection.
     var startupPlaylistTimer=null;
@@ -765,14 +773,88 @@
       browserTab=visible?'community':(customActive?'local':'games');
       var dialog=document.getElementById('chooseSidDialog');
       if(dialog){
-        dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local');
+        dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local','rico-view-hvsc');
         dialog.classList.add('rico-view-'+browserTab);
       }
       if (communityPanel) communityPanel.style.display=visible?'block':'none';
+      if (hvscPanel) hvscPanel.style.display='none';
       if (localPanel) localPanel.style.display=visible?'none':'block';
       refreshTabs();
       if (visible) loadCommunityCatalog();
     }
+    // TEST42: dedicated HVSC ranking. Browsing does not interrupt playing music.
+    async function getHvscData() {
+      if(hvscData) return hvscData;
+      if(hvscPending) return hvscPending;
+      hvscPending=(async function(){
+        var response=await fetch('community/playlists/hvsc-top-100-2000.json',{cache:'no-store'});
+        if(!response.ok) throw Error('HVSC playlist not available ('+response.status+').');
+        var data=await response.json();
+        if(data.format!=='ricos-sid-playlist'||!Array.isArray(data.tracks)||data.tracks.length!==100)
+          throw Error('HVSC Top 100 is incomplete.');
+        var entries=validatedEntries(data);
+        if(entries.length!==100) throw Error('Incomplete HVSC ranking.');
+        hvscData=data;
+        hvscEntries=entries;
+        return data;
+      })();
+      try { return await hvscPending; }
+      finally { hvscPending=null; }
+    }
+    async function showHvsc() {
+      cancelStartupPlaylist();
+      browserTab='hvsc';
+      communityActive=false;
+      var dialog=document.getElementById('chooseSidDialog');
+      if(dialog){
+        dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local','rico-view-hvsc');
+        dialog.classList.add('rico-view-hvsc');
+      }
+      if(communityPanel) communityPanel.style.display='none';
+      if(localPanel) localPanel.style.display='none';
+      if(hvscPanel) hvscPanel.style.display='block';
+      refreshTabs();
+      if(!hvscItems) return;
+      if(hvscEntries) {renderHvscRows();return;}
+      if(hvscStatus) hvscStatus.textContent='Loading HVSC Top 100...';
+      try {await getHvscData();if(browserTab==='hvsc') renderHvscRows();}
+      catch(error) {if(hvscStatus) hvscStatus.textContent='Could not load HVSC Top 100: '+error.message;}
+    }
+    function renderHvscRows() {
+      if(!hvscItems||!hvscEntries)return;
+      hvscItems.textContent='';
+      if(hvscStatus)hvscStatus.textContent='100 ranked SID files · 84 PSID / 16 RSID. Playback compatibility may vary.';
+      hvscEntries.forEach(function(item,index){
+        var row=document.createElement('button');
+        row.type='button';
+        row.className='rico-hvsc-row';
+        row.title=(index+1)+'. '+item.name+' — '+item.author+(item.released?' · '+item.released:'');
+        var rank=document.createElement('span');
+        rank.className='rico-hvsc-rank';
+        rank.textContent=index+1;
+        var title=document.createElement('span');
+        title.className='rico-hvsc-title';
+        title.textContent=item.name||item.file;
+        var artist=document.createElement('span');
+        artist.className='rico-hvsc-artist';
+        artist.textContent=item.author||'Unknown artist';
+        row.appendChild(rank);row.appendChild(title);row.appendChild(artist);
+        row.addEventListener('click',function(){loadPlaylist(hvscData,index);});
+        hvscItems.appendChild(row);
+      });
+    }
+    if(hvscLoad) hvscLoad.addEventListener('click',async function(){
+      hvscLoad.disabled=true;
+      try {
+        var data=await getHvscData();
+        loadPlaylist(data,0);
+        if(hvscStatus)hvscStatus.textContent='HVSC TOP 100 loaded.';
+      }catch(error){if(hvscStatus)hvscStatus.textContent='Could not load HVSC Top 100: '+error.message;}
+      finally {hvscLoad.disabled=false;}
+    });
+    var hvscTab=document.getElementById('ricoHvscTab');
+    if(hvscTab)hvscTab.addEventListener('click',showHvsc);
+
     async function loadCommunityCatalog() {
       if (!communityItems) return;
       var requestNumber=++communityRequestNumber;
