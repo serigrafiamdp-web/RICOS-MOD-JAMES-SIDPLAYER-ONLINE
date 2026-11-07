@@ -2,7 +2,7 @@
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css?v=test42">
+    <link rel="stylesheet" href="css/style.css?v=test45">
     <title>RICOS MOD - JAMES SIDPLAYER ONLINE</title>
 
     <link rel="shortcut icon" type="image/png" href="images/icon16.png"/>
@@ -39,6 +39,8 @@
             <button type="button" id="ricoCommunityTab" class="rico-selected-tab">RICO'S PLAYLISTS</button>
             <button type="button" id="ricoDefaultTab">GAMES (22)</button>
             <button type="button" id="ricoHvscTab">TOP 100 HVSC GAMES</button>
+            <button type="button" id="ricoGroupsTab">TOP GROUPS</button>
+            <button type="button" id="ricoMusiciansTab">TOP MUSICIANS</button>
             <button type="button" id="ricoCustomTab">USER LOCAL <span id="ricoCustomCount">0 SID</span></button>
           </div>
           <div id="ricoDropZone">
@@ -88,10 +90,10 @@
           <div id="ricoCommunityItems" role="list">No public playlists published yet.</div>
         </div>
         <div id="ricoHvscPanel" style="display:none;position:absolute;top:101px;bottom:10px;left:10px;right:10px;overflow:auto;border:1px solid #555;padding:9px;">
-          <strong>TOP 100 HVSC GAMES · COMMUNITY POLL (2000)</strong>
-          <div class="rico-hvsc-intro">Original HVSC community ranking from 2000. Ranked SID titles and their original composers.</div>
+          <strong id="ricoHvscHeading">TOP 100 HVSC GAMES · COMMUNITY POLL (2000)</strong>
+          <div id="ricoHvscIntro" class="rico-hvsc-intro">Original HVSC community ranking from 2000. Ranked SID titles and their original composers.</div>
           <div class="rico-hvsc-head">
-            <span>TOP 100 HVSC GAMES (2000) — Playlist by HVSC Community · 100 SID</span>
+            <span id="ricoHvscListTitle">TOP 100 HVSC GAMES (2000) — Playlist by HVSC Community · 100 SID</span>
             <span class="rico-community-stars" aria-label="Ratings coming soon" title="Ratings coming soon">☆☆☆☆☆</span>
             <button type="button" id="ricoHvscLoad">LOAD</button>
           </div>
@@ -440,6 +442,6 @@
     <script type="text/javascript" src="js/backend_tinysid.js"></script>
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test26"></script>
-    <script type="text/javascript" src="js/customPlaylist.js?v=test43"></script>
+    <script type="text/javascript" src="js/customPlaylist.js?v=test45"></script>
   </body>
 </html>
