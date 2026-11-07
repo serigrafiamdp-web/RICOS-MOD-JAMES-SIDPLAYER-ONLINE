@@ -16,6 +16,7 @@
   var customActive = false;
   var importing = false;
   var liveVisible = true; // TEST21: PLAYLIST ON at startup
+  var landingPlaylists = true; // TEST22: RICO'S PLAYLISTS, not GAMES, is the initial home view.
   // The title belongs to the playlist currently loaded, not the text being edited.
   var loadedPlaylistTitle = '';
 
@@ -73,7 +74,11 @@
     var holder = $('#ricoLivePlaylistItems').empty();
     var list = player.sidList || [];
     $('#ricoLiveCount').text('(' + list.length + ')');
-    $('#ricoLivePlaylistTitle').text(customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'PLAYLIST');
+    $('#ricoLivePlaylistTitle').text(landingPlaylists ? "RICO'S PLAYLISTS" : (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'));
+    if (landingPlaylists) {
+      $('<div>').addClass('rico-live-empty').text("Choose a playlist from RICO'S PLAYLISTS to start listening.").appendTo(holder);
+      return;
+    }
     if (!list.length) {
       $('<div>').addClass('rico-live-empty').text('No SID loaded. Use Choose A SID to add music.').appendTo(holder);
       return;
@@ -192,8 +197,9 @@
   }
 
   function refreshTabs() {
-    $('#ricoDefaultTab').toggleClass('rico-selected-tab', !customActive);
-    $('#ricoCustomTab').toggleClass('rico-selected-tab', customActive);
+    var browsingCommunity = $('#ricoCommunityTab').hasClass('rico-selected-tab');
+    $('#ricoDefaultTab').toggleClass('rico-selected-tab', !customActive && !browsingCommunity);
+    $('#ricoCustomTab').toggleClass('rico-selected-tab', customActive && !browsingCommunity);
     $('#ricoCustomCount').text(custom.length + ' SID');
     $('#ricoFallback').val(formatAutoTime(player.autoFallbackSeconds));
     $('#ricoPlaylistStatus').text(customActive
@@ -373,8 +379,16 @@
   });
   $('#ricoAddFiles').on('click', function () { document.getElementById('sidfile').click(); });
   $('#ricoAddFolder').on('click', function () { document.getElementById('ricoFolderPicker').click(); });
-  $('#ricoDefaultTab').on('click', function () { activate('default'); });
-  $('#ricoCustomTab').on('click', function () { activate('custom'); });
+  $('#ricoDefaultTab').on('click', function () {
+    landingPlaylists = false;
+    activate('default');
+    renderLivePlaylist();
+  });
+  $('#ricoCustomTab').on('click', function () {
+    landingPlaylists = false;
+    activate('custom');
+    renderLivePlaylist();
+  });
   $('#ricoClearList').on('click', function () {
     custom.length = 0;
     loadedPlaylistTitle = '';
@@ -507,6 +521,7 @@
     function loadPlaylist(data) {
       // Validate everything before changing the currently loaded playlist.
       var entries=validatedEntries(data);
+      landingPlaylists = false;
       player.isPlaying=false;
       player.isPaused=false;
       custom.length=0;
@@ -702,6 +717,7 @@
       if(tab) tab.addEventListener('click',function(){showCommunity(false);});
     });
     refreshSaved().catch(function(error){say('Local saving unavailable: '+error.message);});
+    showCommunity(true); // TEST22: startup shows RICO'S PLAYLISTS, not the game list.
   })();
 
   refreshTabs();
