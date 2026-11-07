@@ -37,7 +37,7 @@ for category in ('MUSICIANS','DEMOS'):
                 pack.write(f, arc)
                 with f.open('rb') as fh: head=fh.read(0x7c)
                 def label(offset):
-                    return head[offset:offset+32].split(b'\\0')[0].decode('latin1','replace').strip()
+                    return head[offset:offset+32].split(bytes([0]))[0].decode('latin1','replace').strip()
                 entries.append({'file':arc,'title':label(0x16) or f.stem.replace('_',' '),
                     'author':label(0x36),'released':label(0x56),'bytes':f.stat().st_size})
         letter_shelves[shelf].append({'name':section,'pack':'library/packs/'+category.lower()+'/'+slug+'.zip','tracks':entries})
