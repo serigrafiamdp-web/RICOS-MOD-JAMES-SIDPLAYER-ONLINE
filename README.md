@@ -134,7 +134,7 @@ Detailed record: [docs/CHECKPOINT_TEST54_PASS_2026-11-07.md](docs/CHECKPOINT_TES
 - Official ranking references: https://csdb.dk/toplist.php?subtype=%287%29&type=scener and https://csdb.dk/toplist.php?type=group
 
 
-## TEST56 — HVSC full-library browser (2026-11-07; deployment pending)
+## TEST56 — HVSC full-library browser (2026-11-07; source publication complete, playback pending PASS)
 - Source archives previously supplied by project owner: MUSICIANS (56,568 .sid files), DEMOS (3,058 .sid files); the official current release is HVSC #85.
 - The unchanged original ranked playlists (TOP 100 HVSC GAMES, TOP GROUPS, TOP MUSICIANS) remain read-only.
 - A new HVSC LIBRARY browser tab was coded, with category/shelf/composer navigation, search within a selected shelf, and single-song playback on demand. It uses existing `--rico-theme-*` CSS palette variables and minimal layout.
@@ -143,3 +143,10 @@ Detailed record: [docs/CHECKPOINT_TEST54_PASS_2026-11-07.md](docs/CHECKPOINT_TES
 - Personal playlists remain local/unchanged during this test. Cross-catalog adding and public community submission are future stages.
 - Test entry point: https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=56
 - Static library mirrors original HVSC files; attribution and HVSC copyright notices must be respected.
+
+### TEST56 publication verification
+- Published commit: `caf8be941542293dffa5ce065418d96278f577a8` (GitHub Actions).
+- Total indexed: **59,626 SID**, including **56,568 MUSICIANS** and **3,058 DEMOS**.
+- Example: `library/packs/musicians/U/Uctumi.zip` includes `Balloon_Country_Bursts.sid` (credit: Esteban Palladino/Uctumi, 2016 PVM).
+- The read-only CSDb/HVSC TOP 100 JSON lists are unchanged by the library import.
+- **TEST56 browser audio / deployed Pages: awaiting user PASS**.
