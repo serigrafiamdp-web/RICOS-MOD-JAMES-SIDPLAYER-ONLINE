@@ -812,6 +812,12 @@
         cancelStartupPlaylist();
       }
     }
+    // TEST30: every Choose A SID opening returns to the RICO'S PLAYLISTS tab.
+    // Only switch the visible catalog; do not change the loaded SID or playback.
+    var chooseSidButton=document.getElementById('chooseSid');
+    if(chooseSidButton) chooseSidButton.addEventListener('click',function(){
+      showCommunity(true);
+    });
     if(communityTab) communityTab.addEventListener('click',function(){showCommunity(true);});
     ['ricoDefaultTab','ricoCustomTab'].forEach(function(id) {
       var tab=document.getElementById(id);
