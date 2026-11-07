@@ -33,7 +33,7 @@ for category in ('MUSICIANS','DEMOS'):
         entries=[]
         with zipfile.ZipFile(zip_path,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as pack:
             for f in sorted(files,key=lambda p:str(p).casefold()):
-                arc='/'.join(f.relative_to(ROOT/ category).parts[2:]) if category=='MUSICIANS' else f.name
+                arc='/'.join(f.relative_to(ROOT/category).parts[2:]) if category=='MUSICIANS' else '/'.join(f.relative_to(ROOT/category).parts[1:])
                 pack.write(f, arc)
                 with f.open('rb') as fh: head=fh.read(0x7c)
                 def label(offset):
@@ -46,5 +46,9 @@ for category in ('MUSICIANS','DEMOS'):
         path=DATA/(category.lower()+'-'+re.sub(r'[^A-Za-z0-9_-]','_',shelf)+'.json')
         path.write_text(json.dumps({'category':category,'shelf':shelf,'sections':items},ensure_ascii=False,separators=(',',':')),encoding='utf-8')
         overview['categories'][category.lower()]['shelves'].append({'name':shelf,'file':'library/data/'+path.name,'count':sum(len(x['tracks']) for x in items)})
+expected={'musicians':56568,'demos':3058}
+for key,count in expected.items():
+    actual=overview['categories'][key]['count']
+    if actual!=count: raise RuntimeError(f'Unexpected {key} SID count: {actual}, expected {count}')
 (OUT/'index.json').write_text(json.dumps(overview,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
 print('HVSC Library:',{c:d['count'] for c,d in overview['categories'].items()})
