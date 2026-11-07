@@ -8,7 +8,8 @@ var SidPlayer = function() {
   this.canvas = null;
   this.context = null;
   this.sidHasSamples = false;
-  this.oscilloscopeMode = 'line';
+  // TEST24: filled waves are the standard mode on each page load.
+  this.oscilloscopeMode = 'filled';
   this.colorModeIndex = 0;
   this.colorModes = [
     { name: 'Original', line: '#ffffff', fill: 'rgba(255,255,255,0.56)', background: '#000000' },
@@ -20,6 +21,8 @@ var SidPlayer = function() {
     { name: 'C64 Cyan', line: '#70d7c7', fill: 'rgba(112,215,199,0.55)', background: '#24244f' },
     { name: 'Retro Magenta', line: '#ff88d0', fill: 'rgba(255,95,183,0.5)', background: '#16091d' }
   ];
+  // TEST24: choose a fresh theme on every opening (no persistent preference).
+  this.colorModeIndex = Math.floor(Math.random() * this.colorModes.length);
   // TEST03: Automatic playlist based on documented subtune times.
   this.autoAdvance = false;
   this.autoElapsedSamples = 0;
