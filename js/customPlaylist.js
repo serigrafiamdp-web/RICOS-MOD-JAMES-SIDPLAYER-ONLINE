@@ -198,7 +198,8 @@
     var panel = document.getElementById('ricoLivePlaylist');
     var header = document.getElementById('ricoLivePlaylistHeader');
     var grip = document.getElementById('ricoLiveResizeGrip');
-    if (!panel || !header || !grip) return;
+    var widthGrip = document.getElementById('ricoLiveWidthGrip');
+    if (!panel || !header || !grip || !widthGrip) return;
     var movement = null;
     function clamp(value, minimum, maximum) {
       return Math.max(minimum, Math.min(maximum, value));
@@ -220,6 +221,7 @@
     }
     header.addEventListener('pointerdown', function(event) { start(event, 'move'); });
     grip.addEventListener('pointerdown', function(event) { start(event, 'resize'); });
+    widthGrip.addEventListener('pointerdown', function(event) { start(event, 'width'); });
     window.addEventListener('pointermove', function(event) {
       if (!movement || event.pointerId !== movement.id) return;
       event.preventDefault();
@@ -232,6 +234,12 @@
         panel.style.top = y + 'px';
         // Keep the panel fully visible if dragged near the bottom edge.
         panel.style.height = Math.min(movement.height, Math.max(110, window.innerHeight - y - 30)) + 'px';
+      } else if(movement.mode === 'width') {
+        // Extend to the right; keep the panel within the viewport.
+        var maxWidth=Math.max(230,window.innerWidth-movement.left-8);
+        var w=clamp(movement.width+event.clientX-movement.x,
+          Math.min(230,maxWidth),maxWidth);
+        panel.style.width=w+'px';
       } else {
         var h = clamp(movement.height + event.clientY - movement.y, 110,
           Math.max(110, window.innerHeight - movement.top - 30));
@@ -243,6 +251,14 @@
     }
     window.addEventListener('pointerup', finish);
     window.addEventListener('pointercancel', finish);
+    widthGrip.addEventListener('keydown',function(event){
+      if(event.key!=='ArrowLeft'&&event.key!=='ArrowRight')return;
+      event.preventDefault();
+      var rect=panel.getBoundingClientRect();
+      var limit=Math.max(230,window.innerWidth-rect.left-8);
+      panel.style.width=clamp(rect.width+(event.key==='ArrowRight'?30:-30),
+        Math.min(230,limit),limit)+'px';
+    });
     // Avoid passing drag events into the existing oscilloscope mouse handlers.
     $('#ricoLivePlaylist').on('mousedown', function(event) { event.stopPropagation(); });
   })();
