@@ -559,3 +559,29 @@ left: 1px;
   font:bold 14px Arial,sans-serif;
   cursor:pointer;
 }
+
+/* TEST23: full-width clickable community playlist rows, palette-inverted highlight */
+#ricoCommunityItems .rico-community-row {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:8px; min-height:36px; padding:7px 9px; box-sizing:border-box;
+  cursor:pointer; border-bottom:1px solid var(--rico-theme-border,#888);
+  background:var(--rico-theme-bg,#000);
+  color:var(--rico-theme-fg,#fff);
+  transition:background-color .12s ease,color .12s ease;
+}
+#ricoCommunityItems .rico-community-row > span { flex:1; min-width:0; }
+#ricoCommunityItems .rico-community-row:hover,
+#ricoCommunityItems .rico-community-row:focus-visible,
+#ricoCommunityItems .rico-community-row.rico-community-selected {
+  background:var(--rico-theme-fg,#fff) !important;
+  color:var(--rico-theme-bg,#000) !important;
+}
+#ricoCommunityItems .rico-community-row > button {
+  cursor:pointer;
+  flex-shrink:0;
+  border:1px solid currentColor;
+  background:transparent;
+  color:inherit;
+  padding:3px 8px;
+}
+#ricoCommunityItems .rico-community-row[aria-busy="true"] { cursor:progress; }
