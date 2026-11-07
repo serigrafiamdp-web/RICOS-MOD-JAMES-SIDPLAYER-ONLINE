@@ -1,0 +1,518 @@
+{
+  "format": "ricos-csdb-top-groups-roster",
+  "version": 1,
+  "source": "https://csdb.dk/toplist.php?type=group",
+  "retrievedOn": "2026-11-07",
+  "rankingNote": "Indexed CSDb ranking snapshot; tied ranks share their original ordinal. These 100 entries are CSDb ranked groups, not 100 verified SID tracks.",
+  "selectionRule": "One verifiably credited non-game demo/intro/music-release SID per group, prefer highest-rated eligible CSDb release; Fairlight is user-pinned.",
+  "verifiedSelections": 1,
+  "groups": [
+    {
+      "rank": 1,
+      "group": "Performers",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 2,
+      "group": "Booze Design",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 3,
+      "group": "Oxyron",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 4,
+      "group": "Censor Design",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 5,
+      "group": "Faith Design",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 6,
+      "group": "MultiStyle Labs",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 7,
+      "group": "Crest",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 8,
+      "group": "Fossil",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 9,
+      "group": "Triad",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 10,
+      "group": "Cosmos",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 11,
+      "group": "Fairlight",
+      "status": "verified_selection",
+      "selection": {
+        "sidTitle": "The Demo Coder (tune 1)",
+        "composer": "Fegolhuzz",
+        "hvscPath": "/MUSICIANS/F/Fegolhuzz/Demo_Coder_tune_1.sid",
+        "source": "https://csdb.dk/release/index.php?id=247776",
+        "selectedBy": "RICO"
+      }
+    },
+    {
+      "rank": 12,
+      "group": "Maniacs of Noise",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 13,
+      "group": "Remember",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 14,
+      "group": "Nostalgia",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 15,
+      "group": "PriorArt",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 16,
+      "group": "1001 Crew",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 17,
+      "group": "Artline Designs",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 18,
+      "group": "Lethargy",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 19,
+      "group": "We Music",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 20,
+      "group": "The Transfer Team",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 21,
+      "group": "Hokuto Force",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 21,
+      "group": "Arsenic",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 23,
+      "group": "Camelot",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 24,
+      "group": "SHAPE",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 24,
+      "group": "JEDI",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 26,
+      "group": "Pretzel Logic",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 27,
+      "group": "Panoramic Designs",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 28,
+      "group": "HVSC Crew",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 29,
+      "group": "Offence",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 30,
+      "group": "Legend",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 31,
+      "group": "Genesis Project",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 32,
+      "group": "Excess",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 33,
+      "group": "Success + The Ruling Company",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 34,
+      "group": "Ikari",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 35,
+      "group": "Hotline",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 36,
+      "group": "Extend",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 37,
+      "group": "Arise",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 38,
+      "group": "The Papillons Inc.",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 39,
+      "group": "Vibrants",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 40,
+      "group": "Pond",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 40,
+      "group": "Cinematic Intuitive Dynamix",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 40,
+      "group": "Success",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 40,
+      "group": "The Judges",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 40,
+      "group": "Eagle Soft Incorporated",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 40,
+      "group": "Cosmos Designs",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 40,
+      "group": "The Ruling Company",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 47,
+      "group": "Plush",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 48,
+      "group": "Resource",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 49,
+      "group": "Yeti Factories",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 50,
+      "group": "Hack n' Trade",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 51,
+      "group": "Dynamic-Duo",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 52,
+      "group": "Prosonix",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 52,
+      "group": "SIDRIP Alliance",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 54,
+      "group": "Covert Bitops",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 55,
+      "group": "Instinct",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 55,
+      "group": "20th Century Composers",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 57,
+      "group": "Tristar & Red Sector Inc.",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 57,
+      "group": "Bonzai",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 59,
+      "group": "Horizon",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 60,
+      "group": "Onslaught",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 61,
+      "group": "X-Ample Architectures",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 62,
+      "group": "Illusion",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 63,
+      "group": "Chorus",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 63,
+      "group": "X-Ray",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 63,
+      "group": "F.A.M.E.",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 63,
+      "group": "Viruz",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 63,
+      "group": "B.U.D.S.",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 68,
+      "group": "Finnish Gold",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 69,
+      "group": "Commando Frontier",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 70,
+      "group": "Beyond Force",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 71,
+      "group": "Origo Dreamline",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 71,
+      "group": "Tinnitus",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 71,
+      "group": "Flash Inc.",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 74,
+      "group": "Danish Crackers",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 75,
+      "group": "Dominators",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 76,
+      "group": "Abyss Connection",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 77,
+      "group": "Light",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 78,
+      "group": "Atlantis",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 79,
+      "group": "Army of Darkness",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 80,
+      "group": "Reflex",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 81,
+      "group": "Moz(IC)art",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 81,
+      "group": "NATO",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 81,
+      "group": "Singular",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 81,
+      "group": "North East Importers",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 85,
+      "group": "Black Mail",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 86,
+      "group": "ABC Crackings",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 86,
+      "group": "Strike Force",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 86,
+      "group": "Crazy",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 89,
+      "group": "Blues Muz'",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 90,
+      "group": "Upfront",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 91,
+      "group": "Fantasy Cracking Service",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 91,
+      "group": "Mayday!",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 91,
+      "group": "Teesside Cracking Service",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 94,
+      "group": "Samar Productions",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 95,
+      "group": "PVM",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 95,
+      "group": "Exodus",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 95,
+      "group": "2000 A.D.",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 95,
+      "group": "Starion",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 99,
+      "group": "Flash Cracking Group",
+      "status": "needs_release_credit_validation"
+    },
+    {
+      "rank": 100,
+      "group": "64ever",
+      "status": "needs_release_credit_validation"
+    }
+  ]
+}
