@@ -671,3 +671,23 @@ left: 1px;
   align-items:center;
   flex-shrink:0;
 }
+
+/* TEST35 — same creator attribution and empty rating stars on catalog rows */
+#ricoCommunityItems .rico-community-row .rico-community-stars {
+  flex:0 0 auto;
+  display:inline-block;
+  color:inherit;
+  font:18px Arial,sans-serif;
+  letter-spacing:1px;
+  white-space:nowrap;
+  cursor:inherit;
+  user-select:none;
+}
+@media (max-width:680px) {
+  #ricoCommunityItems .rico-community-row {
+    flex-wrap:wrap;
+  }
+  #ricoCommunityItems .rico-community-row .rico-community-stars {
+    margin-left:auto;
+  }
+}
