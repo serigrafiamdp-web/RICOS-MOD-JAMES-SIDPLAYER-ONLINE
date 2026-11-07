@@ -25,6 +25,7 @@ var SidPlayer = function() {
   this.autoElapsedSamples = 0;
   this.autoFallbackSeconds = 180; // Some subtunes do not specify a duration.
   this.autoLoading = false;
+  this.autoCheckQueued = false;
   this.songInfo = {};
   this.currentSubsong = 0;
   this.dialogManager = null;
@@ -2010,6 +2011,16 @@ SidPlayer.prototype = {
         
           thisPlayer._currentPlaytime += outSize;  // keep track how long we are playing
           thisPlayer.autoElapsedSamples += outSize;
+          // TEST19: trigger AUTO from the audio stream, not animation frames.
+          // Defer to a microtask: never replace SID data during sample rendering.
+          if(thisPlayer.autoAdvance && !thisPlayer.autoLoading && !thisPlayer.autoCheckQueued &&
+             thisPlayer.sampleRate && thisPlayer.autoElapsedSamples / thisPlayer.sampleRate >= thisPlayer.getAutoDurationSeconds()) {
+            thisPlayer.autoCheckQueued = true;
+            Promise.resolve().then(function() {
+              thisPlayer.autoCheckQueued = false;
+              thisPlayer.checkAutoAdvance();
+            });
+          }
        
         
         }
@@ -2297,7 +2308,7 @@ SidPlayer.prototype = {
   },
 
   render: function() {
-    this.checkAutoAdvance();
+    // AUTO timing now runs from audio callbacks; redraws may be throttled when hidden.
     if(this.oscilloscopeMode === 'filled') this.drawFilledWaves();
     else this.drawLines();
     this.updateVoiceInfo();
