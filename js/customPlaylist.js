@@ -33,6 +33,8 @@
   var cancelPendingCommunityStartup = function() {};
   // The title belongs to the playlist currently loaded, not the text being edited.
   var loadedPlaylistTitle = '';
+  // TEST32: playlist curator is separate from the artist metadata of each SID.
+  var loadedPlaylistCreator = '';
 
   function escapeFilename(name) {
     return (name || '').replace(/\.[sS][iI][dD]$/, '')
@@ -89,6 +91,10 @@
     var list = player.sidList || [];
     $('#ricoLiveCount').text('(' + list.length + ')');
     $('#ricoLivePlaylistTitle').text(landingPlaylists ? "RICO'S PLAYLISTS" : (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'));
+    var credit = !landingPlaylists && customActive && loadedPlaylistTitle && loadedPlaylistCreator
+      ? 'Playlist by ' + loadedPlaylistCreator : '';
+    $('#ricoLivePlaylistCreator').text(credit).toggle(!!credit);
+    $('#ricoLivePlaylistStars').toggle(!landingPlaylists && customActive && !!loadedPlaylistTitle);
     if (landingPlaylists) {
       $('<div>').addClass('rico-live-empty').text("Choose a playlist from RICO'S PLAYLISTS to start listening.").appendTo(holder);
       return;
@@ -231,7 +237,7 @@
     player.autoElapsedSamples = 0;
     $('#playButton').text('Play');
     customActive = wantCustom;
-    if (!wantCustom) loadedPlaylistTitle = '';
+    if (!wantCustom) { loadedPlaylistTitle = ''; loadedPlaylistCreator = ''; }
     player.sidList = wantCustom ? custom : originalList;
     player.sidListIndex = false;
     player.songInfo = {};
@@ -336,6 +342,7 @@
     importing = false;
     if (accepted) {
       loadedPlaylistTitle = '';
+      loadedPlaylistCreator = '';
       if (!customActive) activate('custom');
       else player.initFileSelection();
       if (player.sidListIndex === false) loadCustomIndex(0);
@@ -508,6 +515,7 @@
       if (!custom.length) throw Error('CUSTOM playlist is empty.');
       return {
         format:'ricos-sid-playlist', version:1, name:name,
+        createdBy: loadedPlaylistCreator || undefined,
         createdAt:new Date().toISOString(), tracks:custom.map(function(item) {
           return {file:item.file || 'track.sid', sidBase64:encode(item.localBytes)};
         })
@@ -543,6 +551,9 @@
       Array.prototype.push.apply(custom,entries);
       nameEl.value=data.name.slice(0,100);
       loadedPlaylistTitle=data.name.trim().slice(0,100);
+      loadedPlaylistCreator=typeof data.createdBy==='string' && data.createdBy.trim()
+        ? data.createdBy.trim().slice(0,100) : (typeof data.author==='string' && data.author.trim()
+          ? data.author.trim().slice(0,100) : '');
       if (!customActive) activate('custom');
       else player.initFileSelection();
       loadCustomIndex(0);
