@@ -937,7 +937,7 @@
                   say('First SID loaded. If there is no sound, click PLAY once to enable audio.');
                 }
               } else {
-                showCommunity(false);
+                showCommunity(false,'local');
                 say('Community playlist loaded: '+data.name);
               }
             } catch(error) {
