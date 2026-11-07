@@ -30,6 +30,7 @@
   var importing = false;
   var liveVisible = true; // TEST21: PLAYLIST ON at startup
   var landingPlaylists = true; // TEST22: RICO'S PLAYLISTS, not GAMES, is the initial home view.
+  var browserTab = 'community'; // TEST37: browsing tab is independent from active playback source.
   var cancelPendingCommunityStartup = function() {};
   // The title belongs to the playlist currently loaded, not the text being edited.
   var loadedPlaylistTitle = '';
@@ -259,9 +260,9 @@
   }
 
   function refreshTabs() {
-    var browsingCommunity = $('#ricoCommunityTab').hasClass('rico-selected-tab');
-    $('#ricoDefaultTab').toggleClass('rico-selected-tab', !customActive && !browsingCommunity);
-    $('#ricoCustomTab').toggleClass('rico-selected-tab', customActive && !browsingCommunity);
+    $('#ricoCommunityTab').toggleClass('rico-selected-tab',browserTab==='community');
+    $('#ricoDefaultTab').toggleClass('rico-selected-tab',browserTab==='games');
+    $('#ricoCustomTab').toggleClass('rico-selected-tab',browserTab==='local');
     $('#ricoCustomCount').text(custom.length + ' SID');
     $('#ricoFallback').val(formatAutoTime(player.autoFallbackSeconds));
     $('#ricoPlaylistStatus').text(customActive
@@ -332,7 +333,23 @@
   };
   player.initFileSelection = function () {
     if (!customActive) {
-      defaultRenderList.call(player);
+      // TEST37: GAMES is a compact metadata-only list, no artwork.
+      var gamesHolder = $('#sidList').empty();
+      originalList.forEach(function(item,index){
+        var gameRow = $('<button type="button">').addClass('rico-game-row');
+        if (index === player.sidListIndex) gameRow.addClass('rico-active-row');
+        $('<span>').addClass('rico-game-number').text(index+1).appendTo(gameRow);
+        $('<span>').addClass('rico-game-title').text(item.name || item.file || ('SID '+(index+1))).appendTo(gameRow);
+        $('<span>').addClass('rico-game-author').text(item.author || 'Unknown artist').appendTo(gameRow);
+        if(item.released) $('<span>').addClass('rico-game-year').text(item.released).appendTo(gameRow);
+        gameRow.on('click',function(){
+          player.sidListIndex=index;
+          player.loadSID('sids/'+item.file);
+          player.setPath(item.id);
+          player.initFileSelection();
+        });
+        gameRow.appendTo(gamesHolder);
+      });
       renderLivePlaylist();
       refreshTabs();
       return;
@@ -745,10 +762,15 @@
     cancelPendingCommunityStartup=cancelStartupPlaylist;
     function showCommunity(visible) {
       communityActive=visible;
+      browserTab=visible?'community':(customActive?'local':'games');
+      var dialog=document.getElementById('chooseSidDialog');
+      if(dialog){
+        dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local');
+        dialog.classList.add('rico-view-'+browserTab);
+      }
       if (communityPanel) communityPanel.style.display=visible?'block':'none';
       if (localPanel) localPanel.style.display=visible?'none':'block';
-      if (communityTab) communityTab.classList.toggle('rico-selected-tab',visible);
-      refreshTabs(); // TEST22: update selected GAMES / USER LOCAL tab after switching from catalog.
+      refreshTabs();
       if (visible) loadCommunityCatalog();
     }
     async function loadCommunityCatalog() {
