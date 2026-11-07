@@ -1,0 +1,23 @@
+{
+  "format": "ricos-csdb-top-groups-curation",
+  "version": 1,
+  "description": "Curator-selected non-game SID tracks for proposed TOP 100 CSDb GROUPS. Not an official CSDb song rating or a published playlist.",
+  "selections": [
+    {
+      "group": "Fairlight",
+      "release": "The Demo Coder",
+      "releaseDate": "2024-11-23",
+      "releaseType": "C64 Demo",
+      "event": "Mysdata 2024",
+      "composer": "Fegolhuzz",
+      "sidTitle": "The Demo Coder (tune 1)",
+      "hvscPath": "/MUSICIANS/F/Fegolhuzz/Demo_Coder_tune_1.sid",
+      "sidSha256": "cf29d04bdb123a141a0f119c4fdc6a7a8887591a62ddcefdba18091ff6270999",
+      "alternativeTrack": "/MUSICIANS/F/Fegolhuzz/Demo_Coder_tune_2.sid",
+      "source": "https://csdb.dk/release/index.php?id=247776",
+      "selectedBy": "RICO",
+      "selectionStatus": "verified",
+      "excludesGames": true
+    }
+  ]
+}
