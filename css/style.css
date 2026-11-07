@@ -1071,3 +1071,130 @@ left: 1px;
   #ricoLivePlaylistItems .rico-live-group,
   #ricoLivePlaylistItems .rico-live-title {font-size:14px;}
 }
+
+/* TEST50 — compact, consistent UI scale based on the approved floating playlist.
+   Keep the oscilloscope visible: no modal backdrop or screen-wide windows. */
+:root {
+  --rico-ui-text: 15px;
+  --rico-ui-title: 18px;
+  --rico-ui-small: 12px;
+  --rico-ui-row: 42px;
+}
+.dialog {
+  box-sizing:border-box;
+  width:min(560px,calc(100vw - 30px)) !important;
+  height:min(520px,calc(100vh - 64px)) !important;
+  max-width:calc(100vw - 30px);
+  max-height:calc(100vh - 64px);
+}
+.dialog .title {
+  box-sizing:border-box;
+  height:34px;
+  font-size:var(--rico-ui-title);
+  font-weight:bold;
+  line-height:32px;
+  padding-left:10px;
+}
+.dialog .content {
+  top:34px;
+  bottom:36px;
+  font-size:var(--rico-ui-text);
+}
+.dialog .buttons {
+  height:36px;
+  display:flex;
+  align-items:center;
+  padding:0 8px;
+}
+.dialog .buttons button,
+.dialog #ricoListTabs button,
+.dialog #ricoHvscLoad,
+.dialog #ricoCommunityItems button {
+  font-size:var(--rico-ui-small);
+  min-height:27px;
+  padding:4px 8px;
+}
+#chooseSidDialog {
+  width:min(680px,calc(100vw - 30px)) !important;
+  height:min(570px,calc(100vh - 64px)) !important;
+}
+#chooseSidDialog #chooseSidInfo {
+  left:10px;
+  right:10px;
+  padding:8px;
+}
+#chooseSidDialog #chooseSidInfo > h2 {font-size:17px;}
+#chooseSidDialog #ricoListTabs {
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+  margin:6px 0;
+}
+#chooseSidDialog #ricoListTabs button {
+  font-size:12px;
+  padding:5px 8px;
+  min-height:28px;
+}
+#chooseSidDialog.rico-view-community #chooseSidInfo,
+#chooseSidDialog.rico-view-games #chooseSidInfo,
+#chooseSidDialog.rico-view-hvsc #chooseSidInfo {
+  height:112px !important;
+}
+#chooseSidDialog.rico-view-community #ricoCommunityPanel,
+#chooseSidDialog.rico-view-games #sidListHolder,
+#chooseSidDialog.rico-view-hvsc #ricoHvscPanel {
+  top:138px !important;
+}
+#ricoHvscPanel > strong,
+#ricoCommunityPanel > strong {font-size:var(--rico-ui-title);}
+#ricoHvscPanel .rico-hvsc-head {font-size:16px;padding:8px 4px;flex-wrap:wrap;}
+#ricoHvscPanel .rico-hvsc-intro {font-size:12px;margin:5px 0 8px;}
+#ricoHvscItems .rico-hvsc-row {
+  font-size:var(--rico-ui-text);
+  min-height:var(--rico-ui-row);
+  padding:7px 6px;
+  gap:7px;
+  grid-template-columns:30px minmax(0,1.5fr) minmax(0,1fr);
+}
+#ricoHvscItems .rico-groups-row {
+  grid-template-columns:30px minmax(0,1.2fr) minmax(0,.9fr) minmax(0,1.45fr);
+}
+#chooseSidDialog.rico-view-games #sidList .rico-game-row {
+  font-size:var(--rico-ui-text);
+  min-height:var(--rico-ui-row);
+  padding:7px 5px;
+  gap:6px;
+  grid-template-columns:28px minmax(0,1.35fr) minmax(0,1fr) minmax(0,80px);
+}
+#ricoCommunityItems .rico-community-row {
+  min-height:var(--rico-ui-row);
+  font-size:var(--rico-ui-text);
+  padding:7px;
+}
+#ricoHvscItems .rico-groups-row > span {
+  overflow-wrap:break-word;
+}
+#chooseSidDialog.rico-view-local #ricoSavedLibrary {font-size:13px;}
+#chooseSidDialog.rico-view-local #sidList .rico-local-row {font-size:14px;min-height:35px;}
+#aboutSIDDialog #aboutSIDContent,
+#aboutSIDDialog #aboutSID,
+#aboutDialog #about {font-size:14px;line-height:1.45;}
+#aboutDialog #about p,#aboutDialog #about li {font-size:14px;line-height:1.45;}
+#sidInfo,#songInfo {font-size:12px;}
+#sidControls button,#sidControls #oscilloscopeVisualButtons button {
+  font-size:11px;
+  min-height:26px;
+  height:26px;
+  line-height:24px;
+  padding:0 8px;
+}
+#sidControls label,#sidControls span {font-size:11px;line-height:24px;}
+@media(max-width:560px){
+  #chooseSidDialog #ricoListTabs button{font-size:11px;padding:4px 5px;}
+  #ricoHvscItems .rico-hvsc-row,
+  #chooseSidDialog.rico-view-games #sidList .rico-game-row,
+  #ricoCommunityItems .rico-community-row {font-size:13px;gap:4px;}
+  #ricoHvscItems .rico-groups-row {
+    grid-template-columns:24px minmax(0,1fr) minmax(0,.8fr) minmax(0,1.35fr);
+  }
+}
