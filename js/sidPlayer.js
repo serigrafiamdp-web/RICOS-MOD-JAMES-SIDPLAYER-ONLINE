@@ -2058,6 +2058,13 @@ SidPlayer.prototype = {
   applyOscilloscopeColors: function() {
     var palette = this.colorModes[this.colorModeIndex];
     if(this.canvas) this.canvas.style.backgroundColor = palette.background;
+    // TEST20: synchronize interface colors with the selected oscilloscope palette.
+    var root = document.documentElement;
+    root.style.setProperty('--rico-theme-bg', palette.background);
+    root.style.setProperty('--rico-theme-fg', palette.line);
+    root.style.setProperty('--rico-theme-border', palette.line);
+    root.style.setProperty('--rico-theme-panel', 'color-mix(in srgb, ' + palette.background + ' 80%, ' + palette.line + ' 20%)');
+    root.style.setProperty('--rico-theme-hover', 'color-mix(in srgb, ' + palette.background + ' 65%, ' + palette.line + ' 35%)');
     $('#oscilloscopeColorButton').text('Color: ' + palette.name)
       .attr('title', 'Change oscilloscope palette (next: ' +
         this.colorModes[(this.colorModeIndex + 1) % this.colorModes.length].name + ')');
@@ -2319,6 +2326,7 @@ SidPlayer.prototype = {
 var sidPlayer = new SidPlayer();
 sidPlayer.init();
 sidPlayer.initWebAudio();
+sidPlayer.applyOscilloscopeColors(); // TEST20: initialize UI palette, including the default.
 sidPlayer.popPath();
 
 
