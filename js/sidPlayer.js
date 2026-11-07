@@ -2291,11 +2291,9 @@ SidPlayer.prototype = {
       this.updateAutoButton();
       return;
     }
-    if(this.currentSubsong < this.songInfo.maxSubsong) {
-      this.nextSubsong();
-    } else {
-      this.nextSid();
-    }
+    // TEST18: AUTO always advances to the next SID file.
+    // Subtune navigation remains available only through manual controls.
+    this.nextSid();
   },
 
   render: function() {
