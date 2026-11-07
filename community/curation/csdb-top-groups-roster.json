@@ -5,7 +5,7 @@
   "retrievedOn": "2026-11-07",
   "rankingNote": "Indexed CSDb ranking snapshot; tied ranks share their original ordinal. These 100 entries are CSDb ranked groups, not 100 verified SID tracks.",
   "selectionRule": "One verifiably credited non-game demo/intro/music-release SID per group, prefer highest-rated eligible CSDb release; Fairlight is user-pinned.",
-  "verifiedSelections": 2,
+  "verifiedSelections": 4,
   "groups": [
     {
       "rank": 1,
@@ -15,7 +15,14 @@
     {
       "rank": 2,
       "group": "Booze Design",
-      "status": "needs_release_credit_validation"
+      "status": "verified_selection",
+      "selection": {
+        "sidTitle": "Tour De Force",
+        "composer": "Dane",
+        "hvscPath": "/MUSICIANS/M/Mitch_and_Dane/Dane/Tour_De_Force.sid",
+        "source": "https://csdb.dk/release/index.php?id=249805",
+        "selectedBy": "assistant"
+      }
     },
     {
       "rank": 3,
@@ -25,7 +32,14 @@
     {
       "rank": 4,
       "group": "Censor Design",
-      "status": "needs_release_credit_validation"
+      "status": "verified_selection",
+      "selection": {
+        "sidTitle": "Like We Never Left",
+        "composer": "psych858o",
+        "hvscPath": "/MUSICIANS/P/Psych858o/Like_We_Never_Left.sid",
+        "source": "https://csdb.dk/release/?id=262142",
+        "selectedBy": "assistant"
+      }
     },
     {
       "rank": 5,
