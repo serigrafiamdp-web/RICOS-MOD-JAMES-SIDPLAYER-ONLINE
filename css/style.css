@@ -542,3 +542,20 @@ left: 1px;
 #sidList .rico-local-row:hover,
 #sidList .rico-active-row { background:var(--rico-theme-hover) !important; }
 #sidList .rico-row-author, #sidList .rico-row-index, #sidList .rico-row-subs { color:var(--rico-theme-fg) !important; }
+
+/* TEST21: one compact MM:SS timer field, single +/- pair */
+#ricoPlaylistOptions .rico-time-control { display:inline-flex; align-items:center; gap:3px; vertical-align:middle; }
+#ricoPlaylistOptions #ricoFallback {
+  width:55px; height:23px; padding:0 3px; box-sizing:border-box;
+  text-align:center; font:12px monospace;
+  background:#fff; color:#111; border:1px solid #777;
+}
+#ricoPlaylistOptions #ricoFallbackMinus,
+#ricoPlaylistOptions #ricoFallbackPlus {
+  width:25px; height:23px; box-sizing:border-box; padding:0;
+  background:var(--rico-theme-panel,#29303b);
+  color:var(--rico-theme-fg,#fff);
+  border:1px solid var(--rico-theme-border,#78899b);
+  font:bold 14px Arial,sans-serif;
+  cursor:pointer;
+}
