@@ -695,7 +695,7 @@
         var firstRow=null;
         catalog.playlists.forEach(function(item){
           if(!item || typeof item.title!=='string' || typeof item.file!=='string' ||
-             !/^community\\/playlists\\/[a-zA-Z0-9_-]+\\.json$/.test(item.file)) return;
+             !/^community\/playlists\/[a-zA-Z0-9_-]+\.json$/.test(item.file)) return;
           var row=document.createElement('div');
           row.className='rico-community-row';
           row.tabIndex=0;
