@@ -153,8 +153,20 @@
       $('<span>').addClass('rico-live-number').text(index + 1).appendTo(row);
       var songTitle = item.name || item.file || 'SID ' + (index + 1);
       var songArtist = item.author || 'Unknown artist';
-      $('<span>').addClass('rico-live-title').text(songTitle + ' — ' + songArtist).appendTo(row);
-      row.attr('title', (item.name || item.file || 'SID ' + (index + 1)) + ' — ' + (item.author || 'Unknown artist'));
+      if(item.sceneGroup){
+        row.addClass('rico-live-group-row');
+        // Prefer the CSDb alias if it is included in parentheses.
+        var aliasMatch=String(songArtist).match(/\(([^()]*)\)\s*$/);
+        var sceneArtist=aliasMatch ? aliasMatch[1].trim() : songArtist.trim();
+        if(/^(?:<\?>|unknown(?: artist)?)$/i.test(sceneArtist))sceneArtist='';
+        $('<span>').addClass('rico-live-group').text(item.sceneGroup).appendTo(row);
+        if(sceneArtist)$('<span>').addClass('rico-live-composer').text(sceneArtist).appendTo(row);
+        $('<span>').addClass('rico-live-song').text(songTitle).appendTo(row);
+        row.attr('title',(index+1)+'. '+item.sceneGroup+(sceneArtist?' — '+sceneArtist:'')+' — '+songTitle);
+      } else {
+        $('<span>').addClass('rico-live-title').text(songTitle + ' — ' + songArtist).appendTo(row);
+        row.attr('title',songTitle+' — '+songArtist);
+      }
       if (active) $('<span>').addClass('rico-live-current').text('▶').appendTo(row);
       row.on('click', function () {
         if (customActive) loadCustomIndex(index);
@@ -599,6 +611,12 @@
     function loadPlaylist(data,startIndex) {
       // Validate everything before changing the currently loaded playlist.
       var entries=validatedEntries(data);
+      // TEST47: preserve playlist-level scene group credits in the floating playlist.
+      if(Array.isArray(data.tracks)) entries.forEach(function(entry,index){
+        var track=data.tracks[index];
+        if(track&&typeof track.group==='string'&&track.group.trim())
+          entry.sceneGroup=track.group.trim();
+      });
       cancelPendingCommunityStartup();
       landingPlaylists = false;
       player.isPlaying=false;
