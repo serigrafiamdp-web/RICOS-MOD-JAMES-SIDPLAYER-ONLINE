@@ -585,3 +585,12 @@ left: 1px;
   padding:3px 8px;
 }
 #ricoCommunityItems .rico-community-row[aria-busy="true"] { cursor:progress; }
+
+/* TEST25: playlist floats in the viewport center until manually dragged.
+   Dragging resolves the calculated left/top into pixel coordinates. */
+#ricoLivePlaylist {
+  left:calc(50% - 157.5px);
+  right:auto;
+  top:max(20px, calc(50% - 210px));
+  bottom:auto;
+}
