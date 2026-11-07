@@ -1210,3 +1210,44 @@ left: 1px;
 #chooseSidDialog {
   top:min(90px,max(12px,calc(100vh - 605px)));
 }
+
+/* TEST56: HVSC library uses existing palette/theme variables and minimal layout. */
+#chooseSidDialog.rico-view-library #ricoDropZone,
+#chooseSidDialog.rico-view-library #ricoPlaylistOptions,
+#chooseSidDialog.rico-view-library #ricoPlaylistStatus,
+#chooseSidDialog.rico-view-library #ricoSavedPlaylistControls,
+#chooseSidDialog.rico-view-library #ricoCommunityPanel,
+#chooseSidDialog.rico-view-library #sidListHolder,
+#chooseSidDialog.rico-view-library #ricoHvscPanel {display:none !important;}
+#chooseSidDialog.rico-view-library #chooseSidInfo {height:75px !important;}
+#chooseSidDialog.rico-view-library #ricoLibraryPanel {
+ display:block !important;box-sizing:border-box;top:101px !important;
+ background:var(--rico-theme-bg,#000);color:var(--rico-theme-fg,#fff);
+ border-color:var(--rico-theme-border,#888);
+ font:13px Arial,sans-serif;
+}
+#ricoLibraryPanel > strong {font:bold 18px Arial,sans-serif;}
+.rico-library-controls {display:flex;gap:6px;align-items:center;margin:9px 0;flex-wrap:wrap;}
+.rico-library-controls button,.rico-library-shelves button,
+.rico-library-sections button,.rico-library-songs button {
+ border:1px solid var(--rico-theme-border,#888);background:transparent;
+ color:var(--rico-theme-fg,#fff);cursor:pointer;font:inherit;
+}
+.rico-library-controls button {padding:6px 10px;}
+.rico-library-controls .rico-selected-tab,.rico-library-shelves .rico-selected-tab,
+.rico-library-sections .rico-selected-tab {background:var(--rico-theme-fg,#fff)!important;color:var(--rico-theme-bg,#000)!important;}
+#ricoLibrarySearch {flex:1;min-width:130px;padding:6px;background:var(--rico-theme-bg,#000);color:var(--rico-theme-fg,#fff);border:1px solid var(--rico-theme-border,#888);}
+.rico-library-shelves {display:flex;gap:4px;flex-wrap:wrap;padding-bottom:9px;border-bottom:1px solid var(--rico-theme-border,#888);}
+.rico-library-shelf {min-width:27px;padding:5px 7px;}
+.rico-library-columns {display:grid;grid-template-columns:40% 60%;min-height:165px;max-height:45vh;overflow:hidden;}
+.rico-library-sections,.rico-library-songs {overflow-y:auto;min-height:130px;}
+.rico-library-sections {border-right:1px solid var(--rico-theme-border,#888);}
+.rico-library-sections button,.rico-library-songs button {
+ width:100%;display:block;text-align:left;padding:8px 7px;
+ border-width:0 0 1px 0;overflow-wrap:anywhere;
+}
+.rico-library-sections button:hover,.rico-library-songs button:hover,
+.rico-library-songs button:focus-visible {background:var(--rico-theme-fg,#fff);color:var(--rico-theme-bg,#000);}
+.rico-library-heading {padding:8px 7px;font-weight:bold;border-bottom:1px solid var(--rico-theme-border,#888);}
+#ricoLibraryStatus {padding:7px 0;font-size:11px;opacity:.8;}
+@media(max-width:650px){.rico-library-columns{grid-template-columns:45% 55%;}.rico-library-sections button,.rico-library-songs button{padding:7px 4px;}}
