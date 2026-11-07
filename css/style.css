@@ -1251,3 +1251,36 @@ left: 1px;
 .rico-library-heading {padding:8px 7px;font-weight:bold;border-bottom:1px solid var(--rico-theme-border,#888);}
 #ricoLibraryStatus {padding:7px 0;font-size:11px;opacity:.8;}
 @media(max-width:650px){.rico-library-columns{grid-template-columns:45% 55%;}.rico-library-sections button,.rico-library-songs button{padding:7px 4px;}}
+
+/* TEST57 FIX: independent, full-height scrolling for complete HVSC lists.
+   Overrides the former 45vh clipping and keeps every SID reachable. */
+#chooseSidDialog.rico-view-library #ricoLibraryPanel {
+  display:flex !important;
+  flex-direction:column;
+  overflow:hidden !important;
+  min-height:0;
+}
+#ricoLibraryPanel > strong,
+#ricoLibraryIntro,
+#ricoLibraryPanel .rico-library-controls,
+#ricoLibraryStatus { flex:0 0 auto; }
+#ricoLibraryPanel .rico-library-shelves {
+  flex:0 0 auto;
+  max-height:78px;
+  overflow-y:auto;
+}
+#ricoLibraryPanel .rico-library-columns {
+  flex:1 1 auto;
+  height:auto;
+  min-height:0;
+  max-height:none;
+  overflow:hidden;
+}
+#ricoLibraryPanel .rico-library-sections,
+#ricoLibraryPanel .rico-library-songs {
+  min-height:0;
+  max-height:none;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:auto;
+}
