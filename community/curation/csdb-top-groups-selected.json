@@ -17,7 +17,12 @@
       "source": "https://csdb.dk/release/index.php?id=247776",
       "selectedBy": "RICO",
       "selectionStatus": "verified",
-      "excludesGames": true
+      "excludesGames": true,
+      "csdbGroupRank": 20,
+      "csdbGroupWeightedAverage": 9.14,
+      "csdbGroupVotes": 97,
+      "csdbRankingUrl": "https://csdb.dk/toplist.php?type=group",
+      "rankVerifiedOn": "2026-11-07"
     }
   ]
 }
