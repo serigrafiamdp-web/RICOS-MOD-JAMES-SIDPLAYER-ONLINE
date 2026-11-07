@@ -86,17 +86,53 @@
     renderLivePlaylist();
   };
 
+  // TEST33: create the credit strip from JS as well, so it remains available
+  // when a browser serves an older cached HTML shell.
+  function ensureLivePlaylistCredits() {
+    var header = document.getElementById('ricoLivePlaylistHeader');
+    if (!header) return null;
+    var credits = document.getElementById('ricoLivePlaylistCredits');
+    if (!credits) {
+      credits = document.createElement('div');
+      credits.id = 'ricoLivePlaylistCredits';
+      credits.setAttribute('aria-label', 'Playlist curator and future ratings');
+      header.insertAdjacentElement('afterend', credits);
+    }
+    if (!document.getElementById('ricoLivePlaylistCreator')) {
+      var curator = document.createElement('span');
+      curator.id = 'ricoLivePlaylistCreator';
+      credits.appendChild(curator);
+    }
+    if (!document.getElementById('ricoLivePlaylistStars')) {
+      var rating = document.createElement('span');
+      rating.id = 'ricoLivePlaylistStars';
+      rating.title = 'Ratings coming soon';
+      rating.setAttribute('aria-label', 'Ratings coming soon');
+      var stars = document.createElement('span');
+      stars.setAttribute('aria-hidden', 'true');
+      stars.textContent = '☆☆☆☆☆';
+      var note = document.createElement('span');
+      note.className = 'rico-rating-note';
+      note.textContent = 'Ratings coming soon';
+      rating.appendChild(stars);
+      rating.appendChild(note);
+      credits.appendChild(rating);
+    }
+    return credits;
+  }
+
   function renderLivePlaylist() {
     var holder = $('#ricoLivePlaylistItems').empty();
+    ensureLivePlaylistCredits();
     var list = player.sidList || [];
     $('#ricoLiveCount').text('(' + list.length + ')');
     $('#ricoLivePlaylistTitle').text(landingPlaylists ? "RICO'S PLAYLISTS" : (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'));
     var credit = !landingPlaylists && customActive && loadedPlaylistTitle && loadedPlaylistCreator
       ? 'Playlist by ' + loadedPlaylistCreator : '';
-    $('#ricoLivePlaylistCreator').text(credit).toggle(!!credit);
     var showRatingPreview = !landingPlaylists && customActive && !!loadedPlaylistTitle;
-    $('#ricoLivePlaylistStars').toggle(showRatingPreview);
-    $('#ricoLivePlaylistCredits').toggle(!!credit || showRatingPreview);
+    $('#ricoLivePlaylistCreator').text(credit).css('display', credit ? 'inline' : 'none');
+    $('#ricoLivePlaylistStars').css('display', showRatingPreview ? 'inline' : 'none');
+    $('#ricoLivePlaylistCredits').css('display', (credit || showRatingPreview) ? 'flex' : 'none');
     if (landingPlaylists) {
       $('<div>').addClass('rico-live-empty').text("Choose a playlist from RICO'S PLAYLISTS to start listening.").appendTo(holder);
       return;
