@@ -1027,3 +1027,47 @@ left: 1px;
   outline:none;
 }
 #ricoLivePlaylistItems {padding-right:10px;}
+
+/* TEST49: improve floating playlist readability without changing TEST48 dimensions. */
+#ricoLivePlaylistHeader {
+  font-size:18px;
+  letter-spacing:.35px;
+}
+#ricoLivePlaylistHeader #ricoLivePlaylistTitle {
+  max-width:390px !important;
+}
+#ricoLivePlaylistCredits {
+  font-size:15px;
+}
+#ricoLivePlaylistCreator {
+  font-size:15px;
+}
+#ricoLivePlaylistItems .rico-live-row {
+  font-size:16px;
+  line-height:1.4;
+  min-height:47px;
+  padding:8px 11px;
+  gap:8px;
+}
+#ricoLivePlaylistItems .rico-live-number {
+  min-width:30px;
+  font-size:15px;
+}
+#ricoLivePlaylistItems .rico-live-group-row .rico-live-number {
+  flex-basis:30px;
+}
+#ricoLivePlaylistItems .rico-live-group {
+  font-size:16px;
+}
+#ricoLivePlaylistItems .rico-live-composer,
+#ricoLivePlaylistItems .rico-live-song,
+#ricoLivePlaylistItems .rico-live-title {
+  font-size:16px;
+}
+@media (max-width:560px) {
+  #ricoLivePlaylistItems .rico-live-row {font-size:14px;padding:7px 8px;}
+  #ricoLivePlaylistItems .rico-live-composer,
+  #ricoLivePlaylistItems .rico-live-song,
+  #ricoLivePlaylistItems .rico-live-group,
+  #ricoLivePlaylistItems .rico-live-title {font-size:14px;}
+}
