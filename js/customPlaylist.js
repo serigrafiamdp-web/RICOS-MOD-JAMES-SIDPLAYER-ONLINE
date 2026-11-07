@@ -94,7 +94,9 @@
     var credit = !landingPlaylists && customActive && loadedPlaylistTitle && loadedPlaylistCreator
       ? 'Playlist by ' + loadedPlaylistCreator : '';
     $('#ricoLivePlaylistCreator').text(credit).toggle(!!credit);
-    $('#ricoLivePlaylistStars').toggle(!landingPlaylists && customActive && !!loadedPlaylistTitle);
+    var showRatingPreview = !landingPlaylists && customActive && !!loadedPlaylistTitle;
+    $('#ricoLivePlaylistStars').toggle(showRatingPreview);
+    $('#ricoLivePlaylistCredits').toggle(!!credit || showRatingPreview);
     if (landingPlaylists) {
       $('<div>').addClass('rico-live-empty').text("Choose a playlist from RICO'S PLAYLISTS to start listening.").appendTo(holder);
       return;
