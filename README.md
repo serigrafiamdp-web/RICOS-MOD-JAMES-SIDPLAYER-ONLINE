@@ -133,3 +133,13 @@ Detailed record: [docs/CHECKPOINT_TEST54_PASS_2026-11-07.md](docs/CHECKPOINT_TES
 - Source archives supplied for research: HVSC MUSICIANS and HVSC DEMOS. The DEMOS ZIP contains **3,058 SID files** (2,545 PSID and 513 RSID); many have no known composer attribution, so do not infer group credits solely from SID headers.
 - Official ranking references: https://csdb.dk/toplist.php?subtype=%287%29&type=scener and https://csdb.dk/toplist.php?type=group
 
+
+## TEST56 — HVSC full-library browser (2026-11-07; deployment pending)
+- Source archives previously supplied by project owner: MUSICIANS (56,568 .sid files), DEMOS (3,058 .sid files); the official current release is HVSC #85.
+- The unchanged original ranked playlists (TOP 100 HVSC GAMES, TOP GROUPS, TOP MUSICIANS) remain read-only.
+- A new HVSC LIBRARY browser tab was coded, with category/shelf/composer navigation, search within a selected shelf, and single-song playback on demand. It uses existing `--rico-theme-*` CSS palette variables and minimal layout.
+- `tools/build_hvsc_library.py` generates a JSON index per shelf and ZIP packs per composer or DEMOS section; no bulk downloading on app startup.
+- `.github/workflows/build-hvsc-library.yml` is configured to fetch HVSC #85 and publish generated `library/` files. **Do not claim the full library is online until `library/index.json` and packs exist on main and audio playback is tested.** GitHub Actions may need to be enabled or a workflow permission issue resolved.
+- Personal playlists remain local/unchanged during this test. Cross-catalog adding and public community submission are future stages.
+- Test entry point: https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=56
+- Static library mirrors original HVSC files; attribution and HVSC copyright notices must be respected.
