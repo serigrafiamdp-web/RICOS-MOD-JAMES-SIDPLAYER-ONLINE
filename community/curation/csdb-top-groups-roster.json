@@ -5,7 +5,7 @@
   "retrievedOn": "2026-11-07",
   "rankingNote": "Indexed CSDb ranking snapshot; tied ranks share their original ordinal. These 100 entries are CSDb ranked groups, not 100 verified SID tracks.",
   "selectionRule": "One verifiably credited non-game demo/intro/music-release SID per group, prefer highest-rated eligible CSDb release; Fairlight is user-pinned.",
-  "verifiedSelections": 1,
+  "verifiedSelections": 2,
   "groups": [
     {
       "rank": 1,
@@ -35,7 +35,14 @@
     {
       "rank": 6,
       "group": "MultiStyle Labs",
-      "status": "needs_release_credit_validation"
+      "status": "verified_selection",
+      "selection": {
+        "sidTitle": "Hi Fi Sky",
+        "composer": "LMan",
+        "hvscPath": "/MUSICIANS/L/LMan/Hi_Fi_Sky.sid",
+        "source": "https://csdb.dk/release/?id=137965",
+        "selectedBy": "assistant"
+      }
     },
     {
       "rank": 7,
