@@ -15,7 +15,7 @@
   var custom = [];
   var customActive = false;
   var importing = false;
-  var liveVisible = false;
+  var liveVisible = true; // TEST21: PLAYLIST ON at startup
   // The title belongs to the playlist currently loaded, not the text being edited.
   var loadedPlaylistTitle = '';
 
@@ -171,11 +171,31 @@
   });
   $('#ricoLiveClose').on('click', function () { showLivePlaylist(false); });
 
+
+  // TEST21: user-facing MM:SS; engine keeps its seconds-based fallback timer.
+  function formatAutoTime(seconds) {
+    var total = Math.max(5, Math.min(3600, Math.round(seconds)));
+    return String(Math.floor(total / 60)).padStart(2, '0') + ':' +
+      String(total % 60).padStart(2, '0');
+  }
+  function parseAutoTime(value) {
+    var match = /^\s*(\d{1,2}):(\d{1,2})\s*$/.exec(String(value));
+    if (!match) return null;
+    var minutes = Number(match[1]), seconds = Number(match[2]);
+    if (seconds >= 60) return null;
+    var total = minutes * 60 + seconds;
+    return total >= 5 && total <= 3600 ? total : null;
+  }
+  function updateAutoTime(seconds) {
+    player.autoFallbackSeconds = Math.max(5, Math.min(3600, Math.round(seconds)));
+    $('#ricoFallback').val(formatAutoTime(player.autoFallbackSeconds));
+  }
+
   function refreshTabs() {
     $('#ricoDefaultTab').toggleClass('rico-selected-tab', !customActive);
     $('#ricoCustomTab').toggleClass('rico-selected-tab', customActive);
     $('#ricoCustomCount').text(custom.length + ' SID');
-    $('#ricoFallback').val(Math.round(player.autoFallbackSeconds));
+    $('#ricoFallback').val(formatAutoTime(player.autoFallbackSeconds));
     $('#ricoPlaylistStatus').text(customActive
       ? (custom.length ? custom.length + ' local SID files ready (session only).' : 'Select SID files or a folder to create your custom list.')
       : 'Original 22 SID playlist. Your local files remain available in CUSTOM.');
@@ -367,10 +387,20 @@
     }
     refreshTabs();
   });
-  $('#ricoFallback').on('change', function () {
-    var seconds = Math.round(Number(this.value));
-    player.autoFallbackSeconds = Number.isFinite(seconds) ? Math.max(5, Math.min(3600, seconds)) : 180;
-    this.value = player.autoFallbackSeconds;
+  $('#ricoFallback').on('change blur', function () {
+    var entered = parseAutoTime(this.value);
+    updateAutoTime(entered === null ? player.autoFallbackSeconds : entered);
+  });
+  $('#ricoFallback').on('keydown', function (event) {
+    if (event.key === 'Enter') { this.blur(); event.preventDefault(); event.stopPropagation(); }
+  });
+  $('#ricoFallbackMinus').on('click', function () {
+    var entered = parseAutoTime($('#ricoFallback').val());
+    updateAutoTime((entered === null ? player.autoFallbackSeconds : entered) - 10);
+  });
+  $('#ricoFallbackPlus').on('click', function () {
+    var entered = parseAutoTime($('#ricoFallback').val());
+    updateAutoTime((entered === null ? player.autoFallbackSeconds : entered) + 10);
   });
   $('body').off('drop').on('drop.ricoPlaylist', async function (event) {
     event.preventDefault();
@@ -676,5 +706,5 @@
 
   refreshTabs();
   player.initFileSelection();
-  renderLivePlaylist();
+  showLivePlaylist(true); // TEST21: initial playlist visible and button marked ON.
 })();
