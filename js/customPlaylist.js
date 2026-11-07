@@ -663,9 +663,17 @@
     var communityItems=document.getElementById('ricoCommunityItems');
     var localPanel=document.getElementById('sidListHolder');
     var communityActive=false;
-    var startupPlaylistPending=true; // TEST23: first published playlist starts at launch.
+    var startupPlaylistPending=true; // TEST24: allow 30 seconds for manual selection.
+    var startupPlaylistTimer=null;
     var selectedCommunityId='';
     var communityRequestNumber=0;
+    function cancelStartupPlaylist() {
+      startupPlaylistPending=false;
+      if(startupPlaylistTimer!==null) {
+        clearTimeout(startupPlaylistTimer);
+        startupPlaylistTimer=null;
+      }
+    }
     function showCommunity(visible) {
       communityActive=visible;
       if (communityPanel) communityPanel.style.display=visible?'block':'none';
@@ -687,7 +695,7 @@
         if(requestNumber!==communityRequestNumber) return;
         communityItems.textContent='';
         if(!catalog.playlists.length) {
-          startupPlaylistPending=false;
+          cancelStartupPlaylist();
           communityItems.textContent='No shared playlists published yet. Closed beta: Rico and invited testers only.';
           return;
         }
@@ -709,7 +717,7 @@
           communityItems.appendChild(row);
           if(item.id && item.id===selectedCommunityId) row.classList.add('rico-community-selected');
           async function openPlaylist(isStartup) {
-            if(!isStartup) startupPlaylistPending=false;
+            if(!isStartup) cancelStartupPlaylist();
             button.disabled=true;
             row.setAttribute('aria-busy','true');
             try {
@@ -720,13 +728,13 @@
               var data=JSON.parse(body);
               // Ignore a late auto-load if the visitor picked a different source.
               if(isStartup && !startupPlaylistPending) return;
+              if(isStartup) cancelStartupPlaylist();
               loadPlaylist(data); // Includes playing the first SID.
               selectedCommunityId=item.id||item.file;
               Array.prototype.forEach.call(communityItems.querySelectorAll('.rico-community-row'),function(other){
                 other.classList.toggle('rico-community-selected',other===row);
               });
               if(isStartup) {
-                startupPlaylistPending=false;
                 // Retain RICO'S PLAYLISTS as the home dialog, even after loadSIDData hides dialogs.
                 showCommunity(true);
                 player.dialogManager.showDialog('chooseSidDialog');
@@ -745,7 +753,7 @@
             } catch(error) {
               communityItems.setAttribute('data-error',error.message);
               say(error.message);
-              if(isStartup) startupPlaylistPending=false;
+              if(isStartup) cancelStartupPlaylist();
             } finally {
               button.disabled=false;
               row.removeAttribute('aria-busy');
@@ -766,19 +774,23 @@
         });
         if(startupPlaylistPending && firstPlayable && firstRow) {
           firstRow.classList.add('rico-community-selected');
-          firstPlayable();
+          if(startupPlaylistTimer!==null) clearTimeout(startupPlaylistTimer);
+          startupPlaylistTimer=setTimeout(function(){
+            startupPlaylistTimer=null;
+            if(startupPlaylistPending && communityActive) firstPlayable();
+          },30000);
         }
       } catch(error){
         if(requestNumber===communityRequestNumber)
           communityItems.textContent='Could not load RICO\'S PLAYLISTS: '+error.message;
-        startupPlaylistPending=false;
+        cancelStartupPlaylist();
       }
     }
     if(communityTab) communityTab.addEventListener('click',function(){showCommunity(true);});
     ['ricoDefaultTab','ricoCustomTab'].forEach(function(id) {
       var tab=document.getElementById(id);
       if(tab) tab.addEventListener('click',function(){
-        startupPlaylistPending=false;
+        cancelStartupPlaylist();
         showCommunity(false);
       });
     });
