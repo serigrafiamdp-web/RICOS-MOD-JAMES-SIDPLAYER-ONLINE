@@ -1120,7 +1120,7 @@
       }
       async function openShelf(item){
         var request=++token;
-        shelf=item.name;selected=null;shelfData=null;sectionLimit=120;trackLimit=150;
+        shelf=item.name;selected=null;shelfData=null;
         sectionsEl.textContent='';songsEl.textContent='';
         renderShelves();status('Loading '+category.toUpperCase()+' / '+shelf+'...');
         try{
@@ -1135,30 +1135,25 @@
           renderSections();
         }catch(e){if(request===token)status(e.message);}
       }
-      // TEST57: paginate the complete per-letter roster and per-musician tracks;
-      // no tracks or composers are omitted, and the DOM remains responsive.
-      var sectionLimit=120, trackLimit=150;
+      // TEST57: show every artist and SID in a selected HVSC shelf, with independent scrolling.
       function renderSections(){
         if(!shelfData)return;
         var q=searchEl.value.trim().toLocaleLowerCase();
         var matches=shelfData.sections.filter(function(g){
           return !q||g.name.toLocaleLowerCase().includes(q)||g.tracks.some(x=>(x.title+' '+x.author+' '+x.file).toLocaleLowerCase().includes(q));
         });
+        var previousScroll=sectionsEl.scrollTop;
         sectionsEl.textContent='';
         if(!matches.length){selected=null;songsEl.textContent='No matches.';status('No matching musicians or tracks.');return;}
-        if(!selected||!matches.includes(selected)){selected=matches[0];trackLimit=150;}
-        matches.slice(0,sectionLimit).forEach(function(section){
+        if(!selected||!matches.includes(selected)){selected=matches[0];}
+        matches.forEach(function(section){
           var b=makeButton(section.name+' ('+section.tracks.length+')',function(){
-            selected=section;trackLimit=150;renderSections();
+            selected=section;renderSections();
           },'rico-library-section');
           if(selected&&selected.pack===section.pack)b.classList.add('rico-selected-tab');
           sectionsEl.appendChild(b);
         });
-        if(matches.length>sectionLimit){
-          sectionsEl.appendChild(makeButton('SHOW MORE MUSICIANS ('+sectionLimit+' / '+matches.length+')',function(){
-            sectionLimit+=120;renderSections();
-          },'rico-library-more'));
-        }
+        sectionsEl.scrollTop=previousScroll;
         renderSongs();
         status(matches.length+' sections available · '+selected.tracks.length+' SID in '+selected.name+'.');
       }
@@ -1171,15 +1166,10 @@
         var filtered=selected.tracks.filter(function(track){
           return !q||selected.name.toLocaleLowerCase().includes(q)||(track.title+' '+track.author+' '+track.file).toLocaleLowerCase().includes(q);
         });
-        filtered.slice(0,trackLimit).forEach(function(track){
+        filtered.forEach(function(track){
           var b=makeButton(track.title+(track.author?' — '+track.author:''),()=>playTrack(selected,track),'rico-library-track');
           b.title=track.file;songsEl.appendChild(b);
         });
-        if(filtered.length>trackLimit){
-          songsEl.appendChild(makeButton('SHOW MORE SID ('+trackLimit+' / '+filtered.length+')',function(){
-            trackLimit+=150;renderSongs();
-          },'rico-library-more'));
-        }
       }
       async function playTrack(section,track){
         try {
@@ -1230,7 +1220,7 @@
       }
       document.getElementById('ricoLibraryMusicians').addEventListener('click',function(){category='musicians';shelf='';openLibrary();});
       document.getElementById('ricoLibraryDemos').addEventListener('click',function(){category='demos';shelf='';openLibrary();});
-      searchEl.addEventListener('input',function(){sectionLimit=120;trackLimit=150;renderSections();});
+      searchEl.addEventListener('input',renderSections);
       tab.addEventListener('click',openLibrary);
     })();
 
