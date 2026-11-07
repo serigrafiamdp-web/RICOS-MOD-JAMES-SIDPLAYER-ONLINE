@@ -638,3 +638,16 @@ left: 1px;
   font:16px Arial,sans-serif; letter-spacing:1px;
 }
 #ricoLivePlaylistStars .rico-rating-note {font-size:9px; opacity:.82; margin-left:3px;}
+
+/* TEST33: fixed credit strip stays between the title and scrollable SID list. */
+#ricoLivePlaylist #ricoLivePlaylistCredits {
+  box-sizing:border-box;
+  flex:0 0 auto;
+  min-height:32px;
+  width:100%;
+  align-items:center;
+}
+#ricoLivePlaylist #ricoLivePlaylistCredits[style*="display: none"] {
+  min-height:0;
+}
+#ricoLivePlaylist #ricoLivePlaylistCreator {font-weight:bold;}
