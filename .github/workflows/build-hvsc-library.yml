@@ -1,0 +1,40 @@
+name: Build HVSC static library
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/build_hvsc_library.py'
+      - '.github/workflows/build-hvsc-library.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - name: Download official HVSC 85 collection
+        run: |
+          curl -fL --retry 3 --connect-timeout 20 'https://hvsc.brona.dk/HVSC/HVSC_85-all-of-them.7z' -o /tmp/HVSC.7z
+          mkdir -p /tmp/hvsc
+          7z x -y -o/tmp/hvsc /tmp/HVSC.7z > /dev/null
+      - name: Generate packed library and searchable catalogs
+        run: |
+          ROOT=$(find /tmp/hvsc -type d -name MUSICIANS -print -quit | xargs dirname)
+          test -d "$ROOT/MUSICIANS"
+          test -d "$ROOT/DEMOS"
+          python3 tools/build_hvsc_library.py "$ROOT" library
+      - name: Commit static library to main
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add library/
+          if ! git diff --cached --quiet; then
+            git commit -m 'TEST56: publish packed MUSICIANS and DEMOS HVSC library'
+            git push
+          fi
