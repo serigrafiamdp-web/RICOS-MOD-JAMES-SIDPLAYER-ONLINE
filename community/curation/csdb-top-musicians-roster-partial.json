@@ -9,17 +9,57 @@
     {
       "rank": 1,
       "musician": "Rob Hubbard",
-      "status": "needs_non_game_release_validation"
+      "status": "verified_selection",
+      "selection": {
+        "rank": 1,
+        "musician": "Rob Hubbard",
+        "sidTitle": "Commodore 64 Music Examples",
+        "hvscPath": "/MUSICIANS/H/Hubbard_Rob/Commodore_64_Music_Examples.sid",
+        "sidSha256": "a410811f32f9ef4bee6cb0bf4dcb078273e6853118c998b6b15dd77ae118067d",
+        "release": "Commodore 64 Music Examples",
+        "releaseType": "C64 Music Collection",
+        "source": "https://csdb.dk/release/?id=37578",
+        "selectionMethod": "verified original non-game music collection; insufficient votes for rating",
+        "selectionStatus": "verified"
+      }
     },
     {
       "rank": 2,
       "musician": "LMan",
-      "status": "needs_non_game_release_validation"
+      "status": "verified_selection",
+      "selection": {
+        "rank": 2,
+        "musician": "LMan",
+        "sidTitle": "Hi Fi Sky",
+        "hvscPath": "/MUSICIANS/L/LMan/Hi_Fi_Sky.sid",
+        "sidSha256": "71bfd85457331fb701fb51d71263034c115ff033e299f703ddfc290574561249",
+        "release": "Hi Fi Sky",
+        "releaseType": "C64 Music",
+        "source": "https://csdb.dk/release/?id=137965",
+        "releaseRating": 9.9,
+        "releaseVotes": 113,
+        "selectionMethod": "strongly rated verified original music release",
+        "selectionStatus": "verified"
+      }
     },
     {
       "rank": 3,
       "musician": "Mibri",
-      "status": "needs_non_game_release_validation"
+      "status": "verified_selection",
+      "selection": {
+        "rank": 3,
+        "musician": "Mibri",
+        "sidTitle": "Cobweb Dub",
+        "hvscPath": "/MUSICIANS/M/Mibri/Cobweb_Dub.sid",
+        "sidSha256": "4fa037fd0f6ae43eb891c50b36340377941542c947a8027546902f3203305573",
+        "release": "Halloweed 3 - VIC or Weed",
+        "releaseType": "C64 Demo",
+        "source": "https://csdb.dk/release/?id=237151",
+        "releaseRating": 9.5,
+        "releaseVotes": 21,
+        "selectionMethod": "verified credit and SID on rated C64 demo",
+        "selectionStatus": "verified"
+      }
     },
     {
       "rank": 4,
@@ -176,5 +216,6 @@
       "musician": "Stein Pedersen",
       "status": "needs_non_game_release_validation"
     }
-  ]
+  ],
+  "verifiedSelections": 3
 }
