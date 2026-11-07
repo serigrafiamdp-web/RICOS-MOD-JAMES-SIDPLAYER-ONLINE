@@ -1,7 +1,7 @@
 {
   "format": "ricos-community-catalog",
   "version": 1,
-  "updatedAt": "2026-11-06",
+  "updatedAt": "2026-11-07",
   "playlists": [
     {
       "id": "los-pat-moritas",
@@ -10,6 +10,14 @@
       "createdBy": "RICO",
       "tracks": 22,
       "file": "community/playlists/los-pat-moritas.json"
+    },
+    {
+      "id": "rico",
+      "title": "RICO",
+      "author": "RICO",
+      "createdBy": "RICO",
+      "tracks": 7,
+      "file": "community/playlists/rico.json"
     }
   ]
 }
