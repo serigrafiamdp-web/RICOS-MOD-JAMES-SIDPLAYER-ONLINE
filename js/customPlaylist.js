@@ -203,14 +203,22 @@
     var movement = null;
     // TEST51: open the floating playlist centered, leaving the oscilloscope visible.
     // The position remains fully user-adjustable by dragging the header.
-    var initialWidth=panel.getBoundingClientRect().width;
-    var initialHeight=panel.getBoundingClientRect().height;
-    if(initialWidth>0 && initialHeight>0) {
-      panel.style.left=Math.max(0,Math.round((window.innerWidth-initialWidth)/2))+'px';
-      panel.style.top=Math.max(8,Math.round((window.innerHeight-35-initialHeight)/2))+'px';
+    function centerFloatingPlaylistOnStartup() {
+      var rect=panel.getBoundingClientRect();
+      if(!rect.width || !rect.height)return;
+      // Center inside the available workspace above the bottom playback controls.
+      var controls=document.getElementById('sidControls');
+      var controlsHeight=controls?controls.getBoundingClientRect().height:35;
+      var availableHeight=Math.max(120,window.innerHeight-controlsHeight);
+      panel.style.left=Math.max(0,Math.round((window.innerWidth-rect.width)/2))+'px';
+      panel.style.top=Math.max(8,Math.round((availableHeight-rect.height)/2))+'px';
       panel.style.right='auto';
       panel.style.bottom='auto';
     }
+    centerFloatingPlaylistOnStartup();
+    // Correct layout once the initial page geometry is finalized; never re-center
+    // after the user has moved or resized the panel.
+    if(window.requestAnimationFrame)window.requestAnimationFrame(centerFloatingPlaylistOnStartup);
     function clamp(value, minimum, maximum) {
       return Math.max(minimum, Math.min(maximum, value));
     }
