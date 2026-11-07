@@ -1177,21 +1177,22 @@
         });
         filtered.forEach(function(track){
           var b=makeButton(track.title+(track.author?' — '+track.author:''),()=>playTrack(selected,track),'rico-library-track');
-          b.title=track.file;songsEl.appendChild(b);
+          b.title=(track.origin ? track.origin+' / ' : '')+track.file;songsEl.appendChild(b);
         });
       }
       async function playTrack(section,track){
         try {
           status('Loading '+track.title+'...');
           if(typeof JSZip==='undefined')throw Error('ZIP decoder unavailable; reload the page.');
-          var p=packCache.get(section.pack);
+          var sourcePack=track.pack || section.pack;
+          var p=packCache.get(sourcePack);
           if(!p){
             p=(async function(){
-              var res=await fetch(section.pack);
+              var res=await fetch(sourcePack);
               if(!res.ok)throw Error('SID pack unavailable ('+res.status+').');
               return JSZip.loadAsync(await res.arrayBuffer());
             })();
-            packCache.set(section.pack,p);
+            packCache.set(sourcePack,p);
             if(packCache.size>3)packCache.delete(packCache.keys().next().value);
           }
           var zip=await p;
