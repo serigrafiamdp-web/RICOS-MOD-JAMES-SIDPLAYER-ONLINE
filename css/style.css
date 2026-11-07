@@ -771,3 +771,43 @@ left: 1px;
 #chooseSidDialog .rico-game-title {flex:2 1 180px;min-width:0;font-weight:bold;}
 #chooseSidDialog .rico-game-author {flex:1 1 125px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 #chooseSidDialog .rico-game-year {flex:0 0 auto;max-width:115px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.8;}
+
+/* TEST38: centered, consistent metadata columns in GAMES. */
+#chooseSidDialog.rico-view-games #sidList {
+  width:100%;
+  box-sizing:border-box;
+}
+#chooseSidDialog.rico-view-games #sidList .rico-game-row {
+  display:grid;
+  grid-template-columns:36px minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 110px);
+  gap:10px;
+  align-items:center;
+  justify-items:stretch;
+  text-align:center;
+  padding:8px 12px;
+}
+#chooseSidDialog.rico-view-games #sidList .rico-game-number {
+  width:auto;
+  text-align:center;
+}
+#chooseSidDialog.rico-view-games #sidList .rico-game-title,
+#chooseSidDialog.rico-view-games #sidList .rico-game-author,
+#chooseSidDialog.rico-view-games #sidList .rico-game-year {
+  min-width:0;
+  width:100%;
+  max-width:none;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  text-align:center;
+}
+#chooseSidDialog.rico-view-games #sidList .rico-game-title {
+  font-weight:bold;
+}
+@media(max-width:580px) {
+  #chooseSidDialog.rico-view-games #sidList .rico-game-row {
+    grid-template-columns:25px minmax(0, 1.3fr) minmax(0, 1fr) 72px;
+    gap:5px;
+    padding:7px 5px;
+  }
+}
