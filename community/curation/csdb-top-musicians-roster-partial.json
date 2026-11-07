@@ -9,19 +9,8 @@
     {
       "rank": 1,
       "musician": "Rob Hubbard",
-      "status": "verified_selection",
-      "selection": {
-        "rank": 1,
-        "musician": "Rob Hubbard",
-        "sidTitle": "Commodore 64 Music Examples",
-        "hvscPath": "/MUSICIANS/H/Hubbard_Rob/Commodore_64_Music_Examples.sid",
-        "sidSha256": "a410811f32f9ef4bee6cb0bf4dcb078273e6853118c998b6b15dd77ae118067d",
-        "release": "Commodore 64 Music Examples",
-        "releaseType": "C64 Music Collection",
-        "source": "https://csdb.dk/release/?id=37578",
-        "selectionMethod": "verified original non-game music collection; insufficient votes for rating",
-        "selectionStatus": "verified"
-      }
+      "status": "needs_non_game_release_validation",
+      "exclusionNote": "Previous proposed SID Commodore 64 Music Examples includes subtunes originally composed for unreleased game Razzmatazz; excluded pending unambiguously non-game alternative."
     },
     {
       "rank": 2,
@@ -217,5 +206,5 @@
       "status": "needs_non_game_release_validation"
     }
   ],
-  "verifiedSelections": 3
+  "verifiedSelections": 2
 }
