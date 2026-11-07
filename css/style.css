@@ -1204,3 +1204,9 @@ left: 1px;
 .dialog {min-width:280px;min-height:180px;}
 #chooseSidDialog {min-width:min(420px,calc(100vw - 30px));min-height:300px;}
 .dialog .dialogResize {z-index:15;}
+
+/* TEST54: lower the foreground Choose A SID dialog to cover the floating
+   playlist edge underneath, while staying within smaller viewports. */
+#chooseSidDialog {
+  top:min(90px,max(12px,calc(100vh - 605px)));
+}
