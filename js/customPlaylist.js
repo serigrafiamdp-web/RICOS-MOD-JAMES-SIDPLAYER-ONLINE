@@ -668,6 +668,7 @@
       if (communityPanel) communityPanel.style.display=visible?'block':'none';
       if (localPanel) localPanel.style.display=visible?'none':'block';
       if (communityTab) communityTab.classList.toggle('rico-selected-tab',visible);
+      refreshTabs(); // TEST22: update selected GAMES / USER LOCAL tab after switching from catalog.
       if (visible) loadCommunityCatalog();
     }
     async function loadCommunityCatalog() {
