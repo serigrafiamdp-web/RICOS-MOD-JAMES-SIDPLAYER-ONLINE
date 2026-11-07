@@ -2,7 +2,7 @@
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css?v=test20">
+    <link rel="stylesheet" href="css/style.css?v=test21">
     <title>RICOS MOD - JAMES SIDPLAYER ONLINE</title>
 
     <link rel="shortcut icon" type="image/png" href="images/icon16.png"/>
@@ -49,7 +49,13 @@
             </div>
           </div>
           <div id="ricoPlaylistOptions">
-            <label>Unknown duration / AUTO: <input id="ricoFallback" type="number" min="5" max="3600" step="1" value="180"/> seconds</label>
+            <label for="ricoFallback">Unknown duration / AUTO:</label>
+            <span class="rico-time-control">
+              <button type="button" id="ricoFallbackMinus" aria-label="Subtract 10 seconds">−</button>
+              <input id="ricoFallback" type="text" inputmode="numeric" value="03:00" maxlength="5" aria-label="Minutes and seconds" title="MM:SS — e.g. 03:25"/>
+              <button type="button" id="ricoFallbackPlus" aria-label="Add 10 seconds">+</button>
+            </span>
+            <span>min:sec</span>
             <a href="javascript:void(0)" id="sidFileOpen" style="display:none;">Open a Local SID File</a>
           </div>
           <div id="ricoPlaylistStatus" role="status">Original 22 SID playlist.</div>
@@ -349,7 +355,7 @@
 
     <div id="songInfo"></div>
 
-    <aside id="ricoLivePlaylist" aria-label="Active SID playlist" style="display:none;">
+    <aside id="ricoLivePlaylist" aria-label="Active SID playlist" style="display:flex;">
       <div id="ricoLivePlaylistHeader">
         <span style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span id="ricoLivePlaylistTitle" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;max-width:230px;" title="Current playlist">PLAYLIST</span>&nbsp;<span id="ricoLiveCount" style="flex:none;"></span></span>
         <button type="button" id="ricoLiveClose" aria-label="Hide playlist">×</button>
@@ -374,7 +380,7 @@
     <div id="sidControls">
       <button type="button" id="chooseSid">Choose A SID...</button>
       <button type="button" id="nextSid">Next SID &gt;</button>
-      <button type="button" id="ricoPlaylistToggle" aria-pressed="false" title="Show or hide active playlist">PLAYLIST</button>
+      <button type="button" id="ricoPlaylistToggle" aria-pressed="true" title="Show or hide active playlist">PLAYLIST</button>
       <button type="button" id="autoAdvanceButton" aria-pressed="false" title="Advance through subtunes and then the next SID using listed durations">AUTO: OFF</button>
 
       <button type="button" id="stopButton">Stop</button>
@@ -415,6 +421,6 @@
     <script type="text/javascript" src="js/backend_tinysid.js"></script>
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test20"></script>
-    <script type="text/javascript" src="js/customPlaylist.js?v=test17"></script>
+    <script type="text/javascript" src="js/customPlaylist.js?v=test21"></script>
   </body>
 </html>
