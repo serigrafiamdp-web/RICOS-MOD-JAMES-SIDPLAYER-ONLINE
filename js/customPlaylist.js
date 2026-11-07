@@ -778,17 +778,23 @@
           row.tabIndex=0;
           row.setAttribute('role','button');
           row.setAttribute('aria-label','Load playlist '+item.title);
+          // TEST36: keep stars inside the label block, preventing flex clipping.
+          // Curator credit comes from createdBy; individual SID artists stay unchanged.
           var label=document.createElement('span');
-          // TEST35: show the playlist curator (createdBy), never the SID composer field.
-          label.textContent=item.title+' — Playlist by '+(item.createdBy||'Unknown')+' · '+(Number(item.tracks)||0)+' SID';
+          label.className='rico-community-label';
+          var description=document.createElement('span');
+          description.className='rico-community-description';
+          description.textContent=item.title+' — Playlist by '+(item.createdBy||'Unknown')+' · '+(Number(item.tracks)||0)+' SID';
           var stars=document.createElement('span');
           stars.className='rico-community-stars';
           stars.textContent='☆☆☆☆☆';
           stars.setAttribute('aria-label','Ratings coming soon');
           stars.title='Ratings coming soon — prototype, no votes yet';
+          label.appendChild(description);
+          label.appendChild(stars);
           var button=document.createElement('button');
           button.type='button';button.textContent='LOAD';
-          row.appendChild(label);row.appendChild(stars);row.appendChild(button);
+          row.appendChild(label);row.appendChild(button);
           communityItems.appendChild(row);
           if(item.id && item.id===selectedCommunityId) row.classList.add('rico-community-selected');
           async function openPlaylist(isStartup) {
