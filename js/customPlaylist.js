@@ -333,17 +333,20 @@
     if (!customActive) defaultPopPath.apply(player, arguments);
   };
   player.initFileSelection = function () {
-    if (!customActive) {
+    if (browserTab === 'games' || (browserTab === 'community' && !customActive)) {
       // TEST37: GAMES is a compact metadata-only list, no artwork.
       var gamesHolder = $('#sidList').empty();
       originalList.forEach(function(item,index){
         var gameRow = $('<button type="button">').addClass('rico-game-row');
-        if (index === player.sidListIndex) gameRow.addClass('rico-active-row');
+        if (!customActive && index === player.sidListIndex) gameRow.addClass('rico-active-row');
         $('<span>').addClass('rico-game-number').text(index+1).appendTo(gameRow);
         $('<span>').addClass('rico-game-title').text(item.name || item.file || ('SID '+(index+1))).appendTo(gameRow);
         $('<span>').addClass('rico-game-author').text(item.author || 'Unknown artist').appendTo(gameRow);
         $('<span>').addClass('rico-game-year').text(item.released || '').appendTo(gameRow);
         gameRow.on('click',function(){
+          // Selecting a game explicitly replaces the current playback source.
+          landingPlaylists=false;
+          if(customActive) activate('default');
           player.sidListIndex=index;
           player.loadSID('sids/'+item.file);
           player.setPath(item.id);
@@ -361,7 +364,7 @@
     }
     custom.forEach(function (item, index) {
       var row = $('<div>').addClass('rico-local-row').attr('title', item.file);
-      if (index === player.sidListIndex) row.addClass('rico-active-row');
+      if (customActive && index === player.sidListIndex) row.addClass('rico-active-row');
       $('<span>').addClass('rico-row-index').text(('0' + (index + 1)).slice(-2)).appendTo(row);
       $('<span>').addClass('rico-row-title').text(item.name).appendTo(row);
       $('<span>').addClass('rico-row-author').text(item.author).appendTo(row);
@@ -460,16 +463,7 @@
   });
   $('#ricoAddFiles').on('click', function () { document.getElementById('sidfile').click(); });
   $('#ricoAddFolder').on('click', function () { document.getElementById('ricoFolderPicker').click(); });
-  $('#ricoDefaultTab').on('click', function () {
-    landingPlaylists = false;
-    activate('default');
-    renderLivePlaylist();
-  });
-  $('#ricoCustomTab').on('click', function () {
-    landingPlaylists = false;
-    activate('custom');
-    renderLivePlaylist();
-  });
+  // TEST43: tab clicks are browse-only. Playback changes only via LOAD/track selection.
   $('#ricoClearList').on('click', function () {
     custom.length = 0;
     loadedPlaylistTitle = '';
@@ -768,9 +762,9 @@
       }
     }
     cancelPendingCommunityStartup=cancelStartupPlaylist;
-    function showCommunity(visible) {
+    function showCommunity(visible,tabName) {
       communityActive=visible;
-      browserTab=visible?'community':(customActive?'local':'games');
+      browserTab=visible?'community':(tabName==='local'?'local':'games');
       var dialog=document.getElementById('chooseSidDialog');
       if(dialog){
         dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local','rico-view-hvsc');
@@ -779,6 +773,7 @@
       if (communityPanel) communityPanel.style.display=visible?'block':'none';
       if (hvscPanel) hvscPanel.style.display='none';
       if (localPanel) localPanel.style.display=visible?'none':'block';
+      if(!visible) player.initFileSelection(); // Refresh the browser list only.
       refreshTabs();
       if (visible) loadCommunityCatalog();
     }
@@ -988,11 +983,11 @@
       showCommunity(true);
     });
     if(communityTab) communityTab.addEventListener('click',function(){showCommunity(true);});
-    ['ricoDefaultTab','ricoCustomTab'].forEach(function(id) {
-      var tab=document.getElementById(id);
+    [['ricoDefaultTab','games'],['ricoCustomTab','local']].forEach(function(choice) {
+      var tab=document.getElementById(choice[0]);
       if(tab) tab.addEventListener('click',function(){
         cancelStartupPlaylist();
-        showCommunity(false);
+        showCommunity(false,choice[1]);
       });
     });
     refreshSaved().catch(function(error){say('Local saving unavailable: '+error.message);});
