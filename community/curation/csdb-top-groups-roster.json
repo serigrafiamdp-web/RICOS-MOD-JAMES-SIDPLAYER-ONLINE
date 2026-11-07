@@ -5,12 +5,19 @@
   "retrievedOn": "2026-11-07",
   "rankingNote": "Indexed CSDb ranking snapshot; tied ranks share their original ordinal. These 100 entries are CSDb ranked groups, not 100 verified SID tracks.",
   "selectionRule": "One verifiably credited non-game demo/intro/music-release SID per group, prefer highest-rated eligible CSDb release; Fairlight is user-pinned.",
-  "verifiedSelections": 4,
+  "verifiedSelections": 6,
   "groups": [
     {
       "rank": 1,
       "group": "Performers",
-      "status": "needs_release_credit_validation"
+      "status": "verified_selection",
+      "selection": {
+        "sidTitle": "Next Level Main",
+        "composer": "dEViLOCk",
+        "hvscPath": "/MUSICIANS/D/Devilock/Next_Level_Main.sid",
+        "source": "https://csdb.dk/release/?id=232976",
+        "selectedBy": "assistant"
+      }
     },
     {
       "rank": 2,
@@ -27,7 +34,14 @@
     {
       "rank": 3,
       "group": "Oxyron",
-      "status": "needs_release_credit_validation"
+      "status": "verified_selection",
+      "selection": {
+        "sidTitle": "Multirock",
+        "composer": "PRI",
+        "hvscPath": "/MUSICIANS/P/PRI/Multirock.sid",
+        "source": "https://csdb.dk/release/?id=14889",
+        "selectedBy": "assistant"
+      }
     },
     {
       "rank": 4,
