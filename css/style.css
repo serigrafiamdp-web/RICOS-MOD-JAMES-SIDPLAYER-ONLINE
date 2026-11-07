@@ -691,3 +691,27 @@ left: 1px;
     margin-left:auto;
   }
 }
+
+/* TEST36: creator, title and five prototype stars share one visible text block.
+   Prevent theme or row flex layout from hiding the stars. */
+#ricoCommunityItems .rico-community-row > .rico-community-label {
+  display:flex !important;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:4px 12px;
+  min-width:0;
+  flex:1 1 auto;
+}
+#ricoCommunityItems .rico-community-description {
+  display:inline-block;
+  min-width:0;
+  flex:1 1 265px;
+}
+#ricoCommunityItems .rico-community-label > .rico-community-stars {
+  display:inline-block !important;
+  flex:0 0 auto;
+  font:18px/1 Arial,sans-serif;
+  letter-spacing:1px;
+  color:inherit;
+  white-space:nowrap;
+}
