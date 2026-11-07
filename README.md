@@ -105,7 +105,25 @@ Online Player: https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONL
 
 The 2026-11-06 tested baseline is **TEST19 PASS**: AUTO switches to the next SID file, including while the browser tab is in the background; it does not cycle through subtunes automatically. Details, reproduction checklist and continuation notes: [docs/CHECKPOINT_TEST19_PASS_2026-11-06.md](docs/CHECKPOINT_TEST19_PASS_2026-11-06.md).
 
-## Current playlist and browser status (TEST44, 2026-11-07)
+## Stable checkpoint — 2026-11-07 (TEST54 PASS)
+
+**Current user-confirmed visual baseline: TEST54 PASS**. Stable reference: commit `fab528916eaf6e46465e2441845817a2ccd71edc` (the TEST54 stylesheet/index update), branch `main`.
+
+- Browser tabs now include RICO'S PLAYLISTS, GAMES (22), TOP 100 HVSC GAMES, TOP GROUPS, TOP MUSICIANS and USER LOCAL.
+- Two curated CSDb collections are published: 100 embedded SID files in each of `community/playlists/csdb-top-100-groups.json` and `community/playlists/csdb-top-100-musicians.json`. Editorial selections use CSDb rankings and HVSC tracks; artist/group credit matching may be corrected later.
+- In the TOP GROUPS playlist, display rank, **group first**, composer/scene alias when available, and track/release title. Preserve original SID metadata.
+- Floating playlist: user-approved compact minimal layout based on TEST49; adjustable horizontally and vertically; movable by its header; centered at launch.
+- TEST50 unified interface sizing, TEST53 removed CSS `!important` dimension locks to allow dialog resizing, TEST54 lowered the foreground Choose A SID dialog; the user explicitly confirmed **PASS** for TEST54.
+- AUTO startup must not open Choose A SID over the floating playlist. Closing the floating playlist reveals the library browser; opening Choose A SID remains possible via its button.
+- Keep the oscilloscope visible, avoid multiple overlapping windows at startup, and retain the user's preferred window sizes/font scale.
+- **Open correction, NOT published:** PVM (group position 95) currently still has an incorrect `Acid & Black (tune 2)` assignment in the published JSON. A replacement was locally prepared: **Uctumi — Balloon Country Bursts** from PVM's *¡Arriba las manos!* (`MUSICIANS/U/Uctumi/Balloon_Country_Bursts.sid`). It has NOT been committed to the published TOP GROUPS JSON. Samar Productions (position 94) also has an incorrect *Acid & Black* attribution, pending a suitable replacement. Do not state these were fixed.
+- User testing: TEST54 visual **PASS**; do not automatically mark the broader playback/playlist behavior as tested without user confirmation.
+
+Continue from: https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=54
+
+Detailed record: [docs/CHECKPOINT_TEST54_PASS_2026-11-07.md](docs/CHECKPOINT_TEST54_PASS_2026-11-07.md).
+
+## Historical research status (TEST44, 2026-11-07)
 
 - **TEST42: PASS** — four browser tabs: RICO'S PLAYLISTS, GAMES (22), TOP 100 HVSC GAMES (100 SIDs), and USER LOCAL. Games, community playlists, and the HVSC ranking have matching visual text sizing.
 - **TEST43: published, awaiting playback verification** — browsing tabs no longer changes the active SID, playlist or audio; choosing a track or using LOAD changes playback. Auto-play follows the loaded playlist.
