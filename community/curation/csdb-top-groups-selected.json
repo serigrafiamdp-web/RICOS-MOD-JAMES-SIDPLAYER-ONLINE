@@ -4,6 +4,23 @@
   "description": "Curator-selected non-game SID tracks for proposed TOP 100 CSDb GROUPS. Not an official CSDb song rating or a published playlist.",
   "selections": [
     {
+      "group": "MultiStyle Labs",
+      "csdbGroupRank": 6,
+      "release": "Hi Fi Sky",
+      "releaseDate": "2015-04-23",
+      "releaseType": "C64 Music",
+      "composer": "LMan",
+      "sidTitle": "Hi Fi Sky",
+      "hvscPath": "/MUSICIANS/L/LMan/Hi_Fi_Sky.sid",
+      "sidSha256": "71bfd85457331fb701fb51d71263034c115ff033e299f703ddfc290574561249",
+      "source": "https://csdb.dk/release/?id=137965",
+      "releaseRating": 9.9,
+      "releaseVotes": 113,
+      "selectedBy": "assistant",
+      "selectionStatus": "verified",
+      "excludesGames": true
+    },
+    {
       "group": "Fairlight",
       "release": "The Demo Coder",
       "releaseDate": "2024-11-23",
