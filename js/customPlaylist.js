@@ -1089,6 +1089,15 @@
       var sectionsEl=document.getElementById('ricoLibrarySections');
       var songsEl=document.getElementById('ricoLibrarySongs');
       var searchEl=document.getElementById('ricoLibrarySearch');
+      // TEST58: legacy sidPlayer intercepts window mousedown and space keyup.
+      // Keep the keyboard search editable and prevent typing from triggering playback.
+      ['mousedown','mouseup','pointerdown','pointerup','click','dblclick'].forEach(function(type){
+        searchEl.addEventListener(type,function(event){event.stopPropagation();});
+      });
+      ['keydown','keyup','keypress'].forEach(function(type){
+        searchEl.addEventListener(type,function(event){event.stopPropagation();});
+      });
+
       var statusEl=document.getElementById('ricoLibraryStatus');
       var manifest=null, category='musicians', shelf='', shelfData=null, selected=null, token=0;
       var shelfCache={},packCache=new Map();
