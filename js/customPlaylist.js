@@ -341,7 +341,7 @@
         $('<span>').addClass('rico-game-number').text(index+1).appendTo(gameRow);
         $('<span>').addClass('rico-game-title').text(item.name || item.file || ('SID '+(index+1))).appendTo(gameRow);
         $('<span>').addClass('rico-game-author').text(item.author || 'Unknown artist').appendTo(gameRow);
-        if(item.released) $('<span>').addClass('rico-game-year').text(item.released).appendTo(gameRow);
+        $('<span>').addClass('rico-game-year').text(item.released || '').appendTo(gameRow);
         gameRow.on('click',function(){
           player.sidListIndex=index;
           player.loadSID('sids/'+item.file);
