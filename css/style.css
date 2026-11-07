@@ -651,3 +651,23 @@ left: 1px;
   min-height:0;
 }
 #ricoLivePlaylist #ricoLivePlaylistCreator {font-weight:bold;}
+
+/* TEST34: persistent curator panel, visible between title bar and track scroll. */
+#ricoLivePlaylist > #ricoLivePlaylistCredits {
+  display:flex;
+  flex:0 0 auto;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:7px 9px;
+  min-height:32px;
+  box-sizing:border-box;
+  background:var(--rico-theme-panel,#222);
+  border-bottom:1px solid var(--rico-theme-border,#777);
+  color:var(--rico-theme-fg,#fff);
+}
+#ricoLivePlaylist #ricoLivePlaylistStars {
+  gap:3px;
+  align-items:center;
+  flex-shrink:0;
+}
