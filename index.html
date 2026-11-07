@@ -2,7 +2,7 @@
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css?v=test54">
+    <link rel="stylesheet" href="css/style.css?v=test56">
     <title>RICOS MOD - JAMES SIDPLAYER ONLINE</title>
 
     <link rel="shortcut icon" type="image/png" href="images/icon16.png"/>
@@ -41,6 +41,7 @@
             <button type="button" id="ricoHvscTab">TOP 100 HVSC GAMES</button>
             <button type="button" id="ricoGroupsTab">TOP GROUPS</button>
             <button type="button" id="ricoMusiciansTab">TOP MUSICIANS</button>
+            <button type="button" id="ricoLibraryTab">HVSC LIBRARY</button>
             <button type="button" id="ricoCustomTab">USER LOCAL <span id="ricoCustomCount">0 SID</span></button>
           </div>
           <div id="ricoDropZone">
@@ -101,6 +102,21 @@
           <div id="ricoHvscItems" role="list">Select TOP 100 HVSC GAMES to load the ranking.</div>
         </div>
 
+        <div id="ricoLibraryPanel" style="display:none;position:absolute;top:101px;bottom:10px;left:10px;right:10px;overflow:auto;border:1px solid #555;padding:9px;">
+          <strong>HVSC LIBRARY</strong>
+          <div id="ricoLibraryIntro" style="margin:6px 0 9px;">Browse MUSICIANS and DEMOS · read-only original collection</div>
+          <div class="rico-library-controls">
+            <button id="ricoLibraryMusicians" type="button">MUSICIANS</button>
+            <button id="ricoLibraryDemos" type="button">DEMOS</button>
+            <input id="ricoLibrarySearch" type="search" placeholder="Find musician or SID" aria-label="Search library" />
+          </div>
+          <div id="ricoLibraryShelves" class="rico-library-shelves"></div>
+          <div class="rico-library-columns">
+            <div id="ricoLibrarySections" class="rico-library-sections"></div>
+            <div id="ricoLibrarySongs" class="rico-library-songs"></div>
+          </div>
+          <div id="ricoLibraryStatus" role="status">Select a category.</div>
+        </div>
       </div>
 
       <div class="buttons">
@@ -443,6 +459,7 @@
     <script type="text/javascript" src="js/backend_tinysid.js"></script>
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test26"></script>
-    <script type="text/javascript" src="js/customPlaylist.js?v=test53"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" src="js/customPlaylist.js?v=test56"></script>
   </body>
 </html>
