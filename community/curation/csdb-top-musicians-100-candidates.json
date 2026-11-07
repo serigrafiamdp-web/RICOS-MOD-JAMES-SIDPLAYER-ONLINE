@@ -1,0 +1,666 @@
+{
+  "format": "ricos-csdb-demoscene-musicians-candidate-roster",
+  "version": 1,
+  "source": "https://csdb.dk/toplist.php?subtype=%287%29&type=scener",
+  "compiledOn": "2026-11-07",
+  "selectionPolicy": "Follow CSDb relative rankings; exclude explicitly game-focused composers, pick 100 eligible scene-focused musicians. Include only verified demos, intros and original scene music releases; no game tunes or unverified music.",
+  "excludedKnownGameFocused": [
+    "Rob Hubbard",
+    "Jeroen Tel",
+    "Jason Page",
+    "Reyn Ouwehand",
+    "Johannes Bjerregaard",
+    "Tim Follin",
+    "Martin Galway",
+    "Ben Daglish",
+    "Thomas Detert",
+    "Charles Deenen",
+    "Chris Huelsbeck",
+    "Markus Schneider",
+    "Jonathan Dunn",
+    "Antony Crowther",
+    "Matt Gray",
+    "Richard Joseph",
+    "Fred Gray",
+    "David Whittaker"
+  ],
+  "eligibilityNote": "Only explicitly excluded known game-focused composers; other artists with both game and scene credits require song-level non-game checks.",
+  "verifiedSelections": 5,
+  "candidates": [
+    {
+      "csdbRank": 2,
+      "musician": "LMan",
+      "playlistPosition": 1,
+      "status": "verified_selection",
+      "selection": {
+        "sidTitle": "Hi Fi Sky",
+        "hvscPath": "/MUSICIANS/L/LMan/Hi_Fi_Sky.sid",
+        "release": "Hi Fi Sky",
+        "releaseType": "C64 Music",
+        "source": "https://csdb.dk/release/?id=137965"
+      }
+    },
+    {
+      "csdbRank": 3,
+      "musician": "Mibri",
+      "playlistPosition": 2,
+      "status": "verified_selection",
+      "selection": {
+        "sidTitle": "Cobweb Dub",
+        "hvscPath": "/MUSICIANS/M/Mibri/Cobweb_Dub.sid",
+        "release": "Halloweed 3 - VIC or Weed",
+        "releaseType": "C64 Demo",
+        "source": "https://csdb.dk/release/?id=237151"
+      }
+    },
+    {
+      "csdbRank": 5,
+      "musician": "psych858o",
+      "playlistPosition": 3,
+      "status": "verified_selection",
+      "selection": {
+        "sidTitle": "Like We Never Left",
+        "hvscPath": "/MUSICIANS/P/Psych858o/Like_We_Never_Left.sid",
+        "release": "Like We Never Left",
+        "releaseType": "C64 Music",
+        "source": "https://csdb.dk/release/?id=262142"
+      }
+    },
+    {
+      "csdbRank": 6,
+      "musician": "Jammer",
+      "playlistPosition": 4,
+      "status": "verified_selection",
+      "selection": {
+        "sidTitle": "Floatee",
+        "hvscPath": "/MUSICIANS/J/Jammer/Floatee.sid",
+        "release": "Floatee",
+        "releaseType": "C64 Music",
+        "source": "https://csdb.dk/release/?id=33819"
+      }
+    },
+    {
+      "csdbRank": 7,
+      "musician": "Linus",
+      "playlistPosition": 5,
+      "status": "verified_selection",
+      "selection": {
+        "sidTitle": "Auf Wiedersehen Linus",
+        "hvscPath": "/MUSICIANS/L/Linus/Auf_Wiedersehen_Linus.sid",
+        "release": "Auf Wiedersehen Linus",
+        "releaseType": "C64 Music",
+        "source": "https://csdb.dk/release/?id=262176"
+      }
+    },
+    {
+      "csdbRank": 9,
+      "musician": "Stinsen",
+      "playlistPosition": 6,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 10,
+      "musician": "Drax",
+      "playlistPosition": 7,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 11,
+      "musician": "Mutetus",
+      "playlistPosition": 8,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 12,
+      "musician": "Toggle",
+      "playlistPosition": 9,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 14,
+      "musician": "!Cube",
+      "playlistPosition": 10,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 14,
+      "musician": "Flotsam",
+      "playlistPosition": 11,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 14,
+      "musician": "Scortia",
+      "playlistPosition": 12,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 17,
+      "musician": "Jeff",
+      "playlistPosition": 13,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 20,
+      "musician": "dEViLOCk",
+      "playlistPosition": 14,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 21,
+      "musician": "acrouzet",
+      "playlistPosition": 15,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 22,
+      "musician": "Hein",
+      "playlistPosition": 16,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 24,
+      "musician": "Conrad",
+      "playlistPosition": 17,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 26,
+      "musician": "6R6",
+      "playlistPosition": 18,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 26,
+      "musician": "Hermit",
+      "playlistPosition": 19,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 28,
+      "musician": "Laxity",
+      "playlistPosition": 20,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 29,
+      "musician": "OMP",
+      "playlistPosition": 21,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 29,
+      "musician": "Vincenzo",
+      "playlistPosition": 22,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 29,
+      "musician": "c0zmo",
+      "playlistPosition": 23,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 32,
+      "musician": "Shogoon",
+      "playlistPosition": 24,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 34,
+      "musician": "Stein Pedersen",
+      "playlistPosition": 25,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 35,
+      "musician": "Wiklund",
+      "playlistPosition": 26,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 36,
+      "musician": "PRI",
+      "playlistPosition": 27,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 39,
+      "musician": "Zardax",
+      "playlistPosition": 28,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 39,
+      "musician": "Sage",
+      "playlistPosition": 29,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 39,
+      "musician": "TDM",
+      "playlistPosition": 30,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 39,
+      "musician": "CRD",
+      "playlistPosition": 31,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 43,
+      "musician": "Dane",
+      "playlistPosition": 32,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 45,
+      "musician": "4-Mat",
+      "playlistPosition": 33,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 46,
+      "musician": "Oliver Kläwer",
+      "playlistPosition": 34,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 46,
+      "musician": "ATOO",
+      "playlistPosition": 35,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 46,
+      "musician": "Soren",
+      "playlistPosition": 36,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 49,
+      "musician": "Magnar Harestad",
+      "playlistPosition": 37,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 51,
+      "musician": "Kjell Nordbo",
+      "playlistPosition": 38,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 52,
+      "musician": "SMC",
+      "playlistPosition": 39,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 54,
+      "musician": "Fegolhuzz",
+      "playlistPosition": 40,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 54,
+      "musician": "MCH",
+      "playlistPosition": 41,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 56,
+      "musician": "Wacek",
+      "playlistPosition": 42,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 57,
+      "musician": "fieserWolf",
+      "playlistPosition": 43,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 59,
+      "musician": "A-Man",
+      "playlistPosition": 44,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 60,
+      "musician": "Demon",
+      "playlistPosition": 45,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 60,
+      "musician": "Red",
+      "playlistPosition": 46,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 62,
+      "musician": "Flex",
+      "playlistPosition": 47,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 63,
+      "musician": "GT",
+      "playlistPosition": 48,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 64,
+      "musician": "Rock",
+      "playlistPosition": 49,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 64,
+      "musician": "Spider Jerusalem",
+      "playlistPosition": 50,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 66,
+      "musician": "EVS",
+      "playlistPosition": 51,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 67,
+      "musician": "Fanta",
+      "playlistPosition": 52,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 68,
+      "musician": "Bogg",
+      "playlistPosition": 53,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 69,
+      "musician": "PVCF",
+      "playlistPosition": 54,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 70,
+      "musician": "Metal",
+      "playlistPosition": 55,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 71,
+      "musician": "Kristian Røstøen",
+      "playlistPosition": 56,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 71,
+      "musician": "Zabutom",
+      "playlistPosition": 57,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 73,
+      "musician": "SoNiC",
+      "playlistPosition": 58,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 75,
+      "musician": "JCH",
+      "playlistPosition": 59,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 75,
+      "musician": "Groms",
+      "playlistPosition": 60,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 77,
+      "musician": "Link",
+      "playlistPosition": 61,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 78,
+      "musician": "AudioMaster J",
+      "playlistPosition": 62,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 78,
+      "musician": "Nordischsound",
+      "playlistPosition": 63,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 80,
+      "musician": "Danko",
+      "playlistPosition": 64,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 81,
+      "musician": "Scarzix",
+      "playlistPosition": 65,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 82,
+      "musician": "kb",
+      "playlistPosition": 66,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 83,
+      "musician": "Reed",
+      "playlistPosition": 67,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 84,
+      "musician": "Agemixer",
+      "playlistPosition": 68,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 84,
+      "musician": "_V_",
+      "playlistPosition": 69,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 84,
+      "musician": "Deek",
+      "playlistPosition": 70,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 84,
+      "musician": "Xayne",
+      "playlistPosition": 71,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 84,
+      "musician": "Jens Blidon",
+      "playlistPosition": 72,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 84,
+      "musician": "Tim",
+      "playlistPosition": 73,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 84,
+      "musician": "NecroPolo",
+      "playlistPosition": 74,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 93,
+      "musician": "Randall",
+      "playlistPosition": 75,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 94,
+      "musician": "Asterion",
+      "playlistPosition": 76,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 95,
+      "musician": "celticdesign",
+      "playlistPosition": 77,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 96,
+      "musician": "MSK",
+      "playlistPosition": 78,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 96,
+      "musician": "MacMagix",
+      "playlistPosition": 79,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 98,
+      "musician": "Goto80",
+      "playlistPosition": 80,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 98,
+      "musician": "Jellica",
+      "playlistPosition": 81,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 100,
+      "musician": "Aleksi Eeben",
+      "playlistPosition": 82,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 101,
+      "musician": "Orcan",
+      "playlistPosition": 83,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 102,
+      "musician": "Taxim",
+      "playlistPosition": 84,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 102,
+      "musician": "Griff",
+      "playlistPosition": 85,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 104,
+      "musician": "DaFunk",
+      "playlistPosition": 86,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 105,
+      "musician": "The Syndrom",
+      "playlistPosition": 87,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 106,
+      "musician": "Wizard",
+      "playlistPosition": 88,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 107,
+      "musician": "Mixer",
+      "playlistPosition": 89,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 108,
+      "musician": "Ed",
+      "playlistPosition": 90,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 109,
+      "musician": "Yogibear",
+      "playlistPosition": 91,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 109,
+      "musician": "Future Freak",
+      "playlistPosition": 92,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 111,
+      "musician": "The Beasty Boy",
+      "playlistPosition": 93,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 112,
+      "musician": "booker",
+      "playlistPosition": 94,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 113,
+      "musician": "Steel",
+      "playlistPosition": 95,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 113,
+      "musician": "Lft",
+      "playlistPosition": 96,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 115,
+      "musician": "RaveGuru",
+      "playlistPosition": 97,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 115,
+      "musician": "DOS",
+      "playlistPosition": 98,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 117,
+      "musician": "Guy Shavitt",
+      "playlistPosition": 99,
+      "status": "pending_non_game_release_verification"
+    },
+    {
+      "csdbRank": 118,
+      "musician": "Abaddon",
+      "playlistPosition": 100,
+      "status": "pending_non_game_release_verification"
+    }
+  ]
+}
