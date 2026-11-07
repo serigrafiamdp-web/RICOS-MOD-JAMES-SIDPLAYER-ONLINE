@@ -594,3 +594,26 @@ left: 1px;
   top:max(20px, calc(50% - 210px));
   bottom:auto;
 }
+
+/* TEST29 — playlist scrollbar follows the selected oscilloscope palette.
+   Thumb uses the light accent; the track uses the dark palette background. */
+#ricoLivePlaylistItems {
+  scrollbar-color: var(--rico-theme-fg, #ffffff) var(--rico-theme-bg, #000000);
+  scrollbar-width: thin;
+}
+#ricoLivePlaylistItems::-webkit-scrollbar {
+  width: 8px;
+}
+#ricoLivePlaylistItems::-webkit-scrollbar-track {
+  background: var(--rico-theme-bg, #000000);
+  box-shadow: none;
+}
+#ricoLivePlaylistItems::-webkit-scrollbar-thumb {
+  background: var(--rico-theme-fg, #ffffff);
+  border: 1px solid var(--rico-theme-bg, #000000);
+  border-radius: 5px;
+  outline: none;
+}
+#ricoLivePlaylistItems::-webkit-scrollbar-thumb:hover {
+  background: var(--rico-theme-fg, #ffffff);
+}
