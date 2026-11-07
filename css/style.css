@@ -908,3 +908,53 @@ left: 1px;
 #chooseSidDialog.rico-view-hvsc #chooseSidInfo{height:104px !important;}
 #chooseSidDialog.rico-view-hvsc #ricoHvscPanel{top:130px !important;}
 @media(max-width:650px){#ricoListTabs button{font-size:10px;padding:4px 5px;}}
+
+/* TEST46: roomy Choose A SID browser; large fonts and full scene credits. */
+#chooseSidDialog {
+  width:min(1120px,calc(100vw - 32px)) !important;
+  height:min(790px,calc(100vh - 32px)) !important;
+  box-sizing:border-box;
+}
+#chooseSidDialog .content { min-height:0; }
+#chooseSidDialog #ricoListTabs button {
+  font-size:14px;
+  padding:7px 12px;
+}
+#chooseSidDialog #ricoHvscPanel {
+  left:12px !important;
+  right:12px !important;
+  padding:13px !important;
+}
+#chooseSidDialog.rico-view-hvsc #chooseSidInfo {height:115px !important;}
+#chooseSidDialog.rico-view-hvsc #ricoHvscPanel {top:142px !important;}
+#ricoHvscItems .rico-hvsc-row {
+  grid-template-columns:46px minmax(0,1.6fr) minmax(0,1.2fr);
+  min-height:51px;
+  font-size:20px;
+  padding:9px 14px;
+  gap:16px;
+}
+#ricoHvscItems .rico-groups-row {
+  grid-template-columns:46px minmax(0,1.3fr) minmax(0,0.9fr) minmax(0,2fr);
+  text-align:left;
+}
+#ricoHvscItems .rico-groups-row > span {
+  min-width:0;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  text-overflow:clip;
+}
+#ricoHvscItems .rico-hvsc-group {font-weight:bold;}
+#ricoHvscItems .rico-groups-row .rico-hvsc-title {font-weight:normal;}
+#ricoHvscItems .rico-groups-row .rico-hvsc-artist:empty {visibility:hidden;}
+#ricoHvscPanel .rico-hvsc-head {font-size:20px;}
+#ricoHvscPanel .rico-hvsc-intro {font-size:15px;}
+#chooseSidDialog.rico-view-games #sidList .rico-game-row {font-size:20px;min-height:51px;}
+#ricoCommunityItems .rico-community-row {font-size:20px;min-height:51px;}
+@media(max-width:700px){
+ #chooseSidDialog #ricoListTabs button {font-size:12px;padding:5px 7px;}
+ #ricoHvscItems .rico-hvsc-row {font-size:16px;gap:7px;padding:8px 6px;}
+ #ricoHvscItems .rico-groups-row{grid-template-columns:26px minmax(0,1fr) minmax(0,.8fr) minmax(0,1.6fr);}
+ #chooseSidDialog.rico-view-games #sidList .rico-game-row {font-size:16px;}
+ #ricoCommunityItems .rico-community-row {font-size:16px;}
+}
