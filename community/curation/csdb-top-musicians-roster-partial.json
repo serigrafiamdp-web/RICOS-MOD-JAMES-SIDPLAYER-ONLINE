@@ -1,0 +1,180 @@
+{
+  "format": "ricos-csdb-top-musicians-roster",
+  "version": 1,
+  "source": "https://csdb.dk/toplist.php?subtype=%287%29&type=scener",
+  "retrievedOn": "2026-11-07",
+  "coverageNote": "Only first 34 ranks were accessible in verified search index; this is not yet the top 100 roster. No SID candidate published without confirmed non-game origin.",
+  "selectionRule": "One independently verified demo/intro/music-release SID per musician. Prefer highest rated eligible song or release and exclude games.",
+  "musicians": [
+    {
+      "rank": 1,
+      "musician": "Rob Hubbard",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 2,
+      "musician": "LMan",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 3,
+      "musician": "Mibri",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 4,
+      "musician": "Jeroen Tel",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 5,
+      "musician": "psych858o",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 6,
+      "musician": "Jammer",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 7,
+      "musician": "Linus",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 8,
+      "musician": "Jason Page",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 9,
+      "musician": "Stinsen",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 10,
+      "musician": "Drax",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 11,
+      "musician": "Mutetus",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 12,
+      "musician": "Toggle",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 13,
+      "musician": "Reyn Ouwehand",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 14,
+      "musician": "!Cube",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 14,
+      "musician": "Flotsam",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 14,
+      "musician": "Scortia",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 17,
+      "musician": "Jeff",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 18,
+      "musician": "Johannes Bjerregaard",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 19,
+      "musician": "Tim Follin",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 20,
+      "musician": "dEViLOCk",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 21,
+      "musician": "acrouzet",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 22,
+      "musician": "Hein",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 23,
+      "musician": "Martin Galway",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 24,
+      "musician": "Conrad",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 25,
+      "musician": "Ben Daglish",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 26,
+      "musician": "6R6",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 26,
+      "musician": "Hermit",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 28,
+      "musician": "Laxity",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 29,
+      "musician": "OMP",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 29,
+      "musician": "Vincenzo",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 29,
+      "musician": "c0zmo",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 32,
+      "musician": "Shogoon",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 33,
+      "musician": "Thomas Detert",
+      "status": "needs_non_game_release_validation"
+    },
+    {
+      "rank": 34,
+      "musician": "Stein Pedersen",
+      "status": "needs_non_game_release_validation"
+    }
+  ]
+}
