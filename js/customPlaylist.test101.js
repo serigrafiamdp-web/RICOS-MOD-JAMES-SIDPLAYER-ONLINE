@@ -675,6 +675,23 @@
       input.focus();
     });
   }
+  // TEST107: a 2xx response is not proof that the ordering was persisted.
+  // Re-read the canonical Cloudflare record and compare every immutable SID ref.
+  async function verifyRemoteOrder(url,expected,kind){
+    var response=await fetch(url+'?verify='+Date.now(),{cache:'no-store'});
+    if(!response.ok)throw Error('Cannot verify saved order on server (HTTP '+response.status+').');
+    var data=await response.json();
+    if(!data||!Array.isArray(data.tracks)||data.tracks.length!==expected.length)
+      throw Error('Server returned a different number of tracks after SAVE.');
+    var same=data.tracks.every(function(row,index){
+      var want=expected[index];
+      return kind==='collection'
+        ? row.sidId===want.sidId&&row.file===want.file
+        : row.pack===want.pack&&row.file===want.file;
+    });
+    if(!same)throw Error('Server order differs from the playlist. SAVE was not confirmed; do not reload yet.');
+    return data;
+  }
   async function savePublicRemovals(){
     var collection=activePublicCollection,playlist=activePublicPlaylist;
     if(savingCommunityEdits||(!collection&&!playlist))return;
@@ -714,7 +731,18 @@
         body:JSON.stringify(payload)
       });
       var receipt=await response.json();
-      if(!response.ok)throw Error(receipt.error||'Could not save public order.');
+      // If a previous request succeeded but its verification failed, some
+      // backends report "no changes" on retry. Re-reading is authoritative.
+      if(!response.ok&&!(!collection&&response.status===400&&
+         receipt.error==='No playlist changes to save'))
+        throw Error(receipt.error||'Could not save public order.');
+      var readUrl=collection
+        ? communityWriteApi+'/collections/'+encodeURIComponent(collection.id)
+        : communityWriteApi+'/playlists/'+encodeURIComponent(playlist.remoteId);
+      var expectedRows=collection
+        ? collection.tracks.map(function(t){return {sidId:t.sidId,file:t.file};})
+        : playlist.tracks.map(function(t){return {pack:t.pack,file:t.file};});
+      await verifyRemoteOrder(readUrl,expectedRows,collection?'collection':'playlist');
       if(collection){
         collection.originalTracks=collection.tracks.map(function(t){return {sidId:t.sidId,file:t.file};});
         collection.tracks.forEach(function(t,i){t.originalIndex=i;});
@@ -723,9 +751,11 @@
         playlist.originalCount=playlist.tracks.length;
         playlist.dirtyOrder=false;
       }
-      $('#ricoLiveStatus').text('Public playlist updated: '+receipt.tracks+' SID. New order visible to everyone.');
+      $('#ricoLiveStatus').text('SAVE verified: '+expectedRows.length+' SID in the correct order on the server.');
     }catch(error){
-      $('#ricoLiveStatus').text('Public playlist unchanged: '+error.message);
+      // Never erase an unsaved order or claim persistence when verification fails.
+      console.warn('TEST107: public order not confirmed',error);
+      $('#ricoLiveStatus').text('SAVE NOT VERIFIED: '+error.message+' The current order is still here; retry SAVE before reloading.');
     }finally{savingCommunityEdits=false;renderLivePlaylist();}
   }
   // TEST66: multiple, independent in-progress remix destinations.
@@ -895,6 +925,32 @@
       remixNotice('Playing '+draft.name+' (unpublished draft). You can keep adding with +.');
     }catch(error){remixNotice('Could not preview remix: '+error.message);}
   }
+  // TEST107: the floating player is a live, independently reordered preview.
+  // PUBLISH must use *that* order, not the stale order in the creator window.
+  function syncPlayingRemixOrder(draft){
+    if(!draft||draft.id!==activeRemixDraftId||!activeLocalOrderDirty)return false;
+    if(!activeReferenceTracks||activeReferenceTracks.length!==custom.length)
+      throw Error('REMIX preview references do not match the playing list.');
+    var byKey=new Map(draft.tracks.map(function(t){return [t.pack+'::'+t.file,t];}));
+    var ordered=[],included=new Set();
+    activeReferenceTracks.forEach(function(t){
+      var k=t.pack+'::'+t.file;
+      if(!byKey.has(k))throw Error('Song missing from the REMIX draft: '+t.file);
+      if(included.has(k))throw Error('Duplicate song in REMIX preview.');
+      ordered.push(byKey.get(k));included.add(k);
+    });
+    // Song additions made in the REMIX editor since PLAY are preserved.
+    draft.tracks.forEach(function(t){
+      var k=t.pack+'::'+t.file;
+      if(!included.has(k)){ordered.push(t);included.add(k);}
+    });
+    draft.tracks=ordered;
+    activeLocalOrderDirty=false;
+    preserveRemixes();
+    renderRemixes();
+    renderLivePlaylist();
+    return true;
+  }
   async function publishRemix(id){
     var draft=id ? remixDrafts.find(function(d){return d.id===id;}) : selectedRemix();
     if(remixBusy||!draft)return;
@@ -905,6 +961,11 @@
     draft.name=draft.name.trim();draft.creator=draft.creator.trim();
     if(!draft.name||!draft.creator){remixNotice('Enter remix name and creator first.');return;}
     if(!draft.tracks.length){remixNotice('Add some SID using + before publishing.');return;}
+    try{
+      // Crucial: publish the order visible in the floating playlist,
+      // even if the visitor did not press its local SAVE first.
+      syncPlayingRemixOrder(draft);
+    }catch(error){remixNotice('Cannot publish this order: '+error.message);return;}
     preserveRemixes();
     var key=await askBetaKeyDialog('PUBLISH');
     if(!key)return;
@@ -918,7 +979,17 @@
       });
       var result=await response.json();
       if(!response.ok)throw Error(result.error||'Remix publication failed.');
-      remixNotice('Published '+draft.name+' · '+result.tracks+' SID. Existing playlists unchanged.');
+      if(!result.id)throw Error('Publication response did not provide the saved playlist ID.');
+      var expectedDraftRefs=draft.tracks.map(function(t){return {pack:t.pack,file:t.file};});
+      await verifyRemoteOrder(communityWriteApi+'/playlists/'+encodeURIComponent(result.id),
+        expectedDraftRefs,'playlist');
+      if(activeRemixDraftId===draft.id){
+        activePublicPlaylist={remoteId:result.id,name:draft.name,createdBy:draft.creator,
+          tracks:expectedDraftRefs,originalCount:expectedDraftRefs.length,dirtyOrder:false};
+        activeRemixDraftId=null;
+        activeLocalOrderDirty=false;
+      }
+      remixNotice('PUBLISHED AND VERIFIED: '+draft.name+' · '+result.tracks+' SID in the correct order.');
       remixDrafts=remixDrafts.filter(function(d){return d!==draft;});
       remixTarget=remixDrafts.length?remixDrafts[0].id:'';
       preserveRemixes();
@@ -1112,25 +1183,7 @@
       if(activeRemixDraftId){
         var draft=remixDrafts.find(function(d){return d.id===activeRemixDraftId;});
         if(!draft)throw Error('REMIX draft no longer exists. Reload before saving.');
-        if(!activeReferenceTracks||activeReferenceTracks.length!==custom.length)
-          throw Error('REMIX references are out of sync. Reload the draft.');
-        // Preserve all metadata and any songs added since PLAY; only reorder.
-        var byKey=new Map(draft.tracks.map(function(t){return [t.pack+'::'+t.file,t];}));
-        var ordered=[],included=new Set();
-        activeReferenceTracks.forEach(function(t){
-          var key=t.pack+'::'+t.file;
-          if(byKey.has(key)&&!included.has(key)){
-            ordered.push(byKey.get(key));included.add(key);
-          }
-        });
-        draft.tracks.forEach(function(t){
-          var key=t.pack+'::'+t.file;
-          if(!included.has(key)){ordered.push(t);included.add(key);}
-        });
-        draft.tracks=ordered;
-        preserveRemixes();renderRemixes();
-        activeLocalOrderDirty=false;
-        renderLivePlaylist();
+        syncPlayingRemixOrder(draft);
         $('#ricoLiveStatus').text('REMIX order saved in this browser. PUBLISH requests the beta key.');
       }else{
         if(typeof window.ricoSaveCurrentPlaylistLocal!=='function')
