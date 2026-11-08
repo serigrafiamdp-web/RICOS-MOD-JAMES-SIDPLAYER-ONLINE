@@ -33,13 +33,13 @@ export default {
   if(request.method==='OPTIONS'){
    if(origin!==ORIGIN)return new Response(null,{status:403});
    return new Response(null,{status:204,headers:{
-    'access-control-allow-origin':origin,'access-control-allow-methods':'GET, POST, PUT, OPTIONS',
+    'access-control-allow-origin':origin,'access-control-allow-methods':'GET, POST, PUT, PATCH, DELETE, OPTIONS',
     'access-control-allow-headers':'Content-Type, X-Beta-Key','access-control-max-age':'86400'}});
   }
   if(request.method==='POST' && origin!==ORIGIN)return text('Origin not allowed',403,origin);
   if(request.method==='GET' && url.pathname==='/capabilities'){
     return json({format:'ricos-community-capabilities',version:1,
-      betaKeyRequired:true,editMode:'remove-only',configured:!!env.BETA_EDIT_KEY},200,origin);
+      betaKeyRequired:true,editMode:'metadata-and-delete',configured:!!env.BETA_EDIT_KEY},200,origin);
   }
   if(request.method==='GET' && url.pathname==='/playlists'){
     const rows=await env.DB.prepare('SELECT id, title, creator, track_count FROM playlists ORDER BY created_at ASC LIMIT 500').all();
@@ -53,14 +53,39 @@ export default {
   const updateMatch=/^\/playlists\/([a-z0-9-]{12,48})$/.exec(url.pathname);
   const isCreate=request.method==='POST'&&url.pathname==='/playlists';
   const isUpdate=request.method==='PUT'&&!!updateMatch;
-  if(!isCreate&&!isUpdate)return text('Not found',404,origin);
+  const isMetadata=request.method==='PATCH'&&!!updateMatch;
+  const isDelete=request.method==='DELETE'&&!!updateMatch;
+  if(!isCreate&&!isUpdate&&!isMetadata&&!isDelete)return text('Not found',404,origin);
   if(origin!==ORIGIN)return text('Origin not allowed',403,origin);
-  // Never trust a client-side key check. All writes require Cloudflare secret.
+  // Every persistent write, including metadata and deletion, requires server authorization.
   if(!(await hasValidBetaKey(request,env)))return text('Invalid beta key or server beta key not configured',403,origin);
+  if(isDelete){
+    const row=await env.DB.prepare('SELECT id FROM playlists WHERE id=?').bind(updateMatch[1]).first();
+    if(!row)return text('Playlist not found',404,origin);
+    await env.DB.prepare('DELETE FROM playlists WHERE id=?').bind(row.id).run();
+    return json({deleted:true,id:row.id},200,origin);
+  }
   if((Number(request.headers.get('Content-Length'))||0)>180000)return text('Payload too large',413,origin);
   let data;
   try{const raw=await request.text();if(raw.length>180000)return text('Payload too large',413,origin);data=JSON.parse(raw);}
   catch(e){return text('Invalid JSON',400,origin);}
+  if(isMetadata){
+    if(!data||typeof data.name!=='string'||!data.name.trim()||data.name.trim().length>100||
+      typeof data.createdBy!=='string'||!data.createdBy.trim()||data.createdBy.trim().length>60)
+      return text('Invalid title or creator',400,origin);
+    const record=await env.DB.prepare('SELECT id, payload FROM playlists WHERE id=?')
+      .bind(updateMatch[1]).first();
+    if(!record)return text('Playlist not found',404,origin);
+    const prior=JSON.parse(record.payload);
+    prior.name=data.name.trim();
+    prior.createdBy=data.createdBy.trim();
+    prior.updatedAt=new Date().toISOString();
+    const result=await env.DB.prepare(
+      'UPDATE playlists SET title=?,creator=?,payload=? WHERE id=? AND payload=?')
+      .bind(prior.name,prior.createdBy,JSON.stringify(prior),record.id,record.payload).run();
+    if(result.meta?.changes!==1)return text('Playlist changed; reload before editing',409,origin);
+    return json({id:record.id,title:prior.name,createdBy:prior.createdBy,tracks:prior.tracks.length,updated:true},200,origin);
+  }
   if(!data||data.format!=='ricos-sid-playlist'||data.version!==2||
     typeof data.name!=='string'||!data.name.trim()||data.name.length>100||
     typeof data.createdBy!=='string'||!data.createdBy.trim()||data.createdBy.length>60||
