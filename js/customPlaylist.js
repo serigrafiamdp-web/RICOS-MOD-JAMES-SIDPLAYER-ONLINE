@@ -127,7 +127,7 @@
     ensureLivePlaylistCredits();
     var list = player.sidList || [];
     $('#ricoLiveCount').text('(' + list.length + ')');
-    $('#ricoLivePlaylistTitle').text(landingPlaylists ? "RICO'S PLAYLISTS" : (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'));
+    $('#ricoLivePlaylistTitle').text(landingPlaylists ? "COMMUNITY PLAYLISTS" : (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'));
     // TEST34: keep the creator/ratings strip visible while a playlist is loaded.
     // Never confuse the playlist creator with each SID's composer.
     var hasLoadedPlaylist = !!loadedPlaylistTitle && customActive;
@@ -139,7 +139,7 @@
     $('#ricoLivePlaylistCredits').css('display','flex');
     $('#ricoLivePlaylistStars').css('display', hasLoadedPlaylist ? 'inline-flex' : 'none');
     if (landingPlaylists) {
-      $('<div>').addClass('rico-live-empty').text("Choose a playlist from RICO'S PLAYLISTS to start listening.").appendTo(holder);
+      $('<div>').addClass('rico-live-empty').text("Choose a playlist from COMMUNITY PLAYLISTS to start listening.").appendTo(holder);
       return;
     }
     if (!list.length) {
@@ -1039,7 +1039,7 @@
         communityItems.textContent='';
         if(!catalog.playlists.length) {
           cancelStartupPlaylist();
-          communityItems.textContent='No shared playlists published yet. Closed beta: Rico and invited testers only.';
+          communityItems.textContent='No additional published playlists available.';
           return;
         }
         var firstPlayable=null;
@@ -1149,7 +1149,7 @@
         }
       } catch(error){
         if(requestNumber===communityRequestNumber)
-          communityItems.textContent='Could not load RICO\'S PLAYLISTS: '+error.message;
+          communityItems.textContent='Could not load COMMUNITY PLAYLISTS: '+error.message;
         cancelStartupPlaylist();
       }
     }
