@@ -1629,3 +1629,21 @@ left: 1px;
 #ricoRemixEditor #ricoRemixEntries:empty {display:none;}
 #ricoRemixEditor #ricoRemixStatus:empty {display:none;}
 #ricoRemixEditor .rico-remix-fields button {white-space:nowrap;}
+
+/* TEST72: retire the misleading USER LOCAL screen.
+   Loaded community songs still use internal custom[] for playback, but
+   browser file import / legacy local playlist controls are not a visible tab. */
+#ricoCustomTab,
+#ricoDropZone,
+#ricoPlaylistOptions,
+#ricoPlaylistStatus,
+#ricoSavedPlaylistControls {
+  display:none !important;
+}
+#chooseSidDialog.rico-view-local #ricoCommunityPanel {
+  display:block !important;
+  top:138px !important;
+}
+#chooseSidDialog.rico-view-local #sidListHolder {
+  display:none !important;
+}
