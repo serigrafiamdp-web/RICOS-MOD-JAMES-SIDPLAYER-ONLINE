@@ -2043,3 +2043,28 @@ left: 1px;
   min-height:30px;
   min-width:64px;
 }
+
+/* TEST94 — concise reorder controls, respecting every active RICOS palette. */
+#ricoLivePlaylistItems .rico-live-move {
+  flex:0 0 24px;min-width:24px;border:0;
+  border-left:1px solid var(--rico-theme-border,#888);
+  color:var(--rico-theme-fg,#fff);
+  background:transparent;cursor:pointer;
+  font:600 15px Tahoma,Arial,sans-serif;padding:0 2px;
+}
+#ricoLivePlaylistItems .rico-live-move:hover:not(:disabled),
+#ricoRemixEditor .rico-remix-move:hover:not(:disabled) {
+  background:var(--rico-theme-hover,#555) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+}
+#ricoLivePlaylistItems .rico-live-move:disabled,
+#ricoRemixEditor .rico-remix-move:disabled {
+  opacity:.32;cursor:default;
+}
+#ricoRemixEditor .rico-remix-move {
+  flex:0 0 24px;min-width:24px;height:26px;
+  border:1px solid var(--rico-theme-border,#888);
+  background:var(--rico-theme-panel,#222);
+  color:var(--rico-theme-fg,#fff);
+  font:600 15px Tahoma,Arial,sans-serif;cursor:pointer;
+}
