@@ -77,15 +77,25 @@ async function githubSidRead(id,env){
   if(!response.ok)throw Error('GitHub SID read error ('+response.status+')');
   const data=await response.json();
   if(data.encoding!=='base64'||typeof data.content!=='string')throw Error('Invalid GitHub asset');
-  return sidBase64Bytes(data.content.replace(/\\s+/g,''));
+  const bytes=sidBase64Bytes(data.content.replace(/\s+/g,''));
+  if((await sidSha(bytes))!==id)throw Error('SID asset content does not match hash');
+  return bytes;
 }
 async function githubSidPut(item,env){
   const url=githubSidUrl(item.id);
   const headers=githubSidHeaders(env);
   const existing=await fetch(url,{headers,cf:{cacheTtl:0}});
-  if(existing.ok)return;
+  if(existing.ok){
+    // Existing filename is content-addressed. Reject unexpected corruption.
+    const same=await githubSidRead(item.id,env);
+    if(!same)throw Error('SID content disappeared from GitHub');
+    return;
+  }
   if(existing.status!==404)throw Error('GitHub lookup failed ('+existing.status+')');
-  const encoded=btoa(String.fromCharCode(...item.bytes));
+  let binary='';
+  for(let i=0;i<item.bytes.length;i+=8192)
+    binary+=String.fromCharCode(...item.bytes.subarray(i,i+8192));
+  const encoded=btoa(binary);
   const saved=await fetch(url,{method:'PUT',headers:{...headers,
     'Content-Type':'application/json'},body:JSON.stringify({
       message:'Add contributed SID '+item.id,
