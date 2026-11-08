@@ -309,8 +309,13 @@
     $('#ricoRemixPublish').prop('disabled',!selected||!selected.tracks.length||remixBusy);
     $('#ricoRemixPlay').prop('disabled',!selected||!selected.tracks.length||remixBusy);
     var items=$('#ricoRemixEntries').empty();
-    if(!selected){items.text('Press NEW REMIX to create a destination.');return;}
-    if(!selected.tracks.length){items.text('Select a playlist song with + to add it here.');return;}
+    $('#ricoRemixHelp').text(selected
+      ? (selected.tracks.length
+        ? 'REMIX creado: '+selected.tracks.length+' SID. Pulsá DONE para continuar agregando con +, o PLAY REMIX para escucharlo.'
+        : 'REMIX creado y seleccionado. Pulsá DONE y después + en las canciones que quieras agregar.')
+      : 'Pulsá NEW REMIX para crear una lista. Después DONE para seleccionar canciones con +.');
+    if(!selected){items.empty();return;}
+    if(!selected.tracks.length){items.empty();return;}
     selected.tracks.forEach(function(t,index){
       var line=$('<div>').addClass('rico-remix-entry');
       $('<span>').text((index+1)+'. '+(t.title||t.file)+' — '+(t.artist||'Unknown artist')).appendTo(line);
