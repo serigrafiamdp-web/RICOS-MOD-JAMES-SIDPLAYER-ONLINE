@@ -1936,6 +1936,10 @@
       if(!v||v==='<?> ' .trim()||/^unknown(?: artist)?$/i.test(v))return '';
       var matches=[...v.matchAll(/\(([^()]+)\)/g)];
       if(matches.length)return matches[matches.length-1][1].trim();
+      // TEST103: A SID author like "Uctumi / PVM" credits the musician first,
+      // followed by the scene group. Keep that musician visible in TOP GROUPS.
+      var creditParts=v.split(/\s*\/\s*/);
+      if(creditParts.length>1 && /^[^\s,&/]+$/.test(creditParts[0]))return creditParts[0];
       // A single stage name/handle can be shown. Multiword real-name credits are withheld.
       if(/^[^\s,&]+$/.test(v))return v;
       return '';
