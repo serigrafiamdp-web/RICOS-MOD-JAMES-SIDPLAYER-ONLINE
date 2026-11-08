@@ -1985,3 +1985,61 @@ left: 1px;
   border-bottom:2px solid var(--rico-theme-border,#fff);
 }
 #ricoOurItems .rico-our-back strong {font: bold 13px Tahoma,Arial,sans-serif;}
+
+
+/* TEST85 — About dialogs: readable in every player color palette. */
+#aboutSIDDialog .content,
+#aboutDialog .content {
+  color:var(--rico-theme-fg,#e8f8fb) !important;
+}
+#aboutSIDDialog #aboutSIDHolder,
+#aboutDialog #aboutHolder {
+  background:var(--rico-theme-bg,#17243b) !important;
+  color:var(--rico-theme-fg,#e8f8fb) !important;
+  border:1px solid var(--rico-theme-border,#64cfc9) !important;
+}
+#aboutSIDDialog #aboutSID,
+#aboutSIDDialog #aboutSIDContent,
+#aboutDialog #about {
+  background:transparent !important;
+  color:var(--rico-theme-fg,#e8f8fb) !important;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:16px !important;
+  line-height:1.55 !important;
+  padding:10px 12px;
+}
+#aboutSIDDialog #aboutSID {padding:0;}
+#aboutSIDDialog #aboutSIDContent p,
+#aboutSIDDialog #aboutSIDContent li,
+#aboutSIDDialog #aboutSIDContent div,
+#aboutDialog #about p,
+#aboutDialog #about li,
+#aboutDialog #about div {
+  color:var(--rico-theme-fg,#e8f8fb) !important;
+  font-size:16px !important;
+  line-height:1.55 !important;
+}
+#aboutSIDDialog h2,
+#aboutDialog h2 {
+  color:var(--rico-theme-fg,#7ce6de) !important;
+  font-size:19px !important;
+  line-height:1.35 !important;
+  margin:14px 0 7px !important;
+  padding-bottom:5px;
+  border-bottom:1px solid var(--rico-theme-border,#64cfc9) !important;
+}
+#aboutSIDDialog a,
+#aboutDialog a {
+  color:var(--rico-theme-fg,#87eee5) !important;
+  text-decoration:underline;
+  text-underline-offset:2px;
+  font-weight:600;
+}
+#aboutSIDDialog a:hover,
+#aboutDialog a:hover {opacity:.75;}
+#aboutSIDDialog .buttons button,
+#aboutDialog .buttons button {
+  cursor:pointer;
+  min-height:30px;
+  min-width:64px;
+}
