@@ -26,6 +26,121 @@ async function hasValidBetaKey(request,env){
  if(typeof supplied!=='string'||!supplied||supplied.length>128)return false;
  return (await hashSecret(supplied))===(await hashSecret(configured));
 }
+// TEST83: contributed SID files are stored under their SHA-256 content IDs in R2.
+// No modification to the existing HVSC-only playlist registry.
+function sidBase64Bytes(value) {
+  if(typeof value!=='string'||!value.length||value.length>96000||
+     !/^[A-Za-z0-9+/]*={0,2}$/.test(value))throw Error('Invalid SID binary encoding');
+  const binary=atob(value);
+  if(binary.length<118||binary.length>65536)throw Error('SID size must be 118–65536 bytes');
+  const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
+  const magic=String.fromCharCode(...bytes.slice(0,4));
+  if(magic!=='PSID'&&magic!=='RSID')throw Error('Not a PSID/RSID file');
+  const version=(bytes[4]<<8)|bytes[5];
+  const offset=(bytes[6]<<8)|bytes[7];
+  if(version<1||version>4||offset<118||offset>=bytes.length)
+    throw Error('Invalid SID header');
+  return bytes;
+}
+async function sidSha(bytes){
+  const digest=await crypto.subtle.digest('SHA-256',bytes);
+  return [...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+async function contributedCollections(request,env,url,origin){
+  const enabled=!!(env.SID_BUCKET&&env.DB&&env.BETA_EDIT_KEY);
+  if(request.method==='GET'&&url.pathname==='/collections'){
+    if(!env.DB)return text('Database not configured',503,origin);
+    const rows=await env.DB.prepare(
+      'SELECT id,title,creator,track_count FROM sid_collections ORDER BY created_at DESC LIMIT 500'
+    ).all();
+    return json({format:'ricos-sid-collections',version:1,collections:rows.results.map(x=>({
+      id:x.id,name:x.title,createdBy:x.creator,tracks:x.track_count
+    }))},200,origin);
+  }
+  const match=/^\/collections\/([0-9a-f-]{36})$/.exec(url.pathname);
+  if(request.method==='GET'&&match){
+    if(!env.DB)return text('Database not configured',503,origin);
+    const record=await env.DB.prepare(
+      'SELECT id,title,creator,track_count FROM sid_collections WHERE id=?'
+    ).bind(match[1]).first();
+    if(!record)return text('Collection not found',404,origin);
+    const rows=await env.DB.prepare(
+      'SELECT position,sid_id,filename FROM sid_collection_tracks WHERE collection_id=? ORDER BY position ASC'
+    ).bind(record.id).all();
+    return json({format:'ricos-sid-collection',version:1,id:record.id,name:record.title,
+      createdBy:record.creator,tracks:rows.results.map(x=>({sidId:x.sid_id,file:x.filename}))},200,origin);
+  }
+  const asset=/^\/sid-assets\/([0-9a-f]{64})$/.exec(url.pathname);
+  if(request.method==='GET'&&asset){
+    if(!env.SID_BUCKET)return text('SID storage unavailable',503,origin);
+    const object=await env.SID_BUCKET.get('sid/'+asset[1]+'.sid');
+    if(!object)return text('SID file not found',404,origin);
+    const headers={'content-type':'application/octet-stream',
+      'cache-control':'public, max-age=31536000, immutable',
+      'x-content-type-options':'nosniff'};
+    if(origin===ORIGIN)headers['access-control-allow-origin']=origin;
+    return new Response(object.body,{status:200,headers});
+  }
+  if(request.method!=='POST'||url.pathname!=='/collections')return null;
+  if(origin!==ORIGIN)return text('Origin not allowed',403,origin);
+  if(!enabled)return text('SID publishing unavailable: configure D1 and R2 first',503,origin);
+  if(!(await hasValidBetaKey(request,env)))return text('Invalid beta key',403,origin);
+  if((Number(request.headers.get('Content-Length'))||0)>1800000)
+    return text('Collection exceeds 1.8 MB upload limit',413,origin);
+  let data,raw;
+  try{raw=await request.text();if(raw.length>1800000)throw Error('Upload too large');
+      data=JSON.parse(raw);}catch(e){return text('Invalid collection payload',400,origin);}
+  if(!data||data.format!=='ricos-sid-upload'||data.version!==1||
+     typeof data.name!=='string'||!data.name.trim()||data.name.trim().length>100||
+     typeof data.createdBy!=='string'||!data.createdBy.trim()||data.createdBy.trim().length>60||
+     !Array.isArray(data.tracks)||!data.tracks.length||data.tracks.length>40)
+     return text('Invalid collection metadata or number of SID files (1–40)',400,origin);
+  const prepared=[];let total=0;
+  try{
+    for(const entry of data.tracks){
+      if(!entry||typeof entry.file!=='string'||!/^[^<>:*?|\\/]{1,200}\.sid$/i.test(entry.file))
+        throw Error('Invalid SID filename');
+      const bytes=sidBase64Bytes(entry.sidBase64);
+      total+=bytes.length;if(total>1200000)throw Error('SID binary total exceeds 1.2 MB');
+      prepared.push({file:entry.file,bytes,id:await sidSha(bytes)});
+    }
+  }catch(error){return text(error.message,400,origin);}
+  // Optional rate limit is shared with public playlists, and key authorization
+  // is mandatory. Failed DB commits never create visible collection references.
+  const now=Date.now();
+  const ip=request.headers.get('CF-Connecting-IP')||'unknown';
+  const ipHash=await hashSecret(ip+':'+(env.RATE_SALT||''));
+  const count=await env.DB.prepare('SELECT COUNT(*) as n FROM submissions WHERE ip_hash=? AND created_ms>?')
+    .bind(ipHash,now-3600000).first();
+  if((count?.n||0)>=5)return text('Too many publications this hour',429,origin);
+  try{
+    const unique=new Map(prepared.map(x=>[x.id,x]));
+    for(const item of unique.values()){
+      const key='sid/'+item.id+'.sid';
+      if(!(await env.SID_BUCKET.head(key))){
+        await env.SID_BUCKET.put(key,item.bytes,{httpMetadata:{contentType:'application/octet-stream'}});
+      }
+    }
+    const id=crypto.randomUUID();
+    const operations=[
+      env.DB.prepare('INSERT INTO sid_collections(id,title,creator,track_count,created_at) VALUES(?,?,?,?,?)')
+        .bind(id,data.name.trim(),data.createdBy.trim(),prepared.length,now),
+      ...prepared.map((t,i)=>env.DB.prepare(
+        'INSERT INTO sid_collection_tracks(collection_id,position,sid_id,filename) VALUES(?,?,?,?)'
+      ).bind(id,i,t.id,t.file)),
+      ...[...unique.values()].map(t=>env.DB.prepare(
+        'INSERT OR IGNORE INTO sid_assets(id,size,created_at) VALUES(?,?,?)'
+      ).bind(t.id,t.bytes.length,now)),
+      env.DB.prepare('INSERT INTO submissions(ip_hash,created_ms) VALUES(?,?)').bind(ipHash,now)
+    ];
+    await env.DB.batch(operations);
+    return json({id,name:data.name.trim(),tracks:prepared.length,published:true},201,origin);
+  }catch(error){
+    console.error('SID collection publish failed',error);
+    return text('Unable to store SID collection. Try again.',500,origin);
+  }
+}
+
 export default {
  async fetch(request,env){
   const origin=request.headers.get('Origin')||'';
@@ -37,9 +152,18 @@ export default {
     'access-control-allow-headers':'Content-Type, X-Beta-Key','access-control-max-age':'86400'}});
   }
   if(request.method==='POST' && origin!==ORIGIN)return text('Origin not allowed',403,origin);
+  // Independent non-HVSC binary collection endpoints.
+  if(url.pathname==='/collections'||url.pathname.startsWith('/collections/')||
+     url.pathname.startsWith('/sid-assets/')){
+    const contributed=await contributedCollections(request,env,url,origin);
+    if(contributed)return contributed;
+  }
+
   if(request.method==='GET' && url.pathname==='/capabilities'){
     return json({format:'ricos-community-capabilities',version:1,
-      betaKeyRequired:true,editMode:'metadata-and-delete',configured:!!env.BETA_EDIT_KEY},200,origin);
+      betaKeyRequired:true,editMode:'metadata-and-delete',
+      sidUploadsEnabled:!!(env.SID_BUCKET&&env.DB&&env.BETA_EDIT_KEY),
+      sidUploadLimit:40,configured:!!env.BETA_EDIT_KEY},200,origin);
   }
   if(request.method==='GET' && url.pathname==='/playlists'){
     const rows=await env.DB.prepare('SELECT id, title, creator, track_count FROM playlists ORDER BY created_at ASC LIMIT 500').all();
