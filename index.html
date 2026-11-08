@@ -2,7 +2,7 @@
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css?v=test72hidelegacy">
+    <link rel="stylesheet" href="css/style.css?v=test73import1">
     <title>RICOS MOD - JAMES SIDPLAYER ONLINE</title>
 
     <link rel="shortcut icon" type="image/png" href="images/icon16.png"/>
@@ -43,43 +43,6 @@
             <button type="button" id="ricoMusiciansTab">TOP MUSICIANS</button>
             <button type="button" id="ricoLibraryTab">HVSC LIBRARY</button>
             <button type="button" id="ricoCustomTab" hidden style="display:none;" aria-hidden="true" tabindex="-1">USER LOCAL <span id="ricoCustomCount">0 SID</span></button>
-          </div>
-          <div id="ricoDropZone">
-            <div class="rico-drop-row">
-              <span class="rico-drop-label">Drop SID files or folder here</span>
-              <button type="button" id="ricoAddFiles">ADD SID FILES</button>
-              <button type="button" id="ricoAddFolder">ADD FOLDER</button>
-              <button type="button" id="ricoClearList">CLEAR CUSTOM</button>
-            </div>
-          </div>
-          <div id="ricoPlaylistOptions">
-            <label for="ricoFallback">Unknown duration / AUTO:</label>
-            <span class="rico-time-control">
-              <button type="button" id="ricoFallbackMinus" aria-label="Subtract 10 seconds">−</button>
-              <input id="ricoFallback" type="text" inputmode="numeric" value="03:00" maxlength="5" aria-label="Minutes and seconds" title="MM:SS — e.g. 03:25"/>
-              <button type="button" id="ricoFallbackPlus" aria-label="Add 10 seconds">+</button>
-            </span>
-            <span>min:sec</span>
-            <a href="javascript:void(0)" id="sidFileOpen" style="display:none;">Open a Local SID File</a>
-          </div>
-          <div id="ricoPlaylistStatus" role="status">Original 22 SID playlist.</div>
-          <div id="ricoSavedPlaylistControls" style="border-top:1px solid #aab5bc;margin-top:7px;padding-top:7px;">
-            <div style="font-weight:bold;font-size:12px;margin-bottom:5px;">MY PLAYLISTS</div>
-            <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
-              <label for="ricoSavedName" style="font-weight:bold;">Playlist name:</label>
-              <input id="ricoSavedName" type="text" maxlength="100" value="My SID Playlist" autocomplete="off" aria-label="Playlist name" placeholder="Type your playlist name here" style="flex:1;min-width:180px;height:27px;box-sizing:border-box;padding:3px 7px;border:2px solid #326a85;background:white;color:#111;font-size:13px;cursor:text;" />
-              <button type="button" id="ricoSaveList">SAVE LIST</button>
-              <button type="button" id="ricoDownloadList">DOWNLOAD JSON</button>
-              <button type="button" id="ricoImportList">IMPORT JSON</button>
-              <input type="file" id="ricoJsonImport" accept=".json,application/json" style="display:none;" />
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;margin-top:7px;">
-              <strong style="font-size:11px;">SAVED PLAYLISTS</strong>
-              <select id="ricoSavedSelect" aria-label="Saved playlists" style="display:none;"><option value="">Saved playlists</option></select>
-              <button type="button" id="ricoLoadList" style="display:none;">LOAD LIST</button>
-            </div>
-            <div id="ricoSavedLibrary" role="list" style="height:67px;overflow-y:auto;border:1px solid #adb7c0;background:white;padding:3px;color:#222;font-size:11px;">No saved playlists yet.</div>
-            <div id="ricoSavedStatus" role="status" style="font-size:11px;min-height:14px;margin-top:4px;color:#333;">Enter a name, SAVE LIST, then select a saved playlist to load it.</div>
           </div>
         </div>
         <div id="sidListHolder" style="display:none;position:absolute;top:327px;bottom:10px;left:10px;right:10px;overflow:auto;border:1px solid #555;">
@@ -437,6 +400,60 @@
         <div id="ricoRemixStatus" role="status"></div>
       </aside>
 
+    <aside id="ricoImportSidWindow" role="dialog" aria-label="Import SID - local playlists" aria-modal="false" style="display:none;">
+      <div id="ricoImportSidHeader">
+        <strong>IMPORT SID</strong>
+        <button type="button" id="ricoImportSidClose" aria-label="Close Import SID window">×</button>
+      </div>
+      <p class="rico-import-note">LOCAL ONLY · Saved in this browser. Not uploaded to HVSC, CSDb or the community database.</p>
+      <div id="ricoImportSidContent">
+          <div id="ricoDropZone">
+            <div class="rico-drop-row">
+              <span class="rico-drop-label">Drop SID files or folder here</span>
+              <button type="button" id="ricoAddFiles">ADD SID FILES</button>
+              <button type="button" id="ricoAddFolder">ADD FOLDER</button>
+              <button type="button" id="ricoClearList">CLEAR CUSTOM</button>
+            </div>
+          </div>
+          <div id="ricoPlaylistOptions">
+            <label for="ricoFallback">Unknown duration / AUTO:</label>
+            <span class="rico-time-control">
+              <button type="button" id="ricoFallbackMinus" aria-label="Subtract 10 seconds">−</button>
+              <input id="ricoFallback" type="text" inputmode="numeric" value="03:00" maxlength="5" aria-label="Minutes and seconds" title="MM:SS — e.g. 03:25"/>
+              <button type="button" id="ricoFallbackPlus" aria-label="Add 10 seconds">+</button>
+            </span>
+            <span>min:sec</span>
+            <a href="javascript:void(0)" id="sidFileOpen" style="display:none;">Open a Local SID File</a>
+          </div>
+          <div id="ricoPlaylistStatus" role="status">Original 22 SID playlist.</div>
+          <div id="ricoSavedPlaylistControls" style="border-top:1px solid #aab5bc;margin-top:7px;padding-top:7px;">
+            <div style="font-weight:bold;font-size:12px;margin-bottom:5px;">MY PLAYLISTS</div>
+            <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
+              <label for="ricoSavedName" style="font-weight:bold;">Playlist name:</label>
+              <input id="ricoSavedName" type="text" maxlength="100" value="My SID Playlist" autocomplete="off" aria-label="Playlist name" placeholder="Type your playlist name here" style="flex:1;min-width:180px;height:27px;box-sizing:border-box;padding:3px 7px;border:2px solid #326a85;background:white;color:#111;font-size:13px;cursor:text;" />
+              <button type="button" id="ricoSaveList">SAVE LIST</button>
+              <button type="button" id="ricoDownloadList">DOWNLOAD JSON</button>
+              <button type="button" id="ricoImportList">IMPORT JSON</button>
+              <input type="file" id="ricoJsonImport" accept=".json,application/json" style="display:none;" />
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:7px;">
+              <strong style="font-size:11px;">SAVED PLAYLISTS</strong>
+              <select id="ricoSavedSelect" aria-label="Saved playlists" style="display:none;"><option value="">Saved playlists</option></select>
+              <button type="button" id="ricoLoadList" style="display:none;">LOAD LIST</button>
+            </div>
+            <div id="ricoSavedLibrary" role="list" style="height:67px;overflow-y:auto;border:1px solid #adb7c0;background:white;padding:3px;color:#222;font-size:11px;">No saved playlists yet.</div>
+            <div id="ricoSavedStatus" role="status" style="font-size:11px;min-height:14px;margin-top:4px;color:#333;">Enter a name, SAVE LIST, then select a saved playlist to load it.</div>
+          </div>
+
+        <div id="ricoImportTrackSection">
+          <strong>IMPORTED SID FILES</strong>
+          <span id="ricoImportTrackCount">0 SID</span>
+          <div id="ricoImportTrackList">No imported SID yet. Use ADD SID FILES or ADD FOLDER.</div>
+        </div>
+      </div>
+      <div id="ricoImportSidFooter">Stored locally in this browser (IndexedDB). For backup use DOWNLOAD JSON.</div>
+    </aside>
+
     <div id="sidInfo" style="position: absolute; bottom: 21px; top: 20px; left: 0; width: 220px; background-color: #eeeeee; color: #222222; font-size: 10px; padding: 4px; border: 1px solid #444444; display: none">
       <div id="" style="position: absolute; top: 0; left: 0; right: 0; height: 22px; background-color: #111111">
         <div id="sidInfoTitle" style="position: absolute; top: 2px; left: 2px; width: 150px">
@@ -451,6 +468,7 @@
 
     <div id="sidControls">
       <button type="button" id="chooseSid">Choose A SID...</button>
+      <button type="button" id="ricoImportSidButton" title="Import and save SID files in this browser only">IMPORT SID</button>
       <button type="button" id="nextSid">Next SID &gt;</button>
       <button type="button" id="ricoPlaylistToggle" aria-pressed="true" title="Show or hide active playlist">PLAYLIST</button>
       <button type="button" id="autoAdvanceButton" aria-pressed="true" title="Advance to the next SID file when its playback duration ends">AUTO: ON</button>
@@ -494,6 +512,6 @@
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test26"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script type="text/javascript" src="js/customPlaylist.js?v=test72hidelegacy"></script>
+    <script type="text/javascript" src="js/customPlaylist.js?v=test73import1"></script>
   </body>
 </html>
