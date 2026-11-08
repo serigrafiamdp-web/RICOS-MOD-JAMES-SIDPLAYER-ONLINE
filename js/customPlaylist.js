@@ -1092,11 +1092,10 @@
       });
       return entries;
     }
-    function loadPlaylist(data,startIndex) {
+    function loadPlaylist(data,startIndex,localImport) {
       // Validate everything before changing the currently loaded playlist.
       var entries=validatedEntries(data);
-      importedSidEntries=entries.slice();
-      renderImportedSidList();
+      if(localImport){importedSidEntries=entries.slice();renderImportedSidList();}
       // TEST47: preserve playlist-level scene group credits in the floating playlist.
       if(Array.isArray(data.tracks)) entries.forEach(function(entry,index){
         var track=data.tracks[index];
@@ -1122,9 +1121,9 @@
     }
     // TEST61: reference-only playlists resolve SID files from one immutable HVSC base.
     // Existing v1 playlists with embedded SID remain fully supported.
-    async function loadStoredPlaylist(data) {
+    async function loadStoredPlaylist(data,localImport) {
       if (!data || data.format!=='ricos-sid-playlist') throw Error('Unsupported playlist.');
-      if (data.version===1) { loadPlaylist(data); return; }
+      if (data.version===1) { loadPlaylist(data,undefined,!!localImport); return; }
       if (data.version!==2 || !Array.isArray(data.tracks) ||
           !data.tracks.length || data.tracks.length>2000) throw Error('Invalid reference playlist.');
       if(typeof JSZip==='undefined') throw Error('SID ZIP decoder not available.');
@@ -1204,7 +1203,7 @@
               listEl.value=item.id;
               var stored=await dbCall('readonly',function(store){return store.get(item.id);});
               if (!stored) throw Error('Playlist not found.');
-              await loadStoredPlaylist(stored);
+              await loadStoredPlaylist(stored,true);
               say('Loaded: '+stored.name+' ('+stored.tracks.length+' SID).');
             } catch(error){say(error.message || 'Failed to load playlist.');}
           });
@@ -1263,7 +1262,7 @@
               var stored=await dbCall('readonly',function(store){return store.get(item.id);});
               if(!stored)throw Error('Playlist not found.');
               currentId=item.id;
-              await loadStoredPlaylist(stored);
+              await loadStoredPlaylist(stored,true);
               say('Loaded '+stored.name+' · Playlist by '+(stored.createdBy||'Unknown')+'.');
             }catch(error){say(error.message||'Could not load playlist.');}
             finally{load.disabled=false;}
@@ -1299,7 +1298,7 @@
       if (!listEl.value) throw Error('Select a saved playlist.');
       var data=await dbCall('readonly',function(store){return store.get(listEl.value);});
       if (!data) throw Error('Playlist not found.');
-      await loadStoredPlaylist(data);
+      await loadStoredPlaylist(data,true);
       say('Loaded: '+data.name+'.');
     });
     run('ricoDownloadList',function(){
@@ -1322,7 +1321,7 @@
       try {
         if (file.size > MAX_BYTES*2) throw Error('JSON file is too large.');
         var data=JSON.parse(await file.text());
-        loadPlaylist(data);
+        loadPlaylist(data,undefined,true);
         say('Imported '+data.name+' ('+data.tracks.length+' SID). Use SAVE LIST to keep it locally.');
       } catch(error) {
         say(error.message || 'Invalid JSON playlist.');
