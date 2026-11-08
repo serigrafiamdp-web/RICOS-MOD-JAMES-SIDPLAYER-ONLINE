@@ -26,6 +26,33 @@
   var defaultPopPath = player.popPath;
   var originalDisplayInfo = player.displaySongInfo;
   var custom = [];
+  // TEST73: imported files remain separate from shared/community playback buffers.
+  var importedSidEntries = [];
+  function renderImportedSidList(){
+    var holder=document.getElementById('ricoImportTrackList');
+    if(!holder)return;
+    var count=document.getElementById('ricoImportTrackCount');
+    if(count)count.textContent=importedSidEntries.length+' SID';
+    holder.textContent='';
+    if(!importedSidEntries.length){
+      holder.textContent='No imported SID yet. Use ADD SID FILES or ADD FOLDER.';
+      return;
+    }
+    importedSidEntries.forEach(function(entry,index){
+      var row=document.createElement('div');row.className='rico-import-track-row';
+      var title=document.createElement('span');
+      title.textContent=(index+1)+'. '+(entry.name||entry.file)+' — '+(entry.author||'Unknown');
+      row.appendChild(title);
+      var del=document.createElement('button');del.type='button';del.textContent='×';
+      del.title='Remove from local import draft';del.setAttribute('aria-label','Remove '+entry.name);
+      del.addEventListener('click',function(){
+        importedSidEntries.splice(index,1);
+        renderImportedSidList();
+        $('#ricoPlaylistStatus').text(importedSidEntries.length+' SID in local import draft. Save to keep.');
+      });
+      row.appendChild(del);holder.appendChild(row);
+    });
+  }
   var customActive = false;
   var importing = false;
   var liveVisible = true; // TEST21: PLAYLIST ON at startup
@@ -820,7 +847,8 @@
         var buf = new Uint8Array(await files[i].arrayBuffer());
         var parsed = parseSID(buf, files[i]);
         if (!parsed) { rejected++; console.warn('Not a supported PSID/RSID header:', files[i].name); continue; }
-        parsed.id = 'local-' + (custom.length + accepted);
+        parsed.id = 'local-' + (importedSidEntries.length + accepted);
+        importedSidEntries.push(parsed);
         custom.push(parsed);
         accepted++;
       } catch (error) {
@@ -829,6 +857,7 @@
       }
     }
     importing = false;
+    renderImportedSidList();
     if (accepted) {
       loadedPlaylistTitle = '';
       loadedPlaylistCreator = '';
@@ -838,7 +867,7 @@
       renderLivePlaylist();
       showLivePlaylist(true);
     }
-    $('#ricoPlaylistStatus').text(accepted + ' SID imported' + (rejected ? ' · ' + rejected + ' skipped' : '') + '. Session only.');
+    $('#ricoPlaylistStatus').text(accepted + ' SID imported' + (rejected ? ' · ' + rejected + ' skipped' : '') + '. Use SAVE LIST for persistent local storage.');
   }
 
   function getEntryFiles(entry) {
@@ -891,6 +920,7 @@
   $('#ricoAddFolder').on('click', function () { document.getElementById('ricoFolderPicker').click(); });
   // TEST43: tab clicks are browse-only. Playback changes only via LOAD/track selection.
   $('#ricoClearList').on('click', function () {
+    importedSidEntries.length=0;renderImportedSidList();
     custom.length = 0;
     loadedPlaylistTitle = '';
     if (customActive) {
@@ -917,7 +947,7 @@
     var entered = parseAutoTime($('#ricoFallback').val());
     updateAutoTime((entered === null ? player.autoFallbackSeconds : entered) + 10);
   });
-  $('body').off('drop').on('drop.ricoPlaylist', async function (event) {
+  $('#ricoDropZone').off('drop').on('drop.ricoPlaylist', async function (event) {
     event.preventDefault();
     event.stopPropagation();
     var transfer = event.originalEvent && event.originalEvent.dataTransfer;
@@ -929,6 +959,48 @@
     $(this).addClass('rico-dragging');
   }).on('dragleave', function () { $(this).removeClass('rico-dragging'); });
 
+
+  // TEST73: truly separate IMPORT SID window; Community catalog never shows these controls.
+  (function initImportSidWindow(){
+    var panel=document.getElementById('ricoImportSidWindow');
+    var opener=document.getElementById('ricoImportSidButton');
+    var closer=document.getElementById('ricoImportSidClose');
+    var header=document.getElementById('ricoImportSidHeader');
+    if(!panel||!opener||!closer)return;
+    opener.addEventListener('click',function(event){
+      event.stopPropagation();panel.style.display='flex';
+      renderImportedSidList();
+      opener.setAttribute('aria-expanded','true');
+    });
+    closer.addEventListener('click',function(event){
+      event.stopPropagation();panel.style.display='none';
+      opener.setAttribute('aria-expanded','false');
+    });
+    ['mousedown','mouseup','pointerdown','pointerup','click','dblclick','keydown','keyup','keypress'].forEach(function(type){
+      panel.addEventListener(type,function(event){
+        if(event.target.closest('input,select,button'))event.stopPropagation();
+      });
+    });
+    var drag=null;
+    if(header) {
+      header.addEventListener('pointerdown',function(e){
+        if(e.button!==0||e.target.closest('button'))return;
+        var rect=panel.getBoundingClientRect();
+        drag={x:e.clientX,y:e.clientY,l:rect.left,t:rect.top};
+        if(header.setPointerCapture)header.setPointerCapture(e.pointerId);
+        e.preventDefault();e.stopPropagation();
+      });
+      header.addEventListener('pointermove',function(e){
+        if(!drag)return;
+        panel.style.left=Math.max(0,Math.min(window.innerWidth-panel.offsetWidth,drag.l+e.clientX-drag.x))+'px';
+        panel.style.top=Math.max(0,Math.min(window.innerHeight-40,drag.t+e.clientY-drag.y))+'px';
+        panel.style.transform='none';
+        e.stopPropagation();
+      });
+      header.addEventListener('pointerup',function(){drag=null;});
+      header.addEventListener('pointercancel',function(){drag=null;});
+    }
+  })();
 
   // TEST09: self-contained JSON playlists, local IndexedDB storage.
   // No server upload, changes to the SID emulation engine, or automatic disclosure.
@@ -992,11 +1064,11 @@
     function makePlaylist() {
       var name = nameEl.value.trim();
       if (!name) throw Error('Enter a playlist name.');
-      if (!custom.length) throw Error('CUSTOM playlist is empty.');
+      if (!importedSidEntries.length) throw Error('IMPORT SID has no files. Add SID files or select a saved local playlist.');
       return {
         format:'ricos-sid-playlist', version:1, name:name,
         createdBy: loadedPlaylistCreator || undefined,
-        createdAt:new Date().toISOString(), tracks:custom.map(function(item) {
+        createdAt:new Date().toISOString(), tracks:importedSidEntries.map(function(item) {
           return {file:item.file || 'track.sid', sidBase64:encode(item.localBytes)};
         })
       };
@@ -1023,6 +1095,8 @@
     function loadPlaylist(data,startIndex) {
       // Validate everything before changing the currently loaded playlist.
       var entries=validatedEntries(data);
+      importedSidEntries=entries.slice();
+      renderImportedSidList();
       // TEST47: preserve playlist-level scene group credits in the floating playlist.
       if(Array.isArray(data.tracks)) entries.forEach(function(entry,index){
         var track=data.tracks[index];
