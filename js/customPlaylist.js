@@ -291,6 +291,7 @@
     $('#ricoRemixName').val(selected?selected.name:'').prop('disabled',!selected);
     $('#ricoRemixCreator').val(selected?selected.creator:'').prop('disabled',!selected);
     $('#ricoRemixPublish').prop('disabled',!selected||!selected.tracks.length||remixBusy);
+    $('#ricoRemixPlay').prop('disabled',!selected||!selected.tracks.length||remixBusy);
     var items=$('#ricoRemixEntries').empty();
     if(!selected){items.text('Press NEW REMIX to create a destination.');return;}
     if(!selected.tracks.length){items.text('Select a playlist song with + to add it here.');return;}
@@ -328,6 +329,21 @@
     target.tracks.push({pack:track.pack,file:track.file,title:entry.name||track.file,artist:entry.author||''});
     preserveRemixes();renderRemixes();
     remixNotice('Added '+(entry.name||track.file)+' to '+target.name+' — '+target.tracks.length+' SID. Playback unchanged.');
+  }
+  async function playRemixDraft(){
+    var draft=selectedRemix();
+    if(!draft||!draft.tracks.length){remixNotice('Select a REMIX with songs first.');return;}
+    if(typeof window.ricoPlayRemixDraft!=='function'){
+      remixNotice('Remix preview is not ready. Reload this page.');return;
+    }
+    try{
+      remixNotice('Loading '+draft.name+' for preview...');
+      var payload={format:'ricos-sid-playlist',version:2,
+        name:draft.name.trim()||'MY REMIX',createdBy:draft.creator.trim()||'REMIX PREVIEW',
+        tracks:draft.tracks.map(function(t){return {pack:t.pack,file:t.file};})};
+      await window.ricoPlayRemixDraft(payload);
+      remixNotice('Playing '+draft.name+' (unpublished draft). You can keep adding with +.');
+    }catch(error){remixNotice('Could not preview remix: '+error.message);}
   }
   async function publishRemix(){
     var draft=selectedRemix();
@@ -367,6 +383,7 @@
     });
     $('#ricoRemixNew').on('click',function(event){event.stopPropagation();createRemix();});
     $('#ricoRemixPublish').on('click',function(event){event.stopPropagation();publishRemix();});
+    $('#ricoRemixPlay').on('click',function(event){event.stopPropagation();playRemixDraft();});
     $('#ricoRemixName,#ricoRemixCreator').on('input',function(){
       var current=selectedRemix();if(!current)return;
       current.name=$('#ricoRemixName').val().slice(0,100);
@@ -1007,6 +1024,9 @@
       if(!customActive)activate('custom');else player.initFileSelection();
       loadCustomIndex(0);showLivePlaylist(true);
     }
+    window.ricoPlayRemixDraft=async function(data){
+      await loadStoredPlaylist(data);
+    };
     async function refreshSaved() {
       var rows=await dbCall('readonly',function(store){return store.getAll();});
       rows.sort(function(a,b){return (b.updatedAt||'').localeCompare(a.updatedAt||'');});
@@ -1352,6 +1372,7 @@
         document.addEventListener('keydown',onKey,true);(nameInput||key).focus();
       });
     }
+    window.ricoRefreshCommunityCatalog=loadCommunityCatalog;
     async function loadCommunityCatalog() {
       if (!communityItems) return;
       var requestNumber=++communityRequestNumber;
