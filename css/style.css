@@ -2068,3 +2068,15 @@ left: 1px;
   color:var(--rico-theme-fg,#fff);
   font:600 15px Tahoma,Arial,sans-serif;cursor:pointer;
 }
+
+/* TEST95 — immutable TOP 100 rankings: visible but inactive reorder/remove buttons. */
+#ricoLivePlaylistItems button.rico-ranked-disabled:disabled {
+  color:#8c929b !important;
+  opacity:.55 !important;
+  background:transparent !important;
+  cursor:default !important;
+}
+#ricoLivePlaylistItems button.rico-ranked-disabled:disabled:hover {
+  color:#8c929b !important;
+  background:transparent !important;
+}
