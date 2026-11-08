@@ -1271,6 +1271,9 @@
               editButton.disabled=true;
               try{
                 await ensureBetaServerReady();
+                var capabilitiesResponse=await fetch(communityApiBase+'/capabilities',{cache:'no-store'});
+                var capabilities=await capabilitiesResponse.json();
+                if(capabilities.editMode!=='metadata-and-delete')throw Error('New Cloudflare Worker not deployed. No changes made.');
                 var resp=await fetch(communityApiBase+'/playlists/'+encodeURIComponent(item.remoteId),{
                   method:'PATCH',headers:{'Content-Type':'application/json','X-Beta-Key':auth.key},
                   body:JSON.stringify({name:auth.name,createdBy:auth.creator})
@@ -1293,6 +1296,9 @@
               deleteButton.disabled=true;
               try{
                 await ensureBetaServerReady();
+                var capabilitiesResponse=await fetch(communityApiBase+'/capabilities',{cache:'no-store'});
+                var capabilities=await capabilitiesResponse.json();
+                if(capabilities.editMode!=='metadata-and-delete')throw Error('New Cloudflare Worker not deployed. No changes made.');
                 var resp=await fetch(communityApiBase+'/playlists/'+encodeURIComponent(item.remoteId),{
                   method:'DELETE',headers:{'X-Beta-Key':auth.key}
                 });
