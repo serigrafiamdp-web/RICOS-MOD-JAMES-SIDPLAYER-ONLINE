@@ -1,5 +1,13 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## Latest playback fix — TEST104 PASS (2026-11-08)
+
+**User-confirmed PASS:** After the uploaded original `Balloon_Country_Bursts.sid` replaced the incorrect embedded SID in `TOP GROUPS` rank **95** (**PVM / Uctumi**), and the playlist/JS cache version was refreshed, the owner reported **"listo ahi volvio"** (playback restored). Original 4500-byte file verified by FNV-1a32 `3768c894`. No audio-engine changes.
+
+**Current TEST104 link:** [GitHub Pages — Uctumi fix](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=104uctumi).  
+**Fix details and provenance:** [TEST104 Uctumi source correction](docs/TEST104_UCTUMI_SOURCE_FIX.md).  
+**Stable functional baseline retained:** TEST102 PASS; TEST100 audio transition PASS. This PASS confirms return of Uctumi playback, not an exhaustive re-test of all songs or AUTO.
+
 ## Current development checkpoint — TEST102 PASS (2026-11-08)
 
 **Latest user-confirmed visual PASS:** **TEST102**, compact floating playlist: **playlist title + Playlist by** on one line; editable **TIMER** on the **REMIX** controls line; no visible SILENCE DETECT label. The detector remains active.
