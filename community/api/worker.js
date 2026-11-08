@@ -147,6 +147,47 @@ async function contributedCollections(request,env,url,origin){
         text('SID file not found',404,origin);
     }catch(error){console.error('SID read error',error);return text('SID temporarily unavailable',503,origin);}
   }
+  // TEST94: reorder only the existing SID references in a contributed collection.
+  // No SID upload, deletion, new asset, title change or track-count change.
+  const orderMatch=/^\/collections\/([0-9a-f-]{36})\/order$/.exec(url.pathname);
+  if(request.method==='PUT'&&orderMatch){
+    if(origin!==ORIGIN)return text('Origin not allowed',403,origin);
+    if(!env.DB||!env.BETA_EDIT_KEY)return text('Collection editing unavailable',503,origin);
+    if(!(await hasValidBetaKey(request,env)))return text('Invalid beta key',403,origin);
+    let data,raw;
+    try{
+      raw=await request.text();
+      if(raw.length>16000)throw Error('Payload too large');
+      data=JSON.parse(raw);
+    }catch(e){return text('Invalid order payload',400,origin);}
+    const id=orderMatch[1];
+    const collection=await env.DB.prepare('SELECT id,track_count FROM sid_collections WHERE id=?').bind(id).first();
+    if(!collection)return text('Collection not found',404,origin);
+    const old=(await env.DB.prepare(
+      'SELECT sid_id,filename FROM sid_collection_tracks WHERE collection_id=? ORDER BY position ASC'
+    ).bind(id).all()).results;
+    if(!old||old.length!==collection.track_count||old.length>40)return text('Invalid stored collection',500,origin);
+    if(!data||data.format!=='ricos-sid-order'||data.version!==1||
+       !Array.isArray(data.expected)||data.expected.length!==old.length||
+       !Array.isArray(data.order)||data.order.length!==old.length||
+       data.order.some(x=>!Number.isInteger(x)||x<0||x>=old.length)||
+       new Set(data.order).size!==old.length)
+       return text('Invalid SID order',400,origin);
+    if(!data.expected.every((entry,i)=>entry&&entry.sidId===old[i].sid_id&&entry.file===old[i].filename))
+      return text('Collection changed; reload before editing',409,origin);
+    if(data.order.every((item,i)=>item===i))
+      return json({id,tracks:old.length,updated:false},200,origin);
+    const reordered=data.order.map(index=>old[index]);
+    const operations=[
+      env.DB.prepare('DELETE FROM sid_collection_tracks WHERE collection_id=?').bind(id),
+      ...reordered.map((row,i)=>env.DB.prepare(
+        'INSERT INTO sid_collection_tracks(collection_id,position,sid_id,filename) VALUES(?,?,?,?)'
+      ).bind(id,i,row.sid_id,row.filename))
+    ];
+    // D1 batch applies changes together, preserving the files and other collection records.
+    await env.DB.batch(operations);
+    return json({id,tracks:old.length,updated:true},200,origin);
+  }
   if(request.method!=='POST'||url.pathname!=='/collections')return null;
   if(origin!==ORIGIN)return text('Origin not allowed',403,origin);
   if(!enabled)return text('SID publishing unavailable: configure D1 and an asset provider first',503,origin);
@@ -234,6 +275,7 @@ export default {
     return json({format:'ricos-community-capabilities',version:1,
       betaKeyRequired:true,editMode:'metadata-and-delete',
       sidUploadsEnabled:!!(sidUploadProvider(env)&&env.DB&&env.BETA_EDIT_KEY),
+      playlistReorder:true,sidCollectionReorder:true,
       sidUploadProvider:sidUploadProvider(env)||null,
       sidUploadLimit:sidUploadProvider(env)==='github'?15:40,
       configured:!!env.BETA_EDIT_KEY},200,origin);
@@ -299,16 +341,14 @@ export default {
       return text('Name and creator cannot change in removal-only edits',400,origin);
     const original=JSON.parse(record.payload);
     if(!Array.isArray(original.tracks))return text('Stored playlist invalid',500,origin);
-    // Only removals are allowed: same order, no new SID entries, no reordering.
-    let cursor=0;
-    for(const track of tracks){
-      while(cursor<original.tracks.length &&
-        (original.tracks[cursor].pack!==track.pack||original.tracks[cursor].file!==track.file))cursor++;
-      if(cursor>=original.tracks.length)return text('Only removing existing SID is allowed',400,origin);
-      cursor++;
-    }
-    if(tracks.length>=original.tracks.length)
-      return text('Remove at least one SID before saving',400,origin);
+    // Allow removals and reordering of the original references only.
+    // New songs and duplicate references are forbidden, even with a valid beta key.
+    const originalKeys=new Set(original.tracks.map(t=>t.pack+'::'+t.file));
+    if(tracks.some(t=>!originalKeys.has(t.pack+'::'+t.file)))
+      return text('Only reordering or removing existing SID is allowed',400,origin);
+    if(tracks.length===original.tracks.length&&
+       tracks.every((t,i)=>t.pack===original.tracks[i].pack&&t.file===original.tracks[i].file))
+      return text('No playlist changes to save',400,origin);
     const payload={...original,tracks,updatedAt:new Date(now).toISOString()};
     // Optimistic concurrency: old payload must still match, to avoid stale overwrites.
     const write=await env.DB.prepare(
