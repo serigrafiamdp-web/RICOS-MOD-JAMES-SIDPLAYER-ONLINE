@@ -399,7 +399,7 @@
     var toggle=$('#ricoRemixToggle'),target=$('#ricoRemixTarget');
     if(!toggle.length)return;
     toggle.on('click',function(event){event.stopPropagation();remixOpen=true;renderRemixes();});
-    $('#ricoRemixClose').on('click',function(event){event.stopPropagation();remixOpen=false;renderRemixes();});
+    $('#ricoRemixClose').on('click',function(event){event.stopPropagation();remixOpen=false;preserveRemixes();renderRemixes();if(typeof window.ricoRenderRemixCommunityRows==='function')window.ricoRenderRemixCommunityRows();});
     $('#ricoRemixEditorTarget').on('change',function(event){
       event.stopPropagation();remixTarget=this.value;preserveRemixes();renderRemixes();
     });
@@ -423,6 +423,7 @@
       current.name=$('#ricoRemixName').val().slice(0,100);
       current.creator=$('#ricoRemixCreator').val().slice(0,60);
       preserveRemixes();
+      if(typeof window.ricoRenderRemixCommunityRows==='function')window.ricoRenderRemixCommunityRows();
       // Avoid redrawing inputs while the visitor is typing.
       var opt=target.find('option:selected');
       if(opt.length)opt.text((current.name||'UNTITLED')+' ('+current.tracks.length+')');
@@ -1291,7 +1292,12 @@
       if (localPanel) localPanel.style.display=visible?'none':'block';
       if(!visible) player.initFileSelection(); // Refresh the browser list only.
       refreshTabs();
-      if (visible) loadCommunityCatalog();
+      if (visible){
+        // Sync drafts written in a separate tab before displaying COMMUNITY PLAYLISTS.
+        restoreRemixes();
+        renderRemixes();
+        loadCommunityCatalog();
+      }
     }
     // TEST45: shared TOP 100 browser. Selecting a tab never changes playback.
     async function getRankData(kind){
