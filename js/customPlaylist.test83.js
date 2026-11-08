@@ -1595,6 +1595,10 @@
               player.dialogManager.hideDialog('chooseSidDialog');
           }catch(error){say(error.message||'Could not load local playlist.');}
         },false);
+        action('EDIT',async function(){
+          try{await editLocalCommunityItem(item);}
+          catch(error){say('EDIT: '+error.message);}
+        },false);
         action('DELETE',async function(){
           if(!window.confirm('Delete local playlist '+item.name+' from this browser?'))return;
           try{
@@ -1647,6 +1651,64 @@
       });
       // Newly saved local imports are shown above published catalogs.
       communityItems.insertBefore(fragment,communityItems.firstChild);
+    }
+
+    // TEST89: consistent EDIT controls. Static GitHub catalogs must never be
+    // mutated through the D1 API; opening EDIT creates a private editable copy.
+    async function editLocalCommunityItem(item){
+      var original=await dbCall('readonly',function(store){return store.get(item.id);});
+      if(!original)throw Error('Local playlist no longer available.');
+      var name=window.prompt('EDIT LOCAL PLAYLIST — Name:',original.name);
+      if(name===null)return;
+      name=name.trim().slice(0,100);
+      if(!name)throw Error('Playlist name cannot be empty.');
+      var creator=window.prompt('EDIT LOCAL PLAYLIST — Playlist by:',original.createdBy||'Unknown');
+      if(creator===null)return;
+      creator=creator.trim().slice(0,60);
+      if(!creator)throw Error('Playlist creator cannot be empty.');
+      original.name=name;original.createdBy=creator;
+      original.updatedAt=new Date().toISOString();
+      await dbCall('readwrite',function(store){return store.put(original);});
+      await refreshSaved();
+      say('Edited local playlist: '+name+'. Public catalogs unchanged.');
+    }
+    async function editStaticCommunityItem(item){
+      var response=await fetch(item.file,{cache:'no-store'});
+      if(!response.ok)throw Error('Could not open curated playlist.');
+      var source=await response.json();
+      if(!source||source.format!=='ricos-sid-playlist'||!Array.isArray(source.tracks))
+        throw Error('Unsupported curated playlist.');
+      if(source.version===2 && source.tracks.every(function(t){return t&&t.pack&&t.file;})){
+        if(remixDrafts.length>=25)throw Error('Maximum 25 Remix drafts.');
+        remixCounter++;
+        var draft={id:'remix-'+Date.now()+'-'+remixCounter,
+          name:('REMIX '+(source.name||item.title)).slice(0,100),creator:'',
+          tracks:source.tracks.map(function(t){return {pack:t.pack,file:t.file,title:t.title||t.file,artist:t.artist||''};})};
+        remixDrafts.push(draft);remixTarget=draft.id;remixOpen=true;
+        preserveRemixes();renderRemixes();
+        remixNotice('Editable REMIX copy created. The original community playlist stays unchanged.');
+        return;
+      }
+      if(source.version!==1)throw Error('This playlist format cannot be edited here.');
+      validatedEntries(source); // Validate every SID before saving a local copy.
+      var copyName=window.prompt('EDIT — Create a local copy (original remains unchanged):',
+        (source.name||item.title)+' - MY EDIT');
+      if(copyName===null)return;
+      copyName=copyName.trim().slice(0,100);
+      if(!copyName)throw Error('Enter a name for the editable copy.');
+      var author=window.prompt('Playlist by:',source.createdBy||'RICO');
+      if(author===null)return;
+      author=author.trim().slice(0,60);
+      if(!author)throw Error('Enter a playlist creator.');
+      var saved={format:'ricos-sid-playlist',version:1,
+        id:'list-'+Date.now()+'-'+Math.random().toString(36).slice(2,9),
+        name:copyName,createdBy:author,createdAt:new Date().toISOString(),
+        updatedAt:new Date().toISOString(),tracks:source.tracks.map(function(t){
+          return {file:t.file,sidBase64:t.sidBase64};
+        })};
+      await dbCall('readwrite',function(store){return store.put(saved);});
+      await refreshSaved();
+      say('Editable local copy saved: '+copyName+'. Original community list unchanged.');
     }
     window.ricoRenderLocalImportedRows=renderLocalImportedCommunityRows;
     // In-progress remix rows visually share the public community list.
@@ -1801,6 +1863,18 @@
               finally{deleteButton.disabled=false;}
             });
             row.appendChild(editButton);row.appendChild(deleteButton);
+          }else{
+            var editCurated=document.createElement('button');
+            editCurated.type='button';editCurated.textContent='EDIT';
+            editCurated.title='Create an editable personal copy. Original curated playlist remains unchanged.';
+            editCurated.addEventListener('click',async function(event){
+              event.stopPropagation();
+              editCurated.disabled=true;
+              try{await editStaticCommunityItem(item);}
+              catch(error){say('EDIT: '+error.message);}
+              finally{editCurated.disabled=false;}
+            });
+            row.appendChild(editCurated);
           }
           communityItems.appendChild(row);
           if(item.id && item.id===selectedCommunityId) row.classList.add('rico-community-selected');
