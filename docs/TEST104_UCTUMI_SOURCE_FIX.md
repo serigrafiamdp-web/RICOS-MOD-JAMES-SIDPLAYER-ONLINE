@@ -1,6 +1,6 @@
 # TEST104 — Uctumi SID source correction (2026-11-08)
 
-**Status:** Published for user playback testing; **NOT YET PASS**.
+**Status:** **PASS — user-confirmed playback restored on 2026-11-08**. The user reported «listo ahi volvio» after the embedded SID replacement and cache-refresh deployment. This establishes recovery of the Uctumi track, not a fresh end-to-end regression test of all functionality.
 
 Baseline: TEST102 PASS (audio TEST100 PASS). TEST103 corrected TOP GROUPS alias display to recognize `Uctumi / PVM`; that was only a UI attribution fix.
 
@@ -16,6 +16,8 @@ TOP GROUPS #95 PVM already contained a `Balloon_Country_Bursts.sid` (4500-byte P
 - Forced a new URL version for rank JSON and JS to avoid the old embedded binary being reused from browser/CDN cache.
 - Did not change audio engine, AUTO, fade, silence detection, remote playlists, Cloudflare D1, or the immutable HVSC library ZIP (already contains Uctumi and is generated from HVSC).
 
-## Manual test requested
+## User test result / follow-up
 
-Open `https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=104uctumi`, select TOP GROUPS #95, play, verify audible sound and AUTO progression, report PASS/FAIL. If no sound, collect console engine error and compare with the same uploaded SID via local ADD SID FILES to distinguish the core SID engine from curated playlist loading.
+**PASS:** after accessing the updated GitHub Pages site the user confirmed the song «volvió». This verifies that Uctumi playback returned in the tested flow. AUTO switching for this specific tune was not separately confirmed; retain its existing TEST101 preliminary status. The 100-entry ranking and existing stable TEST102/TEST100 functionality remain unchanged.
+
+Source: `https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=104uctumi`.
