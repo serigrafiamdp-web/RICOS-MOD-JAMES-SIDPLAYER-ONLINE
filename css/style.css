@@ -1906,3 +1906,50 @@ left: 1px;
   background:var(--rico-theme-hover,#555) !important;
   color:var(--rico-theme-fg,#fff) !important;
 }
+
+/* TEST77: NUESTRA COLECCIÓN independent browser (non-HVSC SID files). */
+#chooseSidDialog.rico-view-ours #chooseSidInfo {height:112px !important;}
+#chooseSidDialog.rico-view-ours #ricoOurCollectionPanel {
+  display:block !important;top:138px !important;
+}
+#chooseSidDialog.rico-view-ours #ricoCommunityPanel,
+#chooseSidDialog.rico-view-ours #sidListHolder,
+#chooseSidDialog.rico-view-ours #ricoHvscPanel,
+#chooseSidDialog.rico-view-ours #ricoLibraryPanel {display:none !important;}
+#ricoOurCollectionPanel {
+  box-sizing:border-box;
+  background:var(--rico-theme-bg,#000) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+  border:1px solid var(--rico-theme-border,#fff) !important;
+}
+#ricoOurCollectionPanel > p {
+  margin:7px 0 12px;font-size:11px;line-height:1.5;
+  color:var(--rico-theme-fg,#fff);
+}
+.rico-our-controls {
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:7px 0;border-bottom:1px solid var(--rico-theme-border,#fff);
+}
+#ricoOurSearch {
+  flex:1 1 180px;min-width:125px;height:29px;padding:4px 8px;
+  background:var(--rico-theme-panel,#333);color:var(--rico-theme-fg,#fff);
+  border:1px solid var(--rico-theme-border,#fff);
+}
+#ricoOurSearch::placeholder {color:var(--rico-theme-fg,#fff);opacity:.65;}
+#ricoOurCollectionPanel button {
+  background:var(--rico-theme-panel,#333);color:var(--rico-theme-fg,#fff);
+  border:1px solid var(--rico-theme-border,#fff);
+  padding:5px 10px;cursor:pointer;
+}
+#ricoOurCollectionPanel button:hover {
+  background:var(--rico-theme-hover,#555);
+}
+#ricoOurStatus {padding:9px 0;font-size:11px;}
+.rico-our-row {
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  border-bottom:1px solid var(--rico-theme-border,#fff);
+  padding:8px 4px;
+}
+.rico-our-label {flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
+.rico-our-label strong {font-size:12px;overflow-wrap:anywhere;}
+.rico-our-label small {font-size:10px;opacity:.8;overflow-wrap:anywhere;}
