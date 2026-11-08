@@ -1098,6 +1098,17 @@
         searchEl.addEventListener(type,function(event){event.stopPropagation();});
       });
 
+      var draftItemsEl=document.getElementById('ricoLibraryDraftItems');
+      var draftCountEl=document.getElementById('ricoDraftCount');
+      var draftNameEl=document.getElementById('ricoLibraryListName');
+      var addAllButton=document.getElementById('ricoLibraryAddAll');
+      var saveDraftButton=document.getElementById('ricoLibrarySaveList');
+      var newDraftButton=document.getElementById('ricoLibraryNewList');
+      var draft=[],draftId='',draftBusy=false,draftBytes=0;
+      // Original SID player suppresses mousedown and handles the space bar.
+      ['mousedown','mouseup','pointerdown','pointerup','click','dblclick','keydown','keyup','keypress'].forEach(function(type){
+        draftNameEl.addEventListener(type,function(event){event.stopPropagation();});
+      });
       var statusEl=document.getElementById('ricoLibraryStatus');
       var manifest=null, category='musicians', shelf='', shelfData=null, selected=null, token=0;
       var shelfCache={},packCache=new Map();
@@ -1166,52 +1177,142 @@
         renderSongs();
         status(matches.length+' sections available · '+selected.tracks.length+' SID in '+selected.name+'.');
       }
+      function filteredTracks(){
+        if(!selected)return [];
+        var q=searchEl.value.trim().toLocaleLowerCase();
+        return selected.tracks.filter(function(track){
+          return !q||selected.name.toLocaleLowerCase().includes(q)||
+            (track.title+' '+track.author+' '+track.file).toLocaleLowerCase().includes(q);
+        });
+      }
+      function trackKey(section,track){return (track.pack||section.pack)+'::'+track.file;}
+      function renderDraft(){
+        draftCountEl.textContent='('+draft.length+' SID)';
+        draftItemsEl.textContent='';
+        draft.slice(-6).forEach(function(item,index){
+          var row=document.createElement('div');
+          row.className='rico-library-draft-row';
+          var label=document.createElement('span');
+          label.textContent=item.entry.name+' — '+item.entry.author;
+          var remove=makeButton('×',function(){
+            if(draftBusy)return;
+            var at=draft.indexOf(item);
+            if(at<0)return;
+            draft.splice(at,1);draftBytes-=item.entry.localBytes.length;
+            renderDraft();status('Removed from MY PLAYLIST · '+draft.length+' SID.');
+          },'rico-library-draft-remove');
+          remove.setAttribute('aria-label','Remove '+item.entry.name);
+          row.appendChild(label);row.appendChild(remove);draftItemsEl.appendChild(row);
+        });
+        if(draft.length>6){
+          var older=document.createElement('span');older.className='rico-library-draft-older';
+          older.textContent='Showing last 6 of '+draft.length+' SID · All will be saved';
+          draftItemsEl.insertBefore(older,draftItemsEl.firstChild);
+        }
+        saveDraftButton.disabled=draftBusy||!draft.length;
+        addAllButton.disabled=draftBusy||!selected;
+        newDraftButton.disabled=draftBusy;
+      }
+      async function getZip(sourcePack){
+        if(typeof JSZip==='undefined')throw Error('ZIP decoder unavailable; reload page.');
+        var promise=packCache.get(sourcePack);
+        if(!promise){
+          promise=(async function(){
+            var response=await fetch(sourcePack);
+            if(!response.ok)throw Error('SID pack unavailable ('+response.status+').');
+            return JSZip.loadAsync(await response.arrayBuffer());
+          })();
+          packCache.set(sourcePack,promise);
+          if(packCache.size>3)packCache.delete(packCache.keys().next().value);
+        }
+        try{return await promise;}
+        catch(error){packCache.delete(sourcePack);throw error;}
+      }
+      async function addTrack(section,track){
+        var key=trackKey(section,track);
+        if(draft.some(function(item){return item.key===key;}))return false;
+        if(draft.length>=2000)throw Error('Playlist limit: 2000 SID.');
+        if(draftBytes+track.bytes>64*1024*1024)throw Error('Playlist limit: 64 MB.');
+        var zip=await getZip(track.pack||section.pack);
+        var file=zip.file(track.file);
+        if(!file)throw Error('SID missing from pack: '+track.file);
+        var bytes=await file.async('uint8array');
+        if(draftBytes+bytes.length>64*1024*1024)throw Error('Playlist limit: 64 MB.');
+        var entry=parseSID(bytes,{name:track.file,size:bytes.length});
+        if(!entry)throw Error('Invalid SID: '+track.file);
+        draft.push({key:key,entry:entry});
+        draftBytes+=bytes.length;
+        return true;
+      }
+      async function addSelection(section,tracks){
+        if(draftBusy)return;
+        draftBusy=true;renderDraft();
+        var added=0,duplicates=0,failed=0;
+        try{
+          for(var n=0;n<tracks.length;n++){
+            if(n%20===0)status('Adding to MY PLAYLIST: '+n+' / '+tracks.length+'...');
+            try{
+              if(await addTrack(section,tracks[n]))added++;
+              else duplicates++;
+            }catch(error){
+              failed++;
+              console.warn('Could not add SID',tracks[n].file,error);
+              if(/limit/i.test(error.message))throw error;
+            }
+          }
+          status('MY PLAYLIST: '+added+' added, '+duplicates+' already present'+(failed?', '+failed+' unavailable':'')+'. Playback unchanged.');
+        }catch(error){status(error.message+' · '+added+' SID added before stopping.');}
+        finally{draftBusy=false;renderDraft();}
+      }
       function renderSongs(){
         songsEl.textContent='';
-        if(!selected)return;
+        if(!selected){renderDraft();return;}
         var heading=document.createElement('div');heading.className='rico-library-heading';
         heading.textContent=selected.name+' · '+selected.tracks.length+' SID';songsEl.appendChild(heading);
-        var q=searchEl.value.trim().toLocaleLowerCase();
-        var filtered=selected.tracks.filter(function(track){
-          return !q||selected.name.toLocaleLowerCase().includes(q)||(track.title+' '+track.author+' '+track.file).toLocaleLowerCase().includes(q);
+        filteredTracks().forEach(function(track){
+          var key=trackKey(selected,track);
+          var row=makeButton(track.title+(track.author?' — '+track.author:''),function(){
+            addSelection(selected,[track]);
+          },'rico-library-track');
+          row.title='Add to MY PLAYLIST · '+(track.origin||selected.name)+' / '+track.file;
+          if(draft.some(function(item){return item.key===key;}))row.classList.add('rico-draft-added');
+          songsEl.appendChild(row);
         });
-        filtered.forEach(function(track){
-          var b=makeButton(track.title+(track.author?' — '+track.author:''),()=>playTrack(selected,track),'rico-library-track');
-          b.title=(track.origin ? track.origin+' / ' : '')+track.file;songsEl.appendChild(b);
-        });
+        renderDraft();
       }
-      async function playTrack(section,track){
-        try {
-          status('Loading '+track.title+'...');
-          if(typeof JSZip==='undefined')throw Error('ZIP decoder unavailable; reload the page.');
-          var sourcePack=track.pack || section.pack;
-          var p=packCache.get(sourcePack);
-          if(!p){
-            p=(async function(){
-              var res=await fetch(sourcePack);
-              if(!res.ok)throw Error('SID pack unavailable ('+res.status+').');
-              return JSZip.loadAsync(await res.arrayBuffer());
-            })();
-            packCache.set(sourcePack,p);
-            if(packCache.size>3)packCache.delete(packCache.keys().next().value);
-          }
-          var zip=await p;
-          var file=zip.file(track.file);
-          if(!file)throw Error('SID missing from pack.');
-          var bytes=await file.async('uint8array');
-          var entry=parseSID(bytes,{name:track.file,size:bytes.length});
-          if(!entry)throw Error('Invalid PSID/RSID data.');
-          cancelStartupPlaylist();
-          landingPlaylists=false;
-          player.isPlaying=false;player.isPaused=false;
-          custom.length=0;custom.push(entry);
-          loadedPlaylistTitle='HVSC '+category.toUpperCase();
-          loadedPlaylistCreator='HVSC Crew';
-          if(!customActive)activate('custom');else player.initFileSelection();
-          loadCustomIndex(0);showLivePlaylist(true);
-          status('Playing '+entry.name+' — '+entry.author);
-        }catch(e){status(e.message);console.error('HVSC library playback',e);}
-      }
+      addAllButton.addEventListener('click',function(){
+        if(!selected)return;
+        addSelection(selected,filteredTracks());
+      });
+      newDraftButton.addEventListener('click',function(){
+        if(draftBusy)return;
+        if(draft.length&&!window.confirm('Start a new empty MY PLAYLIST? Unsaved selections will be cleared.'))return;
+        draft=[];draftBytes=0;draftId='';draftNameEl.value='My SID Playlist';
+        renderDraft();status('New empty MY PLAYLIST. Playback unchanged.');
+      });
+      saveDraftButton.addEventListener('click',async function(){
+        if(draftBusy||!draft.length)return;
+        var title=draftNameEl.value.trim();
+        if(!title){status('Enter a playlist name first.');draftNameEl.focus();return;}
+        draftBusy=true;renderDraft();
+        try{
+          var data={format:'ricos-sid-playlist',version:1,name:title,createdBy:'You',
+            createdAt:new Date().toISOString(),
+            tracks:draft.map(function(item){
+              return {file:item.entry.file||'track.sid',sidBase64:encode(item.entry.localBytes)};
+            })};
+          if(draftId)data.id=draftId;
+          else data.id='list-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);
+          data.updatedAt=new Date().toISOString();
+          await dbCall('readwrite',function(store){return store.put(data);});
+          draftId=data.id;
+          await refreshSaved();
+          status('Saved locally: '+title+' ('+data.tracks.length+' SID). Open MY PLAYLISTS to load and play.');
+          say('Saved locally: '+title+' ('+data.tracks.length+' SID).');
+        }catch(error){status('Could not save: '+error.message);}
+        finally{draftBusy=false;renderDraft();}
+      });
+      renderDraft();
       async function openLibrary(){
         cancelStartupPlaylist();
         browserTab='library';communityActive=false;
