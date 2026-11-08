@@ -2,7 +2,7 @@
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css?v=test101silentauto">
+    <link rel="stylesheet" href="css/style.css?v=test102compact">
     <title>RICOS MOD - JAMES SIDPLAYER ONLINE</title>
 
     <link rel="shortcut icon" type="image/png" href="images/icon16.png"/>
@@ -432,28 +432,27 @@
 
     <aside id="ricoLivePlaylist" aria-label="Active SID playlist" style="display:flex;">
       <div id="ricoLivePlaylistHeader">
-        <span style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span id="ricoLivePlaylistTitle" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;max-width:230px;" title="Current playlist">PLAYLIST</span>&nbsp;<span id="ricoLiveCount" style="flex:none;"></span></span>
+        <span class="rico-live-heading"><span id="ricoLivePlaylistTitle" title="Current playlist">PLAYLIST</span><span id="ricoLiveCount"></span></span>
+        <div id="ricoLivePlaylistCredits" aria-label="Playlist curator and future ratings">
+          <span id="ricoLivePlaylistCreator">Select a playlist</span>
+          <span id="ricoLivePlaylistStars" title="Ratings coming soon" aria-label="Ratings coming soon">
+            <span aria-hidden="true">☆☆☆☆☆</span>
+            <span class="rico-rating-note">Ratings coming soon</span>
+          </span>
+        </div>
         <span class="rico-live-head-actions"><button type="button" id="ricoLiveSave" title="Save new public song order or removals (beta key required)" style="display:none;">SAVE</button><button type="button" id="ricoLiveClose" aria-label="Hide playlist">×</button></span>
-      </div>
-      <div id="ricoLivePlaylistCredits" aria-label="Playlist curator and future ratings">
-        <span id="ricoLivePlaylistCreator">Select a playlist</span>
-        <span id="ricoLivePlaylistStars" title="Ratings coming soon" aria-label="Ratings coming soon">
-          <span aria-hidden="true">☆☆☆☆☆</span>
-          <span class="rico-rating-note">Ratings coming soon</span>
-        </span>
-      </div>
-      <div id="ricoLiveTimerBar" class="rico-live-timer-bar">
-        <label for="ricoLiveTimer">AUTO TIMER</label>
-        <input id="ricoLiveTimer" type="text" value="03:00" maxlength="5" inputmode="numeric"
-          autocomplete="off" aria-label="Maximum time per SID in minutes and seconds"
-          title="MM:SS · Maximum time per SID. AUTO also skips after 2.5 seconds of genuine silence."/>
-        <span title="Automatic advance on genuine SID silence after playback starts">SILENCE DETECT</span>
       </div>
       <div id="ricoRemixBar" class="rico-remix-bar">
         <button type="button" id="ricoRemixToggle" aria-expanded="false">REMIX PLAYLIST</button>
         <label for="ricoRemixTarget">ADD + TO</label>
         <select id="ricoRemixTarget" aria-label="Remix destination"><option value="">SELECT REMIX</option></select>
         <span id="ricoRemixCount">0 SID</span>
+        <div id="ricoLiveTimerBar" class="rico-live-timer-bar">
+          <label for="ricoLiveTimer">TIMER</label>
+          <input id="ricoLiveTimer" type="text" value="03:00" maxlength="5" inputmode="numeric"
+            autocomplete="off" aria-label="Maximum time per SID in minutes and seconds"
+            title="AUTO TIMER · MM:SS"/>
+        </div>
       </div>
       <div id="ricoLiveStatus" role="status" style="padding:3px 8px;color:#ffb6a9;font-size:11px;"></div>
       <div id="ricoLivePlaylistItems"></div>
@@ -588,6 +587,6 @@
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test87aboutsidclose"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script type="text/javascript" src="js/customPlaylist.test101.js?v=test101silentauto"></script>
+    <script type="text/javascript" src="js/customPlaylist.test101.js?v=test102compact"></script>
   </body>
 </html>
