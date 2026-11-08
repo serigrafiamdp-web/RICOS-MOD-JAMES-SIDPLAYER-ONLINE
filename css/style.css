@@ -2080,3 +2080,29 @@ left: 1px;
   color:#8c929b !important;
   background:transparent !important;
 }
+
+/* TEST96 — two independent playlist cursors; no artwork or extra window. */
+/* Filled/inverted row = actual SID playing. Thin outline = selected next SID. */
+#ricoLivePlaylistItems .rico-live-row.rico-live-active,
+#ricoLivePlaylistItems .rico-live-row.rico-live-active:hover {
+  background:var(--rico-theme-fg,#fff) !important;
+  color:var(--rico-theme-bg,#000) !important;
+}
+#ricoLivePlaylistItems .rico-live-row.rico-live-active .rico-live-number,
+#ricoLivePlaylistItems .rico-live-row.rico-live-active .rico-live-title,
+#ricoLivePlaylistItems .rico-live-row.rico-live-active .rico-live-artist,
+#ricoLivePlaylistItems .rico-live-row.rico-live-active .rico-live-composer,
+#ricoLivePlaylistItems .rico-live-row.rico-live-active .rico-live-group,
+#ricoLivePlaylistItems .rico-live-row.rico-live-active .rico-live-current {
+  color:var(--rico-theme-bg,#000) !important;
+}
+#ricoLivePlaylistItems .rico-live-row.rico-live-selected:not(.rico-live-active) {
+  outline:1px solid var(--rico-theme-fg,#fff);
+  outline-offset:-2px;
+}
+#ricoLivePlaylistItems .rico-live-row.rico-live-queued:not(.rico-live-active) {
+  background:var(--rico-theme-hover,#555) !important;
+}
+#ricoLivePlaylistItems .rico-live-next {
+  flex:0 0 auto;color:var(--rico-theme-fg,#fff) !important;font-weight:bold;font-size:16px;
+}
