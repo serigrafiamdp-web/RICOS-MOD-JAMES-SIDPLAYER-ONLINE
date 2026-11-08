@@ -76,7 +76,10 @@
     if(transitionRecovery!==null){clearTimeout(transitionRecovery);transitionRecovery=null;}
     transitionBusy=false;transitionAwaitingStart=false;
     queuedLiveIndex=null;transitionSource=null;
-    if(resetSelection)selectedLiveIndex=null;
+    if(resetSelection){
+      selectedLiveIndex=null;followPlayingRowOnce=false;
+      $('#ricoLivePlaylistItems').scrollTop(0);
+    }
     restoreFullVolume();
   }
   var originalPlaySong=player.playSong;
@@ -791,6 +794,8 @@
   })();
 
   function renderLivePlaylist() {
+    var scrollNode=document.getElementById('ricoLivePlaylistItems');
+    var previousScroll=scrollNode?scrollNode.scrollTop:0;
     var holder = $('#ricoLivePlaylistItems').empty();
     ensureLivePlaylistCredits();
     var list = player.sidList || [];
@@ -890,6 +895,7 @@
     // Save remains fixed in the header, not in the scrolling track list.
     // TEST96: never force scrolling on a manual selection or a render refresh.
     // Follow the newly playing row only on NEXT/AUTO, within this list's scrollbox.
+    if(!followPlayingRowOnce && scrollNode)scrollNode.scrollTop=previousScroll;
     if(followPlayingRowOnce && liveVisible){
       followPlayingRowOnce=false;
       var activeRow=holder.find('.rico-live-active')[0],scroller=holder[0];
