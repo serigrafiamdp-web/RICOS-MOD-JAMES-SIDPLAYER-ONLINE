@@ -2127,3 +2127,69 @@ left: 1px;
 }
 #ricoLiveTimerBar input:focus-visible {outline:1px solid var(--rico-theme-fg,#fff);outline-offset:1px;}
 #ricoLiveTimerBar span {font-size:10px;opacity:.67;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* TEST102 — compact Playlist: TITLE + Playlist by in one header row. */
+#ricoLivePlaylist #ricoLivePlaylistHeader {
+  display:flex;flex-wrap:nowrap;align-items:center;gap:7px;
+  padding:0 8px;min-width:0;
+}
+#ricoLivePlaylistHeader .rico-live-heading {
+  display:flex;align-items:center;gap:4px;
+  min-width:60px;flex:1.2 1 170px;overflow:hidden;
+  white-space:nowrap;
+}
+#ricoLivePlaylistHeader #ricoLivePlaylistTitle {
+  display:block;min-width:0;max-width:none !important;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:14px;line-height:1.2;
+}
+#ricoLivePlaylistHeader #ricoLiveCount {flex:0 0 auto;font-size:11px;white-space:nowrap;}
+#ricoLivePlaylistHeader #ricoLivePlaylistCredits {
+  flex:1 1 175px;display:flex;flex-wrap:nowrap;
+  justify-content:flex-end;align-items:center;min-width:75px;
+  width:auto;min-height:0;height:auto;box-sizing:border-box;
+  padding:0;gap:5px;border:0;background:transparent;
+  font:11px Tahoma,Arial,sans-serif;overflow:hidden;
+}
+#ricoLivePlaylistHeader #ricoLivePlaylistCreator {
+  min-width:0;flex:0 1 auto;
+  font:11px Tahoma,Arial,sans-serif;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+#ricoLivePlaylistHeader #ricoLivePlaylistStars {
+  display:inline-flex;flex:0 0 auto;min-width:0;
+  padding:0;gap:0;font-size:11px;
+}
+#ricoLivePlaylistHeader #ricoLivePlaylistStars > span[aria-hidden] {
+  font:12px Arial,sans-serif;letter-spacing:0;
+}
+#ricoLivePlaylistHeader #ricoLivePlaylistStars .rico-rating-note {display:none;}
+#ricoLivePlaylistHeader .rico-live-head-actions {flex:0 0 auto;white-space:nowrap;}
+
+/* TEST102 — AUTO TIMER shares the Remix controls line, without SILENCE DETECT text. */
+#ricoLivePlaylist #ricoRemixBar.rico-remix-bar {
+  flex-wrap:nowrap;align-items:center;gap:5px;
+  overflow:hidden;min-width:0;
+}
+#ricoRemixBar #ricoRemixTarget {
+  flex:1 1 68px;min-width:40px;max-width:115px;
+}
+#ricoRemixBar #ricoRemixCount {flex:0 0 auto;margin-left:0;}
+#ricoRemixBar #ricoLiveTimerBar.rico-live-timer-bar {
+  display:flex;flex:0 0 auto;align-items:center;gap:4px;
+  margin-left:auto;padding:0;min-height:0;
+  border:0;background:transparent;white-space:nowrap;
+}
+#ricoRemixBar #ricoLiveTimerBar label {
+  font:10px Tahoma,Arial,sans-serif;letter-spacing:0;
+}
+#ricoRemixBar #ricoLiveTimerBar input {
+  flex:0 0 51px;width:51px;min-width:51px;height:24px;
+}
+@media(max-width:370px){
+  #ricoRemixBar #ricoRemixCount {display:none;}
+  #ricoLivePlaylistHeader #ricoLivePlaylistStars {display:none !important;}
+}
+@media(max-width:290px){
+  #ricoRemixBar label[for="ricoRemixTarget"]{display:none;}
+}
