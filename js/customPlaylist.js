@@ -793,25 +793,21 @@
       var localCommunity=document.getElementById('ricoLocalCommunityItems');
       if(localCommunity){
         localCommunity.textContent='';
-        var heading=document.createElement('div');
-        heading.className='rico-local-community-heading';
-        heading.textContent='YOUR PLAYLISTS · SAVED ON THIS DEVICE ('+rows.length+')';
-        localCommunity.appendChild(heading);
-        if(!rows.length){
-          var empty=document.createElement('div');
-          empty.className='rico-local-community-empty';
-          empty.textContent='Create a playlist in HVSC LIBRARY and save it here.';
-          localCommunity.appendChild(empty);
-        }
         rows.forEach(function(item){
           var line=document.createElement('div');
-          line.className='rico-community-row rico-local-community-row';
+          line.className='rico-community-row';
           var label=document.createElement('span');
           label.className='rico-community-label';
           var caption=document.createElement('span');
           caption.className='rico-community-description';
           caption.textContent=item.name+' — Playlist by '+(item.createdBy||'Unknown')+' · '+item.tracks.length+' SID';
           label.appendChild(caption);
+          var stars=document.createElement('span');
+          stars.className='rico-community-stars';
+          stars.textContent='☆☆☆☆☆';
+          stars.setAttribute('aria-label','Ratings coming soon');
+          stars.title='Ratings coming soon — no votes yet';
+          label.appendChild(stars);
           var load=document.createElement('button');
           load.type='button';load.textContent='LOAD';
           load.addEventListener('click',async function(event){
@@ -829,10 +825,6 @@
           line.appendChild(label);line.appendChild(load);
           localCommunity.appendChild(line);
         });
-        var publishedHeading=document.createElement('div');
-        publishedHeading.className='rico-local-community-heading';
-        publishedHeading.textContent='PUBLISHED PLAYLISTS';
-        localCommunity.appendChild(publishedHeading);
       }
     }
     function run(id,action) {
