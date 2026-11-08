@@ -1872,9 +1872,9 @@
       });
     });
 
-    // TEST77 — NUESTRA COLECCIÓN: non-HVSC SID browser.
-    // Initial catalogue: the existing RICO embedded playlist, and private
-    // IndexedDB IMPORT SID playlists. No server upload is implied.
+    // TEST78 — OUR COLLECTION: navigate collections first, then SID tracks.
+    // Keep each saved local playlist intact (including repeated tracks).
+    // Browser-only imports remain private; do not present them as published SIDs.
     (function initOurCollection(){
       var tab=document.getElementById('ricoOurCollectionTab');
       var panel=document.getElementById('ricoOurCollectionPanel');
@@ -1884,83 +1884,137 @@
       var status=document.getElementById('ricoOurStatus');
       var reload=document.getElementById('ricoOurRefresh');
       if(!tab||!panel||!items||!search)return;
-      var catalog=[], request=0;
+      var collections=[],selectedId='',request=0;
       ['mousedown','mouseup','pointerdown','pointerup','click','dblclick','keydown','keyup','keypress'].forEach(function(type){
         search.addEventListener(type,function(event){event.stopPropagation();});
       });
+      function addAction(row,text,handler){
+        var button=document.createElement('button');
+        button.type='button';button.textContent=text;
+        button.addEventListener('click',function(event){event.stopPropagation();handler();});
+        row.appendChild(button);return button;
+      }
       function render(){
         items.textContent='';
         var query=search.value.toLocaleLowerCase().trim();
-        var found=catalog.filter(function(item){
-          return !query || (item.title+' '+item.author+' '+item.file+' '+item.source)
-            .toLocaleLowerCase().includes(query);
-        });
-        count.textContent=found.length+' SID';
-        if(!found.length){items.textContent='No SID match this search.';return;}
+        var selected=collections.find(function(c){return c.id===selectedId;});
         var fragment=document.createDocumentFragment();
-        found.forEach(function(item){
-          var row=document.createElement('div');row.className='rico-our-row';row.setAttribute('role','listitem');
-          var label=document.createElement('span');label.className='rico-our-label';
-          var title=document.createElement('strong');title.textContent=item.title;
-          var detail=document.createElement('small');
-          detail.textContent=(item.author||'Unknown')+' · '+item.source+' · '+item.file;
-          label.appendChild(title);label.appendChild(detail);
-          var play=document.createElement('button');play.type='button';play.textContent='PLAY';
-          play.addEventListener('click',function(event){
-            event.stopPropagation();
-            try {
-              // A single track, with SID bytes embedded, avoids reliance on HVSC.
-              loadPlaylist({format:'ricos-sid-playlist',version:1,name:'NUESTRA COLECCIÓN',
-                createdBy:item.source,tracks:[{file:item.file,sidBase64:item.sidBase64}]},0,false);
-              status.textContent='Playing '+item.title+' (not published to HVSC).';
-              if(player.dialogManager && player.dialogManager.dialogShown==='chooseSidDialog')
-                player.dialogManager.hideDialog('chooseSidDialog');
-            }catch(error){status.textContent='Unable to play: '+error.message;}
+        if(selected){
+          var back=document.createElement('div');back.className='rico-our-row rico-our-back';
+          var title=document.createElement('strong');
+          title.textContent=selected.name+' · '+selected.tracks.length+' SID';
+          back.appendChild(title);
+          addAction(back,'BACK',function(){selectedId='';search.value='';render();});
+          fragment.appendChild(back);
+          var matches=selected.tracks.map(function(t,index){return {track:t,index:index};})
+            .filter(function(obj){
+              var t=obj.track;
+              return !query||(t.title+' '+t.author+' '+t.file).toLocaleLowerCase().includes(query);
+            });
+          count.textContent=matches.length+' / '+selected.tracks.length+' SID';
+          matches.forEach(function(obj){
+            var item=obj.track;
+            var row=document.createElement('div');row.className='rico-our-row rico-our-track-row';
+            row.setAttribute('role','listitem');
+            var label=document.createElement('span');label.className='rico-our-label';
+            var name=document.createElement('strong');
+            name.textContent=String(obj.index+1).padStart(2,'0')+'  '+item.title;
+            var detail=document.createElement('small');
+            detail.textContent=(item.author||'Unknown')+' · '+item.file;
+            label.appendChild(name);label.appendChild(detail);row.appendChild(label);
+            addAction(row,'PLAY',function(){
+              try{
+                loadPlaylist({format:'ricos-sid-playlist',version:1,name:selected.name,
+                  createdBy:selected.creator,tracks:selected.tracks.map(function(t){
+                    return {file:t.file,sidBase64:t.sidBase64};
+                  })},obj.index,false);
+                status.textContent='Playing '+item.title+' from '+selected.name+'.';
+                if(player.dialogManager&&player.dialogManager.dialogShown==='chooseSidDialog')
+                  player.dialogManager.hideDialog('chooseSidDialog');
+              }catch(error){status.textContent='Unable to play: '+error.message;}
+            });
+            fragment.appendChild(row);
           });
-          row.appendChild(label);row.appendChild(play);fragment.appendChild(row);
-        });
+          if(!matches.length){
+            var empty=document.createElement('div');empty.className='rico-our-row';
+            empty.textContent='No SID match this search.';fragment.appendChild(empty);
+          }
+        }else{
+          var found=collections.filter(function(c){
+            return !query||(c.name+' '+c.creator+' '+c.tracks.map(function(t){
+              return t.title+' '+t.author+' '+t.file;
+            }).join(' ')).toLocaleLowerCase().includes(query);
+          });
+          count.textContent=found.length+' COLLECTIONS';
+          found.forEach(function(c){
+            var row=document.createElement('div');row.className='rico-our-row rico-our-collection-row';
+            row.setAttribute('role','listitem');
+            var label=document.createElement('span');label.className='rico-our-label';
+            var title=document.createElement('strong');title.textContent=c.name;
+            var detail=document.createElement('small');
+            detail.textContent='Collection by '+c.creator+' · '+c.tracks.length+' SID'+
+              (c.local?' · LOCAL ONLY':' · INCLUDED COLLECTION');
+            label.appendChild(title);label.appendChild(detail);row.appendChild(label);
+            addAction(row,'OPEN',function(){selectedId=c.id;search.value='';render();});
+            fragment.appendChild(row);
+          });
+          if(!found.length){
+            var emptyRow=document.createElement('div');emptyRow.className='rico-our-row';
+            emptyRow.textContent='No collections match this search.';fragment.appendChild(emptyRow);
+          }
+        }
         items.appendChild(fragment);
       }
+      function inspectPlaylist(id,name,creator,tracks,local,updatedAt){
+        if(!Array.isArray(tracks)||!tracks.length)return null;
+        var valid=[];
+        tracks.forEach(function(t){
+          if(!t||typeof t.sidBase64!=='string')return;
+          try{
+            var bytes=decode(t.sidBase64);
+            var parsed=parseSID(bytes,{name:t.file||'track.sid',size:bytes.length});
+            if(!parsed)return;
+            valid.push({file:t.file||'track.sid',sidBase64:t.sidBase64,
+              title:parsed.name||t.file||'Untitled SID',author:parsed.author||'Unknown'});
+          }catch(e){console.warn('Skipped invalid SID in collection '+name,e);}
+        });
+        return valid.length?{id:id,name:name,creator:creator||'Unknown',
+          tracks:valid,local:local,updatedAt:updatedAt||''}:null;
+      }
       async function loadCatalog(){
-        var serial=++request;status.textContent='Loading our collection...';
-        try {
-          var candidates=[],seen=new Set();
-          // Existing RICO playlist is a first-party, non-HVSC collection.
+        var serial=++request;status.textContent='Loading collections...';
+        try{
+          var result=[];
+          // The existing RICO JSON is a standalone curated collection.
           var response=await fetch('community/playlists/rico.json',{cache:'no-store'});
           if(response.ok){
             var rico=await response.json();
-            if(rico&&rico.version===1&&Array.isArray(rico.tracks))
-              rico.tracks.forEach(function(t){
-                if(t&&typeof t.sidBase64==='string')
-                  candidates.push({file:t.file||'track.sid',sidBase64:t.sidBase64,source:'RICO'});
-              });
+            if(rico&&rico.version===1){
+              var curated=inspectPlaylist('curated-rico','RICO',
+                rico.createdBy||'RICO',rico.tracks,false,'');
+              if(curated)result.push(curated);
+            }
           }
           var saved=await dbCall('readonly',function(store){return store.getAll();});
           saved.forEach(function(list){
-            if(list&&list.version===1&&Array.isArray(list.tracks))
-              list.tracks.forEach(function(t){
-                if(t&&typeof t.sidBase64==='string')
-                  candidates.push({file:t.file||'track.sid',sidBase64:t.sidBase64,source:list.name||'IMPORT SID'});
-              });
+            if(list&&list.version===1&&Array.isArray(list.tracks)){
+              var entry=inspectPlaylist('local-'+list.id,list.name||'IMPORT SID',
+                list.createdBy||'Unknown',list.tracks,true,list.updatedAt||list.createdAt);
+              if(entry)result.push(entry);
+            }
           });
-          var result=[];
-          candidates.forEach(function(item){
-            // Ignore repeated copies of identical SID bytes, regardless of playlist.
-            if(seen.has(item.sidBase64))return;
-            seen.add(item.sidBase64);
-            try{
-              var bytes=decode(item.sidBase64);
-              var parsed=parseSID(bytes,{name:item.file,size:bytes.length});
-              if(!parsed)return;
-              result.push({file:item.file,sidBase64:item.sidBase64,source:item.source,
-                title:parsed.name||item.file,author:parsed.author||'Unknown'});
-            }catch(error){console.warn('Skipped invalid non-HVSC SID',item.file,error);}
+          result.sort(function(a,b){
+            if(a.local!==b.local)return a.local?-1:1;
+            return String(b.updatedAt||'').localeCompare(String(a.updatedAt||''));
           });
           if(serial!==request)return;
-          catalog=result;status.textContent=result.length+
-            ' non-HVSC SID available. Local imports are private to this browser.';
+          collections=result;
+          if(!collections.some(function(c){return c.id===selectedId;}))selectedId='';
+          status.textContent=result.length+' collections available. Local imports remain private to this browser.';
           render();
-        }catch(error){if(serial===request)status.textContent='Collection unavailable: '+error.message;}
+        }catch(error){
+          if(serial===request)status.textContent='Collection unavailable: '+error.message;
+        }
       }
       function openOurCollection(){
         cancelStartupPlaylist();
@@ -1976,7 +2030,6 @@
         if(libraryPanel)libraryPanel.style.display='none';
         panel.style.display='block';refreshTabs();loadCatalog();
       }
-      // All other browser tabs hide this separate collection panel.
       Array.prototype.forEach.call(document.querySelectorAll('#ricoListTabs button:not(#ricoOurCollectionTab)'),function(other){
         other.addEventListener('click',function(){panel.style.display='none';},{capture:true});
       });
