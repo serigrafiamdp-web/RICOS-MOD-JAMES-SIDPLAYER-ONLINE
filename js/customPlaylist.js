@@ -1563,7 +1563,9 @@
       );
       var fragment=document.createDocumentFragment();
       rows.filter(function(d){return d&&d.format==='ricos-sid-playlist'&&d.version===1&&
-        Array.isArray(d.tracks);}).forEach(function(item){
+        Array.isArray(d.tracks);}).sort(function(a,b){
+          return String(b.updatedAt||b.createdAt||'').localeCompare(String(a.updatedAt||a.createdAt||''));
+        }).forEach(function(item){
         var row=document.createElement('div');
         row.className='rico-community-row rico-community-import-row';
         var label=document.createElement('span');label.className='rico-community-label';
@@ -1614,7 +1616,7 @@
       Array.prototype.forEach.call(communityItems.querySelectorAll('.rico-community-remix-row'),function(el){el.remove();});
       if(!remixDrafts.length)return;
       var fragment=document.createDocumentFragment();
-      remixDrafts.forEach(function(d){
+      remixDrafts.slice().reverse().forEach(function(d){
         var row=document.createElement('div');row.className='rico-community-row rico-community-remix-row';
         var label=document.createElement('span');label.className='rico-community-label';
         label.textContent=d.name+' — Playlist by '+(d.creator||'Unknown')+' · '+d.tracks.length+' SID';
@@ -1648,14 +1650,20 @@
           if(!remoteResponse.ok)throw Error('Public service returned '+remoteResponse.status);
           var remoteCatalog=await remoteResponse.json();
           if(remoteCatalog&&Array.isArray(remoteCatalog.playlists)){
-            remoteCatalog.playlists.forEach(function(entry){
-              if(entry&&typeof entry.title==='string'&&
-                 typeof entry.id==='string'&&/^[a-z0-9-]{12,48}$/i.test(entry.id))
-                catalog.playlists.push({
+            // D1 /playlists currently returns created_at ASC (oldest first).
+            // Display newest first without needing to redeploy the Worker.
+            var newestPublished=remoteCatalog.playlists.slice().reverse()
+              .filter(function(entry){
+                return entry&&typeof entry.title==='string'&&
+                  typeof entry.id==='string'&&/^[a-z0-9-]{12,48}$/i.test(entry.id);
+              }).map(function(entry){
+                return {
                   id:entry.id,title:entry.title,createdBy:entry.createdBy||'Unknown',
                   tracks:Number(entry.tracks)||0,remoteId:entry.id
-                });
-            });
+                };
+              });
+            // Keep historical GitHub playlists after published user playlists.
+            catalog.playlists=newestPublished.concat(catalog.playlists);
           }
         }catch(remoteError){
           console.warn('Public user playlists unavailable, showing curated list only',remoteError);
