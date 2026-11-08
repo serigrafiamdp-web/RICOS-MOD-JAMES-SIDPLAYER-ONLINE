@@ -2106,3 +2106,24 @@ left: 1px;
 #ricoLivePlaylistItems .rico-live-next {
   flex:0 0 auto;color:var(--rico-theme-fg,#fff) !important;font-weight:bold;font-size:16px;
 }
+
+/* TEST101: compact timer directly inside the active floating playlist. */
+#ricoLiveTimerBar.rico-live-timer-bar {
+  flex:0 0 auto;display:flex;align-items:center;gap:7px;
+  min-height:27px;padding:3px 9px;
+  color:var(--rico-theme-fg,#fff);
+  background:var(--rico-theme-panel,#222);
+  border-bottom:1px solid var(--rico-theme-border,#777);
+  font:11px Tahoma,Arial,sans-serif;
+}
+#ricoLiveTimerBar label {white-space:nowrap;font-weight:bold;letter-spacing:.2px;}
+#ricoLiveTimerBar input {
+  box-sizing:border-box;width:54px;min-width:54px;height:22px;
+  padding:1px 4px;text-align:center;
+  border:1px solid var(--rico-theme-border,#777);
+  border-radius:0;background:var(--rico-theme-bg,#000);
+  color:var(--rico-theme-fg,#fff);
+  font:12px Tahoma,Arial,sans-serif;font-variant-numeric:tabular-nums;
+}
+#ricoLiveTimerBar input:focus-visible {outline:1px solid var(--rico-theme-fg,#fff);outline-offset:1px;}
+#ricoLiveTimerBar span {font-size:10px;opacity:.67;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
