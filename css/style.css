@@ -1603,3 +1603,29 @@ left: 1px;
   #ricoLivePlaylist #ricoRemixBar{flex-wrap:wrap;}
   #ricoRemixEditor .rico-remix-fields{flex-wrap:wrap;}
 }
+
+/* TEST70 — simple compact creator: no huge empty black region. */
+#ricoRemixEditor.rico-remix-editor {
+  height:auto !important;
+  min-height:0 !important;
+  max-height:min(68vh,550px) !important;
+  resize:both;
+  overflow:auto;
+}
+#ricoRemixFloatHeader {flex-shrink:0;}
+#ricoRemixClose {font-size:10px !important;padding:3px 9px !important;}
+#ricoRemixHelp {
+  flex:0 0 auto;
+  padding:8px 10px;
+  font:11px/1.4 Tahoma,Arial,sans-serif;
+  color:var(--rico-theme-fg,#fff);
+}
+#ricoRemixEditor #ricoRemixEntries {
+  flex:0 1 auto !important;
+  min-height:0 !important;
+  max-height:210px !important;
+  overflow-y:auto !important;
+}
+#ricoRemixEditor #ricoRemixEntries:empty {display:none;}
+#ricoRemixEditor #ricoRemixStatus:empty {display:none;}
+#ricoRemixEditor .rico-remix-fields button {white-space:nowrap;}
