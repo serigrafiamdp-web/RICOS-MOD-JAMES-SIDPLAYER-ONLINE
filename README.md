@@ -101,7 +101,17 @@ Project: https://github.com/serigrafiamdp-web/RICOS-MOD-JAMES-SIDPLAYER-ONLINE
 
 Online Player: https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/
 
-## CURRENT STABLE CHECKPOINT — TEST62 PASS (2026-11-08)
+## CURRENT STABLE CHECKPOINT — TEST64 PASS (2026-11-08)
+
+**TEST64 PASS confirmed by the project owner:** beta-key publishing of public HVSC reference playlists, temporary removal of songs with ×, and permanent removal-only edits via a fixed **SAVE** button and password dialog in the floating player. Cloudflare Worker + D1 are deployed and working.
+
+- [TEST64 PASS checkpoint and follow-up](docs/CHECKPOINT_TEST64_PASS_2026-11-08.md)
+- [Technical architecture and D1 operations](docs/ARCHITECTURE_COMMUNITY_HVSC_D1_TEST62.md)
+- [Player TEST64](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=64save)
+
+**Next candidate TEST65 (not implemented):** + buttons to add songs from existing playlists to a new MY PLAYLIST without interrupting playback; preserve ranked lists as read-only.
+
+## PREVIOUS STABLE CHECKPOINT — TEST62 PASS (2026-11-08)
 
 **User-confirmed working state: TEST62 PASS** — public community playlist publishing through Cloudflare Worker + D1 using only HVSC `pack/file` references. GitHub Pages hosts the fixed 59,626-SID library. Older checkpoints below remain historical.
 
