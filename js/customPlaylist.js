@@ -1144,6 +1144,7 @@
       var draftItemsEl=document.getElementById('ricoLibraryDraftItems');
       var draftCountEl=document.getElementById('ricoDraftCount');
       var draftNameEl=document.getElementById('ricoLibraryListName');
+      var draftCreatorEl=document.getElementById('ricoLibraryCreator');
       var addAllButton=document.getElementById('ricoLibraryAddAll');
       var saveDraftButton=document.getElementById('ricoLibrarySaveList');
       var newDraftButton=document.getElementById('ricoLibraryNewList');
@@ -1151,6 +1152,7 @@
       // Original SID player suppresses mousedown and handles the space bar.
       ['mousedown','mouseup','pointerdown','pointerup','click','dblclick','keydown','keyup','keypress'].forEach(function(type){
         draftNameEl.addEventListener(type,function(event){event.stopPropagation();});
+        draftCreatorEl.addEventListener(type,function(event){event.stopPropagation();});
       });
       var statusEl=document.getElementById('ricoLibraryStatus');
       var manifest=null, category='musicians', shelf='', shelfData=null, selected=null, token=0;
@@ -1278,7 +1280,7 @@
         if(draftBytes+bytes.length>64*1024*1024)throw Error('Playlist limit: 64 MB.');
         var entry=parseSID(bytes,{name:track.file,size:bytes.length});
         if(!entry)throw Error('Invalid SID: '+track.file);
-        draft.push({key:key,entry:entry});
+        draft.push({key:key,entry:entry,pack:track.pack||section.pack,file:track.file});
         draftBytes+=bytes.length;
         return true;
       }
@@ -1334,10 +1336,12 @@
         if(!title){status('Enter a playlist name first.');draftNameEl.focus();return;}
         draftBusy=true;renderDraft();
         try{
-          var data={format:'ricos-sid-playlist',version:1,name:title,createdBy:'You',
+          var creator=draftCreatorEl.value.trim();
+          if(!creator){status('Enter your nickname in Playlist by before saving.');draftCreatorEl.focus();return;}
+          var data={format:'ricos-sid-playlist',version:2,name:title,createdBy:creator.slice(0,60),
             createdAt:new Date().toISOString(),
             tracks:draft.map(function(item){
-              return {file:item.entry.file||'track.sid',sidBase64:encode(item.entry.localBytes)};
+              return {pack:item.pack,file:item.file};
             })};
           if(draftId)data.id=draftId;
           else data.id='list-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);
