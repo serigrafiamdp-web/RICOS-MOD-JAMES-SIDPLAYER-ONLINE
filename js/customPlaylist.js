@@ -158,7 +158,7 @@
   }
   // TEST64: the public beta key is requested in a small, accessible overlay.
   // Never persist it in localStorage, DOM attributes or GitHub.
-  function askBetaKeyDialog(){
+  function askBetaKeyDialog(action){
     return new Promise(function(resolve){
       var cover=document.createElement('div');
       cover.className='rico-beta-overlay';
@@ -168,16 +168,16 @@
       dialog.setAttribute('aria-modal','true');
       dialog.setAttribute('aria-label','Beta key for saving playlist');
       var heading=document.createElement('strong');
-      heading.textContent='SAVE CHANGES';
+      heading.textContent=action==='PUBLISH'?'PUBLISH PLAYLIST':'SAVE CHANGES';
       var message=document.createElement('p');
-      message.textContent='Enter the beta key to make your song removals permanent for everyone.';
+      message.textContent=action==='PUBLISH'?'Enter the beta key to publish this playlist for everyone.':'Enter the beta key to make your song removals permanent for everyone.';
       var input=document.createElement('input');
       input.type='password';input.placeholder='Beta key';input.autocomplete='off';
       input.setAttribute('aria-label','Beta key');
       input.required=true;
       var actions=document.createElement('div');actions.className='rico-beta-actions';
       var cancel=document.createElement('button');cancel.type='button';cancel.textContent='CANCEL';
-      var save=document.createElement('button');save.type='submit';save.textContent='SAVE';
+      var save=document.createElement('button');save.type='submit';save.textContent=action==='PUBLISH'?'PUBLISH':'SAVE';
       actions.appendChild(cancel);actions.appendChild(save);
       dialog.appendChild(heading);dialog.appendChild(message);dialog.appendChild(input);dialog.appendChild(actions);
       cover.appendChild(dialog);document.body.appendChild(cover);
@@ -285,6 +285,7 @@
       option.value=d.id;option.textContent=d.name+' ('+d.tracks.length+')';target.appendChild(option);
     });
     target.value=selected?selected.id:'';
+    if(typeof window.ricoRenderRemixCommunityRows==='function')window.ricoRenderRemixCommunityRows();
     var editorTarget=document.getElementById('ricoRemixEditorTarget');
     if(editorTarget){
       editorTarget.textContent='';
@@ -353,15 +354,18 @@
       remixNotice('Playing '+draft.name+' (unpublished draft). You can keep adding with +.');
     }catch(error){remixNotice('Could not preview remix: '+error.message);}
   }
-  async function publishRemix(){
-    var draft=selectedRemix();
+  async function publishRemix(id){
+    var draft=id ? remixDrafts.find(function(d){return d.id===id;}) : selectedRemix();
     if(remixBusy||!draft)return;
-    draft.name=$('#ricoRemixName').val().trim();
-    draft.creator=$('#ricoRemixCreator').val().trim();
+    if(!id){
+      draft.name=$('#ricoRemixName').val().trim();
+      draft.creator=$('#ricoRemixCreator').val().trim();
+    }
+    draft.name=draft.name.trim();draft.creator=draft.creator.trim();
     if(!draft.name||!draft.creator){remixNotice('Enter remix name and creator first.');return;}
     if(!draft.tracks.length){remixNotice('Add some SID using + before publishing.');return;}
     preserveRemixes();
-    var key=await askBetaKeyDialog();
+    var key=await askBetaKeyDialog('PUBLISH');
     if(!key)return;
     remixBusy=true;renderRemixes();
     try{
@@ -395,6 +399,15 @@
     });
     $('#ricoRemixNew').on('click',function(event){event.stopPropagation();createRemix();});
     $('#ricoRemixPublish').on('click',function(event){event.stopPropagation();publishRemix();});
+    window.ricoPublishRemixDraft=publishRemix;
+    window.ricoOpenRemixDraft=function(id){
+      if(!remixDrafts.some(function(d){return d.id===id;}))return;
+      remixTarget=id;remixOpen=true;preserveRemixes();renderRemixes();
+    };
+    window.ricoPlayRemixDraftFromCommunity=function(id){
+      if(!remixDrafts.some(function(d){return d.id===id;}))return;
+      remixTarget=id;preserveRemixes();renderRemixes();playRemixDraft();
+    };
     $('#ricoRemixPlay').on('click',function(event){event.stopPropagation();playRemixDraft();});
     $('#ricoRemixName,#ricoRemixCreator').on('input',function(){
       var current=selectedRemix();if(!current)return;
@@ -1408,6 +1421,31 @@
       });
     }
     window.ricoRefreshCommunityCatalog=loadCommunityCatalog;
+    // In-progress remix rows visually share the public community list.
+    // They exist only within this visitor's browser session until PUBLISH succeeds.
+    function renderRemixCommunityRows(){
+      if(!communityItems)return;
+      Array.prototype.forEach.call(communityItems.querySelectorAll('.rico-community-remix-row'),function(el){el.remove();});
+      if(!remixDrafts.length)return;
+      var fragment=document.createDocumentFragment();
+      remixDrafts.forEach(function(d){
+        var row=document.createElement('div');row.className='rico-community-row rico-community-remix-row';
+        var label=document.createElement('span');label.className='rico-community-label';
+        label.textContent=d.name+' — Playlist by '+(d.creator||'Unknown')+' · '+d.tracks.length+' SID';
+        row.appendChild(label);
+        function action(name,callback,disabled){
+          var button=document.createElement('button');button.type='button';button.textContent=name;
+          button.disabled=!!disabled;button.addEventListener('click',function(e){e.stopPropagation();callback();});
+          row.appendChild(button);
+        }
+        action('PLAY',function(){window.ricoPlayRemixDraftFromCommunity(d.id);},!d.tracks.length);
+        action('EDIT',function(){window.ricoOpenRemixDraft(d.id);},false);
+        action('PUBLISH',function(){window.ricoPublishRemixDraft(d.id);},!d.tracks.length||remixBusy);
+        fragment.appendChild(row);
+      });
+      communityItems.appendChild(fragment);
+    }
+    window.ricoRenderRemixCommunityRows=renderRemixCommunityRows;
     async function loadCommunityCatalog() {
       if (!communityItems) return;
       var requestNumber=++communityRequestNumber;
@@ -1438,7 +1476,8 @@
         }
         if(requestNumber!==communityRequestNumber) return;
         communityItems.textContent='';
-        if(!catalog.playlists.length) {
+        renderRemixCommunityRows();
+        if(!catalog.playlists.length && !remixDrafts.length) {
           cancelStartupPlaylist();
           communityItems.textContent='No additional published playlists available.';
           return;
