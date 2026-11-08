@@ -1617,7 +1617,8 @@
             var stored=await dbCall('readonly',function(store){return store.get(item.id);});
             if(!stored||!Array.isArray(stored.tracks)||!stored.tracks.length)
               throw Error('Local collection missing.');
-            if(stored.tracks.length>40)throw Error('Max 40 SID per publication in this beta.');
+            var maxSid=Number(cap.sidUploadLimit)||15;
+            if(stored.tracks.length>maxSid)throw Error('Max '+maxSid+' SID per publication with the current storage provider.');
             var creator=String(stored.createdBy||'').trim();
             if(!creator||creator==='Unknown'){
               creator=window.prompt('Collection creator / uploader:', '')||'';
