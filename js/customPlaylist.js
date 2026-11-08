@@ -788,6 +788,52 @@
           libraryEl.appendChild(row);
         });
       }
+      // Same COMMUNITY PLAYLISTS tab: locally saved lists are private to this browser.
+      // Public catalog remains separate and unchanged.
+      var localCommunity=document.getElementById('ricoLocalCommunityItems');
+      if(localCommunity){
+        localCommunity.textContent='';
+        var heading=document.createElement('div');
+        heading.className='rico-local-community-heading';
+        heading.textContent='YOUR PLAYLISTS · SAVED ON THIS DEVICE ('+rows.length+')';
+        localCommunity.appendChild(heading);
+        if(!rows.length){
+          var empty=document.createElement('div');
+          empty.className='rico-local-community-empty';
+          empty.textContent='Create a playlist in HVSC LIBRARY and save it here.';
+          localCommunity.appendChild(empty);
+        }
+        rows.forEach(function(item){
+          var line=document.createElement('div');
+          line.className='rico-community-row rico-local-community-row';
+          var label=document.createElement('span');
+          label.className='rico-community-label';
+          var caption=document.createElement('span');
+          caption.className='rico-community-description';
+          caption.textContent=item.name+' — Playlist by '+(item.createdBy||'Unknown')+' · '+item.tracks.length+' SID';
+          label.appendChild(caption);
+          var load=document.createElement('button');
+          load.type='button';load.textContent='LOAD';
+          load.addEventListener('click',async function(event){
+            event.stopPropagation();
+            load.disabled=true;
+            try{
+              var stored=await dbCall('readonly',function(store){return store.get(item.id);});
+              if(!stored)throw Error('Playlist not found.');
+              currentId=item.id;
+              await loadStoredPlaylist(stored);
+              say('Loaded '+stored.name+' · Playlist by '+(stored.createdBy||'Unknown')+'.');
+            }catch(error){say(error.message||'Could not load playlist.');}
+            finally{load.disabled=false;}
+          });
+          line.appendChild(label);line.appendChild(load);
+          localCommunity.appendChild(line);
+        });
+        var publishedHeading=document.createElement('div');
+        publishedHeading.className='rico-local-community-heading';
+        publishedHeading.textContent='PUBLISHED PLAYLISTS';
+        localCommunity.appendChild(publishedHeading);
+      }
     }
     function run(id,action) {
       document.getElementById(id).addEventListener('click',function(){
@@ -1334,10 +1380,10 @@
         if(draftBusy||!draft.length)return;
         var title=draftNameEl.value.trim();
         if(!title){status('Enter a playlist name first.');draftNameEl.focus();return;}
+        var creator=draftCreatorEl.value.trim();
+        if(!creator){status('Enter your nickname in Playlist by before saving.');draftCreatorEl.focus();return;}
         draftBusy=true;renderDraft();
         try{
-          var creator=draftCreatorEl.value.trim();
-          if(!creator){status('Enter your nickname in Playlist by before saving.');draftCreatorEl.focus();return;}
           var data={format:'ricos-sid-playlist',version:2,name:title,createdBy:creator.slice(0,60),
             createdAt:new Date().toISOString(),
             tracks:draft.map(function(item){
@@ -1349,7 +1395,7 @@
           await dbCall('readwrite',function(store){return store.put(data);});
           draftId=data.id;
           await refreshSaved();
-          status('Saved locally: '+title+' ('+data.tracks.length+' SID). Open MY PLAYLISTS to load and play.');
+          status('Saved locally: '+title+' ('+data.tracks.length+' SID). Open COMMUNITY PLAYLISTS to load and play.');
           say('Saved locally: '+title+' ('+data.tracks.length+' SID).');
         }catch(error){status('Could not save: '+error.message);}
         finally{draftBusy=false;renderDraft();}
