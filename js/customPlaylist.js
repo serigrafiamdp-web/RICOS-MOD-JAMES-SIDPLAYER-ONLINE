@@ -41,6 +41,14 @@
   var communityWriteApi='https://ricos-sid-community.serigrafiamdp.workers.dev';
   var savingCommunityEdits=false;
   function promptBetaKey(){return window.prompt('BETA KEY required to publish permanent changes:');}
+  async function ensureBetaServerReady(){
+    var response=await fetch(communityWriteApi+'/capabilities',{cache:'no-store'});
+    if(!response.ok)throw Error('TEST63 backend not deployed yet. No public changes were made.');
+    var data=await response.json();
+    if(!data||!data.betaKeyRequired||data.editMode!=='remove-only'||!data.configured)
+      throw Error('TEST63 beta protection is not configured in Cloudflare.');
+  }
+
 
 
   function escapeFilename(name) {
@@ -158,6 +166,8 @@
       $('#ricoLiveStatus').text('No songs have been removed.');
       return;
     }
+    try{await ensureBetaServerReady();}
+    catch(error){$('#ricoLiveStatus').text(error.message);return;}
     var key=promptBetaKey();
     if(key===null||!key)return;
     savingCommunityEdits=true;
@@ -1473,6 +1483,8 @@
         if(!title){status('Enter a playlist name first.');draftNameEl.focus();return;}
         var creator=draftCreatorEl.value.trim();
         if(!creator){status('Enter your nickname in Playlist by before saving.');draftCreatorEl.focus();return;}
+        try{await ensureBetaServerReady();}
+        catch(error){status(error.message);return;}
         var betaKey=promptBetaKey();
         if(betaKey===null||!betaKey){status('Publication cancelled. Your playlist remains in MY PLAYLIST.');return;}
         draftBusy=true;renderDraft();
