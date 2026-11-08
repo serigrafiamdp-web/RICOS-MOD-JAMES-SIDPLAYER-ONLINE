@@ -340,6 +340,11 @@
   var activePublicCollection = null;
   // TEST95: ranked TOP 100 sources retain their published order and entries.
   var loadedRankedPlaylist=false;
+  // TEST106: source identity for saving editable playlists and REMIX drafts.
+  var activeRemixDraftId=null;
+  var activeReferenceTracks=null;
+  var activeLocalSavedId=null;
+  var activeLocalOrderDirty=false;
   // TEST93: Resolve historical HVSC source filenames against the real HVSC #85
   // shelf index. Do not guess pack paths or use a filename match alone.
   var embeddedHvscPaths=[];
@@ -583,6 +588,9 @@
       insertAt(activePublicCollection.tracks,index,destination);
       activePublicCollection.dirtyOrder=true;
     }
+    if(activeReferenceTracks&&activeReferenceTracks.length===custom.length)
+      insertAt(activeReferenceTracks,index,destination);
+    if(!activePublicPlaylist&&!activePublicCollection)activeLocalOrderDirty=true;
     player.sidListIndex=relocateCursor(player.sidListIndex,index,destination);
     selectedLiveIndex=relocateCursor(selectedLiveIndex,index,destination);
     queuedLiveIndex=relocateCursor(queuedLiveIndex,index,destination);
@@ -596,7 +604,7 @@
     }
     $('#ricoLiveStatus').text(activePublicPlaylist||activePublicCollection
       ? 'Order changed locally. Press SAVE and enter the beta key to update the public list.'
-      : 'Order changed for this playback. Save or publish a personal list to keep it.');
+      : 'Order changed. Press SAVE to keep this order without publishing.');
   }
   function removeLiveSong(index){
     if(!customActive||loadedRankedPlaylist||activePublicCollection||index<0||index>=custom.length)return;
@@ -604,6 +612,8 @@
     custom.splice(index,1);
     if(activePublicPlaylist&&Array.isArray(activePublicPlaylist.tracks))activePublicPlaylist.tracks.splice(index,1);
     if(embeddedHvscPaths.length===custom.length+1)embeddedHvscPaths.splice(index,1);
+    if(activeReferenceTracks&&activeReferenceTracks.length===custom.length+1)activeReferenceTracks.splice(index,1);
+    if(!activePublicPlaylist&&!activePublicCollection)activeLocalOrderDirty=true;
     if(!custom.length){
       player.isPlaying=false;player.isPaused=false;
       player.sidListIndex=false;
@@ -879,6 +889,9 @@
         name:draft.name.trim()||'MY REMIX',createdBy:draft.creator.trim()||'REMIX PREVIEW',
         tracks:draft.tracks.map(function(t){return {pack:t.pack,file:t.file};})};
       await window.ricoPlayRemixDraft(payload);
+      activeRemixDraftId=draft.id;
+      activeLocalOrderDirty=false;
+      renderLivePlaylist();
       remixNotice('Playing '+draft.name+' (unpublished draft). You can keep adding with +.');
     }catch(error){remixNotice('Could not preview remix: '+error.message);}
   }
@@ -988,13 +1001,16 @@
     if(selectedLiveIndex!==null && selectedLiveIndex>=list.length)selectedLiveIndex=null;
     $('#ricoRemixBar').css('display',(!landingPlaylists&&list.length)?'flex':'none');
     $('#ricoLiveCount').text('(' + list.length + ')');
-    var canSave=!!(customActive&&!landingPlaylists&&
-      ((activePublicPlaylist&&activePublicPlaylist.remoteId)||activePublicCollection));
+    // TEST106: SAVE is visible for any editable loaded list, never TOP 100.
+    var canSave=!!(customActive&&!landingPlaylists&&!loadedRankedPlaylist&&list.length);
     var hasChanges=canSave&&(activePublicCollection?activePublicCollection.dirtyOrder:
-      (activePublicPlaylist.dirtyOrder||
-        activePublicPlaylist.tracks.length!==activePublicPlaylist.originalCount));
+      activePublicPlaylist?(activePublicPlaylist.dirtyOrder||
+        activePublicPlaylist.tracks.length!==activePublicPlaylist.originalCount):activeLocalOrderDirty);
     $('#ricoLiveSave').css('display',canSave?'inline-block':'none')
-      .prop('disabled',savingCommunityEdits||!hasChanges);
+      .prop('disabled',savingCommunityEdits||!hasChanges)
+      .attr('title',activePublicPlaylist||activePublicCollection
+        ? 'Save updated public order (beta key required)'
+        : 'Save current song order locally; publication requires beta key');
     $('#ricoLivePlaylistTitle').text(landingPlaylists ? "COMMUNITY PLAYLISTS" : (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'));
     // TEST34: keep the creator/ratings strip visible while a playlist is loaded.
     // Never confuse the playlist creator with each SID's composer.
@@ -1087,7 +1103,42 @@
     }
   }
 
-  $('#ricoLiveSave').on('click',function(event){event.stopPropagation();savePublicRemovals();});
+  $('#ricoLiveSave').on('click',async function(event){
+    event.stopPropagation();
+    if(loadedRankedPlaylist||!customActive)return;
+    if(activePublicPlaylist||activePublicCollection){await savePublicRemovals();return;}
+    if(!activeLocalOrderDirty)return;
+    try{
+      if(activeRemixDraftId){
+        var draft=remixDrafts.find(function(d){return d.id===activeRemixDraftId;});
+        if(!draft)throw Error('REMIX draft no longer exists. Reload before saving.');
+        if(!activeReferenceTracks||activeReferenceTracks.length!==custom.length)
+          throw Error('REMIX references are out of sync. Reload the draft.');
+        // Preserve all metadata and any songs added since PLAY; only reorder.
+        var byKey=new Map(draft.tracks.map(function(t){return [t.pack+'::'+t.file,t];}));
+        var ordered=[],included=new Set();
+        activeReferenceTracks.forEach(function(t){
+          var key=t.pack+'::'+t.file;
+          if(byKey.has(key)&&!included.has(key)){
+            ordered.push(byKey.get(key));included.add(key);
+          }
+        });
+        draft.tracks.forEach(function(t){
+          var key=t.pack+'::'+t.file;
+          if(!included.has(key)){ordered.push(t);included.add(key);}
+        });
+        draft.tracks=ordered;
+        preserveRemixes();renderRemixes();
+        activeLocalOrderDirty=false;
+        renderLivePlaylist();
+        $('#ricoLiveStatus').text('REMIX order saved in this browser. PUBLISH requests the beta key.');
+      }else{
+        if(typeof window.ricoSaveCurrentPlaylistLocal!=='function')
+          throw Error('Local playlist storage unavailable.');
+        await window.ricoSaveCurrentPlaylistLocal();
+      }
+    }catch(error){$('#ricoLiveStatus').text('SAVE failed: '+error.message);}
+  });
 
   function showLivePlaylist(visible) {
     liveVisible = !!visible;
@@ -1593,6 +1644,33 @@
       for (var i=0; i<binary.length; i++) out[i]=binary.charCodeAt(i);
       return out;
     }
+    // TEST106: persist active playlist order, not the import draft used by SAVE LIST.
+    window.ricoSaveCurrentPlaylistLocal=async function(){
+      if(!customActive||loadedRankedPlaylist||!custom.length)
+        throw Error('No editable playlist is loaded.');
+      var title=(loadedPlaylistTitle||nameEl.value||'MY PLAYLIST').trim().slice(0,100);
+      var creator=(loadedPlaylistCreator||'RICO').trim().slice(0,60);
+      if(!title||!creator)throw Error('Playlist title or creator missing.');
+      var version,tracks;
+      if(activeReferenceTracks&&activeReferenceTracks.length===custom.length){
+        version=2;
+        tracks=activeReferenceTracks.map(function(t){return {pack:t.pack,file:t.file};});
+      }else{
+        if(!custom.every(function(t){return t.localBytes instanceof Uint8Array;}))
+          throw Error('Original SID data unavailable; cannot save locally.');
+        version=1;
+        tracks=custom.map(function(t){return {file:t.file||'track.sid',sidBase64:encode(t.localBytes)};});
+      }
+      var old=activeLocalSavedId?await dbCall('readonly',function(store){return store.get(activeLocalSavedId);}):null;
+      var record={format:'ricos-sid-playlist',version:version,
+        id:old?old.id:'list-'+Date.now()+'-'+Math.random().toString(36).slice(2,9),
+        name:title,createdBy:creator,createdAt:(old&&old.createdAt)||new Date().toISOString(),
+        updatedAt:new Date().toISOString(),tracks:tracks};
+      await dbCall('readwrite',function(store){return store.put(record);});
+      activeLocalSavedId=record.id;activeLocalOrderDirty=false;
+      await refreshSaved();renderLivePlaylist();
+      $('#ricoLiveStatus').text('Order saved locally: '+title+'. Public playlists unchanged.');
+    };
     function makePlaylist() {
       var name = nameEl.value.trim();
       if (!name) throw Error('Enter a playlist name.');
@@ -1637,6 +1715,8 @@
           entry.sceneGroup=track.group.trim();
       });
       activePublicPlaylist=null;activePublicCollection=null;
+      activeRemixDraftId=null;activeReferenceTracks=null;activeLocalSavedId=null;
+      activeLocalOrderDirty=false;
       embeddedHvscPaths=data.tracks.map(function(t){
         return t&&typeof t.file==='string'&&/^(?:MUSICIANS|DEMOS)\//.test(t.file)?t.file:'';
       });
@@ -1661,7 +1741,11 @@
     async function loadStoredPlaylist(data,localImport) {
       resetSoftTransition(true);
       if (!data || data.format!=='ricos-sid-playlist') throw Error('Unsupported playlist.');
-      if (data.version===1) { loadPlaylist(data,undefined,!!localImport); return; }
+      if (data.version===1) {
+        loadPlaylist(data,undefined,!!localImport);
+        activeLocalSavedId=localImport&&typeof data.id==='string'?data.id:null;
+        return;
+      }
       if (data.version!==2 || !Array.isArray(data.tracks) ||
           !data.tracks.length || data.tracks.length>2000) throw Error('Invalid reference playlist.');
       if(typeof JSZip==='undefined') throw Error('SID ZIP decoder not available.');
@@ -1691,6 +1775,10 @@
       }
       // Do not change playback until every reference has been resolved and validated.
       activePublicPlaylist=null;activePublicCollection=null;
+      activeRemixDraftId=null;
+      activeReferenceTracks=data.tracks.map(function(t){return {pack:t.pack,file:t.file};});
+      activeLocalSavedId=localImport&&typeof data.id==='string'?data.id:null;
+      activeLocalOrderDirty=false;
       loadedRankedPlaylist=false;
       embeddedHvscPaths=[];
       cancelPendingCommunityStartup();
