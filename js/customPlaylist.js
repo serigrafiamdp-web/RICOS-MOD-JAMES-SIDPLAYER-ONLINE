@@ -404,7 +404,10 @@
     var toggle=$('#ricoRemixToggle'),target=$('#ricoRemixTarget');
     if(!toggle.length)return;
     toggle.on('click',function(event){event.stopPropagation();remixOpen=true;renderRemixes();});
-    $('#ricoRemixClose').on('click',function(event){event.stopPropagation();remixOpen=false;preserveRemixes();renderRemixes();if(typeof window.ricoRenderRemixCommunityRows==='function')window.ricoRenderRemixCommunityRows();});
+    $('#ricoRemixClose').on('click',function(event){
+      event.stopPropagation();remixOpen=false;preserveRemixes();renderRemixes();
+      if(typeof window.ricoOpenCommunityFromRemix==='function')window.ricoOpenCommunityFromRemix();
+    });
     $('#ricoRemixEditorTarget').on('change',function(event){
       event.stopPropagation();remixTarget=this.value;preserveRemixes();renderRemixes();
     });
@@ -1304,6 +1307,17 @@
         loadCommunityCatalog();
       }
     }
+    // TEST71: closing Remix Creator leads directly to the unified COMMUNITY PLAYLISTS.
+    window.ricoOpenCommunityFromRemix=function(){
+      cancelStartupPlaylist();
+      showCommunity(true);
+      var manager=player.dialogManager;
+      if(manager && manager.dialogShown!=='chooseSidDialog'){
+        if(manager.dialogShown&&typeof manager.hideDialog==='function')
+          manager.hideDialog(manager.dialogShown);
+        manager.showDialog('chooseSidDialog');
+      }
+    };
     // TEST45: shared TOP 100 browser. Selecting a tab never changes playback.
     async function getRankData(kind){
       if(ricoRankCache[kind])return ricoRankCache[kind];
