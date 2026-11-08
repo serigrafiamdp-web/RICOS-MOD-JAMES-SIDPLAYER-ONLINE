@@ -1287,6 +1287,9 @@
     }
     cancelPendingCommunityStartup=cancelStartupPlaylist;
     function showCommunity(visible,tabName) {
+      // TEST72: legacy USER LOCAL browser is retired; keep SID bytes only as
+      // internal playback buffers. Never expose its duplicated playlist.
+      if(!visible&&tabName==='local')visible=true;
       communityActive=visible;
       browserTab=visible?'community':(tabName==='local'?'local':'games');
       var dialog=document.getElementById('chooseSidDialog');
@@ -1699,7 +1702,7 @@
       showCommunity(true);
     });
     if(communityTab) communityTab.addEventListener('click',function(){showCommunity(true);});
-    [['ricoDefaultTab','games'],['ricoCustomTab','local']].forEach(function(choice) {
+    [['ricoDefaultTab','games']].forEach(function(choice) {
       var tab=document.getElementById(choice[0]);
       if(tab) tab.addEventListener('click',function(){
         cancelStartupPlaylist();
