@@ -1455,7 +1455,7 @@ SidPlayer.prototype = {
     $('#aboutSIDButton').on('click', function() {
       sidPlayer.dialogManager.showDialog('aboutSIDDialog');
     });
-    $('#aboutClose').on('click', function() {
+    $('#aboutClose, #aboutSIDClose').on('click', function() {
       sidPlayer.dialogManager.hideDialog();
     });
 
