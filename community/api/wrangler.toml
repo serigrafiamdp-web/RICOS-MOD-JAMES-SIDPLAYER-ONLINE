@@ -1,0 +1,8 @@
+name = "ricos-sid-community"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ricos-sid-community"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
