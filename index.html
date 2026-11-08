@@ -2,7 +2,7 @@
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css?v=test66remix2">
+    <link rel="stylesheet" href="css/style.css?v=test67float1">
     <title>RICOS MOD - JAMES SIDPLAYER ONLINE</title>
 
     <link rel="shortcut icon" type="image/png" href="images/icon16.png"/>
@@ -416,7 +416,15 @@
         <select id="ricoRemixTarget" aria-label="Remix destination"><option value="">SELECT REMIX</option></select>
         <span id="ricoRemixCount">0 SID</span>
       </div>
-      <div id="ricoRemixEditor" class="rico-remix-editor" style="display:none;">
+      <div id="ricoLiveStatus" role="status" style="padding:3px 8px;color:#ffb6a9;font-size:11px;"></div>
+      <div id="ricoLivePlaylistItems"></div>
+      <div id="ricoLiveWidthGrip" title="Drag horizontally to change playlist width" aria-label="Resize playlist width" role="separator" aria-orientation="vertical" tabindex="0"></div>
+      <div id="ricoLiveResizeGrip" title="Drag to change playlist height" aria-label="Resize playlist height"></div>
+    </aside>
+
+    <aside id="ricoRemixEditor" class="rico-remix-editor" style="display:none;" role="dialog" aria-label="Remix playlist creator" aria-modal="false">
+      <div id="ricoRemixFloatHeader"><strong>REMIX PLAYLIST CREATOR</strong><button type="button" id="ricoRemixClose" aria-label="Close remix creator">×</button></div>
+      <div id="ricoRemixDraftChooser"><label for="ricoRemixEditorTarget">EDIT REMIX</label><select id="ricoRemixEditorTarget" aria-label="Choose draft to edit"><option value="">SELECT REMIX</option></select></div>
         <div class="rico-remix-fields">
           <input id="ricoRemixName" type="text" maxlength="100" placeholder="Remix name" aria-label="Remix name" />
           <input id="ricoRemixCreator" type="text" maxlength="60" placeholder="Playlist by" aria-label="Remix creator" />
@@ -426,12 +434,7 @@
         </div>
         <div id="ricoRemixEntries" class="rico-remix-entries" role="list"></div>
         <div id="ricoRemixStatus" role="status"></div>
-      </div>
-      <div id="ricoLiveStatus" role="status" style="padding:3px 8px;color:#ffb6a9;font-size:11px;"></div>
-      <div id="ricoLivePlaylistItems"></div>
-      <div id="ricoLiveWidthGrip" title="Drag horizontally to change playlist width" aria-label="Resize playlist width" role="separator" aria-orientation="vertical" tabindex="0"></div>
-      <div id="ricoLiveResizeGrip" title="Drag to change playlist height" aria-label="Resize playlist height"></div>
-    </aside>
+      </aside>
 
     <div id="sidInfo" style="position: absolute; bottom: 21px; top: 20px; left: 0; width: 220px; background-color: #eeeeee; color: #222222; font-size: 10px; padding: 4px; border: 1px solid #444444; display: none">
       <div id="" style="position: absolute; top: 0; left: 0; right: 0; height: 22px; background-color: #111111">
@@ -490,6 +493,6 @@
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test26"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script type="text/javascript" src="js/customPlaylist.js?v=test66remix2"></script>
+    <script type="text/javascript" src="js/customPlaylist.js?v=test67float1"></script>
   </body>
 </html>
