@@ -1429,3 +1429,34 @@ left: 1px;
   font:11px Tahoma,Arial,sans-serif;cursor:pointer;
 }
 #ricoLivePlaylistItems .rico-live-save-changes:hover {background:#31625c;}
+
+/* TEST64 — fixed save in floating playlist, compact modal for shared beta key. */
+#ricoLivePlaylistHeader .rico-live-head-actions {display:flex;align-items:center;flex:none;gap:6px;}
+#ricoLiveSave {
+  color:#dce5e7;background:transparent;border:1px solid #728792;
+  padding:3px 8px;cursor:pointer;font:10px Tahoma,Arial,sans-serif;
+}
+#ricoLiveSave:hover:not(:disabled){background:#305649;}
+#ricoLiveSave:disabled {opacity:.43;cursor:default;}
+.rico-beta-overlay {
+  position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.58);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.rico-beta-dialog {
+  box-sizing:border-box;width:min(350px,100%);padding:17px;
+  background:#19262f;color:#e3edf1;border:1px solid #78909c;
+  box-shadow:0 8px 30px #0008;font:12px Tahoma,Arial,sans-serif;
+}
+.rico-beta-dialog strong {font-size:13px;}
+.rico-beta-dialog p {line-height:1.5;font-size:12px;}
+.rico-beta-dialog input {
+  box-sizing:border-box;width:100%;height:32px;padding:6px 8px;
+  color:#111;background:white;border:1px solid #8295a0;
+  font:13px Tahoma,Arial,sans-serif;
+}
+.rico-beta-actions {display:flex;justify-content:flex-end;gap:8px;margin-top:12px;}
+.rico-beta-actions button {
+  color:#e3edf1;background:#253b48;border:1px solid #738b98;
+  padding:6px 13px;cursor:pointer;font:11px Tahoma,Arial,sans-serif;
+}
+.rico-beta-actions button:hover {background:#375b61;}
