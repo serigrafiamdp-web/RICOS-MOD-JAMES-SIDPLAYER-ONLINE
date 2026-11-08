@@ -36,6 +36,12 @@
   var loadedPlaylistTitle = '';
   // TEST32: playlist curator is separate from the artist metadata of each SID.
   var loadedPlaylistCreator = '';
+  // TEST63: the loaded public v2 playlist is editable locally until beta-authorized PUT.
+  var activePublicPlaylist = null;
+  var communityWriteApi='https://ricos-sid-community.serigrafiamdp.workers.dev';
+  var savingCommunityEdits=false;
+  function promptBetaKey(){return window.prompt('BETA KEY required to publish permanent changes:');}
+
 
   function escapeFilename(name) {
     return (name || '').replace(/\.[sS][iI][dD]$/, '')
@@ -122,6 +128,55 @@
     return credits;
   }
 
+  function removeLiveSong(index){
+    if(!customActive||index<0||index>=custom.length)return;
+    var wasCurrent=player.sidListIndex===index;
+    custom.splice(index,1);
+    if(activePublicPlaylist&&Array.isArray(activePublicPlaylist.tracks))activePublicPlaylist.tracks.splice(index,1);
+    if(!custom.length){
+      player.isPlaying=false;player.isPaused=false;
+      player.sidListIndex=false;
+      player.initFileSelection();
+      $('#ricoLiveStatus').text('Empty temporary playlist. Reload original to restore songs.');
+    }else if(wasCurrent){
+      loadCustomIndex(Math.min(index,custom.length-1));
+    }else{
+      if(typeof player.sidListIndex==='number' && index<player.sidListIndex)player.sidListIndex--;
+      player.initFileSelection();
+    }
+    renderLivePlaylist();
+    $('#ricoLiveStatus').text('Song removed temporarily. Reload to undo.'+
+      (activePublicPlaylist&&activePublicPlaylist.remoteId?' Use SAVE CHANGES + beta key to update the public list.':''));
+  }
+  async function savePublicRemovals(){
+    if(savingCommunityEdits||!activePublicPlaylist||!activePublicPlaylist.remoteId)return;
+    if(!activePublicPlaylist.tracks.length){
+      $('#ricoLiveStatus').text('Keep at least one song in a public playlist.');
+      return;
+    }
+    if(activePublicPlaylist.tracks.length===activePublicPlaylist.originalCount){
+      $('#ricoLiveStatus').text('No songs have been removed.');
+      return;
+    }
+    var key=promptBetaKey();
+    if(key===null||!key)return;
+    savingCommunityEdits=true;
+    try{
+      var payload={format:'ricos-sid-playlist',version:2,
+        name:activePublicPlaylist.name,createdBy:activePublicPlaylist.createdBy,
+        tracks:activePublicPlaylist.tracks.map(function(t){return {pack:t.pack,file:t.file};})};
+      var response=await fetch(communityWriteApi+'/playlists/'+encodeURIComponent(activePublicPlaylist.remoteId),{
+        method:'PUT',headers:{'Content-Type':'application/json','X-Beta-Key':key},
+        body:JSON.stringify(payload)
+      });
+      var receipt=await response.json();
+      if(!response.ok)throw Error(receipt.error||'Could not save changes.');
+      activePublicPlaylist.originalCount=activePublicPlaylist.tracks.length;
+      $('#ricoLiveStatus').text('Public playlist updated · '+receipt.tracks+' SID. Changes visible to everyone.');
+      renderLivePlaylist();
+    }catch(err){$('#ricoLiveStatus').text('Public playlist unchanged: '+err.message);}
+    finally{savingCommunityEdits=false;}
+  }
   function renderLivePlaylist() {
     var holder = $('#ricoLivePlaylistItems').empty();
     ensureLivePlaylistCredits();
@@ -177,8 +232,22 @@
         }
         renderLivePlaylist();
       });
-      row.appendTo(holder);
+      if(customActive){
+        var wrap=$('<div>').addClass('rico-live-edit-row');
+        row.appendTo(wrap);
+        $('<button type="button">').addClass('rico-live-remove').text('×')
+          .attr('aria-label','Remove '+songTitle+' temporarily')
+          .attr('title','Remove song temporarily')
+          .on('click',function(event){event.stopPropagation();removeLiveSong(index);})
+          .appendTo(wrap);
+        wrap.appendTo(holder);
+      }else row.appendTo(holder);
     });
+    if(activePublicPlaylist&&activePublicPlaylist.remoteId&&customActive){
+      $('<button type="button">').addClass('rico-live-save-changes').text('SAVE CHANGES')
+        .attr('title','Save permanent removals using beta key')
+        .on('click',savePublicRemovals).appendTo(holder);
+    }
     var currentRow = holder.find('.rico-live-active');
     if (currentRow.length && liveVisible) currentRow[0].scrollIntoView({block:'nearest'});
   }
@@ -662,6 +731,7 @@
         if(track&&typeof track.group==='string'&&track.group.trim())
           entry.sceneGroup=track.group.trim();
       });
+      activePublicPlaylist=null;
       cancelPendingCommunityStartup();
       landingPlaylists = false;
       player.isPlaying=false;
@@ -711,6 +781,7 @@
         output.push(entry);
       }
       // Do not change playback until every reference has been resolved and validated.
+      activePublicPlaylist=null;
       cancelPendingCommunityStartup();
       landingPlaylists=false;
       player.isPlaying=false;player.isPaused=false;
@@ -1099,6 +1170,12 @@
               if(isStartup && !startupPlaylistPending) return;
               if(isStartup) cancelStartupPlaylist();
               await loadStoredPlaylist(data); // Plays only after all referenced SID files resolve.
+              activePublicPlaylist=item.remoteId&&data.version===2?{
+                remoteId:item.remoteId,name:data.name,createdBy:data.createdBy,
+                tracks:data.tracks.map(function(t){return {pack:t.pack,file:t.file};}),
+                originalCount:data.tracks.length
+              }:null;
+              renderLivePlaylist();
               selectedCommunityId=item.id||item.file;
               Array.prototype.forEach.call(communityItems.querySelectorAll('.rico-community-row'),function(other){
                 other.classList.toggle('rico-community-selected',other===row);
@@ -1396,6 +1473,8 @@
         if(!title){status('Enter a playlist name first.');draftNameEl.focus();return;}
         var creator=draftCreatorEl.value.trim();
         if(!creator){status('Enter your nickname in Playlist by before saving.');draftCreatorEl.focus();return;}
+        var betaKey=promptBetaKey();
+        if(betaKey===null||!betaKey){status('Publication cancelled. Your playlist remains in MY PLAYLIST.');return;}
         draftBusy=true;renderDraft();
         try{
           var data={format:'ricos-sid-playlist',version:2,name:title,createdBy:creator.slice(0,60),
@@ -1405,7 +1484,7 @@
             })};
           var publishResponse=await fetch(communityApiBase+'/playlists',{
             method:'POST',
-            headers:{'Content-Type':'application/json'},
+            headers:{'Content-Type':'application/json','X-Beta-Key':betaKey},
             body:JSON.stringify(data)
           });
           var receipt=await publishResponse.json();
