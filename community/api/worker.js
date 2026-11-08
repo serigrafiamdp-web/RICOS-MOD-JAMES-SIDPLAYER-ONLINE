@@ -37,6 +37,10 @@ export default {
     'access-control-allow-headers':'Content-Type, X-Beta-Key','access-control-max-age':'86400'}});
   }
   if(request.method==='POST' && origin!==ORIGIN)return text('Origin not allowed',403,origin);
+  if(request.method==='GET' && url.pathname==='/capabilities'){
+    return json({format:'ricos-community-capabilities',version:1,
+      betaKeyRequired:true,editMode:'remove-only',configured:!!env.BETA_EDIT_KEY},200,origin);
+  }
   if(request.method==='GET' && url.pathname==='/playlists'){
     const rows=await env.DB.prepare('SELECT id, title, creator, track_count FROM playlists ORDER BY created_at ASC LIMIT 500').all();
     return json({format:'ricos-community-catalog',version:1,playlists:rows.results.map(x=>({id:x.id,title:x.title,createdBy:x.creator,tracks:x.track_count}))},200,origin);
