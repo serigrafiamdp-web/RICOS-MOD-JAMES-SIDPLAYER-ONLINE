@@ -1,5 +1,13 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## Current test — TEST106 SAVE for non-ranked playlists (published, pending user PASS)
+
+**TEST106:** SAVE is visible for every non-ranked editable playlist, including unpublished REMIX previews such as **RICO'S BEST OF MUSICIANS**. It activates when the track order changes. Unpublished REMIX order is saved to the existing local draft without publishing; public playlists/collections still require the beta key to save to Cloudflare. Other local playlists save to browser IndexedDB. TOP 100 ranked sources stay immutable and have no SAVE button.
+
+- [Try TEST106](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=106save)
+- [TEST106 source behavior and user test](docs/TEST106_SAVE_EDITABLE_PLAYLISTS.md)
+- TEST105 arrow controls remain available (single click ±1, double click ±10) with hover tips.
+
 ## Current test — TEST105 REORDER (published, pending user PASS)
 
 **TEST105:** Floating playlist and REMIX editor arrows now move **±1 position on a single click** or **±10 positions on double-click**, with on-hover pointer hints. A 420 ms single-click decision window prevents a double-click from being counted as multiple moves. Song/reference order and playing/queued cursor mapping stay synchronized; ranked TOP 100 lists remain immutable. Source and CSS are published on GitHub; **browser verification by the owner is still pending**.
