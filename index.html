@@ -442,6 +442,13 @@
           <span class="rico-rating-note">Ratings coming soon</span>
         </span>
       </div>
+      <div id="ricoLiveTimerBar" class="rico-live-timer-bar">
+        <label for="ricoLiveTimer">AUTO TIMER</label>
+        <input id="ricoLiveTimer" type="text" value="03:00" maxlength="5" inputmode="numeric"
+          autocomplete="off" aria-label="Maximum time per SID in minutes and seconds"
+          title="MM:SS · Maximum time per SID. AUTO also skips after 2.5 seconds of genuine silence."/>
+        <span title="Automatic advance on genuine SID silence after playback starts">SILENCE DETECT</span>
+      </div>
       <div id="ricoRemixBar" class="rico-remix-bar">
         <button type="button" id="ricoRemixToggle" aria-expanded="false">REMIX PLAYLIST</button>
         <label for="ricoRemixTarget">ADD + TO</label>
@@ -581,6 +588,6 @@
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test87aboutsidclose"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script type="text/javascript" src="js/customPlaylist.test100.js?v=test100bufferhandoff"></script>
+    <script type="text/javascript" src="js/customPlaylist.test101.js?v=test101silentauto"></script>
   </body>
 </html>
