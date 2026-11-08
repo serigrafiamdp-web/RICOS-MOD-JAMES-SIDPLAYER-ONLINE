@@ -1374,7 +1374,7 @@
       browserTab=visible?'community':(tabName==='local'?'local':'games');
       var dialog=document.getElementById('chooseSidDialog');
       if(dialog){
-        dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local','rico-view-hvsc','rico-view-library');
+        dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local','rico-view-hvsc','rico-view-library','rico-view-ours');
         dialog.classList.add('rico-view-'+browserTab);
       }
       if (communityPanel) communityPanel.style.display=visible?'block':'none';
@@ -1438,7 +1438,7 @@
       cancelStartupPlaylist();
       ricoCurrentRank=kind;browserTab=kind;communityActive=false;
       var dialog=document.getElementById('chooseSidDialog');
-      if(dialog){dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local','rico-view-hvsc','rico-view-library');dialog.classList.add('rico-view-hvsc');}
+      if(dialog){dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local','rico-view-hvsc','rico-view-library','rico-view-ours');dialog.classList.add('rico-view-hvsc');}
       if(communityPanel)communityPanel.style.display='none';
       if(libraryPanel)libraryPanel.style.display='none';
       if(localPanel)localPanel.style.display='none';
@@ -2229,7 +2229,7 @@
         cancelStartupPlaylist();
         browserTab='library';communityActive=false;
         var dialog=document.getElementById('chooseSidDialog');
-        if(dialog){dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local','rico-view-hvsc','rico-view-library');dialog.classList.add('rico-view-library');}
+        if(dialog){dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local','rico-view-hvsc','rico-view-library','rico-view-ours');dialog.classList.add('rico-view-library');}
         if(communityPanel)communityPanel.style.display='none';
         if(localPanel)localPanel.style.display='none';
         if(hvscPanel)hvscPanel.style.display='none';
