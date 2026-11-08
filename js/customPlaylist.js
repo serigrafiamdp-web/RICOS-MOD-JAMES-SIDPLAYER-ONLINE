@@ -156,6 +156,52 @@
     $('#ricoLiveStatus').text('Song removed temporarily. Reload to undo.'+
       (activePublicPlaylist&&activePublicPlaylist.remoteId?' Use SAVE CHANGES + beta key to update the public list.':''));
   }
+  // TEST64: the public beta key is requested in a small, accessible overlay.
+  // Never persist it in localStorage, DOM attributes or GitHub.
+  function askBetaKeyDialog(){
+    return new Promise(function(resolve){
+      var cover=document.createElement('div');
+      cover.className='rico-beta-overlay';
+      var dialog=document.createElement('form');
+      dialog.className='rico-beta-dialog';
+      dialog.setAttribute('role','dialog');
+      dialog.setAttribute('aria-modal','true');
+      dialog.setAttribute('aria-label','Beta key for saving playlist');
+      var heading=document.createElement('strong');
+      heading.textContent='SAVE CHANGES';
+      var message=document.createElement('p');
+      message.textContent='Enter the beta key to make your song removals permanent for everyone.';
+      var input=document.createElement('input');
+      input.type='password';input.placeholder='Beta key';input.autocomplete='off';
+      input.setAttribute('aria-label','Beta key');
+      input.required=true;
+      var actions=document.createElement('div');actions.className='rico-beta-actions';
+      var cancel=document.createElement('button');cancel.type='button';cancel.textContent='CANCEL';
+      var save=document.createElement('button');save.type='submit';save.textContent='SAVE';
+      actions.appendChild(cancel);actions.appendChild(save);
+      dialog.appendChild(heading);dialog.appendChild(message);dialog.appendChild(input);dialog.appendChild(actions);
+      cover.appendChild(dialog);document.body.appendChild(cover);
+      var finished=false;
+      function finish(value){
+        if(finished)return;finished=true;
+        document.removeEventListener('keydown',onKey,true);
+        cover.remove();resolve(value);
+      }
+      function onKey(event){
+        if(event.key==='Escape'){event.preventDefault();event.stopPropagation();finish(null);}
+        else if(event.target===input)event.stopPropagation();
+      }
+      // Protect the input from the original SID player keyboard and mouse listeners.
+      ['mousedown','mouseup','pointerdown','pointerup','click','dblclick','keydown','keyup','keypress'].forEach(function(type){
+        dialog.addEventListener(type,function(event){event.stopPropagation();});
+      });
+      dialog.addEventListener('submit',function(event){event.preventDefault();event.stopPropagation();finish(input.value||null);});
+      cancel.addEventListener('click',function(){finish(null);});
+      cover.addEventListener('click',function(event){if(event.target===cover)finish(null);});
+      document.addEventListener('keydown',onKey,true);
+      input.focus();
+    });
+  }
   async function savePublicRemovals(){
     if(savingCommunityEdits||!activePublicPlaylist||!activePublicPlaylist.remoteId)return;
     if(!activePublicPlaylist.tracks.length){
@@ -166,10 +212,10 @@
       $('#ricoLiveStatus').text('No songs have been removed.');
       return;
     }
+    var key=await askBetaKeyDialog();
+    if(key===null||!key)return;
     try{await ensureBetaServerReady();}
     catch(error){$('#ricoLiveStatus').text(error.message);return;}
-    var key=promptBetaKey();
-    if(key===null||!key)return;
     savingCommunityEdits=true;
     try{
       var payload={format:'ricos-sid-playlist',version:2,
@@ -192,6 +238,9 @@
     ensureLivePlaylistCredits();
     var list = player.sidList || [];
     $('#ricoLiveCount').text('(' + list.length + ')');
+    var canSave=!!(activePublicPlaylist&&activePublicPlaylist.remoteId&&customActive&&
+      !landingPlaylists&&activePublicPlaylist.tracks.length<activePublicPlaylist.originalCount);
+    $('#ricoLiveSave').css('display',canSave?'inline-block':'none').prop('disabled',savingCommunityEdits);
     $('#ricoLivePlaylistTitle').text(landingPlaylists ? "COMMUNITY PLAYLISTS" : (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'));
     // TEST34: keep the creator/ratings strip visible while a playlist is loaded.
     // Never confuse the playlist creator with each SID's composer.
@@ -253,14 +302,12 @@
         wrap.appendTo(holder);
       }else row.appendTo(holder);
     });
-    if(activePublicPlaylist&&activePublicPlaylist.remoteId&&customActive){
-      $('<button type="button">').addClass('rico-live-save-changes').text('SAVE CHANGES')
-        .attr('title','Save permanent removals using beta key')
-        .on('click',savePublicRemovals).appendTo(holder);
-    }
+    // Save remains fixed in the header, not in the scrolling track list.
     var currentRow = holder.find('.rico-live-active');
     if (currentRow.length && liveVisible) currentRow[0].scrollIntoView({block:'nearest'});
   }
+
+  $('#ricoLiveSave').on('click',function(event){event.stopPropagation();savePublicRemovals();});
 
   function showLivePlaylist(visible) {
     liveVisible = !!visible;
