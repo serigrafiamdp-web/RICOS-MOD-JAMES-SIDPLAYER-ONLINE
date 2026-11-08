@@ -720,6 +720,7 @@
     $('#ricoGroupsTab').toggleClass('rico-selected-tab',browserTab==='groups');
     $('#ricoMusiciansTab').toggleClass('rico-selected-tab',browserTab==='musicians');
     $('#ricoLibraryTab').toggleClass('rico-selected-tab',browserTab==='library');
+    $('#ricoOurCollectionTab').toggleClass('rico-selected-tab',browserTab==='ours');
     $('#ricoCustomCount').text(custom.length + ' SID');
     $('#ricoFallback').val(formatAutoTime(player.autoFallbackSeconds));
     $('#ricoPlaylistStatus').text(customActive
@@ -1379,6 +1380,8 @@
       if (communityPanel) communityPanel.style.display=visible?'block':'none';
       if (hvscPanel) hvscPanel.style.display='none';
       if (libraryPanel) libraryPanel.style.display='none';
+      var ourPanel=document.getElementById('ricoOurCollectionPanel');
+      if(ourPanel)ourPanel.style.display='none';
       if (localPanel) localPanel.style.display=visible?'none':'block';
       if(!visible) player.initFileSelection(); // Refresh the browser list only.
       refreshTabs();
@@ -1868,6 +1871,119 @@
         showCommunity(false,choice[1]);
       });
     });
+
+    // TEST77 — NUESTRA COLECCIÓN: non-HVSC SID browser.
+    // Initial catalogue: the existing RICO embedded playlist, and private
+    // IndexedDB IMPORT SID playlists. No server upload is implied.
+    (function initOurCollection(){
+      var tab=document.getElementById('ricoOurCollectionTab');
+      var panel=document.getElementById('ricoOurCollectionPanel');
+      var items=document.getElementById('ricoOurItems');
+      var search=document.getElementById('ricoOurSearch');
+      var count=document.getElementById('ricoOurCount');
+      var status=document.getElementById('ricoOurStatus');
+      var reload=document.getElementById('ricoOurRefresh');
+      if(!tab||!panel||!items||!search)return;
+      var catalog=[], request=0;
+      ['mousedown','mouseup','pointerdown','pointerup','click','dblclick','keydown','keyup','keypress'].forEach(function(type){
+        search.addEventListener(type,function(event){event.stopPropagation();});
+      });
+      function render(){
+        items.textContent='';
+        var query=search.value.toLocaleLowerCase().trim();
+        var found=catalog.filter(function(item){
+          return !query || (item.title+' '+item.author+' '+item.file+' '+item.source)
+            .toLocaleLowerCase().includes(query);
+        });
+        count.textContent=found.length+' SID';
+        if(!found.length){items.textContent='No SID match this search.';return;}
+        var fragment=document.createDocumentFragment();
+        found.forEach(function(item){
+          var row=document.createElement('div');row.className='rico-our-row';row.setAttribute('role','listitem');
+          var label=document.createElement('span');label.className='rico-our-label';
+          var title=document.createElement('strong');title.textContent=item.title;
+          var detail=document.createElement('small');
+          detail.textContent=(item.author||'Unknown')+' · '+item.source+' · '+item.file;
+          label.appendChild(title);label.appendChild(detail);
+          var play=document.createElement('button');play.type='button';play.textContent='PLAY';
+          play.addEventListener('click',function(event){
+            event.stopPropagation();
+            try {
+              // A single track, with SID bytes embedded, avoids reliance on HVSC.
+              loadPlaylist({format:'ricos-sid-playlist',version:1,name:'NUESTRA COLECCIÓN',
+                createdBy:item.source,tracks:[{file:item.file,sidBase64:item.sidBase64}]},0,false);
+              status.textContent='Playing '+item.title+' (not published to HVSC).';
+              if(player.dialogManager && player.dialogManager.dialogShown==='chooseSidDialog')
+                player.dialogManager.hideDialog('chooseSidDialog');
+            }catch(error){status.textContent='Unable to play: '+error.message;}
+          });
+          row.appendChild(label);row.appendChild(play);fragment.appendChild(row);
+        });
+        items.appendChild(fragment);
+      }
+      async function loadCatalog(){
+        var serial=++request;status.textContent='Loading our collection...';
+        try {
+          var candidates=[],seen=new Set();
+          // Existing RICO playlist is a first-party, non-HVSC collection.
+          var response=await fetch('community/playlists/rico.json',{cache:'no-store'});
+          if(response.ok){
+            var rico=await response.json();
+            if(rico&&rico.version===1&&Array.isArray(rico.tracks))
+              rico.tracks.forEach(function(t){
+                if(t&&typeof t.sidBase64==='string')
+                  candidates.push({file:t.file||'track.sid',sidBase64:t.sidBase64,source:'RICO'});
+              });
+          }
+          var saved=await dbCall('readonly',function(store){return store.getAll();});
+          saved.forEach(function(list){
+            if(list&&list.version===1&&Array.isArray(list.tracks))
+              list.tracks.forEach(function(t){
+                if(t&&typeof t.sidBase64==='string')
+                  candidates.push({file:t.file||'track.sid',sidBase64:t.sidBase64,source:list.name||'IMPORT SID'});
+              });
+          });
+          var result=[];
+          candidates.forEach(function(item){
+            // Ignore repeated copies of identical SID bytes, regardless of playlist.
+            if(seen.has(item.sidBase64))return;
+            seen.add(item.sidBase64);
+            try{
+              var bytes=decode(item.sidBase64);
+              var parsed=parseSID(bytes,{name:item.file,size:bytes.length});
+              if(!parsed)return;
+              result.push({file:item.file,sidBase64:item.sidBase64,source:item.source,
+                title:parsed.name||item.file,author:parsed.author||'Unknown'});
+            }catch(error){console.warn('Skipped invalid non-HVSC SID',item.file,error);}
+          });
+          if(serial!==request)return;
+          catalog=result;status.textContent=result.length+
+            ' non-HVSC SID available. Local imports are private to this browser.';
+          render();
+        }catch(error){if(serial===request)status.textContent='Collection unavailable: '+error.message;}
+      }
+      function openOurCollection(){
+        cancelStartupPlaylist();
+        browserTab='ours';communityActive=false;
+        var dialog=document.getElementById('chooseSidDialog');
+        if(dialog){
+          dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local','rico-view-hvsc','rico-view-library','rico-view-ours');
+          dialog.classList.add('rico-view-ours');
+        }
+        if(communityPanel)communityPanel.style.display='none';
+        if(localPanel)localPanel.style.display='none';
+        if(hvscPanel)hvscPanel.style.display='none';
+        if(libraryPanel)libraryPanel.style.display='none';
+        panel.style.display='block';refreshTabs();loadCatalog();
+      }
+      // All other browser tabs hide this separate collection panel.
+      Array.prototype.forEach.call(document.querySelectorAll('#ricoListTabs button:not(#ricoOurCollectionTab)'),function(other){
+        other.addEventListener('click',function(){panel.style.display='none';},{capture:true});
+      });
+      tab.addEventListener('click',openOurCollection);
+      reload.addEventListener('click',loadCatalog);
+      search.addEventListener('input',render);
+    })();
 
     // TEST56: browse the immutable HVSC library, loading one pack on demand.
     // The browser never changes source rankings or saved personal playlists.
