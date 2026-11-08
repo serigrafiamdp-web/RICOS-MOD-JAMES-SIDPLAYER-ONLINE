@@ -74,6 +74,7 @@
     transitionGeneration++;
     if(transitionTimer!==null){clearTimeout(transitionTimer);transitionTimer=null;}
     if(transitionRecovery!==null){clearTimeout(transitionRecovery);transitionRecovery=null;}
+    if(transitionBusy&&!transitionAwaitingStart)player.autoLoading=false;
     transitionBusy=false;transitionAwaitingStart=false;
     queuedLiveIndex=null;transitionSource=null;
     if(resetSelection){
@@ -114,6 +115,10 @@
     if(index<0||index>=list.length)return;
     if(source==='manual')selectedLiveIndex=index;
     if(transitionBusy){
+      if(transitionAwaitingStart){
+        $('#ricoLiveStatus').text('Loading the next SID; select another song once it starts.');
+        renderLivePlaylist();return;
+      }
       // Another click changes NEXT without starting another fade or timer.
       if(index===player.sidListIndex){
         resetSoftTransition(false);
@@ -154,6 +159,7 @@
         transitionRecovery=null;
         if(generation!==transitionGeneration||!transitionAwaitingStart)return;
         transitionAwaitingStart=false;transitionBusy=false;queuedLiveIndex=null;
+        player.autoLoading=false;
         restoreFullVolume();
         $('#ricoLiveStatus').text('SID loading took too long; volume restored.');
         renderLivePlaylist();
@@ -163,7 +169,7 @@
         resetSoftTransition(false);
         $('#ricoLiveStatus').text('Could not switch SID: '+error.message);
       }
-    },playing?FADE_OUT_MS+SILENT_GAP_MS:20);
+    },playing&&fadeGainNode?FADE_OUT_MS+SILENT_GAP_MS:20);
   }
   // Stop/pause must never leave a pending timer that starts a different track.
   $('#stopButton').on('click',function(){resetSoftTransition(false);});
