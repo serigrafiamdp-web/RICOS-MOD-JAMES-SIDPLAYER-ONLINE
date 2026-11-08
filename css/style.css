@@ -1953,3 +1953,35 @@ left: 1px;
 .rico-our-label {flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
 .rico-our-label strong {font-size:12px;overflow-wrap:anywhere;}
 .rico-our-label small {font-size:10px;opacity:.8;overflow-wrap:anywhere;}
+
+/* TEST78: Our Collection now uses the same full-width list pattern as Community. */
+#ricoOurItems {width:100%;}
+#ricoOurItems .rico-our-row {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;min-height:42px;box-sizing:border-box;
+  padding:8px 9px;border-bottom:1px solid var(--rico-theme-border,#fff);
+  color:var(--rico-theme-fg,#fff);background:var(--rico-theme-bg,#000);
+  font:12px Tahoma,Arial,sans-serif;
+}
+#ricoOurItems .rico-our-row:hover {
+  background:var(--rico-theme-hover,#555);
+}
+#ricoOurItems .rico-our-label {
+  flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;
+}
+#ricoOurItems .rico-our-label strong {font:normal 14px Tahoma,Arial,sans-serif;}
+#ricoOurItems .rico-our-label small {font:10px Tahoma,Arial,sans-serif;opacity:.78;}
+#ricoOurItems .rico-our-row button {
+  flex:0 0 auto;border:1px solid currentColor;
+  color:inherit;background:transparent;padding:5px 10px;
+  font:11px Tahoma,Arial,sans-serif;
+}
+#ricoOurItems .rico-our-row button:hover {
+  background:var(--rico-theme-fg,#fff) !important;
+  color:var(--rico-theme-bg,#000) !important;
+}
+#ricoOurItems .rico-our-back {
+  background:var(--rico-theme-panel,#333);
+  border-bottom:2px solid var(--rico-theme-border,#fff);
+}
+#ricoOurItems .rico-our-back strong {font: bold 13px Tahoma,Arial,sans-serif;}
