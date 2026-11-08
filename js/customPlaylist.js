@@ -1233,6 +1233,9 @@
           libraryEl.appendChild(row);
         });
       }
+      // Sync IMPORT SID saved playlists into the single Community list.
+      if(typeof window.ricoRenderLocalImportedRows==='function')
+        await window.ricoRenderLocalImportedRows();
       // Same COMMUNITY PLAYLISTS tab: locally saved lists are private to this browser.
       // Public catalog remains separate and unchanged.
       var localCommunity=document.getElementById('ricoLocalCommunityItems');
@@ -1533,6 +1536,61 @@
       });
     }
     window.ricoRefreshCommunityCatalog=loadCommunityCatalog;
+    // TEST73: local imported V1 playlists join the same Community list.
+    // They are private IndexedDB records, never sent to D1 or HVSC.
+    async function renderLocalImportedCommunityRows(){
+      if(!communityItems)return;
+      var rows=await dbCall('readonly',function(store){return store.getAll();});
+      Array.prototype.forEach.call(
+        communityItems.querySelectorAll('.rico-community-import-row'),
+        function(node){node.remove();}
+      );
+      var fragment=document.createDocumentFragment();
+      rows.filter(function(d){return d&&d.format==='ricos-sid-playlist'&&d.version===1&&
+        Array.isArray(d.tracks);}).forEach(function(item){
+        var row=document.createElement('div');
+        row.className='rico-community-row rico-community-import-row';
+        var label=document.createElement('span');label.className='rico-community-label';
+        label.textContent=item.name+' — Playlist by '+(item.createdBy||'Unknown')+
+          ' · '+item.tracks.length+' SID';
+        row.appendChild(label);
+        function action(name,callback,disabled){
+          var button=document.createElement('button');button.type='button';
+          button.textContent=name;button.disabled=!!disabled;
+          button.addEventListener('click',function(event){
+            event.stopPropagation();if(!button.disabled)callback();
+          });
+          row.appendChild(button);
+          return button;
+        }
+        action('LOAD',async function(){
+          try{
+            var stored=await dbCall('readonly',function(store){return store.get(item.id);});
+            if(!stored)throw Error('Local playlist no longer available.');
+            currentId=item.id;
+            await loadStoredPlaylist(stored,true);
+            say('Loaded locally: '+stored.name);
+            if(player.dialogManager&&player.dialogManager.dialogShown==='chooseSidDialog')
+              player.dialogManager.hideDialog('chooseSidDialog');
+          }catch(error){say(error.message||'Could not load local playlist.');}
+        },false);
+        action('DELETE',async function(){
+          if(!window.confirm('Delete local playlist '+item.name+' from this browser?'))return;
+          try{
+            await dbCall('readwrite',function(store){return store.delete(item.id);});
+            if(currentId===item.id)currentId='';
+            await refreshSaved();
+            say('Local playlist deleted: '+item.name);
+          }catch(error){say(error.message||'Could not delete local playlist.');}
+        },false);
+        var publish=action('PUBLISH',function(){},true);
+        publish.title='Coming soon: user-uploaded SID need Cloudflare file storage and authorization. Not published.';
+        publish.setAttribute('aria-label','Publish '+item.name+' not yet available');
+        fragment.appendChild(row);
+      });
+      communityItems.appendChild(fragment);
+    }
+    window.ricoRenderLocalImportedRows=renderLocalImportedCommunityRows;
     // In-progress remix rows visually share the public community list.
     // They exist only within this visitor's browser session until PUBLISH succeeds.
     function renderRemixCommunityRows(){
@@ -1590,6 +1648,8 @@
         communityItems.textContent='';
         renderRemixCommunityRows();
         if(!catalog.playlists.length && !remixDrafts.length) {
+          await renderLocalImportedCommunityRows();
+          if(communityItems.children.length)return;
           cancelStartupPlaylist();
           communityItems.textContent='No additional published playlists available.';
           return;
@@ -1754,6 +1814,7 @@
           });
           if(!firstPlayable){firstPlayable=function(){openPlaylist(true);};firstRow=row;}
         });
+        await renderLocalImportedCommunityRows();
         if(startupPlaylistPending && firstPlayable && firstRow) {
           firstRow.classList.add('rico-community-selected');
           if(startupPlaylistTimer!==null) clearTimeout(startupPlaylistTimer);
