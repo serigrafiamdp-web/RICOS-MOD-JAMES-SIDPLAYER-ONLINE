@@ -1606,7 +1606,8 @@
         publish.setAttribute('aria-label','Publish '+item.name+' not yet available');
         fragment.appendChild(row);
       });
-      communityItems.appendChild(fragment);
+      // Newly saved local imports are shown above published catalogs.
+      communityItems.insertBefore(fragment,communityItems.firstChild);
     }
     window.ricoRenderLocalImportedRows=renderLocalImportedCommunityRows;
     // In-progress remix rows visually share the public community list.
