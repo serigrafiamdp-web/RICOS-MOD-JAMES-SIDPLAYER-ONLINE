@@ -2,7 +2,7 @@
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css?v=test65editdelete">
+    <link rel="stylesheet" href="css/style.css?v=test66remix">
     <title>RICOS MOD - JAMES SIDPLAYER ONLINE</title>
 
     <link rel="shortcut icon" type="image/png" href="images/icon16.png"/>
@@ -410,6 +410,22 @@
           <span class="rico-rating-note">Ratings coming soon</span>
         </span>
       </div>
+      <div id="ricoRemixBar" class="rico-remix-bar">
+        <button type="button" id="ricoRemixToggle" aria-expanded="false">REMIX PLAYLIST</button>
+        <label for="ricoRemixTarget">ADD + TO</label>
+        <select id="ricoRemixTarget" aria-label="Remix destination"><option value="">SELECT REMIX</option></select>
+        <span id="ricoRemixCount">0 SID</span>
+      </div>
+      <div id="ricoRemixEditor" class="rico-remix-editor" style="display:none;">
+        <div class="rico-remix-fields">
+          <input id="ricoRemixName" type="text" maxlength="100" placeholder="Remix name" aria-label="Remix name" />
+          <input id="ricoRemixCreator" type="text" maxlength="60" placeholder="Playlist by" aria-label="Remix creator" />
+          <button type="button" id="ricoRemixNew">NEW REMIX</button>
+          <button type="button" id="ricoRemixPublish">PUBLISH REMIX</button>
+        </div>
+        <div id="ricoRemixEntries" class="rico-remix-entries" role="list"></div>
+        <div id="ricoRemixStatus" role="status"></div>
+      </div>
       <div id="ricoLiveStatus" role="status" style="padding:3px 8px;color:#ffb6a9;font-size:11px;"></div>
       <div id="ricoLivePlaylistItems"></div>
       <div id="ricoLiveWidthGrip" title="Drag horizontally to change playlist width" aria-label="Resize playlist width" role="separator" aria-orientation="vertical" tabindex="0"></div>
@@ -473,6 +489,6 @@
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test26"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script type="text/javascript" src="js/customPlaylist.js?v=test65editdelete"></script>
+    <script type="text/javascript" src="js/customPlaylist.js?v=test66remix"></script>
   </body>
 </html>
