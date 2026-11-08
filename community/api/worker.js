@@ -46,8 +46,57 @@ async function sidSha(bytes){
   const digest=await crypto.subtle.digest('SHA-256',bytes);
   return [...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,'0')).join('');
 }
+// TEST84: optional GitHub-backed SID storage for a small, beta-key-authorized group.
+// GitHub credential is a Worker secret limited to the dedicated asset repository.
+// Keep this repo independent of the player's source and of HVSC.
+const SID_GITHUB_REPO='serigrafiamdp-web/ricos-sid-uploads';
+function githubSidHeaders(env){
+  return {'Authorization':'Bearer '+env.GITHUB_SID_TOKEN,
+    'Accept':'application/vnd.github+json',
+    'X-GitHub-Api-Version':'2022-11-28',
+    'User-Agent':'ricos-sid-community-worker'};
+}
+function githubSidUrl(id){
+  if(!/^[0-9a-f]{64}$/.test(id))throw Error('Invalid asset digest');
+  return 'https://api.github.com/repos/'+SID_GITHUB_REPO+'/contents/sid/'+id+'.sid';
+}
+function sidUploadProvider(env){
+  if(env.SID_BUCKET)return 'r2';
+  if(env.GITHUB_SID_TOKEN)return 'github';
+  return '';
+}
+async function githubSidRead(id,env){
+  // Repository is public, but this uses GitHub's Contents API to avoid
+  // propagation delays of raw.githubusercontent.com immediately after upload.
+  const response=await fetch(githubSidUrl(id),{
+    headers:{'Accept':'application/vnd.github+json',
+      'X-GitHub-Api-Version':'2022-11-28','User-Agent':'ricos-sid-community-worker'},
+    cf:{cacheTtl:0}
+  });
+  if(response.status===404)return null;
+  if(!response.ok)throw Error('GitHub SID read error ('+response.status+')');
+  const data=await response.json();
+  if(data.encoding!=='base64'||typeof data.content!=='string')throw Error('Invalid GitHub asset');
+  return sidBase64Bytes(data.content.replace(/\\s+/g,''));
+}
+async function githubSidPut(item,env){
+  const url=githubSidUrl(item.id);
+  const headers=githubSidHeaders(env);
+  const existing=await fetch(url,{headers,cf:{cacheTtl:0}});
+  if(existing.ok)return;
+  if(existing.status!==404)throw Error('GitHub lookup failed ('+existing.status+')');
+  const encoded=btoa(String.fromCharCode(...item.bytes));
+  const saved=await fetch(url,{method:'PUT',headers:{...headers,
+    'Content-Type':'application/json'},body:JSON.stringify({
+      message:'Add contributed SID '+item.id,
+      content:encoded,branch:'main'
+    })});
+  if(!saved.ok)throw Error('GitHub SID write failed ('+saved.status+')');
+}
+
 async function contributedCollections(request,env,url,origin){
-  const enabled=!!(env.SID_BUCKET&&env.DB&&env.BETA_EDIT_KEY);
+  const provider=sidUploadProvider(env);
+  const enabled=!!(provider&&env.DB&&env.BETA_EDIT_KEY);
   if(request.method==='GET'&&url.pathname==='/collections'){
     if(!env.DB)return text('Database not configured',503,origin);
     const rows=await env.DB.prepare(
@@ -72,29 +121,37 @@ async function contributedCollections(request,env,url,origin){
   }
   const asset=/^\/sid-assets\/([0-9a-f]{64})$/.exec(url.pathname);
   if(request.method==='GET'&&asset){
-    if(!env.SID_BUCKET)return text('SID storage unavailable',503,origin);
-    const object=await env.SID_BUCKET.get('sid/'+asset[1]+'.sid');
-    if(!object)return text('SID file not found',404,origin);
+    if(!provider)return text('SID storage unavailable',503,origin);
     const headers={'content-type':'application/octet-stream',
       'cache-control':'public, max-age=31536000, immutable',
       'x-content-type-options':'nosniff'};
     if(origin===ORIGIN)headers['access-control-allow-origin']=origin;
-    return new Response(object.body,{status:200,headers});
+    try {
+      if(provider==='r2'){
+        const object=await env.SID_BUCKET.get('sid/'+asset[1]+'.sid');
+        return object?new Response(object.body,{status:200,headers}):
+          text('SID file not found',404,origin);
+      }
+      const bytes=await githubSidRead(asset[1],env);
+      return bytes?new Response(bytes,{status:200,headers}):
+        text('SID file not found',404,origin);
+    }catch(error){console.error('SID read error',error);return text('SID temporarily unavailable',503,origin);}
   }
   if(request.method!=='POST'||url.pathname!=='/collections')return null;
   if(origin!==ORIGIN)return text('Origin not allowed',403,origin);
-  if(!enabled)return text('SID publishing unavailable: configure D1 and R2 first',503,origin);
+  if(!enabled)return text('SID publishing unavailable: configure D1 and an asset provider first',503,origin);
   if(!(await hasValidBetaKey(request,env)))return text('Invalid beta key',403,origin);
   if((Number(request.headers.get('Content-Length'))||0)>1800000)
     return text('Collection exceeds 1.8 MB upload limit',413,origin);
   let data,raw;
   try{raw=await request.text();if(raw.length>1800000)throw Error('Upload too large');
       data=JSON.parse(raw);}catch(e){return text('Invalid collection payload',400,origin);}
+  const uploadLimit=provider==='github'?15:40;
   if(!data||data.format!=='ricos-sid-upload'||data.version!==1||
      typeof data.name!=='string'||!data.name.trim()||data.name.trim().length>100||
      typeof data.createdBy!=='string'||!data.createdBy.trim()||data.createdBy.trim().length>60||
-     !Array.isArray(data.tracks)||!data.tracks.length||data.tracks.length>40)
-     return text('Invalid collection metadata or number of SID files (1–40)',400,origin);
+     !Array.isArray(data.tracks)||!data.tracks.length||data.tracks.length>uploadLimit)
+     return text('Invalid collection metadata or number of SID files (1–'+uploadLimit+')',400,origin);
   const prepared=[];let total=0;
   try{
     for(const entry of data.tracks){
@@ -117,8 +174,12 @@ async function contributedCollections(request,env,url,origin){
     const unique=new Map(prepared.map(x=>[x.id,x]));
     for(const item of unique.values()){
       const key='sid/'+item.id+'.sid';
-      if(!(await env.SID_BUCKET.head(key))){
-        await env.SID_BUCKET.put(key,item.bytes,{httpMetadata:{contentType:'application/octet-stream'}});
+      if(provider==='r2'){
+        if(!(await env.SID_BUCKET.head(key))){
+          await env.SID_BUCKET.put(key,item.bytes,{httpMetadata:{contentType:'application/octet-stream'}});
+        }
+      }else{
+        await githubSidPut(item,env);
       }
     }
     const id=crypto.randomUUID();
@@ -162,8 +223,10 @@ export default {
   if(request.method==='GET' && url.pathname==='/capabilities'){
     return json({format:'ricos-community-capabilities',version:1,
       betaKeyRequired:true,editMode:'metadata-and-delete',
-      sidUploadsEnabled:!!(env.SID_BUCKET&&env.DB&&env.BETA_EDIT_KEY),
-      sidUploadLimit:40,configured:!!env.BETA_EDIT_KEY},200,origin);
+      sidUploadsEnabled:!!(sidUploadProvider(env)&&env.DB&&env.BETA_EDIT_KEY),
+      sidUploadProvider:sidUploadProvider(env)||null,
+      sidUploadLimit:sidUploadProvider(env)==='github'?15:40,
+      configured:!!env.BETA_EDIT_KEY},200,origin);
   }
   if(request.method==='GET' && url.pathname==='/playlists'){
     const rows=await env.DB.prepare('SELECT id, title, creator, track_count FROM playlists ORDER BY created_at ASC LIMIT 500').all();
