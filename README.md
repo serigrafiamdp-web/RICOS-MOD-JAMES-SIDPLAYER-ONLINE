@@ -101,6 +101,18 @@ Project: https://github.com/serigrafiamdp-web/RICOS-MOD-JAMES-SIDPLAYER-ONLINE
 
 Online Player: https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/
 
+## CURRENT STABLE CHECKPOINT — TEST62 PASS (2026-11-08)
+
+**User-confirmed working state: TEST62 PASS** — public community playlist publishing through Cloudflare Worker + D1 using only HVSC `pack/file` references. GitHub Pages hosts the fixed 59,626-SID library. Older checkpoints below remain historical.
+
+- **Technical architecture and operations:** [docs/ARCHITECTURE_COMMUNITY_HVSC_D1_TEST62.md](docs/ARCHITECTURE_COMMUNITY_HVSC_D1_TEST62.md).
+- **User-confirmed PASS and continuation:** [docs/CHECKPOINT_TEST62_PASS_2026-11-08.md](docs/CHECKPOINT_TEST62_PASS_2026-11-08.md).
+- **Player:** https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=62public
+- **Community API:** https://ricos-sid-community.serigrafiamdp.workers.dev/playlists
+- **Backend source/schema:** [community/api/worker.js](community/api/worker.js) · [community/api/schema.sql](community/api/schema.sql).
+
+**Next development, not yet PASS:** editing published playlists requires verifying authorship. Never allow anonymous visitors to overwrite/delete another author's list. Do not claim that a browser nickname is an authenticated identity.
+
 ## Stable checkpoint — 2026-11-06 (TEST19 PASS)
 
 The 2026-11-06 tested baseline is **TEST19 PASS**: AUTO switches to the next SID file, including while the browser tab is in the background; it does not cycle through subtunes automatically. Details, reproduction checklist and continuation notes: [docs/CHECKPOINT_TEST19_PASS_2026-11-06.md](docs/CHECKPOINT_TEST19_PASS_2026-11-06.md).
