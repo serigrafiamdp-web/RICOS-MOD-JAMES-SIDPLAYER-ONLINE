@@ -1604,9 +1604,44 @@
             say('Local playlist deleted: '+item.name);
           }catch(error){say(error.message||'Could not delete local playlist.');}
         },false);
-        var publish=action('PUBLISH',function(){},true);
-        publish.title='Coming soon: user-uploaded SID need Cloudflare file storage and authorization. Not published.';
-        publish.setAttribute('aria-label','Publish '+item.name+' not yet available');
+        // TEST83: publish only after a capabilities check confirms R2 is ready.
+        var publish=action('PUBLISH',async function(){
+          if(publish.disabled)return;
+          publish.disabled=true;
+          try{
+            var capResponse=await fetch(communityWriteApi+'/capabilities',{cache:'no-store'});
+            if(!capResponse.ok)throw Error('Publishing service unavailable.');
+            var cap=await capResponse.json();
+            if(!cap.sidUploadsEnabled)
+              throw Error('SID file publishing is not active on Cloudflare yet. Local copy is safe.');
+            var stored=await dbCall('readonly',function(store){return store.get(item.id);});
+            if(!stored||!Array.isArray(stored.tracks)||!stored.tracks.length)
+              throw Error('Local collection missing.');
+            if(stored.tracks.length>40)throw Error('Max 40 SID per publication in this beta.');
+            var creator=String(stored.createdBy||'').trim();
+            if(!creator||creator==='Unknown'){
+              creator=window.prompt('Collection creator / uploader:', '')||'';
+              if(!creator.trim())return;
+            }
+            if(!window.confirm('Publish '+stored.name+' ('+stored.tracks.length+
+              ' SID) to OUR COLLECTION for all users? Only publish files you have permission to share.'))return;
+            var key=await askBetaKeyDialog('PUBLISH');
+            if(!key)return;
+            var response=await fetch(communityWriteApi+'/collections',{
+              method:'POST',headers:{'Content-Type':'application/json','X-Beta-Key':key},
+              body:JSON.stringify({format:'ricos-sid-upload',version:1,
+                name:stored.name,createdBy:creator.trim(),tracks:stored.tracks.map(function(t){
+                  return {file:t.file,sidBase64:t.sidBase64};
+                })})
+            });
+            var outcome=await response.json();
+            if(!response.ok)throw Error(outcome.error||'Collection upload failed');
+            say('Published '+stored.name+' · '+outcome.tracks+' SID to OUR COLLECTION.');
+            window.alert('Published '+stored.name+' to OUR COLLECTION. Your local copy is preserved.');
+          }catch(error){say('PUBLISH: '+error.message);window.alert(error.message);}
+          finally{publish.disabled=false;}
+        },false);
+        publish.title='Publish imported SID collection with beta key once Cloudflare SID storage is enabled.';
         fragment.appendChild(row);
       });
       // Newly saved local imports are shown above published catalogs.
@@ -1913,23 +1948,39 @@
           var label=document.createElement('span');label.className='rico-our-label';
           var title=document.createElement('strong');title.textContent=c.name;
           var detail=document.createElement('small');
-          detail.textContent='Collection by '+c.creator+' · '+c.tracks.length+' SID'+
-            (c.local?' · LOCAL ONLY':' · INCLUDED COLLECTION');
+          detail.textContent='Collection by '+c.creator+' · '+
+            (c.remote?c.trackCount:c.tracks.length)+' SID'+
+            (c.local?' · LOCAL ONLY':' · PUBLISHED');
           label.appendChild(title);label.appendChild(detail);row.appendChild(label);
-          var load=addAction(row,'LOAD',function(){
+          var load=addAction(row,'LOAD',async function(){
             load.disabled=true;
             try{
+              var songs=c.tracks;
+              if(c.remote){
+                var response=await fetch(communityWriteApi+'/collections/'+encodeURIComponent(c.id));
+                if(!response.ok)throw Error('Published collection unavailable.');
+                var manifest=await response.json();
+                if(!Array.isArray(manifest.tracks)||!manifest.tracks.length||manifest.tracks.length>40)
+                  throw Error('Invalid published collection.');
+                songs=[];
+                for(var track of manifest.tracks){
+                  if(!/^[0-9a-f]{64}$/.test(track.sidId))throw Error('Invalid SID reference');
+                  var fileResponse=await fetch(communityWriteApi+'/sid-assets/'+track.sidId);
+                  if(!fileResponse.ok)throw Error('Missing SID asset: '+track.file);
+                  var bytes=new Uint8Array(await fileResponse.arrayBuffer());
+                  if(!parseSID(bytes,{name:track.file,size:bytes.length}))
+                    throw Error('Invalid SID asset: '+track.file);
+                  songs.push({file:track.file,sidBase64:encode(bytes)});
+                }
+              }
               loadPlaylist({format:'ricos-sid-playlist',version:1,
                 name:c.name,createdBy:c.creator,
-                tracks:c.tracks.map(function(t){
-                  return {file:t.file,sidBase64:t.sidBase64};
-                })},0,false);
-              status.textContent='Loaded '+c.name+' · '+c.tracks.length+' SID.';
+                tracks:songs.map(function(t){return {file:t.file,sidBase64:t.sidBase64};})},0,false);
+              status.textContent='Loaded '+c.name+' · '+songs.length+' SID.';
               if(player.dialogManager&&player.dialogManager.dialogShown==='chooseSidDialog')
                 player.dialogManager.hideDialog('chooseSidDialog');
-            }catch(error){
-              status.textContent='Unable to load collection: '+error.message;
-            }finally{load.disabled=false;}
+            }catch(error){status.textContent='Unable to load collection: '+error.message;}
+            finally{load.disabled=false;}
           });
           if(c.local&&c.id.startsWith('local-')){
             var remove=addAction(row,'DELETE',async function(){
@@ -1983,6 +2034,21 @@
           // TEST81: show only collections explicitly saved through IMPORT SID.
           // RICO remains available as a historical Community Playlist, not
           // auto-inserted into OUR COLLECTION.
+          // Public contributed collections are independent of HVSC and the
+          // original immutable RICO curated playlist.
+          try{
+            var remoteResponse=await fetch(communityWriteApi+'/collections',{cache:'no-store'});
+            if(remoteResponse.ok){
+              var published=await remoteResponse.json();
+              if(Array.isArray(published.collections)){
+                published.collections.forEach(function(c){
+                  if(c&&typeof c.id==='string'&&typeof c.name==='string')
+                    result.push({id:c.id,name:c.name,creator:c.createdBy||'Unknown',
+                      tracks:[],trackCount:Number(c.tracks)||0,local:false,remote:true,updatedAt:''});
+                });
+              }
+            }
+          }catch(error){console.warn('Published SID collections unavailable',error);}
           var saved=await dbCall('readonly',function(store){return store.getAll();});
           saved.forEach(function(list){
             if(list&&list.version===1&&Array.isArray(list.tracks)){
@@ -1997,7 +2063,7 @@
           });
           if(serial!==request)return;
           collections=result;
-          status.textContent=result.length+' collections available. Local imports remain private to this browser.';
+          status.textContent=result.length+' collections available. Local imports stay private until PUBLISH succeeds.';
           render();
         }catch(error){
           if(serial===request)status.textContent='Collection unavailable: '+error.message;
