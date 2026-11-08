@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RICO — Export 13 SID</title>
+<style>
+:root{color-scheme:dark}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#160b00;color:#ffcb60;font:14px Tahoma,Arial,sans-serif}
+main{width:min(440px,calc(100vw - 36px));border:1px solid currentColor;padding:20px;box-sizing:border-box}
+h1{font-size:19px;margin:0 0 10px}
+p{line-height:1.6}
+button{background:#30200a;color:inherit;border:1px solid currentColor;padding:12px 18px;font:inherit;cursor:pointer}
+button:disabled{opacity:.5;cursor:wait}
+a{color:inherit}#status{font-size:12px;margin-top:12px}
+</style></head>
+<body><main>
+<h1>RICO · 13 SID</h1>
+<p>Descargá tu colección en un archivo ZIP con los SID originales sueltos para probar <b>IMPORT SID → ADD SID FILES</b>.</p>
+<button type="button" id="download">DOWNLOAD RICO SID ZIP</button>
+<p id="status" role="status">Los SID no se envían a ningún servidor. El ZIP se crea en tu navegador.</p>
+<p><a href="../">Volver al SIDPLAYER</a></p>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+(function(){
+'use strict';
+const button=document.getElementById('download'),status=document.getElementById('status');
+function bytes64(encoded){
+ const binary=atob(encoded),bytes=new Uint8Array(binary.length);
+ for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+ return bytes;
+}
+button.addEventListener('click',async function(){
+ button.disabled=true;status.textContent='Preparing your ZIP...';
+ try {
+  if(typeof JSZip==='undefined')throw Error('ZIP library could not be loaded.');
+  const response=await fetch('../community/playlists/rico.json',{cache:'no-store'});
+  if(!response.ok)throw Error('RICO source unavailable ('+response.status+')');
+  const data=await response.json();
+  if(data.format!=='ricos-sid-playlist'||data.version!==1||!Array.isArray(data.tracks)||data.tracks.length!==13)
+   throw Error('Unexpected RICO playlist format.');
+  const zip=new JSZip();
+  const used=new Set();
+  data.tracks.forEach((track,index)=>{
+   if(!track||typeof track.sidBase64!=='string')throw Error('Missing SID '+(index+1));
+   const bytes=bytes64(track.sidBase64);
+   const magic=String.fromCharCode(...bytes.slice(0,4));
+   if(bytes.length<118||(magic!=='PSID'&&magic!=='RSID'))throw Error('Invalid SID header '+(index+1));
+   let name=String(track.file||'SID_'+(index+1)+'.sid').split(/[\\/]/).pop()
+    .replace(/[<>:"|?*\\x00-\\x1f]/g,'_').slice(0,120);
+   if(!/\.sid$/i.test(name))name+='.sid';
+   let base=name,n=2;
+   while(used.has(name.toLowerCase())){name=base.replace(/\.sid$/i,'')+'_'+n++ +'.sid';}
+   used.add(name.toLowerCase());
+   zip.file(name,bytes);
+  });
+  const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='RICO_13_SID.zip';document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),15000);
+  status.textContent='RICO_13_SID.zip — 13 original SID files. Extract ZIP before ADD SID FILES.';
+ }catch(error){status.textContent='Error: '+error.message;}
+ finally{button.disabled=false;}
+});
+})();
+</script></body></html>
