@@ -1980,16 +1980,9 @@
         var serial=++request;status.textContent='Loading collections...';
         try{
           var result=[];
-          // The existing RICO JSON is a standalone curated collection.
-          var response=await fetch('community/playlists/rico.json',{cache:'no-store'});
-          if(response.ok){
-            var rico=await response.json();
-            if(rico&&rico.version===1){
-              var curated=inspectPlaylist('curated-rico','RICO',
-                rico.createdBy||'RICO',rico.tracks,false,'');
-              if(curated)result.push(curated);
-            }
-          }
+          // TEST81: show only collections explicitly saved through IMPORT SID.
+          // RICO remains available as a historical Community Playlist, not
+          // auto-inserted into OUR COLLECTION.
           var saved=await dbCall('readonly',function(store){return store.getAll();});
           saved.forEach(function(list){
             if(list&&list.version===1&&Array.isArray(list.tracks)){
