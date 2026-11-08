@@ -313,6 +313,10 @@
     });
   }
   function addRemixTrack(index){
+    // FIX2: pressing + always leaves the creator closed. Only REMIX PLAYLIST opens it.
+    remixOpen=false;
+    $('#ricoRemixEditor').css('display','none');
+    $('#ricoRemixToggle').attr('aria-expanded','false');
     var target=selectedRemix();
     if(!target){
       remixNotice('Select a REMIX destination first using ADD + TO.');
@@ -322,7 +326,7 @@
     // Do NOT invent pack paths for legacy Base64 or ranked / built-in SID files.
     var track=activePublicPlaylist&&customActive&&activePublicPlaylist.tracks[index];
     if(!track||!track.pack||!track.file){
-      remixNotice('This SID has no HVSC reference yet. Only referenced community SID can be added in TEST66.');
+      remixNotice('Cannot add this SID yet: this source has no verified HVSC reference. The Remix Creator stays closed.');
       return;
     }
     if(target.tracks.length>=2000){remixNotice('Remix limit: 2000 SID.');return;}
