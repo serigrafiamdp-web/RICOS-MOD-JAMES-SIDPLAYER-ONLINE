@@ -1311,3 +1311,77 @@ left: 1px;
 @media (max-width:560px) {
   #chooseSidDialog.rico-view-library #ricoLibraryPanel {top:149px !important;}
 }
+
+/* TEST60: non-playing selection tray, using existing palette variables. */
+#ricoLibraryBuilder {
+  flex:0 0 auto;
+  border-top:1px solid var(--rico-theme-border,#888);
+  padding:6px 0;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  min-height:0;
+}
+.rico-library-builder-head,.rico-library-builder-save{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.rico-library-builder-head strong{
+  flex:1;
+  white-space:nowrap;
+  font-size:13px;
+}
+#ricoLibraryBuilder button{
+  border:1px solid var(--rico-theme-border,#888);
+  background:transparent;
+  color:var(--rico-theme-fg,#fff);
+  cursor:pointer;
+  padding:5px 8px;
+  font:11px Arial,sans-serif;
+}
+#ricoLibraryBuilder button:disabled{opacity:.4;cursor:default;}
+#ricoLibraryListName{
+  flex:1 1 140px;
+  min-width:100px;
+  min-height:27px;
+  padding:3px 6px;
+  box-sizing:border-box;
+  background:var(--rico-theme-bg,#000);
+  color:var(--rico-theme-fg,#fff);
+  border:1px solid var(--rico-theme-border,#888);
+  font:12px Arial,sans-serif;
+}
+#ricoLibraryListName:focus{outline:2px solid var(--rico-theme-fg,#fff);outline-offset:1px;}
+.rico-library-draft-items{
+  overflow-y:auto;
+  max-height:78px;
+  min-height:0;
+  font:11px Arial,sans-serif;
+}
+.rico-library-draft-row{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  border-bottom:1px solid var(--rico-theme-border,#888);
+}
+.rico-library-draft-row>span{
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  padding:3px 0;
+}
+#ricoLibraryBuilder .rico-library-draft-remove{
+  flex:none;
+  min-width:24px;
+  padding:1px 5px;
+  font-size:14px;
+}
+.rico-library-draft-older{display:block;opacity:.7;font-size:10px;}
+#ricoLibraryPanel .rico-library-track.rico-draft-added{
+  border-left:3px solid var(--rico-theme-fg,#fff);
+  padding-left:5px;
+}
