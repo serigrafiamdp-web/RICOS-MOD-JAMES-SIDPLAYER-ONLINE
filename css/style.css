@@ -1725,3 +1725,184 @@ left: 1px;
   background:var(--rico-theme-panel,#222);color:var(--rico-theme-fg,#fff);
   border-color:var(--rico-theme-border,#888);
 }
+
+/* TEST75 — unified visual palette. No audio, data, or layout changes.
+   All controls inherit the current oscilloscope palette via CSS variables. */
+#sidControls {
+  background:var(--rico-theme-bg,#000) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+  border-top:1px solid var(--rico-theme-border,#fff) !important;
+}
+#sidControls button,
+#sidControls #oscilloscopeVisualButtons button,
+#sidInfo button {
+  background:var(--rico-theme-bg,#000) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+  border-color:var(--rico-theme-border,#fff) !important;
+}
+#sidControls button:hover:not(:disabled),
+#sidInfo button:hover:not(:disabled) {
+  background:var(--rico-theme-hover,#555) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+}
+#sidControls button:active:not(:disabled),
+#sidInfo button:active:not(:disabled),
+#sidControls button[aria-pressed="true"],
+#sidControls #ricoPlaylistToggle.rico-playlist-on {
+  background:var(--rico-theme-panel,#333) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+  border-color:var(--rico-theme-fg,#fff) !important;
+}
+#sidControls label,
+#sidControls span,
+#sidControls .rico-bottom-about {
+  color:var(--rico-theme-fg,#fff) !important;
+}
+#sidControls input[type="checkbox"],
+#sidControls input[type="radio"] {
+  accent-color:var(--rico-theme-fg,#fff);
+}
+#sidControls input:focus-visible,
+#sidControls button:focus-visible,
+#ricoLivePlaylist button:focus-visible,
+#ricoRemixEditor button:focus-visible,
+#ricoImportSidWindow button:focus-visible,
+#ricoCommunityPanel button:focus-visible {
+  outline:2px solid var(--rico-theme-fg,#fff) !important;
+  outline-offset:2px;
+}
+#songInfo,
+#songInfo .songInfoLabel,
+#songInfo .songInfoValue,
+#subsongInfo {
+  color:var(--rico-theme-fg,#fff) !important;
+}
+#ricoLivePlaylist,
+#ricoLivePlaylistHeader,
+#ricoLivePlaylistCredits,
+#ricoLivePlaylistItems,
+#ricoLivePlaylistItems .rico-live-row,
+#ricoLivePlaylistItems .rico-live-number,
+#ricoLivePlaylistItems .rico-live-title,
+#ricoLivePlaylistItems .rico-live-artist,
+#ricoLivePlaylistItems .rico-live-composer,
+#ricoLivePlaylistItems .rico-live-group,
+#ricoLivePlaylistItems .rico-live-current,
+#ricoLivePlaylistItems .rico-live-empty,
+#ricoLivePlaylistStars,
+#ricoLivePlaylistStars .rico-rating-note,
+#ricoLivePlaylistCreator,
+#ricoLiveCount,
+#ricoLiveStatus,
+#ricoRemixCount {
+  color:var(--rico-theme-fg,#fff) !important;
+}
+#ricoLivePlaylistHeader,
+#ricoLivePlaylistCredits,
+#ricoRemixBar,
+#ricoLiveResizeGrip {
+  border-color:var(--rico-theme-border,#fff) !important;
+}
+#ricoLivePlaylistHeader button,
+#ricoLivePlaylistItems .rico-live-add,
+#ricoLivePlaylistItems .rico-live-remove,
+#ricoRemixBar button,
+#ricoRemixBar select,
+#ricoRemixEditor select,
+#ricoRemixEditor input,
+#ricoRemixEditor button,
+#ricoImportSidWindow select,
+#ricoImportSidWindow input,
+#ricoImportSidWindow button {
+  color:var(--rico-theme-fg,#fff) !important;
+  border-color:var(--rico-theme-border,#fff) !important;
+}
+#ricoLivePlaylistHeader button:hover:not(:disabled),
+#ricoRemixBar button:hover:not(:disabled),
+#ricoLivePlaylistItems .rico-live-add:hover,
+#ricoLivePlaylistItems .rico-live-remove:hover,
+#ricoRemixEditor button:hover:not(:disabled),
+#ricoImportSidWindow button:hover:not(:disabled) {
+  background:var(--rico-theme-hover,#555) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+}
+#ricoLivePlaylistHeader button:disabled,
+#ricoRemixEditor button:disabled,
+#ricoImportSidWindow button:disabled,
+#ricoCommunityItems button:disabled {
+  opacity:.45;
+  cursor:default;
+}
+#ricoRemixEditor,
+#ricoRemixEditor #ricoRemixHelp,
+#ricoRemixEditor #ricoRemixStatus,
+#ricoRemixEditor #ricoRemixEntries,
+#ricoRemixEditor .rico-remix-entry,
+#ricoImportSidWindow,
+#ricoImportSidWindow .rico-import-note,
+#ricoImportSidWindow #ricoImportTrackList,
+#ricoImportSidWindow .rico-import-track-row,
+#ricoImportSidFooter {
+  color:var(--rico-theme-fg,#fff) !important;
+  border-color:var(--rico-theme-border,#fff) !important;
+}
+#ricoRemixEditor #ricoRemixFloatHeader,
+#ricoImportSidWindow #ricoImportSidHeader,
+#ricoImportSidFooter {
+  background:var(--rico-theme-panel,#333) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+}
+.rico-beta-dialog {
+  background:var(--rico-theme-bg,#000) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+  border-color:var(--rico-theme-border,#fff) !important;
+}
+.rico-beta-dialog strong,
+.rico-beta-dialog p,
+.rico-beta-dialog label {
+  color:var(--rico-theme-fg,#fff) !important;
+}
+.rico-beta-dialog input,
+.rico-beta-dialog button {
+  color:var(--rico-theme-fg,#fff) !important;
+  background:var(--rico-theme-panel,#333) !important;
+  border-color:var(--rico-theme-border,#fff) !important;
+}
+.rico-beta-dialog input::placeholder,
+#ricoRemixEditor input::placeholder,
+#ricoImportSidWindow input::placeholder {
+  color:var(--rico-theme-fg,#fff) !important;
+  opacity:.7;
+}
+.rico-beta-dialog button:hover:not(:disabled) {
+  background:var(--rico-theme-hover,#555) !important;
+}
+#ricoCommunityItems .rico-community-row,
+#ricoCommunityItems .rico-community-row .rico-community-label,
+#ricoCommunityItems .rico-community-description,
+#ricoCommunityItems .rico-community-stars {
+  border-color:var(--rico-theme-border,#fff);
+}
+#ricoCommunityItems .rico-community-row button {
+  border-color:currentColor !important;
+  color:inherit !important;
+}
+#ricoCommunityItems .rico-community-row:hover button,
+#ricoCommunityItems .rico-community-row.rico-community-selected button {
+  color:inherit !important;
+}
+#ricoCommunityPanel, #ricoHvscPanel, #ricoLibraryPanel, #sidListHolder,
+#ricoCommunityPanel strong, #ricoHvscPanel strong {
+  color:var(--rico-theme-fg,#fff) !important;
+  border-color:var(--rico-theme-border,#fff) !important;
+}
+#ricoListTabs button {
+  background:var(--rico-theme-bg,#000) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+  border-color:var(--rico-theme-border,#fff) !important;
+}
+#ricoListTabs button:hover,
+#ricoListTabs button.rico-selected-tab {
+  background:var(--rico-theme-hover,#555) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+}
