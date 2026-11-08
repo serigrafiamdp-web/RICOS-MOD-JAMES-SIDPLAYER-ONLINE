@@ -344,9 +344,9 @@
       if(!capabilitiesResponse.ok)throw Error('Cannot check publication capabilities.');
       var cap=await capabilitiesResponse.json();
       if(collection&&!cap.sidCollectionReorder)
-        throw Error('Cloudflare Worker TEST94 is not deployed yet. Your local order is unchanged.');
+        throw Error('Cloudflare Worker TEST94 is not deployed yet. Public order was not changed; your local preview is preserved.');
       if(playlist&&playlist.dirtyOrder&&!cap.playlistReorder)
-        throw Error('Cloudflare Worker TEST94 is not deployed yet. Your local order is unchanged.');
+        throw Error('Cloudflare Worker TEST94 is not deployed yet. Public order was not changed; your local preview is preserved.');
       var url,method='PUT',payload;
       if(collection){
         url=communityWriteApi+'/collections/'+encodeURIComponent(collection.id)+'/order';
