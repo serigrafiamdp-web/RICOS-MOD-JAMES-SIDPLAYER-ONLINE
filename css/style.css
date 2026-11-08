@@ -2193,3 +2193,21 @@ left: 1px;
 @media(max-width:290px){
   #ricoRemixBar label[for="ricoRemixTarget"]{display:none;}
 }
+
+/* TEST105 — compact hover hint for reordering, outside scrolling windows. */
+#ricoReorderHint {
+  position:fixed;
+  z-index:2147483640;
+  display:none;
+  pointer-events:none;
+  max-width:min(270px,calc(100vw - 16px));
+  padding:6px 9px;
+  border:1px solid var(--rico-theme-border,#aaa);
+  border-radius:4px;
+  background:var(--rico-theme-panel,#222);
+  color:var(--rico-theme-fg,#fff);
+  box-shadow:0 3px 12px rgba(0,0,0,.45);
+  font:11px/1.4 Tahoma,Arial,sans-serif;
+  white-space:normal;
+  overflow-wrap:break-word;
+}
