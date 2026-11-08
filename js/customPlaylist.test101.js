@@ -972,29 +972,67 @@
     remixBusy=true;renderRemixes();
     try{
       await ensureBetaServerReady();
-      var response=await fetch(communityWriteApi+'/playlists',{
-        method:'POST',headers:{'Content-Type':'application/json','X-Beta-Key':key},
-        body:JSON.stringify({format:'ricos-sid-playlist',version:2,name:draft.name,
-          createdBy:draft.creator,tracks:draft.tracks.map(function(t){return {pack:t.pack,file:t.file};})})
-      });
-      var result=await response.json();
-      if(!response.ok)throw Error(result.error||'Remix publication failed.');
-      if(!result.id)throw Error('Publication response did not provide the saved playlist ID.');
       var expectedDraftRefs=draft.tracks.map(function(t){return {pack:t.pack,file:t.file};});
-      await verifyRemoteOrder(communityWriteApi+'/playlists/'+encodeURIComponent(result.id),
-        expectedDraftRefs,'playlist');
+      var remoteId=draft.pendingPublishedId||'';
+      var remoteUrl='';
+      if(!remoteId){
+        var response=await fetch(communityWriteApi+'/playlists',{
+          method:'POST',headers:{'Content-Type':'application/json','X-Beta-Key':key},
+          body:JSON.stringify({format:'ricos-sid-playlist',version:2,name:draft.name,
+            createdBy:draft.creator,tracks:expectedDraftRefs})
+        });
+        var result=await response.json();
+        if(!response.ok)throw Error(result.error||'Remix publication failed.');
+        if(!result.id)throw Error('Server accepted publication but did not return its ID.');
+        remoteId=result.id;
+        // Keep the ID in the draft until GET confirms the stored order.
+        // A temporary failure must never trigger a second POST/duplicate list.
+        draft.pendingPublishedId=remoteId;
+        preserveRemixes();
+      }
+      remoteUrl=communityWriteApi+'/playlists/'+encodeURIComponent(remoteId);
+      try{
+        await verifyRemoteOrder(remoteUrl,expectedDraftRefs,'playlist');
+      }catch(verifyError){
+        // An existing ID may have the previous order (e.g. after an earlier
+        // partial publish). Correct the same published playlist, never duplicate.
+        var put=await fetch(remoteUrl,{
+          method:'PUT',headers:{'Content-Type':'application/json','X-Beta-Key':key},
+          body:JSON.stringify({format:'ricos-sid-playlist',version:2,
+            name:draft.name,createdBy:draft.creator,tracks:expectedDraftRefs})
+        });
+        var changed=await put.json();
+        if(!put.ok&&!(put.status===400&&changed.error==='No playlist changes to save'))
+          throw Error('Published order could not be corrected: '+(changed.error||put.status));
+        await verifyRemoteOrder(remoteUrl,expectedDraftRefs,'playlist');
+      }
       if(activeRemixDraftId===draft.id){
-        activePublicPlaylist={remoteId:result.id,name:draft.name,createdBy:draft.creator,
-          tracks:expectedDraftRefs,originalCount:expectedDraftRefs.length,dirtyOrder:false};
+        // Do not bind a partial playback preview to a longer published list.
+        var samePlayingOrder=activeReferenceTracks &&
+          activeReferenceTracks.length===expectedDraftRefs.length&&
+          activeReferenceTracks.every(function(t,i){
+            return t.pack===expectedDraftRefs[i].pack&&t.file===expectedDraftRefs[i].file;
+          });
+        activePublicPlaylist=samePlayingOrder?{remoteId:remoteId,name:draft.name,
+          createdBy:draft.creator,tracks:expectedDraftRefs.slice(),
+          originalCount:expectedDraftRefs.length,dirtyOrder:false}:null;
         activeRemixDraftId=null;
         activeLocalOrderDirty=false;
+        renderLivePlaylist();
       }
-      remixNotice('PUBLISHED AND VERIFIED: '+draft.name+' · '+result.tracks+' SID in the correct order.');
+      remixNotice('PUBLISHED AND VERIFIED: '+draft.name+' · '+expectedDraftRefs.length+' SID in the correct order.');
       remixDrafts=remixDrafts.filter(function(d){return d!==draft;});
       remixTarget=remixDrafts.length?remixDrafts[0].id:'';
       preserveRemixes();
-      if(typeof window.ricoRefreshCommunityCatalog==='function')await window.ricoRefreshCommunityCatalog();
-    }catch(error){remixNotice('Remix not published: '+error.message);}
+      if(typeof window.ricoRefreshCommunityCatalog==='function'){
+        try{await window.ricoRefreshCommunityCatalog();}
+        catch(refreshError){console.warn('Published successfully, catalog refresh failed',refreshError);}
+      }
+    }catch(error){
+      remixNotice(draft.pendingPublishedId
+        ? 'Playlist created, but order NOT VERIFIED: '+error.message+' Retry PUBLISH to verify/update the SAME playlist.'
+        : 'Remix not published: '+error.message);
+    }
     finally{remixBusy=false;renderRemixes();}
   }
   restoreRemixes();
