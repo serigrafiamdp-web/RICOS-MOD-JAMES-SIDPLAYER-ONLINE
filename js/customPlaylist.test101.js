@@ -505,28 +505,95 @@
     return credits;
   }
 
-  // TEST94: reorder a loaded playlist without restarting audio.
+  // TEST105: single click moves one slot; double click moves ten slots, never twelve.
+  // Wait for the browser's double-click window BEFORE modifying the DOM. Otherwise
+  // the first click re-renders the button and a dblclick cannot reach it.
+  var REORDER_CLICK_DELAY_MS=420;
+  var reorderHint=null;
+  function hideReorderHint(){
+    if(reorderHint)reorderHint.style.display='none';
+  }
+  function showReorderHint(event,message){
+    if(!reorderHint){
+      reorderHint=document.createElement('div');
+      reorderHint.id='ricoReorderHint';
+      reorderHint.setAttribute('role','tooltip');
+      document.body.appendChild(reorderHint);
+    }
+    reorderHint.textContent=message;
+    reorderHint.style.display='block';
+    var x=Math.min(event.clientX+12,window.innerWidth-reorderHint.offsetWidth-8);
+    var y=Math.min(event.clientY+17,window.innerHeight-reorderHint.offsetHeight-8);
+    reorderHint.style.left=Math.max(5,x)+'px';
+    reorderHint.style.top=Math.max(5,y)+'px';
+  }
+  function bindReorderArrows(button,direction,action){
+    var word=direction<0?'up':'down';
+    var instruction='Single click: move '+word+' 1 position. Double-click: move '+word+' 10 positions.';
+    button.attr('title',instruction)
+      .attr('aria-label',instruction);
+    var pending=null;
+    button.on('click',function(event){
+      event.preventDefault();
+      event.stopPropagation();
+      if(event.detail>=2){
+        if(pending!==null){clearTimeout(pending);pending=null;}
+        return;
+      }
+      if(pending!==null)clearTimeout(pending);
+      pending=setTimeout(function(){
+        pending=null;hideReorderHint();action(direction);
+      },REORDER_CLICK_DELAY_MS);
+    });
+    button.on('dblclick',function(event){
+      event.preventDefault();
+      event.stopPropagation();
+      if(pending!==null){clearTimeout(pending);pending=null;}
+      hideReorderHint();action(direction*10);
+    });
+    button.on('pointerenter pointermove',function(event){
+      if(!button.prop('disabled'))showReorderHint(event,instruction);
+    });
+    button.on('pointerleave blur',hideReorderHint);
+    return button;
+  }
+  function insertAt(array,from,to){
+    array.splice(to,0,array.splice(from,1)[0]);
+  }
+  function relocateCursor(cursor,from,to){
+    if(typeof cursor!=='number')return cursor;
+    if(cursor===from)return to;
+    if(from<to&&cursor>from&&cursor<=to)return cursor-1;
+    if(from>to&&cursor>=to&&cursor<from)return cursor+1;
+    return cursor;
+  }
+  // TEST94/105: reorder without restarting SID or losing metadata/reference sync.
   function moveLiveSong(index,step){
     if(!customActive||loadedRankedPlaylist||index<0||index>=custom.length)return;
-    var other=index+step;
-    if(other<0||other>=custom.length||other===index)return;
-    var priorIndex=player.sidListIndex;
-    [custom[index],custom[other]]=[custom[other],custom[index]];
+    var destination=Math.max(0,Math.min(custom.length-1,index+step));
+    if(destination===index)return;
+    insertAt(custom,index,destination);
     if(embeddedHvscPaths.length===custom.length)
-      [embeddedHvscPaths[index],embeddedHvscPaths[other]]=[embeddedHvscPaths[other],embeddedHvscPaths[index]];
+      insertAt(embeddedHvscPaths,index,destination);
     if(activePublicPlaylist&&activePublicPlaylist.tracks.length===custom.length){
-      [activePublicPlaylist.tracks[index],activePublicPlaylist.tracks[other]]=
-        [activePublicPlaylist.tracks[other],activePublicPlaylist.tracks[index]];
+      insertAt(activePublicPlaylist.tracks,index,destination);
       activePublicPlaylist.dirtyOrder=true;
     }
     if(activePublicCollection&&activePublicCollection.tracks.length===custom.length){
-      [activePublicCollection.tracks[index],activePublicCollection.tracks[other]]=
-        [activePublicCollection.tracks[other],activePublicCollection.tracks[index]];
+      insertAt(activePublicCollection.tracks,index,destination);
       activePublicCollection.dirtyOrder=true;
     }
-    if(priorIndex===index)player.sidListIndex=other;
-    else if(priorIndex===other)player.sidListIndex=index;
+    player.sidListIndex=relocateCursor(player.sidListIndex,index,destination);
+    selectedLiveIndex=relocateCursor(selectedLiveIndex,index,destination);
+    queuedLiveIndex=relocateCursor(queuedLiveIndex,index,destination);
     renderLivePlaylist();
+    var scroller=document.getElementById('ricoLivePlaylistItems');
+    var movedRow=scroller&&scroller.children[destination];
+    if(movedRow){
+      var moved=movedRow.getBoundingClientRect(),visible=scroller.getBoundingClientRect();
+      if(moved.top<visible.top)scroller.scrollTop-=visible.top-moved.top+4;
+      else if(moved.bottom>visible.bottom)scroller.scrollTop+=moved.bottom-visible.bottom+4;
+    }
     $('#ricoLiveStatus').text(activePublicPlaylist||activePublicCollection
       ? 'Order changed locally. Press SAVE and enter the beta key to update the public list.'
       : 'Order changed for this playback. Save or publish a personal list to keep it.');
@@ -738,19 +805,17 @@
       var line=$('<div>').addClass('rico-remix-entry');
       $('<span>').text((index+1)+'. '+(t.title||t.file)+' — '+(t.artist||'Unknown artist')).appendTo(line);
       function moveDraft(step){
-        var newIndex=index+step;
-        if(newIndex<0||newIndex>=selected.tracks.length||remixBusy)return;
-        [selected.tracks[index],selected.tracks[newIndex]]=
-          [selected.tracks[newIndex],selected.tracks[index]];
+        if(remixBusy)return;
+        var destination=Math.max(0,Math.min(selected.tracks.length-1,index+step));
+        if(destination===index)return;
+        insertAt(selected.tracks,index,destination);
         preserveRemixes();renderRemixes();
         remixNotice('Order saved locally for '+selected.name+'.');
       }
-      $('<button type="button">').addClass('rico-remix-move').text('↑')
-        .attr('aria-label','Move song up').prop('disabled',index===0||remixBusy)
-        .on('click',function(event){event.stopPropagation();moveDraft(-1);}).appendTo(line);
-      $('<button type="button">').addClass('rico-remix-move').text('↓')
-        .attr('aria-label','Move song down').prop('disabled',index===selected.tracks.length-1||remixBusy)
-        .on('click',function(event){event.stopPropagation();moveDraft(1);}).appendTo(line);
+      bindReorderArrows($('<button type="button">').addClass('rico-remix-move').text('↑')
+        .prop('disabled',index===0||remixBusy),-1,moveDraft).appendTo(line);
+      bindReorderArrows($('<button type="button">').addClass('rico-remix-move').text('↓')
+        .prop('disabled',index===selected.tracks.length-1||remixBusy),1,moveDraft).appendTo(line);
       $('<button type="button">').text('×').attr('aria-label','Remove from remix')
         .on('click',function(event){
           event.stopPropagation();selected.tracks.splice(index,1);
@@ -986,19 +1051,13 @@
           .on('click',function(event){event.stopPropagation();addRemixTrack(index);})
           .appendTo(wrap);
         if(customActive){
-        $('<button type="button">').addClass('rico-live-move')
+        bindReorderArrows($('<button type="button">').addClass('rico-live-move')
           .toggleClass('rico-ranked-disabled',loadedRankedPlaylist).text('↑')
-          .attr('aria-label','Move '+songTitle+' up')
-          .attr('title',loadedRankedPlaylist?'Fixed original ranking order':'Move song up')
-          .prop('disabled',loadedRankedPlaylist||index===0)
-          .on('click',function(event){event.stopPropagation();moveLiveSong(index,-1);})
+          .prop('disabled',loadedRankedPlaylist||index===0),-1,function(step){moveLiveSong(index,step);})
           .appendTo(wrap);
-        $('<button type="button">').addClass('rico-live-move')
+        bindReorderArrows($('<button type="button">').addClass('rico-live-move')
           .toggleClass('rico-ranked-disabled',loadedRankedPlaylist).text('↓')
-          .attr('aria-label','Move '+songTitle+' down')
-          .attr('title',loadedRankedPlaylist?'Fixed original ranking order':'Move song down')
-          .prop('disabled',loadedRankedPlaylist||index===list.length-1)
-          .on('click',function(event){event.stopPropagation();moveLiveSong(index,1);})
+          .prop('disabled',loadedRankedPlaylist||index===list.length-1),1,function(step){moveLiveSong(index,step);})
           .appendTo(wrap);
         if(!activePublicCollection){
         $('<button type="button">').addClass('rico-live-remove')
