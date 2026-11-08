@@ -285,8 +285,14 @@
       option.value=d.id;option.textContent=d.name+' ('+d.tracks.length+')';target.appendChild(option);
     });
     target.value=selected?selected.id:'';
+    var editorTarget=document.getElementById('ricoRemixEditorTarget');
+    if(editorTarget){
+      editorTarget.textContent='';
+      Array.prototype.forEach.call(target.options,function(option){editorTarget.appendChild(option.cloneNode(true));});
+      editorTarget.value=target.value;
+    }
     $('#ricoRemixCount').text(selected?selected.tracks.length+' SID':'0 SID');
-    $('#ricoRemixEditor').css('display',remixOpen?'block':'none');
+    $('#ricoRemixEditor').css('display',remixOpen?'flex':'none');
     $('#ricoRemixToggle').attr('aria-expanded',remixOpen?'true':'false');
     $('#ricoRemixName').val(selected?selected.name:'').prop('disabled',!selected);
     $('#ricoRemixCreator').val(selected?selected.creator:'').prop('disabled',!selected);
@@ -377,7 +383,11 @@
   (function initRemixControls(){
     var toggle=$('#ricoRemixToggle'),target=$('#ricoRemixTarget');
     if(!toggle.length)return;
-    toggle.on('click',function(event){event.stopPropagation();remixOpen=!remixOpen;renderRemixes();});
+    toggle.on('click',function(event){event.stopPropagation();remixOpen=true;renderRemixes();});
+    $('#ricoRemixClose').on('click',function(event){event.stopPropagation();remixOpen=false;renderRemixes();});
+    $('#ricoRemixEditorTarget').on('change',function(event){
+      event.stopPropagation();remixTarget=this.value;preserveRemixes();renderRemixes();
+    });
     target.on('change',function(event){
       event.stopPropagation();remixTarget=this.value;preserveRemixes();renderRemixes();
     });
@@ -396,6 +406,29 @@
     $('#ricoRemixEditor').on('mousedown mouseup pointerdown pointerup keydown keyup keypress',function(event){
       if(event.target.tagName==='INPUT'||event.target.tagName==='SELECT')event.stopPropagation();
     });
+    // TEST67 floating creator: independent drag by titlebar; inputs stay editable.
+    (function(){
+      var panel=document.getElementById('ricoRemixEditor');
+      var bar=document.getElementById('ricoRemixFloatHeader');
+      if(!panel||!bar)return;
+      var drag=null;
+      bar.addEventListener('pointerdown',function(e){
+        if(e.button!==0||e.target.closest('button'))return;
+        var rect=panel.getBoundingClientRect();
+        drag={x:e.clientX,y:e.clientY,left:rect.left,top:rect.top};
+        if(bar.setPointerCapture)bar.setPointerCapture(e.pointerId);
+        e.preventDefault();e.stopPropagation();
+      });
+      bar.addEventListener('pointermove',function(e){
+        if(!drag)return;
+        var left=Math.max(0,Math.min(window.innerWidth-panel.offsetWidth,drag.left+e.clientX-drag.x));
+        var top=Math.max(0,Math.min(window.innerHeight-45,drag.top+e.clientY-drag.y));
+        panel.style.left=left+'px';panel.style.top=top+'px';
+        panel.style.transform='none';e.stopPropagation();
+      });
+      bar.addEventListener('pointerup',function(e){drag=null;e.stopPropagation();});
+      bar.addEventListener('pointercancel',function(){drag=null;});
+    })();
     renderRemixes();
   })();
 
