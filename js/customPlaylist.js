@@ -678,6 +678,49 @@
       loadCustomIndex(Number.isInteger(startIndex) ? startIndex : 0);
       showLivePlaylist(true);
     }
+    // TEST61: reference-only playlists resolve SID files from one immutable HVSC base.
+    // Existing v1 playlists with embedded SID remain fully supported.
+    async function loadStoredPlaylist(data) {
+      if (!data || data.format!=='ricos-sid-playlist') throw Error('Unsupported playlist.');
+      if (data.version===1) { loadPlaylist(data); return; }
+      if (data.version!==2 || !Array.isArray(data.tracks) ||
+          !data.tracks.length || data.tracks.length>2000) throw Error('Invalid reference playlist.');
+      if(typeof JSZip==='undefined') throw Error('SID ZIP decoder not available.');
+      var packages=new Map(), output=[], bytesTotal=0;
+      for(var i=0;i<data.tracks.length;i++){
+        var track=data.tracks[i];
+        if(!track || typeof track.pack!=='string' || typeof track.file!=='string' ||
+           !/^library\\/packs\\/(?:musicians|demos)\\/[a-zA-Z0-9_.\\/-]+\\.zip$/.test(track.pack) ||
+           track.pack.includes('..') || track.file.includes('..') ||
+           track.file.startsWith('/') || track.file.includes('\\\\') ||
+           !/^[^<>:*?|]+\\.sid$/i.test(track.file)) throw Error('Invalid catalog SID reference.');
+        var archive=packages.get(track.pack);
+        if(!archive){
+          var response=await fetch(track.pack);
+          if(!response.ok)throw Error('SID pack missing ('+response.status+'): '+track.pack);
+          archive=await JSZip.loadAsync(await response.arrayBuffer());
+          packages.set(track.pack,archive);
+        }
+        var file=archive.file(track.file);
+        if(!file)throw Error('SID not found in catalog: '+track.file);
+        var bytes=await file.async('uint8array');
+        bytesTotal+=bytes.length;
+        if(bytesTotal>64*1024*1024) throw Error('Playlist exceeds 64 MB.');
+        var entry=parseSID(bytes,{name:track.file,size:bytes.length});
+        if(!entry)throw Error('Invalid SID: '+track.file);
+        output.push(entry);
+      }
+      // Do not change playback until every reference has been resolved and validated.
+      cancelPendingCommunityStartup();
+      landingPlaylists=false;
+      player.isPlaying=false;player.isPaused=false;
+      custom.length=0;Array.prototype.push.apply(custom,output);
+      nameEl.value=data.name.slice(0,100);
+      loadedPlaylistTitle=data.name.trim().slice(0,100);
+      loadedPlaylistCreator=(data.createdBy||'You').slice(0,100);
+      if(!customActive)activate('custom');else player.initFileSelection();
+      loadCustomIndex(0);showLivePlaylist(true);
+    }
     async function refreshSaved() {
       var rows=await dbCall('readonly',function(store){return store.getAll();});
       rows.sort(function(a,b){return (b.updatedAt||'').localeCompare(a.updatedAt||'');});
@@ -715,7 +758,7 @@
               listEl.value=item.id;
               var stored=await dbCall('readonly',function(store){return store.get(item.id);});
               if (!stored) throw Error('Playlist not found.');
-              loadPlaylist(stored);
+              await loadStoredPlaylist(stored);
               say('Loaded: '+stored.name+' ('+stored.tracks.length+' SID).');
             } catch(error){say(error.message || 'Failed to load playlist.');}
           });
@@ -772,7 +815,7 @@
       if (!listEl.value) throw Error('Select a saved playlist.');
       var data=await dbCall('readonly',function(store){return store.get(listEl.value);});
       if (!data) throw Error('Playlist not found.');
-      loadPlaylist(data);
+      await loadStoredPlaylist(data);
       say('Loaded: '+data.name+'.');
     });
     run('ricoDownloadList',function(){
