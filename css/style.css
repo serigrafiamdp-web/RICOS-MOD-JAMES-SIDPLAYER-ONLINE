@@ -1409,3 +1409,23 @@ left: 1px;
   flex:none;border:1px solid currentColor;background:transparent;color:inherit;
   padding:5px 10px;cursor:pointer;
 }
+
+/* TEST63: compact removal controls in the floating playlist. */
+#ricoLivePlaylistItems .rico-live-edit-row {
+  display:flex;align-items:stretch;min-width:0;border-bottom:1px solid #24343f;
+}
+#ricoLivePlaylistItems .rico-live-edit-row .rico-live-row {
+  flex:1 1 auto;min-width:0;width:auto;border-bottom:0;
+}
+#ricoLivePlaylistItems .rico-live-remove {
+  flex:0 0 29px;border:0;border-left:1px solid #344650;
+  color:#dce5e7;background:transparent;cursor:pointer;
+  font:18px Tahoma,Arial,sans-serif;padding:0 5px;
+}
+#ricoLivePlaylistItems .rico-live-remove:hover {background:#73313b;color:white;}
+#ricoLivePlaylistItems .rico-live-save-changes {
+  display:block;width:calc(100% - 16px);margin:9px 8px;padding:7px 8px;
+  border:1px solid #82989f;background:#243f43;color:#e4f5f2;
+  font:11px Tahoma,Arial,sans-serif;cursor:pointer;
+}
+#ricoLivePlaylistItems .rico-live-save-changes:hover {background:#31625c;}
