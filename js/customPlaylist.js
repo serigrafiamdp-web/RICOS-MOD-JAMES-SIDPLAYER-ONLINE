@@ -1310,13 +1310,15 @@
     // TEST71: closing Remix Creator leads directly to the unified COMMUNITY PLAYLISTS.
     window.ricoOpenCommunityFromRemix=function(){
       cancelStartupPlaylist();
-      showCommunity(true);
       var manager=player.dialogManager;
       if(manager && manager.dialogShown!=='chooseSidDialog'){
         if(manager.dialogShown&&typeof manager.hideDialog==='function')
           manager.hideDialog(manager.dialogShown);
         manager.showDialog('chooseSidDialog');
       }
+      // The original dialog manager restores its own LOCAL panel when opening.
+      // Set the COMMUNITY view after showDialog so it cannot be overwritten.
+      showCommunity(true);
     };
     // TEST45: shared TOP 100 browser. Selecting a tab never changes playback.
     async function getRankData(kind){
