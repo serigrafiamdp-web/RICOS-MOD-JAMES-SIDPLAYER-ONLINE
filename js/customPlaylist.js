@@ -315,15 +315,13 @@
   function addRemixTrack(index){
     var target=selectedRemix();
     if(!target){
-      remixOpen=true;renderRemixes();
-      remixNotice('Create a REMIX PLAYLIST and select its destination first.');
+      remixNotice('Select a REMIX destination first using ADD + TO.');
       return;
     }
     // Public user-created playlists (v2) preserve the exact original HVSC ZIP paths.
     // Do NOT invent pack paths for legacy Base64 or ranked / built-in SID files.
     var track=activePublicPlaylist&&customActive&&activePublicPlaylist.tracks[index];
     if(!track||!track.pack||!track.file){
-      remixOpen=true;renderRemixes();
       remixNotice('This SID has no HVSC reference yet. Only referenced community SID can be added in TEST66.');
       return;
     }
