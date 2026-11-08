@@ -1385,3 +1385,27 @@ left: 1px;
   border-left:3px solid var(--rico-theme-fg,#fff);
   padding-left:5px;
 }
+
+/* TEST61: community playlist sections and creator credit use active theme. */
+#ricoLibraryCreator{
+  flex:1 1 150px;min-width:110px;min-height:27px;padding:3px 6px;
+  box-sizing:border-box;background:var(--rico-theme-bg,#000);
+  color:var(--rico-theme-fg,#fff);
+  border:1px solid var(--rico-theme-border,#888);
+  font:12px Arial,sans-serif;cursor:text;
+}
+#ricoLibraryCreator:focus{outline:2px solid var(--rico-theme-fg,#fff);outline-offset:1px;}
+#ricoLocalCommunityItems .rico-local-community-heading{
+  border-bottom:1px solid currentColor;margin:9px 0 5px;padding:5px 1px;
+  font-size:12px;font-weight:bold;opacity:.85;
+}
+#ricoLocalCommunityItems .rico-local-community-empty{
+  font-size:12px;padding:9px 3px;opacity:.7;
+}
+#ricoLocalCommunityItems .rico-local-community-row{
+  background:transparent;color:inherit;border-color:currentColor;
+}
+#ricoLocalCommunityItems .rico-local-community-row button{
+  flex:none;border:1px solid currentColor;background:transparent;color:inherit;
+  padding:5px 10px;cursor:pointer;
+}
