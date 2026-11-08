@@ -115,6 +115,18 @@
             <div id="ricoLibrarySections" class="rico-library-sections"></div>
             <div id="ricoLibrarySongs" class="rico-library-songs"></div>
           </div>
+          <div id="ricoLibraryBuilder" class="rico-library-builder">
+            <div class="rico-library-builder-head">
+              <strong>MY PLAYLIST <span id="ricoDraftCount">(0 SID)</span></strong>
+              <button type="button" id="ricoLibraryAddAll">ADD ALL FROM ARTIST</button>
+              <button type="button" id="ricoLibraryNewList">NEW LIST</button>
+            </div>
+            <div class="rico-library-builder-save">
+              <input id="ricoLibraryListName" type="text" maxlength="100" value="My SID Playlist" aria-label="Personal playlist name" placeholder="Playlist name"/>
+              <button type="button" id="ricoLibrarySaveList">SAVE LIST</button>
+            </div>
+            <div id="ricoLibraryDraftItems" class="rico-library-draft-items" role="list"></div>
+          </div>
           <div id="ricoLibraryStatus" role="status">Select a category.</div>
         </div>
       </div>
