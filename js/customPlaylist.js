@@ -682,10 +682,13 @@
   $('#ricoLiveClose').on('click', function () {
     showLivePlaylist(false);
     cancelPendingCommunityStartup();
-    var manager=player.dialogManager;
-    if(manager && !manager.dialogShown) {
-      // The library is brought forward, centered by the original dialog manager.
-      manager.showDialog('chooseSidDialog');
+    // TEST74: closing a playing list must never reveal the retired USER LOCAL view.
+    // Reuse the single community-opening path without modifying playback.
+    if(typeof window.ricoOpenCommunityFromRemix==='function'){
+      window.ricoOpenCommunityFromRemix();
+    }else{
+      var manager=player.dialogManager;
+      if(manager&&!manager.dialogShown)manager.showDialog('chooseSidDialog');
     }
   });
 
@@ -1399,6 +1402,19 @@
       // Set the COMMUNITY view after showDialog so it cannot be overwritten.
       showCommunity(true);
     };
+    // TEST74: any route opening Choose A SID starts from COMMUNITY PLAYLISTS,
+    // rather than accidentally exposing the old LOCAL view through sidPlayer.
+    (function secureChooseSidBrowser(){
+      var manager=player.dialogManager;
+      if(!manager||typeof manager.showDialog!=='function'||manager.ricoCommunityGuard)return;
+      var original=manager.showDialog;
+      manager.showDialog=function(id){
+        var result=original.apply(this,arguments);
+        if(id==='chooseSidDialog')showCommunity(true);
+        return result;
+      };
+      manager.ricoCommunityGuard=true;
+    })();
     // TEST45: shared TOP 100 browser. Selecting a tab never changes playback.
     async function getRankData(kind){
       if(ricoRankCache[kind])return ricoRankCache[kind];
