@@ -1,11 +1,28 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
-## Development status — TEST82 PASS / TEST83 SID publishing staged (2026-11-08)
+## Current development checkpoint — TEST102 PASS (2026-11-08)
 
-- **Latest user-confirmed PASS:** TEST82: OUR COLLECTION lists imported collections without hardcoded RICO, retaining LOAD and local DELETE.
-- **Current GitHub Pages build:** [TEST83 staging](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=83r2staged), using `js/customPlaylist.test83.js`. Existing SID playback, HVSC and community playlist features must remain unchanged.
-- **TEST83 PUBLISH:** the browser now supports the beta-key flow for V1 imported collections and checks `/capabilities.sidUploadsEnabled`. GitHub backend source and D1 migration are prepared for independent SHA-256-addressed SID storage in Cloudflare R2; **not deployed to Cloudflare yet**. PUBLISH will refuse until R2, DB schema, and Worker are ready.
-- **Deployment runbook:** [docs/TEST83_SID_PUBLISH_R2_D1_DEPLOY.md](docs/TEST83_SID_PUBLISH_R2_D1_DEPLOY.md). Do not claim SID uploads are live or TEST83 is PASS before verifying deployment and playback.
+**Latest user-confirmed visual PASS:** **TEST102**, compact floating playlist: **playlist title + Playlist by** on one line; editable **TIMER** on the **REMIX** controls line; no visible SILENCE DETECT label. The detector remains active.
+
+**Latest user-confirmed audio PASS:** **TEST100**, smooth 5-second cosine fade-out to near zero, **no fade-in and no artificial gap**, volume restored at the first new SID audio buffer to prevent an audible spike from the previous SID.
+
+**Current player:** [GitHub Pages — TEST102](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=102compact)  
+**Published front-end:** `index.html` → `js/customPlaylist.test101.js?v=test102compact` and `css/style.css?v=test102compact`  
+**AUTO / silence detection:** TEST101, initial `03:00` adjustable within the Playlist. AUTO begins the 5-second fade approximately five seconds before the selected maximum. When original SID audio stays very quiet for 2.5 s after the first 12 s, or when the SID engine ends, AUTO may advance earlier. **Preliminary positive testing reported; further SID coverage needed.**
+
+**Detailed documentation:**
+- [Complete TEST102 PASS checkpoint — architecture, features, tests, backend, limitations and next tasks](docs/CHECKPOINT_TEST102_PASS_2026-11-08.md).
+- [Audio architecture — TEST100 fade/handoff + TEST101 AUTO timer/silence detection](docs/AUDIO_AUTO_TRANSITIONS_TEST102.md).
+- [TEST94 remote playlist reordering — Cloudflare deployment/verification runbook](docs/TEST94_REORDER_DEPLOY.md).
+- [TEST83 contributed-SID publishing — earlier deployment planning](docs/TEST83_SID_PUBLISH_R2_D1_DEPLOY.md).
+
+**Important integration boundaries:** Editing GitHub Pages does not deploy the Cloudflare Worker. The current Worker source includes remote playlist/collection reorder operations, but the corresponding deployed Worker and end-to-end save confirmation have **not been verified in this checkpoint**. Public write operations require beta-key authorization. Rankings TOP 100 remain immutable in the UI. Double-click ±10 reorder and arrow tooltips were requested but **have not been implemented**.
+
+### Earlier staging milestone — TEST82/83 (historical)
+
+- TEST82 PASS: OUR COLLECTION listed imported collections with LOAD and local DELETE.
+- TEST83 introduced the contributed SID publishing flow and Cloudflare capability checks. Read its original runbook before editing backend infrastructure. Historical staging notes do not establish present cloud deployment status.
+- Legacy notes below preserve original research and test history. Where they say **current**, treat those statements as *historical*, superseded by TEST102 above.
 
 **A Commodore 64 SID Music Player — Preservation, Maintenance & Continued Development**
 
@@ -39,7 +56,7 @@ https://github.com/serigrafiamdp-web/RICOS-MOD-JAMES-SIDPLAYER-ONLINE
 - Switchable oscilloscope display with original line rendering and filled waveform visualization.
 - Retro oscilloscope color palettes, including green phosphor, amber, orange, Commodore 64 BASIC colors and additional combinations.
 - Automatic SID playback with optional AUTO ON/OFF control.
-- Automatic progression between **SID files only** (not subtunes) using documented track duration or a configurable fallback; TEST18 PASS.
+- Automatic progression between **SID files only** (not subtunes), initially driven by track metadata/fallback (TEST18), now by the user-editable maximum TIMER plus original-audio silence detection (TEST101).
 - Background playback AUTO driven from the audio callback rather than `requestAnimationFrame`, so auto-switching continues when the browser tab is inactive; TEST19 PASS on user test.
 - Manual subtune navigation remains available using its own controls.
 - Custom SID playlists supporting multiple local files.
@@ -109,7 +126,7 @@ Project: https://github.com/serigrafiamdp-web/RICOS-MOD-JAMES-SIDPLAYER-ONLINE
 
 Online Player: https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/
 
-## CURRENT STABLE CHECKPOINT — TEST64 PASS (2026-11-08)
+## HISTORICAL STABLE CHECKPOINT — TEST64 PASS (2026-11-08)
 
 **TEST64 PASS confirmed by the project owner:** beta-key publishing of public HVSC reference playlists, temporary removal of songs with ×, and permanent removal-only edits via a fixed **SAVE** button and password dialog in the floating player. Cloudflare Worker + D1 are deployed and working.
 
@@ -117,7 +134,7 @@ Online Player: https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONL
 - [Technical architecture and D1 operations](docs/ARCHITECTURE_COMMUNITY_HVSC_D1_TEST62.md)
 - [Player TEST64](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=64save)
 
-**Next candidate TEST65 (not implemented):** + buttons to add songs from existing playlists to a new MY PLAYLIST without interrupting playback; preserve ranked lists as read-only.
+**Historical planning note:** the subsequent Remix/+/ranking work was implemented in later tests; see the TEST102 checkpoint for present status.
 
 ## PREVIOUS STABLE CHECKPOINT — TEST62 PASS (2026-11-08)
 
@@ -129,7 +146,7 @@ Online Player: https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONL
 - **Community API:** https://ricos-sid-community.serigrafiamdp.workers.dev/playlists
 - **Backend source/schema:** [community/api/worker.js](community/api/worker.js) · [community/api/schema.sql](community/api/schema.sql).
 
-**Next development, not yet PASS:** editing published playlists requires verifying authorship. Never allow anonymous visitors to overwrite/delete another author's list. Do not claim that a browser nickname is an authenticated identity.
+**Historical design warning (still applicable):** editing published playlists requires authorization. Never allow anonymous visitors to overwrite/delete another author's list. A browser nickname is not an authenticated identity; the beta key is not per-user ownership.
 
 ## Stable checkpoint — 2026-11-06 (TEST19 PASS)
 
@@ -137,7 +154,7 @@ The 2026-11-06 tested baseline is **TEST19 PASS**: AUTO switches to the next SID
 
 ## Stable checkpoint — 2026-11-07 (TEST54 PASS)
 
-**Current user-confirmed visual baseline: TEST54 PASS**. Stable reference: commit `fab528916eaf6e46465e2441845817a2ccd71edc` (the TEST54 stylesheet/index update), branch `main`.
+**Historical user-confirmed visual baseline: TEST54 PASS**. Stable reference: commit `fab528916eaf6e46465e2441845817a2ccd71edc` (the TEST54 stylesheet/index update), branch `main`.
 
 - Browser tabs now include RICO'S PLAYLISTS, GAMES (22), TOP 100 HVSC GAMES, TOP GROUPS, TOP MUSICIANS and USER LOCAL.
 - Two curated CSDb collections are published: 100 embedded SID files in each of `community/playlists/csdb-top-100-groups.json` and `community/playlists/csdb-top-100-musicians.json`. Editorial selections use CSDb rankings and HVSC tracks; artist/group credit matching may be corrected later.
