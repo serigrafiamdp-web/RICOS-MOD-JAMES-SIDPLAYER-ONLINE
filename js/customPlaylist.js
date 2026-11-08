@@ -1017,6 +1017,8 @@
       var button=document.getElementById(pair[0]);if(button)button.addEventListener('click',function(){showRank(pair[1]);});
     });
 
+    // TEST62: public playlist metadata on D1; static curated entries stay first.
+    var communityApiBase='https://ricos-sid-community.serigrafiamdp.workers.dev';
     async function loadCommunityCatalog() {
       if (!communityItems) return;
       var requestNumber=++communityRequestNumber;
@@ -1027,6 +1029,24 @@
         var catalog=await response.json();
         if (!catalog || catalog.format!=='ricos-community-catalog' || catalog.version!==1 ||
             !Array.isArray(catalog.playlists)) throw Error('Unsupported community catalog.');
+        // Append public user playlists after manually curated playlists.
+        try{
+          var remoteResponse=await fetch(communityApiBase+'/playlists',{cache:'no-store'});
+          if(!remoteResponse.ok)throw Error('Public service returned '+remoteResponse.status);
+          var remoteCatalog=await remoteResponse.json();
+          if(remoteCatalog&&Array.isArray(remoteCatalog.playlists)){
+            remoteCatalog.playlists.forEach(function(entry){
+              if(entry&&typeof entry.title==='string'&&
+                 typeof entry.id==='string'&&/^[a-z0-9-]{12,48}$/i.test(entry.id))
+                catalog.playlists.push({
+                  id:entry.id,title:entry.title,createdBy:entry.createdBy||'Unknown',
+                  tracks:Number(entry.tracks)||0,remoteId:entry.id
+                });
+            });
+          }
+        }catch(remoteError){
+          console.warn('Public user playlists unavailable, showing curated list only',remoteError);
+        }
         if(requestNumber!==communityRequestNumber) return;
         communityItems.textContent='';
         if(!catalog.playlists.length) {
@@ -1037,8 +1057,10 @@
         var firstPlayable=null;
         var firstRow=null;
         catalog.playlists.forEach(function(item){
-          if(!item || typeof item.title!=='string' || typeof item.file!=='string' ||
-             !/^community\/playlists\/[a-zA-Z0-9_-]+\.json$/.test(item.file)) return;
+          if(!item || typeof item.title!=='string' ||
+             !(item.remoteId ? /^[a-z0-9-]{12,48}$/i.test(item.remoteId) :
+               typeof item.file==='string' &&
+               /^community\/playlists\/[a-zA-Z0-9_-]+\.json$/.test(item.file))) return;
           var row=document.createElement('div');
           row.className='rico-community-row';
           row.tabIndex=0;
@@ -1068,7 +1090,7 @@
             button.disabled=true;
             row.setAttribute('aria-busy','true');
             try {
-              var result=await fetch(item.file,{cache:'no-store'});
+              var result=await fetch(item.remoteId ? communityApiBase+'/playlists/'+encodeURIComponent(item.remoteId) : item.file,{cache:'no-store'});
               if(!result.ok) throw Error('Playlist unavailable.');
               var body=await result.text();
               if(body.length>90*1024*1024) throw Error('Playlist too large.');
@@ -1076,7 +1098,7 @@
               // Ignore a late auto-load if the visitor picked a different source.
               if(isStartup && !startupPlaylistPending) return;
               if(isStartup) cancelStartupPlaylist();
-              loadPlaylist(data); // Includes playing the first SID.
+              await loadStoredPlaylist(data); // Plays only after all referenced SID files resolve.
               selectedCommunityId=item.id||item.file;
               Array.prototype.forEach.call(communityItems.querySelectorAll('.rico-community-row'),function(other){
                 other.classList.toggle('rico-community-selected',other===row);
@@ -1381,14 +1403,17 @@
             tracks:draft.map(function(item){
               return {pack:item.pack,file:item.file};
             })};
-          if(draftId)data.id=draftId;
-          else data.id='list-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);
-          data.updatedAt=new Date().toISOString();
-          await dbCall('readwrite',function(store){return store.put(data);});
-          draftId=data.id;
-          await refreshSaved();
-          status('Saved locally: '+title+' ('+data.tracks.length+' SID). Open COMMUNITY PLAYLISTS to load and play.');
-          say('Saved locally: '+title+' ('+data.tracks.length+' SID).');
+          var publishResponse=await fetch(communityApiBase+'/playlists',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(data)
+          });
+          var receipt=await publishResponse.json();
+          if(!publishResponse.ok)throw Error(receipt.error||'Publication failed.');
+          draftId=receipt.id;
+          status('PUBLISHED for everyone: '+title+' — Playlist by '+creator+' · '+data.tracks.length+' SID.');
+          say('Published: '+title+' — Playlist by '+creator+'.');
+          await loadCommunityCatalog();
         }catch(error){status('Could not save: '+error.message);}
         finally{draftBusy=false;renderDraft();}
       });
