@@ -1460,3 +1460,11 @@ left: 1px;
   padding:6px 13px;cursor:pointer;font:11px Tahoma,Arial,sans-serif;
 }
 .rico-beta-actions button:hover {background:#375b61;}
+
+/* TEST65 — keep LOAD / EDIT / DELETE compact in community rows. */
+#ricoCommunityItems .rico-community-row {gap:5px;}
+#ricoCommunityItems .rico-community-row > button {
+  font:10px Tahoma,Arial,sans-serif;padding:5px 6px;
+  white-space:nowrap;
+}
+#ricoCommunityItems .rico-community-row > button:hover {text-decoration:underline;}
