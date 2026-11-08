@@ -16,13 +16,15 @@ function validReference(x){
     && !x.file.includes('\\') && /^[^<>:*?|]+\.sid$/i.test(x.file);
 }
 async function hashSecret(secret){
- const bytes=new TextEncoder().encode(secret);
- const digest=await crypto.subtle.digest('SHA-256',bytes);
+ const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(secret));
  return [...new Uint8Array(digest)].map(v=>v.toString(16).padStart(2,'0')).join('');
 }
-function makeSecret(){
- const bytes=crypto.getRandomValues(new Uint8Array(32));
- return [...bytes].map(v=>v.toString(16).padStart(2,'0')).join('');
+async function hasValidBetaKey(request,env){
+ const configured=env.BETA_EDIT_KEY;
+ const supplied=request.headers.get('X-Beta-Key')||'';
+ if(typeof configured!=='string'||!configured)return false;
+ if(typeof supplied!=='string'||!supplied||supplied.length>128)return false;
+ return (await hashSecret(supplied))===(await hashSecret(configured));
 }
 export default {
  async fetch(request,env){
@@ -32,7 +34,7 @@ export default {
    if(origin!==ORIGIN)return new Response(null,{status:403});
    return new Response(null,{status:204,headers:{
     'access-control-allow-origin':origin,'access-control-allow-methods':'GET, POST, PUT, OPTIONS',
-    'access-control-allow-headers':'Content-Type, X-Playlist-Edit-Key','access-control-max-age':'86400'}});
+    'access-control-allow-headers':'Content-Type, X-Beta-Key','access-control-max-age':'86400'}});
   }
   if(request.method==='POST' && origin!==ORIGIN)return text('Origin not allowed',403,origin);
   if(request.method==='GET' && url.pathname==='/playlists'){
@@ -49,6 +51,8 @@ export default {
   const isUpdate=request.method==='PUT'&&!!updateMatch;
   if(!isCreate&&!isUpdate)return text('Not found',404,origin);
   if(origin!==ORIGIN)return text('Origin not allowed',403,origin);
+  // Never trust a client-side key check. All writes require Cloudflare secret.
+  if(!(await hasValidBetaKey(request,env)))return text('Invalid beta key or server beta key not configured',403,origin);
   if((Number(request.headers.get('Content-Length'))||0)>180000)return text('Payload too large',413,origin);
   let data;
   try{const raw=await request.text();if(raw.length>180000)return text('Payload too large',413,origin);data=JSON.parse(raw);}
@@ -62,35 +66,44 @@ export default {
   if(new Set(tracks.map(t=>t.pack+'::'+t.file)).size!==tracks.length)return text('Duplicate SID reference',400,origin);
   const now=Date.now();
   if(isUpdate){
-    const secret=request.headers.get('X-Playlist-Edit-Key')||'';
-    if(!/^[0-9a-f]{64}$/.test(secret))return text('Edit key required',403,origin);
-    const record=await env.DB.prepare(
-      'SELECT p.id, p.creator, p.created_at, k.secret_hash FROM playlists p JOIN playlist_edit_keys k ON p.id=k.id WHERE p.id=?'
-    ).bind(updateMatch[1]).first();
-    if(!record)return text('Playlist not editable without original creator key',403,origin);
-    if((await hashSecret(secret))!==record.secret_hash)return text('Invalid edit key',403,origin);
-    if(data.createdBy.trim()!==record.creator)return text('Creator credit cannot change',400,origin);
-    const payload={format:'ricos-sid-playlist',version:2,id:record.id,
-      name:data.name.trim(),createdBy:record.creator,
-      createdAt:new Date(record.created_at).toISOString(),updatedAt:new Date(now).toISOString(),tracks};
-    await env.DB.prepare('UPDATE playlists SET title=?,track_count=?,payload=? WHERE id=?')
-      .bind(payload.name,tracks.length,JSON.stringify(payload),record.id).run();
-    return json({id:record.id,title:payload.name,createdBy:payload.createdBy,tracks:tracks.length,updated:true},200,origin);
+    const record=await env.DB.prepare('SELECT id,title,creator,created_at,payload FROM playlists WHERE id=?')
+      .bind(updateMatch[1]).first();
+    if(!record)return text('Playlist not found',404,origin);
+    if(data.name.trim()!==record.title||data.createdBy.trim()!==record.creator)
+      return text('Name and creator cannot change in removal-only edits',400,origin);
+    const original=JSON.parse(record.payload);
+    if(!Array.isArray(original.tracks))return text('Stored playlist invalid',500,origin);
+    // Only removals are allowed: same order, no new SID entries, no reordering.
+    let cursor=0;
+    for(const track of tracks){
+      while(cursor<original.tracks.length &&
+        (original.tracks[cursor].pack!==track.pack||original.tracks[cursor].file!==track.file))cursor++;
+      if(cursor>=original.tracks.length)return text('Only removing existing SID is allowed',400,origin);
+      cursor++;
+    }
+    if(tracks.length>=original.tracks.length)
+      return text('Remove at least one SID before saving',400,origin);
+    const payload={...original,tracks,updatedAt:new Date(now).toISOString()};
+    // Optimistic concurrency: old payload must still match, to avoid stale overwrites.
+    const write=await env.DB.prepare(
+      'UPDATE playlists SET track_count=?,payload=? WHERE id=? AND payload=?')
+      .bind(tracks.length,JSON.stringify(payload),record.id,record.payload).run();
+    if(write.meta?.changes!==1)return text('Playlist changed; reload before editing',409,origin);
+    return json({id:record.id,title:record.title,createdBy:record.creator,tracks:tracks.length,updated:true},200,origin);
   }
   const ip=request.headers.get('CF-Connecting-IP')||'unknown';
   const ipHash=await hashSecret(ip+':'+(env.RATE_SALT||''));
   const count=await env.DB.prepare('SELECT COUNT(*) as n FROM submissions WHERE ip_hash=? AND created_ms>?')
     .bind(ipHash,now-3600000).first();
   if((count?.n||0)>=5)return text('Too many playlists; try again later',429,origin);
-  const id=crypto.randomUUID(),editKey=makeSecret();
+  const id=crypto.randomUUID();
   const payload={format:'ricos-sid-playlist',version:2,id,name:data.name.trim(),
     createdBy:data.createdBy.trim(),createdAt:new Date(now).toISOString(),tracks};
   await env.DB.batch([
     env.DB.prepare('INSERT INTO playlists(id,title,creator,track_count,payload,created_at) VALUES(?,?,?,?,?,?)')
       .bind(id,payload.name,payload.createdBy,tracks.length,JSON.stringify(payload),now),
-    env.DB.prepare('INSERT INTO playlist_edit_keys(id,secret_hash) VALUES(?,?)').bind(id,await hashSecret(editKey)),
     env.DB.prepare('INSERT INTO submissions(ip_hash,created_ms) VALUES(?,?)').bind(ipHash,now)
   ]);
-  return json({id,title:payload.name,createdBy:payload.createdBy,tracks:tracks.length,editKey},201,origin);
+  return json({id,title:payload.name,createdBy:payload.createdBy,tracks:tracks.length},201,origin);
  }
 };
