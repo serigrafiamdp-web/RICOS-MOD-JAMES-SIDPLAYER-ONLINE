@@ -233,10 +233,160 @@
     }catch(err){$('#ricoLiveStatus').text('Public playlist unchanged: '+err.message);}
     finally{savingCommunityEdits=false;}
   }
+  // TEST66: multiple, independent in-progress remix destinations.
+  // Drafts contain only HVSC references and editorial labels, never SID bytes or beta keys.
+  var remixDrafts=[],remixTarget='',remixOpen=false,remixBusy=false;
+  var remixCounter=0;
+  function selectedRemix(){return remixDrafts.find(function(d){return d.id===remixTarget;})||null;}
+  function preserveRemixes(){
+    try{sessionStorage.setItem('rico-remix-test66',JSON.stringify({
+      drafts:remixDrafts,target:remixTarget,counter:remixCounter
+    }));}catch(error){console.warn('Remix session storage unavailable',error);}
+  }
+  function restoreRemixes(){
+    try{
+      var data=JSON.parse(sessionStorage.getItem('rico-remix-test66')||'null');
+      if(data&&Array.isArray(data.drafts)){
+        remixDrafts=data.drafts.filter(function(d){
+          return d&&typeof d.id==='string'&&typeof d.name==='string'&&
+            typeof d.creator==='string'&&Array.isArray(d.tracks)
+            &&d.tracks.length<=2000&&d.tracks.every(function(t){
+              return t&&typeof t.pack==='string'&&typeof t.file==='string'&&
+                /^library\/packs\/(?:musicians|demos)\/[A-Za-z0-9_./-]+\.zip$/.test(t.pack)&&
+                !t.pack.includes('..')&&!t.file.includes('..');
+            });
+        }).slice(0,25);
+        remixCounter=Number(data.counter)||remixDrafts.length;
+        remixTarget=remixDrafts.some(function(d){return d.id===data.target;})?data.target:'';
+      }
+    }catch(error){console.warn('Remix drafts were not restored',error);}
+  }
+  function createRemix(){
+    if(remixDrafts.length>=25){remixNotice('Maximum 25 drafts. Publish or finish an existing remix first.');return;}
+    remixCounter++;
+    var next={id:'remix-'+Date.now()+'-'+remixCounter,name:'REMIX '+remixCounter,creator:'',tracks:[]};
+    remixDrafts.push(next);remixTarget=next.id;remixOpen=true;
+    preserveRemixes();renderRemixes();
+    $('#ricoRemixName').trigger('focus');
+  }
+  function remixNotice(message){
+    $('#ricoRemixStatus').text(message);
+    $('#ricoLiveStatus').text(message);
+  }
+  function renderRemixes(){
+    var target=document.getElementById('ricoRemixTarget');
+    if(!target)return;
+    var selected=selectedRemix();
+    target.textContent='';
+    var blank=document.createElement('option');blank.value='';blank.textContent='SELECT REMIX';
+    target.appendChild(blank);
+    remixDrafts.forEach(function(d){
+      var option=document.createElement('option');
+      option.value=d.id;option.textContent=d.name+' ('+d.tracks.length+')';target.appendChild(option);
+    });
+    target.value=selected?selected.id:'';
+    $('#ricoRemixCount').text(selected?selected.tracks.length+' SID':'0 SID');
+    $('#ricoRemixEditor').css('display',remixOpen?'block':'none');
+    $('#ricoRemixToggle').attr('aria-expanded',remixOpen?'true':'false');
+    $('#ricoRemixName').val(selected?selected.name:'').prop('disabled',!selected);
+    $('#ricoRemixCreator').val(selected?selected.creator:'').prop('disabled',!selected);
+    $('#ricoRemixPublish').prop('disabled',!selected||!selected.tracks.length||remixBusy);
+    var items=$('#ricoRemixEntries').empty();
+    if(!selected){items.text('Press NEW REMIX to create a destination.');return;}
+    if(!selected.tracks.length){items.text('Select a playlist song with + to add it here.');return;}
+    selected.tracks.forEach(function(t,index){
+      var line=$('<div>').addClass('rico-remix-entry');
+      $('<span>').text((index+1)+'. '+(t.title||t.file)+' — '+(t.artist||'Unknown artist')).appendTo(line);
+      $('<button type="button">').text('×').attr('aria-label','Remove from remix')
+        .on('click',function(event){
+          event.stopPropagation();selected.tracks.splice(index,1);
+          preserveRemixes();renderRemixes();remixNotice('Removed from '+selected.name+'.');
+        }).appendTo(line);
+      items.append(line);
+    });
+  }
+  function addRemixTrack(index){
+    var target=selectedRemix();
+    if(!target){
+      remixOpen=true;renderRemixes();
+      remixNotice('Create a REMIX PLAYLIST and select its destination first.');
+      return;
+    }
+    // Public user-created playlists (v2) preserve the exact original HVSC ZIP paths.
+    // Do NOT invent pack paths for legacy Base64 or ranked / built-in SID files.
+    var track=activePublicPlaylist&&customActive&&activePublicPlaylist.tracks[index];
+    if(!track||!track.pack||!track.file){
+      remixOpen=true;renderRemixes();
+      remixNotice('This SID has no HVSC reference yet. Only referenced community SID can be added in TEST66.');
+      return;
+    }
+    if(target.tracks.length>=2000){remixNotice('Remix limit: 2000 SID.');return;}
+    if(target.tracks.some(function(x){return x.pack===track.pack&&x.file===track.file;})){
+      remixNotice('This SID is already in '+target.name+'.');return;
+    }
+    var entry=(player.sidList||[])[index]||{};
+    target.tracks.push({pack:track.pack,file:track.file,title:entry.name||track.file,artist:entry.author||''});
+    preserveRemixes();renderRemixes();
+    remixNotice('Added '+(entry.name||track.file)+' to '+target.name+' — '+target.tracks.length+' SID. Playback unchanged.');
+  }
+  async function publishRemix(){
+    var draft=selectedRemix();
+    if(remixBusy||!draft)return;
+    draft.name=$('#ricoRemixName').val().trim();
+    draft.creator=$('#ricoRemixCreator').val().trim();
+    if(!draft.name||!draft.creator){remixNotice('Enter remix name and creator first.');return;}
+    if(!draft.tracks.length){remixNotice('Add some SID using + before publishing.');return;}
+    preserveRemixes();
+    var key=await askBetaKeyDialog();
+    if(!key)return;
+    remixBusy=true;renderRemixes();
+    try{
+      await ensureBetaServerReady();
+      var response=await fetch(communityWriteApi+'/playlists',{
+        method:'POST',headers:{'Content-Type':'application/json','X-Beta-Key':key},
+        body:JSON.stringify({format:'ricos-sid-playlist',version:2,name:draft.name,
+          createdBy:draft.creator,tracks:draft.tracks.map(function(t){return {pack:t.pack,file:t.file};})})
+      });
+      var result=await response.json();
+      if(!response.ok)throw Error(result.error||'Remix publication failed.');
+      remixNotice('Published '+draft.name+' · '+result.tracks+' SID. Existing playlists unchanged.');
+      remixDrafts=remixDrafts.filter(function(d){return d!==draft;});
+      remixTarget=remixDrafts.length?remixDrafts[0].id:'';
+      preserveRemixes();
+      if(typeof window.ricoRefreshCommunityCatalog==='function')await window.ricoRefreshCommunityCatalog();
+    }catch(error){remixNotice('Remix not published: '+error.message);}
+    finally{remixBusy=false;renderRemixes();}
+  }
+  restoreRemixes();
+  (function initRemixControls(){
+    var toggle=$('#ricoRemixToggle'),target=$('#ricoRemixTarget');
+    if(!toggle.length)return;
+    toggle.on('click',function(event){event.stopPropagation();remixOpen=!remixOpen;renderRemixes();});
+    target.on('change',function(event){
+      event.stopPropagation();remixTarget=this.value;preserveRemixes();renderRemixes();
+    });
+    $('#ricoRemixNew').on('click',function(event){event.stopPropagation();createRemix();});
+    $('#ricoRemixPublish').on('click',function(event){event.stopPropagation();publishRemix();});
+    $('#ricoRemixName,#ricoRemixCreator').on('input',function(){
+      var current=selectedRemix();if(!current)return;
+      current.name=$('#ricoRemixName').val().slice(0,100);
+      current.creator=$('#ricoRemixCreator').val().slice(0,60);
+      preserveRemixes();
+      // Avoid redrawing inputs while the visitor is typing.
+      var opt=target.find('option:selected');
+      if(opt.length)opt.text((current.name||'UNTITLED')+' ('+current.tracks.length+')');
+    });
+    $('#ricoRemixEditor').on('mousedown mouseup pointerdown pointerup keydown keyup keypress',function(event){
+      if(event.target.tagName==='INPUT'||event.target.tagName==='SELECT')event.stopPropagation();
+    });
+    renderRemixes();
+  })();
+
   function renderLivePlaylist() {
     var holder = $('#ricoLivePlaylistItems').empty();
     ensureLivePlaylistCredits();
     var list = player.sidList || [];
+    $('#ricoRemixBar').css('display',(!landingPlaylists&&list.length)?'flex':'none');
     $('#ricoLiveCount').text('(' + list.length + ')');
     var canSave=!!(activePublicPlaylist&&activePublicPlaylist.remoteId&&customActive&&!landingPlaylists);
     var hasRemovals=canSave&&activePublicPlaylist.tracks.length<activePublicPlaylist.originalCount;
@@ -292,14 +442,21 @@
         }
         renderLivePlaylist();
       });
-      if(customActive){
+      if(!landingPlaylists){
         var wrap=$('<div>').addClass('rico-live-edit-row');
         row.appendTo(wrap);
+        $('<button type="button">').addClass('rico-live-add').text('+')
+          .attr('aria-label','Add '+songTitle+' to selected remix')
+          .attr('title','Add to selected REMIX PLAYLIST without changing playback')
+          .on('click',function(event){event.stopPropagation();addRemixTrack(index);})
+          .appendTo(wrap);
+        if(customActive){
         $('<button type="button">').addClass('rico-live-remove').text('×')
           .attr('aria-label','Remove '+songTitle+' temporarily')
           .attr('title','Remove song temporarily')
           .on('click',function(event){event.stopPropagation();removeLiveSong(index);})
           .appendTo(wrap);
+        }
         wrap.appendTo(holder);
       }else row.appendTo(holder);
     });
