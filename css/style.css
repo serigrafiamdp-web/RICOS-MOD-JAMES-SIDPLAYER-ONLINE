@@ -1647,3 +1647,81 @@ left: 1px;
 #chooseSidDialog.rico-view-local #sidListHolder {
   display:none !important;
 }
+
+/* TEST73 — standalone LOCAL IMPORT SID library, outside Choose A SID. */
+#ricoImportSidWindow {
+  position:fixed;z-index:640;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(660px,calc(100vw - 24px));height:min(540px,calc(100vh - 60px));
+  min-width:290px;min-height:260px;max-height:calc(100vh - 25px);
+  box-sizing:border-box;flex-direction:column;resize:both;overflow:hidden;
+  background:var(--rico-theme-bg,#000);color:var(--rico-theme-fg,#fff);
+  border:1px solid var(--rico-theme-border,#888);
+  box-shadow:0 12px 36px #0009;font:11px Tahoma,Arial,sans-serif;
+}
+#ricoImportSidHeader {
+  flex:0 0 31px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 9px;border-bottom:1px solid var(--rico-theme-border,#888);
+  background:var(--rico-theme-panel,#222);cursor:move;touch-action:none;
+}
+#ricoImportSidHeader button {
+  color:var(--rico-theme-fg,#fff);background:transparent;
+  border:1px solid var(--rico-theme-border,#888);cursor:pointer;
+}
+#ricoImportSidWindow .rico-import-note{
+  flex:0 0 auto;margin:0;padding:7px 10px;line-height:1.4;
+  border-bottom:1px solid var(--rico-theme-border,#888);
+}
+#ricoImportSidContent {flex:1 1 0;min-height:0;overflow-y:auto;padding:9px 10px;}
+/* These are intentionally visible ONLY inside Import SID, not the legacy browser. */
+#ricoImportSidWindow #ricoDropZone,
+#ricoImportSidWindow #ricoPlaylistOptions,
+#ricoImportSidWindow #ricoPlaylistStatus,
+#ricoImportSidWindow #ricoSavedPlaylistControls {
+  display:block !important;
+  position:static !important;background:transparent !important;
+  color:var(--rico-theme-fg,#fff) !important;
+}
+#ricoImportSidWindow #ricoDropZone{
+  padding:8px;border:1px dashed var(--rico-theme-border,#888);
+}
+#ricoImportSidWindow #ricoSavedPlaylistControls {margin-top:9px;}
+#ricoImportSidWindow #ricoDropZone button,
+#ricoImportSidWindow #ricoSavedPlaylistControls button,
+#ricoImportSidWindow #ricoPlaylistOptions button {
+  background:var(--rico-theme-panel,#222) !important;
+  border:1px solid var(--rico-theme-border,#888) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+  cursor:pointer;padding:5px 7px;
+}
+#ricoImportSidWindow #ricoSavedName {
+  background:var(--rico-theme-panel,#222) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+  border:1px solid var(--rico-theme-border,#888) !important;
+  min-width:110px !important;
+}
+#ricoImportSidWindow #ricoSavedLibrary {
+  height:110px !important;min-height:60px;overflow-y:auto;
+  background:var(--rico-theme-bg,#000) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+  border-color:var(--rico-theme-border,#888) !important;
+}
+#ricoImportSidWindow #ricoSavedLibrary button {
+  background:var(--rico-theme-panel,#222) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+  border-color:var(--rico-theme-border,#888) !important;
+}
+#ricoImportSidWindow #ricoSavedLibrary span {color:inherit !important;}
+#ricoImportTrackSection {margin-top:12px;border-top:1px solid var(--rico-theme-border,#888);padding-top:9px;}
+#ricoImportTrackCount {float:right;}
+#ricoImportTrackList {margin-top:7px;max-height:200px;overflow:auto;}
+.rico-import-track-row {display:flex;gap:6px;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--rico-theme-border,#888);padding:5px 3px;}
+.rico-import-track-row span{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.rico-import-track-row button{background:transparent;color:inherit;
+  border:1px solid var(--rico-theme-border,#888);cursor:pointer;}
+#ricoImportSidFooter {padding:6px 9px;flex:none;font-size:10px;
+  background:var(--rico-theme-panel,#222);border-top:1px solid var(--rico-theme-border,#888);}
+#ricoImportSidButton {
+  background:var(--rico-theme-panel,#222);color:var(--rico-theme-fg,#fff);
+  border-color:var(--rico-theme-border,#888);
+}
