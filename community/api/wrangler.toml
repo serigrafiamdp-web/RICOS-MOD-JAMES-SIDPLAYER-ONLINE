@@ -5,4 +5,4 @@ compatibility_date = "2026-11-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "ricos-sid-community"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "0a860e88-4d84-40e6-9b5a-d52a7ab22c99"
