@@ -1,5 +1,13 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## Current test — TEST105 REORDER (published, pending user PASS)
+
+**TEST105:** Floating playlist and REMIX editor arrows now move **±1 position on a single click** or **±10 positions on double-click**, with on-hover pointer hints. A 420 ms single-click decision window prevents a double-click from being counted as multiple moves. Song/reference order and playing/queued cursor mapping stay synchronized; ranked TOP 100 lists remain immutable. Source and CSS are published on GitHub; **browser verification by the owner is still pending**.
+
+- [Try TEST105](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=105reorder)
+- [TEST105 change log, implementation, tests and regression checklist](docs/TEST105_REORDER_1_10_TOOLTIP.md)
+- Last owner-confirmed playback fix: **TEST104 PASS**; earlier stable player baseline: **TEST102 PASS**.
+
 ## Latest playback fix — TEST104 PASS (2026-11-08)
 
 **User-confirmed PASS:** After the uploaded original `Balloon_Country_Bursts.sid` replaced the incorrect embedded SID in `TOP GROUPS` rank **95** (**PVM / Uctumi**), and the playlist/JS cache version was refreshed, the owner reported **"listo ahi volvio"** (playback restored). Original 4500-byte file verified by FNV-1a32 `3768c894`. No audio-engine changes.
