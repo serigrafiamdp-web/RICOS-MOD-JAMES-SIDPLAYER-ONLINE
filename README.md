@@ -1,5 +1,15 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## Current test — TEST107 persisted order verification (published, pending user PASS)
+
+**Problem:** After moving songs, using SAVE + beta key, and reloading a playlist, the old order could reappear. Two source issues were found: unpublished REMIX PUBLISH could submit an old draft order, and public SAVE did not read the saved order back from Cloudflare.
+
+**TEST107 fix:** PUBLISH synchronizes the currently playing REMIX order before POST. Both publishing and public SAVE now verify the exact stored order by GET before reporting success. Failed verification keeps the order unsaved/dirty; a publication with an uncertain read-back retains its server ID so a retry does not create a duplicate. The beta-key requirement and immutable TOP 100 remain unchanged.
+
+- [Test TEST107](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=107orderverify2)
+- [TEST107 implementation, safeguards and reload test](docs/TEST107_SAVE_RELOAD_VERIFY.md)
+- **Status: browser user confirmation pending; no production SAVE PASS claimed.**
+
 ## Current test — TEST106 SAVE for non-ranked playlists (published, pending user PASS)
 
 **TEST106:** SAVE is visible for every non-ranked editable playlist, including unpublished REMIX previews such as **RICO'S BEST OF MUSICIANS**. It activates when the track order changes. Unpublished REMIX order is saved to the existing local draft without publishing; public playlists/collections still require the beta key to save to Cloudflare. Other local playlists save to browser IndexedDB. TOP 100 ranked sources stay immutable and have no SAVE button.
