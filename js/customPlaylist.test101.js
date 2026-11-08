@@ -1900,7 +1900,7 @@
       if(ricoRankCache[kind])return ricoRankCache[kind];
       if(ricoRankWaiting[kind])return ricoRankWaiting[kind];
       ricoRankWaiting[kind]=(async function(){
-        var res=await fetch(ricoRankConfig[kind].file,{cache:'no-store'});
+        var res=await fetch(ricoRankConfig[kind].file+'?v=test104uctumi',{cache:'no-store'});
         if(!res.ok)throw Error('Playlist unavailable ('+res.status+').');
         var data=await res.json();
         if(data.format!=='ricos-sid-playlist'||!Array.isArray(data.tracks)||data.tracks.length!==100)throw Error('Top 100 incomplete.');
