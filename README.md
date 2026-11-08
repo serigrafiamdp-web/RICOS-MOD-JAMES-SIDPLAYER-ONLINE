@@ -1,4 +1,12 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
+
+## Development status — TEST82 PASS / TEST83 SID publishing staged (2026-11-08)
+
+- **Latest user-confirmed PASS:** TEST82: OUR COLLECTION lists imported collections without hardcoded RICO, retaining LOAD and local DELETE.
+- **Current GitHub Pages build:** [TEST83 staging](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=83r2staged), using `js/customPlaylist.test83.js`. Existing SID playback, HVSC and community playlist features must remain unchanged.
+- **TEST83 PUBLISH:** the browser now supports the beta-key flow for V1 imported collections and checks `/capabilities.sidUploadsEnabled`. GitHub backend source and D1 migration are prepared for independent SHA-256-addressed SID storage in Cloudflare R2; **not deployed to Cloudflare yet**. PUBLISH will refuse until R2, DB schema, and Worker are ready.
+- **Deployment runbook:** [docs/TEST83_SID_PUBLISH_R2_D1_DEPLOY.md](docs/TEST83_SID_PUBLISH_R2_D1_DEPLOY.md). Do not claim SID uploads are live or TEST83 is PASS before verifying deployment and playback.
+
 **A Commodore 64 SID Music Player — Preservation, Maintenance & Continued Development**
 
 RICOS MOD – JAMES SIDPLAYER ONLINE is a preservation and continued development project based on the original Jojati SID Player.
