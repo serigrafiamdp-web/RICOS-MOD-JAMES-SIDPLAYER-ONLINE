@@ -238,9 +238,10 @@
     ensureLivePlaylistCredits();
     var list = player.sidList || [];
     $('#ricoLiveCount').text('(' + list.length + ')');
-    var canSave=!!(activePublicPlaylist&&activePublicPlaylist.remoteId&&customActive&&
-      !landingPlaylists&&activePublicPlaylist.tracks.length<activePublicPlaylist.originalCount);
-    $('#ricoLiveSave').css('display',canSave?'inline-block':'none').prop('disabled',savingCommunityEdits);
+    var canSave=!!(activePublicPlaylist&&activePublicPlaylist.remoteId&&customActive&&!landingPlaylists);
+    var hasRemovals=canSave&&activePublicPlaylist.tracks.length<activePublicPlaylist.originalCount;
+    $('#ricoLiveSave').css('display',canSave?'inline-block':'none')
+      .prop('disabled',savingCommunityEdits||!hasRemovals);
     $('#ricoLivePlaylistTitle').text(landingPlaylists ? "COMMUNITY PLAYLISTS" : (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'));
     // TEST34: keep the creator/ratings strip visible while a playlist is loaded.
     // Never confuse the playlist creator with each SID's composer.
