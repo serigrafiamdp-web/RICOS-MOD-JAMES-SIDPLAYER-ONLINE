@@ -239,13 +239,22 @@
   var remixCounter=0;
   function selectedRemix(){return remixDrafts.find(function(d){return d.id===remixTarget;})||null;}
   function preserveRemixes(){
-    try{sessionStorage.setItem('rico-remix-test66',JSON.stringify({
-      drafts:remixDrafts,target:remixTarget,counter:remixCounter
-    }));}catch(error){console.warn('Remix session storage unavailable',error);}
+    try{
+      var snapshot=JSON.stringify({drafts:remixDrafts,target:remixTarget,counter:remixCounter});
+      localStorage.setItem('rico-remix-test68-persistent',snapshot);
+      sessionStorage.setItem('rico-remix-test66',snapshot);
+    }catch(error){
+      try{sessionStorage.setItem('rico-remix-test66',JSON.stringify({drafts:remixDrafts,target:remixTarget,counter:remixCounter}));}
+      catch(inner){console.warn('Remix draft storage unavailable',inner);}
+    }
   }
   function restoreRemixes(){
     try{
-      var data=JSON.parse(sessionStorage.getItem('rico-remix-test66')||'null');
+      // Prefer the persistent copy; import TEST66 session drafts on first upgrade.
+      var persistent=localStorage.getItem('rico-remix-test68-persistent');
+      var legacy=sessionStorage.getItem('rico-remix-test66');
+      var data=JSON.parse(persistent||legacy||'null');
+      if(!persistent&&legacy)localStorage.setItem('rico-remix-test68-persistent',legacy);
       if(data&&Array.isArray(data.drafts)){
         remixDrafts=data.drafts.filter(function(d){
           return d&&typeof d.id==='string'&&typeof d.name==='string'&&
