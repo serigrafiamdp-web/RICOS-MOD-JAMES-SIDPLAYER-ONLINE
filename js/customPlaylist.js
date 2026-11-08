@@ -690,10 +690,10 @@
       for(var i=0;i<data.tracks.length;i++){
         var track=data.tracks[i];
         if(!track || typeof track.pack!=='string' || typeof track.file!=='string' ||
-           !/^library\\/packs\\/(?:musicians|demos)\\/[a-zA-Z0-9_.\\/-]+\\.zip$/.test(track.pack) ||
+           !/^library\/packs\/(?:musicians|demos)\/[a-zA-Z0-9_./-]+\.zip$/.test(track.pack) ||
            track.pack.includes('..') || track.file.includes('..') ||
-           track.file.startsWith('/') || track.file.includes('\\\\') ||
-           !/^[^<>:*?|]+\\.sid$/i.test(track.file)) throw Error('Invalid catalog SID reference.');
+           track.file.startsWith('/') || track.file.includes('\\') ||
+           !/^[^<>:*?|]+\.sid$/i.test(track.file)) throw Error('Invalid catalog SID reference.');
         var archive=packages.get(track.pack);
         if(!archive){
           var response=await fetch(track.pack);
