@@ -1189,7 +1189,7 @@
       function renderDraft(){
         draftCountEl.textContent='('+draft.length+' SID)';
         draftItemsEl.textContent='';
-        draft.slice(-6).forEach(function(item,index){
+        draft.forEach(function(item,index){
           var row=document.createElement('div');
           row.className='rico-library-draft-row';
           var label=document.createElement('span');
@@ -1204,11 +1204,6 @@
           remove.setAttribute('aria-label','Remove '+item.entry.name);
           row.appendChild(label);row.appendChild(remove);draftItemsEl.appendChild(row);
         });
-        if(draft.length>6){
-          var older=document.createElement('span');older.className='rico-library-draft-older';
-          older.textContent='Showing last 6 of '+draft.length+' SID · All will be saved';
-          draftItemsEl.insertBefore(older,draftItemsEl.firstChild);
-        }
         saveDraftButton.disabled=draftBusy||!draft.length;
         addAllButton.disabled=draftBusy||!selected;
         newDraftButton.disabled=draftBusy;
@@ -1262,7 +1257,7 @@
           }
           status('MY PLAYLIST: '+added+' added, '+duplicates+' already present'+(failed?', '+failed+' unavailable':'')+'. Playback unchanged.');
         }catch(error){status(error.message+' · '+added+' SID added before stopping.');}
-        finally{draftBusy=false;renderDraft();}
+        finally{draftBusy=false;renderSongs();}
       }
       function renderSongs(){
         songsEl.textContent='';
