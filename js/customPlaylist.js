@@ -45,7 +45,7 @@
     var response=await fetch(communityWriteApi+'/capabilities',{cache:'no-store'});
     if(!response.ok)throw Error('TEST63 backend not deployed yet. No public changes were made.');
     var data=await response.json();
-    if(!data||!data.betaKeyRequired||data.editMode!=='remove-only'||!data.configured)
+    if(!data||!data.betaKeyRequired||!['remove-only','metadata-and-delete'].includes(data.editMode)||!data.configured)
       throw Error('TEST63 beta protection is not configured in Cloudflare.');
   }
 
@@ -1148,6 +1148,53 @@
 
     // TEST62: public playlist metadata on D1; static curated entries stay first.
     var communityApiBase='https://ricos-sid-community.serigrafiamdp.workers.dev';
+    // TEST65: metadata update and delete never act on static curated JSON.
+    function communityAuthorizeDialog(action,item){
+      return new Promise(function(resolve){
+        var cover=document.createElement('div');cover.className='rico-beta-overlay';
+        var form=document.createElement('form');form.className='rico-beta-dialog';
+        form.setAttribute('role','dialog');form.setAttribute('aria-modal','true');
+        form.setAttribute('aria-label',action==='delete'?'Authorize playlist deletion':'Authorize playlist edit');
+        var title=document.createElement('strong');title.textContent=action==='delete'?'DELETE PLAYLIST':'EDIT PLAYLIST';
+        var msg=document.createElement('p');
+        msg.textContent=action==='delete'?
+          'Deleting this playlist is permanent and affects everyone. Enter the beta key to authorize.':
+          'Change playlist name and creator, then enter the beta key to authorize.';
+        form.appendChild(title);form.appendChild(msg);
+        var nameInput=null,creatorInput=null;
+        function field(value,max,label){
+          var input=document.createElement('input');input.type='text';input.value=value;
+          input.maxLength=max;input.setAttribute('aria-label',label);input.placeholder=label;
+          input.style.marginBottom='8px';form.appendChild(input);return input;
+        }
+        if(action==='edit'){
+          nameInput=field(item.title,100,'Playlist name');
+          creatorInput=field(item.createdBy||'',60,'Playlist by');
+        }
+        var key=document.createElement('input');key.type='password';key.autocomplete='off';
+        key.placeholder='BETA KEY';key.setAttribute('aria-label','Beta key');key.required=true;
+        form.appendChild(key);
+        var controls=document.createElement('div');controls.className='rico-beta-actions';
+        var cancel=document.createElement('button');cancel.type='button';cancel.textContent='CANCEL';
+        var submit=document.createElement('button');submit.type='submit';submit.textContent='AUTHORIZE';
+        controls.appendChild(cancel);controls.appendChild(submit);form.appendChild(controls);
+        cover.appendChild(form);document.body.appendChild(cover);
+        var done=false;
+        function finish(value){if(done)return;done=true;document.removeEventListener('keydown',onKey,true);cover.remove();resolve(value);}
+        function onKey(event){if(event.key==='Escape'){event.preventDefault();event.stopPropagation();finish(null);}}
+        ['mousedown','mouseup','pointerdown','pointerup','click','dblclick','keydown','keyup','keypress'].forEach(function(type){
+          form.addEventListener(type,function(event){event.stopPropagation();});
+        });
+        form.addEventListener('submit',function(event){
+          event.preventDefault();event.stopPropagation();
+          if(action==='edit'&&(!nameInput.value.trim()||!creatorInput.value.trim()))return;
+          finish({key:key.value,name:nameInput?nameInput.value.trim():null,creator:creatorInput?creatorInput.value.trim():null});
+        });
+        cancel.addEventListener('click',function(){finish(null);});
+        cover.addEventListener('click',function(event){if(event.target===cover)finish(null);});
+        document.addEventListener('keydown',onKey,true);(nameInput||key).focus();
+      });
+    }
     async function loadCommunityCatalog() {
       if (!communityItems) return;
       var requestNumber=++communityRequestNumber;
@@ -1212,6 +1259,55 @@
           var button=document.createElement('button');
           button.type='button';button.textContent='LOAD';
           row.appendChild(label);row.appendChild(button);
+          if(item.remoteId){
+            var editButton=document.createElement('button');
+            editButton.type='button';editButton.textContent='EDIT';
+            var deleteButton=document.createElement('button');
+            deleteButton.type='button';deleteButton.textContent='DELETE';
+            editButton.addEventListener('click',async function(event){
+              event.stopPropagation();
+              var auth=await communityAuthorizeDialog('edit',item);
+              if(!auth)return;
+              editButton.disabled=true;
+              try{
+                await ensureBetaServerReady();
+                var resp=await fetch(communityApiBase+'/playlists/'+encodeURIComponent(item.remoteId),{
+                  method:'PATCH',headers:{'Content-Type':'application/json','X-Beta-Key':auth.key},
+                  body:JSON.stringify({name:auth.name,createdBy:auth.creator})
+                });
+                var result=await resp.json();
+                if(!resp.ok)throw Error(result.error||'Could not edit playlist.');
+                if(activePublicPlaylist&&activePublicPlaylist.remoteId===item.remoteId){
+                  activePublicPlaylist.name=result.title;activePublicPlaylist.createdBy=result.createdBy;
+                  loadedPlaylistTitle=result.title;loadedPlaylistCreator=result.createdBy;renderLivePlaylist();
+                }
+                await loadCommunityCatalog();say('Playlist metadata updated: '+result.title);
+              }catch(error){say('Edit failed: '+error.message);}
+              finally{editButton.disabled=false;}
+            });
+            deleteButton.addEventListener('click',async function(event){
+              event.stopPropagation();
+              var auth=await communityAuthorizeDialog('delete',item);
+              if(!auth)return;
+              if(!window.confirm('DELETE '+item.title+' permanently for everyone? This cannot be undone.'))return;
+              deleteButton.disabled=true;
+              try{
+                await ensureBetaServerReady();
+                var resp=await fetch(communityApiBase+'/playlists/'+encodeURIComponent(item.remoteId),{
+                  method:'DELETE',headers:{'X-Beta-Key':auth.key}
+                });
+                var result=await resp.json();
+                if(!resp.ok)throw Error(result.error||'Could not delete playlist.');
+                if(activePublicPlaylist&&activePublicPlaylist.remoteId===item.remoteId){
+                  activePublicPlaylist=null;renderLivePlaylist();
+                }
+                if(selectedCommunityId===item.remoteId)selectedCommunityId='';
+                await loadCommunityCatalog();say('Public playlist deleted: '+item.title);
+              }catch(error){say('Delete failed: '+error.message);}
+              finally{deleteButton.disabled=false;}
+            });
+            row.appendChild(editButton);row.appendChild(deleteButton);
+          }
           communityItems.appendChild(row);
           if(item.id && item.id===selectedCommunityId) row.classList.add('rico-community-selected');
           async function openPlaylist(isStartup) {
