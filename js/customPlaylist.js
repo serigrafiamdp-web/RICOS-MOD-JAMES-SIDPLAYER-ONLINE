@@ -1884,7 +1884,7 @@
       var status=document.getElementById('ricoOurStatus');
       var reload=document.getElementById('ricoOurRefresh');
       if(!tab||!panel||!items||!search)return;
-      var collections=[],selectedId='',request=0;
+      var collections=[],request=0;
       ['mousedown','mouseup','pointerdown','pointerup','click','dblclick','keydown','keyup','keypress'].forEach(function(type){
         search.addEventListener(type,function(event){event.stopPropagation();});
       });
@@ -1894,74 +1894,48 @@
         button.addEventListener('click',function(event){event.stopPropagation();handler();});
         row.appendChild(button);return button;
       }
+      // TEST79: collection rows use the exact Community LOAD workflow.
+      // No nested tracks or individual PLAY buttons in this browser.
       function render(){
         items.textContent='';
         var query=search.value.toLocaleLowerCase().trim();
-        var selected=collections.find(function(c){return c.id===selectedId;});
+        var found=collections.filter(function(c){
+          return !query||(c.name+' '+c.creator+' '+c.tracks.map(function(t){
+            return t.title+' '+t.author+' '+t.file;
+          }).join(' ')).toLocaleLowerCase().includes(query);
+        });
+        count.textContent=found.length+' COLLECTIONS';
         var fragment=document.createDocumentFragment();
-        if(selected){
-          var back=document.createElement('div');back.className='rico-our-row rico-our-back';
-          var title=document.createElement('strong');
-          title.textContent=selected.name+' · '+selected.tracks.length+' SID';
-          back.appendChild(title);
-          addAction(back,'BACK',function(){selectedId='';search.value='';render();});
-          fragment.appendChild(back);
-          var matches=selected.tracks.map(function(t,index){return {track:t,index:index};})
-            .filter(function(obj){
-              var t=obj.track;
-              return !query||(t.title+' '+t.author+' '+t.file).toLocaleLowerCase().includes(query);
-            });
-          count.textContent=matches.length+' / '+selected.tracks.length+' SID';
-          matches.forEach(function(obj){
-            var item=obj.track;
-            var row=document.createElement('div');row.className='rico-our-row rico-our-track-row';
-            row.setAttribute('role','listitem');
-            var label=document.createElement('span');label.className='rico-our-label';
-            var name=document.createElement('strong');
-            name.textContent=String(obj.index+1).padStart(2,'0')+'  '+item.title;
-            var detail=document.createElement('small');
-            detail.textContent=(item.author||'Unknown')+' · '+item.file;
-            label.appendChild(name);label.appendChild(detail);row.appendChild(label);
-            addAction(row,'PLAY',function(){
-              try{
-                loadPlaylist({format:'ricos-sid-playlist',version:1,name:selected.name,
-                  createdBy:selected.creator,tracks:selected.tracks.map(function(t){
-                    return {file:t.file,sidBase64:t.sidBase64};
-                  })},obj.index,false);
-                status.textContent='Playing '+item.title+' from '+selected.name+'.';
-                if(player.dialogManager&&player.dialogManager.dialogShown==='chooseSidDialog')
-                  player.dialogManager.hideDialog('chooseSidDialog');
-              }catch(error){status.textContent='Unable to play: '+error.message;}
-            });
-            fragment.appendChild(row);
+        found.forEach(function(c){
+          var row=document.createElement('div');
+          row.className='rico-our-row rico-our-collection-row';
+          row.setAttribute('role','listitem');
+          var label=document.createElement('span');label.className='rico-our-label';
+          var title=document.createElement('strong');title.textContent=c.name;
+          var detail=document.createElement('small');
+          detail.textContent='Collection by '+c.creator+' · '+c.tracks.length+' SID'+
+            (c.local?' · LOCAL ONLY':' · INCLUDED COLLECTION');
+          label.appendChild(title);label.appendChild(detail);row.appendChild(label);
+          var load=addAction(row,'LOAD',function(){
+            load.disabled=true;
+            try{
+              loadPlaylist({format:'ricos-sid-playlist',version:1,
+                name:c.name,createdBy:c.creator,
+                tracks:c.tracks.map(function(t){
+                  return {file:t.file,sidBase64:t.sidBase64};
+                })},0,false);
+              status.textContent='Loaded '+c.name+' · '+c.tracks.length+' SID.';
+              if(player.dialogManager&&player.dialogManager.dialogShown==='chooseSidDialog')
+                player.dialogManager.hideDialog('chooseSidDialog');
+            }catch(error){
+              status.textContent='Unable to load collection: '+error.message;
+            }finally{load.disabled=false;}
           });
-          if(!matches.length){
-            var empty=document.createElement('div');empty.className='rico-our-row';
-            empty.textContent='No SID match this search.';fragment.appendChild(empty);
-          }
-        }else{
-          var found=collections.filter(function(c){
-            return !query||(c.name+' '+c.creator+' '+c.tracks.map(function(t){
-              return t.title+' '+t.author+' '+t.file;
-            }).join(' ')).toLocaleLowerCase().includes(query);
-          });
-          count.textContent=found.length+' COLLECTIONS';
-          found.forEach(function(c){
-            var row=document.createElement('div');row.className='rico-our-row rico-our-collection-row';
-            row.setAttribute('role','listitem');
-            var label=document.createElement('span');label.className='rico-our-label';
-            var title=document.createElement('strong');title.textContent=c.name;
-            var detail=document.createElement('small');
-            detail.textContent='Collection by '+c.creator+' · '+c.tracks.length+' SID'+
-              (c.local?' · LOCAL ONLY':' · INCLUDED COLLECTION');
-            label.appendChild(title);label.appendChild(detail);row.appendChild(label);
-            addAction(row,'OPEN',function(){selectedId=c.id;search.value='';render();});
-            fragment.appendChild(row);
-          });
-          if(!found.length){
-            var emptyRow=document.createElement('div');emptyRow.className='rico-our-row';
-            emptyRow.textContent='No collections match this search.';fragment.appendChild(emptyRow);
-          }
+          fragment.appendChild(row);
+        });
+        if(!found.length){
+          var empty=document.createElement('div');empty.className='rico-our-row';
+          empty.textContent='No collections match this search.';fragment.appendChild(empty);
         }
         items.appendChild(fragment);
       }
@@ -2009,7 +1983,6 @@
           });
           if(serial!==request)return;
           collections=result;
-          if(!collections.some(function(c){return c.id===selectedId;}))selectedId='';
           status.textContent=result.length+' collections available. Local imports remain private to this browser.';
           render();
         }catch(error){
