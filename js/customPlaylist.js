@@ -1931,6 +1931,27 @@
               status.textContent='Unable to load collection: '+error.message;
             }finally{load.disabled=false;}
           });
+          if(c.local&&c.id.startsWith('local-')){
+            var remove=addAction(row,'DELETE',async function(){
+              if(!window.confirm('Delete local collection "'+c.name+'" ('+c.tracks.length+
+                ' SID) from this browser? This will not delete public collections or other playlists.'))return;
+              remove.disabled=true;
+              try{
+                var storedId=c.id.slice('local-'.length);
+                if(!storedId)throw Error('Invalid local collection ID.');
+                // Delete only this saved local playlist record. Shared playback
+                // buffers and all other collections remain untouched.
+                await dbCall('readwrite',function(store){return store.delete(storedId);});
+                if(currentId===storedId)currentId='';
+                collections=collections.filter(function(other){return other.id!==c.id;});
+                await refreshSaved();
+                status.textContent='Deleted local collection: '+c.name+'.';
+                render();
+              }catch(error){
+                status.textContent='Unable to delete collection: '+error.message;
+              }finally{remove.disabled=false;}
+            });
+          }
           fragment.appendChild(row);
         });
         if(!found.length){
