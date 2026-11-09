@@ -2311,7 +2311,7 @@
       var stream=createProgressiveReferenceStream(data.tracks,data.name==='UNKNOWN CSDB');
       // TOP 100 DEMOS: song metadata is already in the source manifest.
       // Load song bytes on demand without decoding the entire list at launch.
-      stream.onDemandOnly=data.name==='TOP 100 DEMOS';
+      stream.onDemandOnly=data.name==='TOP 100 DEMOS'||/^TOP 100 CSDb DEMOS/.test(data.name);
       activeReferenceStream=stream;
       try{
         await stream.loadSlot(stream.slots[0]);
@@ -2358,7 +2358,7 @@
       // SIDs decode. Keep every other playlist on its existing stable loader.
       if(((data.name==='OLD SID COLLECTION RICO'||data.name==='UNKNOWN CSDB')&&
          data.tracks.length>=200)||
-         (data.name==='TOP 100 DEMOS'&&data.tracks.length>=100)){
+         ((data.name==='TOP 100 DEMOS'||/^TOP 100 CSDb DEMOS/.test(data.name))&&data.tracks.length>=100)){
         for(var k=0;k<data.tracks.length;k++){
           var ref=data.tracks[k];
           if(!ref||typeof ref.pack!=='string'||typeof ref.file!=='string'||
@@ -2738,6 +2738,28 @@
     // TEST131: CSDb ranks releases and groups; SID tunes are optional associations.
     // The three CSDb catalogs are independent of each other and of COMMUNITY PLAYLISTS.
     var ricoRankSongs={};
+    // Preserve tab visibility when the user resizes the Choose A SID window.
+    function layoutChooseSidTabs(){
+      var info=document.getElementById('chooseSidInfo');
+      var tabs=document.getElementById('ricoListTabs');
+      var dialog=document.getElementById('chooseSidDialog');
+      if(!info||!tabs||!dialog||!dialog.offsetWidth)return;
+      var required=Math.max(94,Math.ceil(tabs.getBoundingClientRect().bottom-
+        info.getBoundingClientRect().top+10));
+      info.style.setProperty('height',required+'px','important');
+      var top=Math.ceil(info.offsetTop+required+13)+'px';
+      ['ricoHvscPanel','ricoCommunityPanel','sidListHolder','ricoLibraryPanel','ricoOurCollectionPanel']
+        .forEach(function(id){
+          var element=document.getElementById(id);
+          if(element)element.style.setProperty('top',top,'important');
+        });
+    }
+    if(typeof ResizeObserver!=='undefined'){
+      var tabSizer=new ResizeObserver(layoutChooseSidTabs);
+      var tabArea=document.getElementById('ricoListTabs');
+      if(tabArea)tabSizer.observe(tabArea);
+    }
+    window.addEventListener('resize',layoutChooseSidTabs);
     function isCsdbCategory(kind){return kind==='demos'||kind==='onefile'||kind==='groups';}
     function normalizeRankTitle(value){
       return String(value||'').normalize('NFKD').toLowerCase()
@@ -2815,7 +2837,7 @@
         (isCsdbCategory(kind)?' — 100 entries · CSDb snapshot':' — 100 SID');
       hvscLoad.textContent=isCsdbCategory(kind)?'PLAY IDENTIFIED SIDS':'PLAY';
       hvscLoad.disabled=(kind==='onefile');
-      refreshTabs();hvscItems.textContent='';
+      refreshTabs();layoutChooseSidTabs();hvscItems.textContent='';
       if(ricoRankEntries[kind]){renderRankRows(kind);return;}
       hvscStatus.textContent='Loading '+cfg.title+'...';
       try{await getRankData(kind);if(browserTab===kind)renderRankRows(kind);}
