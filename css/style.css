@@ -2329,3 +2329,67 @@ left: 1px;
   outline:2px solid var(--rico-theme-fg,#fff);
   outline-offset:2px;
 }
+
+/* TEST116 — Community catalog ordering: minimal palette-aware controls. */
+#ricoCommunityPanel .rico-community-toolbar {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  justify-content:space-between;
+}
+#ricoCommunityPanel .rico-community-toolbar > strong { flex:1 1 auto; min-width:0; }
+#ricoCommunityOrderStatus {
+  color:var(--rico-theme-fg,#fff);
+  font:10px Tahoma,Arial,sans-serif;
+  opacity:.8;
+  white-space:nowrap;
+}
+#ricoCommunityOrderSave {
+  flex:0 0 auto;
+  min-height:28px;
+  padding:4px 12px;
+  font:11px Tahoma,Arial,sans-serif;
+  color:var(--rico-theme-fg,#fff);
+  background:var(--rico-theme-panel,#222);
+  border:1px solid var(--rico-theme-border,#aaa);
+  border-radius:3px;
+  cursor:pointer;
+}
+#ricoCommunityOrderSave:hover,
+#ricoCommunityOrderSave:focus-visible {
+  background:var(--rico-theme-hover,#444);
+}
+#ricoCommunityItems .rico-community-row .rico-community-order-controls {
+  display:inline-flex;
+  flex:0 0 auto;
+  align-items:center;
+  gap:3px;
+}
+#ricoCommunityItems .rico-community-order-controls > button {
+  width:24px;
+  height:28px;
+  min-height:28px;
+  padding:0 !important;
+  font:bold 15px Tahoma,Arial,sans-serif;
+  text-align:center;
+  border:1px solid currentColor !important;
+  border-radius:3px;
+  background:transparent;
+  color:inherit !important;
+  cursor:pointer;
+}
+#ricoCommunityItems .rico-community-order-controls > button:disabled {
+  opacity:.35;
+  cursor:default;
+}
+#ricoCommunityItems .rico-community-order-controls > button:not(:disabled):hover {
+  background:var(--rico-theme-hover,#555);
+}
+#ricoCommunityItems .rico-community-row .rico-community-stars {
+  font-size:16px;
+  letter-spacing:0;
+}
+@media(max-width:580px) {
+  #ricoCommunityItems .rico-community-row .rico-community-order-controls {gap:2px;}
+  #ricoCommunityItems .rico-community-order-controls > button {width:22px;}
+}
