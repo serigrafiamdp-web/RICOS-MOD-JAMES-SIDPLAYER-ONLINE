@@ -865,6 +865,55 @@
   // Drafts contain only HVSC references and editorial labels, never SID bytes or beta keys.
   var remixDrafts=[],remixTarget='',remixOpen=false,remixBusy=false;
   var remixCounter=0;
+  // TEST118: Published lists can be selected as destinations while another
+  // playlist is playing. Only D1 reference lists can be updated in place.
+  var publishedRemixChoices=[];
+  function remixTrackKeys(tracks){
+    return JSON.stringify(tracks.map(function(t){return [t.pack,t.file];}));
+  }
+  async function remixSnapshotHash(tracks){
+    var bytes=new TextEncoder().encode(remixTrackKeys(tracks));
+    var digest=await crypto.subtle.digest('SHA-256',bytes);
+    return Array.from(new Uint8Array(digest),function(v){return v.toString(16).padStart(2,'0');}).join('');
+  }
+  async function beginPublishedEdit(id){
+    if(!/^[a-z0-9-]{12,48}$/i.test(id))throw Error('Invalid published playlist ID.');
+    var existing=remixDrafts.find(function(d){return d.remoteEditId===id;});
+    if(existing){
+      remixTarget=existing.id;remixOpen=true;preserveRemixes();renderRemixes();
+      remixNotice('Continuing unpublished changes for '+existing.name+'. ADD + TO is ready.');
+      return;
+    }
+    if(remixDrafts.length>=25)throw Error('Maximum 25 editable drafts. Finish an existing one first.');
+    var response=await fetch(communityWriteApi+'/playlists/'+encodeURIComponent(id),{cache:'no-store'});
+    if(!response.ok)throw Error('Published playlist unavailable ('+response.status+').');
+    var source=await response.json();
+    if(!source||source.format!=='ricos-sid-playlist'||source.version!==2||
+       !Array.isArray(source.tracks)||!source.tracks.length||source.tracks.length>2000||
+       !source.tracks.every(function(t){return t&&typeof t.pack==='string'&&typeof t.file==='string';}))
+      throw Error('This published playlist has no editable HVSC references.');
+    // Do not start playback; copy reference paths into a private draft only.
+    var tracks=source.tracks.map(function(t){return {pack:t.pack,file:t.file,title:t.title||t.file,artist:t.artist||''};});
+    remixCounter++;
+    var draft={id:'remix-'+Date.now()+'-'+remixCounter,name:source.name,
+      creator:source.createdBy,remoteEditId:id,
+      baseTracks:tracks.map(function(t){return {pack:t.pack,file:t.file};}),
+      tracks:tracks};
+    remixDrafts.push(draft);remixTarget=draft.id;remixOpen=true;
+    preserveRemixes();renderRemixes();
+    remixNotice('Editing '+draft.name+' privately. Play any other list and press + to add its songs. PUBLISH CHANGES keeps the same public ID.');
+  }
+  async function selectRemixDestination(value){
+    if(value.indexOf('published:')!==0){
+      remixTarget=value;
+      preserveRemixes();renderRemixes();
+      return;
+    }
+    var id=value.slice('published:'.length);
+    remixTarget='';renderRemixes();
+    try{await beginPublishedEdit(id);}
+    catch(error){remixNotice('Could not open published playlist for editing: '+error.message);renderRemixes();}
+  }
   function selectedRemix(){return remixDrafts.find(function(d){return d.id===remixTarget;})||null;}
   function preserveRemixes(){
     try{
@@ -891,7 +940,14 @@
               return t&&typeof t.pack==='string'&&typeof t.file==='string'&&
                 /^library\/packs\/(?:musicians|demos)\/[A-Za-z0-9_./-]+\.zip$/.test(t.pack)&&
                 !t.pack.includes('..')&&!t.file.includes('..');
-            });
+            })&&(!d.remoteEditId||(
+              /^[a-z0-9-]{12,48}$/i.test(d.remoteEditId)&&Array.isArray(d.baseTracks)&&
+              d.baseTracks.length<=2000&&d.baseTracks.every(function(t){
+                return t&&typeof t.pack==='string'&&typeof t.file==='string'&&
+                  /^library\/packs\/(?:musicians|demos)\/[A-Za-z0-9_./-]+\.zip$/.test(t.pack)&&
+                  !t.pack.includes('..')&&!t.file.includes('..');
+              })
+            ));
         }).slice(0,25);
         remixCounter=Number(data.counter)||remixDrafts.length;
         remixTarget=remixDrafts.some(function(d){return d.id===data.target;})?data.target:'';
