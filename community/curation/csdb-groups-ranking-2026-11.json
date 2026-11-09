@@ -1,0 +1,411 @@
+{
+  "format": "ricos-csdb-ranking",
+  "version": 1,
+  "category": "groups",
+  "title": "TOP 100 CSDb GROUPS",
+  "sourceUrl": "https://csdb.dk/toplist.php?type=group",
+  "retrievedOn": "2026-11-09",
+  "note": "100 highest-ranked groups from indexed CSDb list. Source may change after index snapshot.",
+  "items": [
+    {
+      "position": 1,
+      "title": "Performers"
+    },
+    {
+      "position": 2,
+      "title": "Booze Design"
+    },
+    {
+      "position": 3,
+      "title": "Oxyron"
+    },
+    {
+      "position": 4,
+      "title": "Censor Design"
+    },
+    {
+      "position": 5,
+      "title": "Faith Design"
+    },
+    {
+      "position": 6,
+      "title": "MultiStyle Labs"
+    },
+    {
+      "position": 7,
+      "title": "Crest"
+    },
+    {
+      "position": 8,
+      "title": "Fossil"
+    },
+    {
+      "position": 9,
+      "title": "Triad"
+    },
+    {
+      "position": 10,
+      "title": "Cosmos"
+    },
+    {
+      "position": 11,
+      "title": "Fairlight"
+    },
+    {
+      "position": 12,
+      "title": "Maniacs of Noise"
+    },
+    {
+      "position": 13,
+      "title": "Remember"
+    },
+    {
+      "position": 14,
+      "title": "Nostalgia"
+    },
+    {
+      "position": 15,
+      "title": "PriorArt"
+    },
+    {
+      "position": 16,
+      "title": "1001 Crew"
+    },
+    {
+      "position": 17,
+      "title": "Artline Designs"
+    },
+    {
+      "position": 18,
+      "title": "Lethargy"
+    },
+    {
+      "position": 19,
+      "title": "We Music"
+    },
+    {
+      "position": 20,
+      "title": "The Transfer Team"
+    },
+    {
+      "position": 21,
+      "title": "Hokuto Force"
+    },
+    {
+      "position": 22,
+      "title": "Arsenic"
+    },
+    {
+      "position": 23,
+      "title": "Camelot"
+    },
+    {
+      "position": 24,
+      "title": "SHAPE"
+    },
+    {
+      "position": 25,
+      "title": "JEDI"
+    },
+    {
+      "position": 26,
+      "title": "Pretzel Logic"
+    },
+    {
+      "position": 27,
+      "title": "Panoramic Designs"
+    },
+    {
+      "position": 28,
+      "title": "HVSC Crew"
+    },
+    {
+      "position": 29,
+      "title": "Offence"
+    },
+    {
+      "position": 30,
+      "title": "Legend"
+    },
+    {
+      "position": 31,
+      "title": "Genesis Project"
+    },
+    {
+      "position": 32,
+      "title": "Excess"
+    },
+    {
+      "position": 33,
+      "title": "Success + The Ruling Company"
+    },
+    {
+      "position": 34,
+      "title": "Ikari"
+    },
+    {
+      "position": 35,
+      "title": "Hotline"
+    },
+    {
+      "position": 36,
+      "title": "Extend"
+    },
+    {
+      "position": 37,
+      "title": "Arise"
+    },
+    {
+      "position": 38,
+      "title": "The Papillons Inc."
+    },
+    {
+      "position": 39,
+      "title": "Vibrants"
+    },
+    {
+      "position": 40,
+      "title": "Pond"
+    },
+    {
+      "position": 41,
+      "title": "Cinematic Intuitive Dynamix"
+    },
+    {
+      "position": 42,
+      "title": "Success"
+    },
+    {
+      "position": 43,
+      "title": "The Judges"
+    },
+    {
+      "position": 44,
+      "title": "Eagle Soft Incorporated"
+    },
+    {
+      "position": 45,
+      "title": "Cosmos Designs"
+    },
+    {
+      "position": 46,
+      "title": "The Ruling Company"
+    },
+    {
+      "position": 47,
+      "title": "Plush"
+    },
+    {
+      "position": 48,
+      "title": "Resource"
+    },
+    {
+      "position": 49,
+      "title": "Yeti Factories"
+    },
+    {
+      "position": 50,
+      "title": "Hack n' Trade"
+    },
+    {
+      "position": 51,
+      "title": "Dynamic-Duo"
+    },
+    {
+      "position": 52,
+      "title": "Prosonix"
+    },
+    {
+      "position": 53,
+      "title": "SIDRIP Alliance"
+    },
+    {
+      "position": 54,
+      "title": "Covert Bitops"
+    },
+    {
+      "position": 55,
+      "title": "Instinct"
+    },
+    {
+      "position": 56,
+      "title": "20th Century Composers"
+    },
+    {
+      "position": 57,
+      "title": "Tristar & Red Sector Inc."
+    },
+    {
+      "position": 58,
+      "title": "Bonzai"
+    },
+    {
+      "position": 59,
+      "title": "Horizon"
+    },
+    {
+      "position": 60,
+      "title": "Onslaught"
+    },
+    {
+      "position": 61,
+      "title": "X-Ample Architectures"
+    },
+    {
+      "position": 62,
+      "title": "Illusion"
+    },
+    {
+      "position": 63,
+      "title": "Chorus"
+    },
+    {
+      "position": 64,
+      "title": "X-Ray"
+    },
+    {
+      "position": 65,
+      "title": "F.A.M.E."
+    },
+    {
+      "position": 66,
+      "title": "Viruz"
+    },
+    {
+      "position": 67,
+      "title": "B.U.D.S."
+    },
+    {
+      "position": 68,
+      "title": "Finnish Gold"
+    },
+    {
+      "position": 69,
+      "title": "Commando Frontier"
+    },
+    {
+      "position": 70,
+      "title": "Beyond Force"
+    },
+    {
+      "position": 71,
+      "title": "Origo Dreamline"
+    },
+    {
+      "position": 72,
+      "title": "Tinnitus"
+    },
+    {
+      "position": 73,
+      "title": "Flash Inc."
+    },
+    {
+      "position": 74,
+      "title": "Danish Crackers"
+    },
+    {
+      "position": 75,
+      "title": "Dominators"
+    },
+    {
+      "position": 76,
+      "title": "Abyss Connection"
+    },
+    {
+      "position": 77,
+      "title": "Light"
+    },
+    {
+      "position": 78,
+      "title": "Atlantis"
+    },
+    {
+      "position": 79,
+      "title": "Army of Darkness"
+    },
+    {
+      "position": 80,
+      "title": "Reflex"
+    },
+    {
+      "position": 81,
+      "title": "Moz(IC)art"
+    },
+    {
+      "position": 82,
+      "title": "NATO"
+    },
+    {
+      "position": 83,
+      "title": "Singular"
+    },
+    {
+      "position": 84,
+      "title": "North East Importers"
+    },
+    {
+      "position": 85,
+      "title": "Black Mail"
+    },
+    {
+      "position": 86,
+      "title": "ABC Crackings"
+    },
+    {
+      "position": 87,
+      "title": "Strike Force"
+    },
+    {
+      "position": 88,
+      "title": "Crazy"
+    },
+    {
+      "position": 89,
+      "title": "Blues Muz'"
+    },
+    {
+      "position": 90,
+      "title": "Upfront"
+    },
+    {
+      "position": 91,
+      "title": "Fantasy Cracking Service"
+    },
+    {
+      "position": 92,
+      "title": "Mayday!"
+    },
+    {
+      "position": 93,
+      "title": "Teesside Cracking Service"
+    },
+    {
+      "position": 94,
+      "title": "Samar Productions"
+    },
+    {
+      "position": 95,
+      "title": "PVM"
+    },
+    {
+      "position": 96,
+      "title": "Exodus"
+    },
+    {
+      "position": 97,
+      "title": "2000 A.D."
+    },
+    {
+      "position": 98,
+      "title": "Starion"
+    },
+    {
+      "position": 99,
+      "title": "Flash Cracking Group"
+    },
+    {
+      "position": 100,
+      "title": "64ever"
+    }
+  ]
+}
