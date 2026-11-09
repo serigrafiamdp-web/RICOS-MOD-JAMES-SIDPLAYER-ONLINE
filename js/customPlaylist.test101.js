@@ -947,7 +947,18 @@
     if(!target){remixNotice('Select a REMIX destination first using ADD + TO.');return;}
     var sidEntry=(player.sidList||[])[index];
     if(!sidEntry){remixNotice('SID selection no longer available.');return;}
-    var candidate=activePublicPlaylist&&customActive&&activePublicPlaylist.tracks[index];
+    // TEST111: reference-only v2 playlists already validated and loaded every
+    // SID from its real HVSC ZIP. Keep the source from activeReferenceTracks,
+    // whether the list is a GitHub curated file, local REMIX, or Cloudflare D1.
+    // The candidate indices are maintained by moveLiveSong/removeLiveSong.
+    var candidate=null;
+    if(customActive&&activeReferenceTracks&&
+       activeReferenceTracks.length===(player.sidList||[]).length){
+      candidate=activeReferenceTracks[index];
+    }else if(customActive&&activePublicPlaylist&&
+             activePublicPlaylist.tracks.length===(player.sidList||[]).length){
+      candidate=activePublicPlaylist.tracks[index];
+    }
     try{
       var reference=null;
       if(candidate&&candidate.pack&&candidate.file){
