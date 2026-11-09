@@ -1751,6 +1751,8 @@
     $('#ricoDefaultTab').toggleClass('rico-selected-tab',browserTab==='games');
     $('#ricoCustomTab').toggleClass('rico-selected-tab',browserTab==='local');
     $('#ricoHvscTab').toggleClass('rico-selected-tab',browserTab==='hvsc');
+    $('#ricoDemosTab').toggleClass('rico-selected-tab',browserTab==='demos');
+    $('#ricoOnefileTab').toggleClass('rico-selected-tab',browserTab==='onefile');
     $('#ricoGroupsTab').toggleClass('rico-selected-tab',browserTab==='groups');
     $('#ricoMusiciansTab').toggleClass('rico-selected-tab',browserTab==='musicians');
     $('#ricoLibraryTab').toggleClass('rico-selected-tab',browserTab==='library');
@@ -2661,7 +2663,13 @@
     var ricoRankEntries={};
     var ricoRankWaiting={};
     var ricoCurrentRank="hvsc";
-    var ricoRankConfig={hvsc:{file:"community/playlists/hvsc-top-100-2000.json",title:"TOP 100 HVSC GAMES",description:"Historical HVSC community ranking (2000)."},groups:{file:"community/playlists/csdb-top-100-groups.json",title:"TOP GROUPS",description:"100 selected SIDs from CSDb scene groups."},musicians:{file:"community/playlists/csdb-top-100-musicians.json",title:"TOP MUSICIANS",description:"100 selected SID musicians from the CSDb scene."}};
+    var ricoRankConfig={
+      hvsc:{file:"community/playlists/hvsc-top-100-2000.json",title:"TOP 100 HVSC GAMES",description:"Historical HVSC community ranking (2000)."},
+      demos:{file:"community/curation/csdb-demo-ranking-2026-11.json",sidFile:"community/playlists/csdb-top-100-demos.json",title:"TOP 100 CSDb DEMOS",description:"100 C64 demos from the CSDb rating list.",sourceUrl:"https://csdb.dk/toplist.php?type=release&subtype=%281%29"},
+      onefile:{file:"community/curation/csdb-onefile-ranking-2026-11.json",title:"TOP 100 CSDb ONEFILE DEMOS",description:"100 one-file demos ranked separately by CSDb.",sourceUrl:"https://csdb.dk/toplist.php?type=release&subtype=%282%29"},
+      groups:{file:"community/curation/csdb-groups-ranking-2026-11.json",sidFile:"community/playlists/csdb-top-100-groups.json",title:"TOP 100 CSDb GROUPS",description:"CSDb rating of groups, not a musicians ranking.",sourceUrl:"https://csdb.dk/toplist.php?type=group"},
+      musicians:{file:"community/playlists/csdb-top-100-musicians.json",title:"TOP MUSICIANS",description:"100 selected SID musicians from the CSDb scene."}
+    };
     var communityActive=false;
     var startupPlaylistPending=true; // TEST24: allow 30 seconds for manual selection.
     var startupPlaylistTimer=null;
@@ -2727,21 +2735,69 @@
       };
       manager.ricoCommunityGuard=true;
     })();
-    // TEST45: shared TOP 100 browser. Selecting a tab never changes playback.
+    // TEST131: CSDb ranks releases and groups; SID tunes are optional associations.
+    // The three CSDb catalogs are independent of each other and of COMMUNITY PLAYLISTS.
+    var ricoRankSongs={};
+    function isCsdbCategory(kind){return kind==='demos'||kind==='onefile'||kind==='groups';}
+    function normalizeRankTitle(value){
+      return String(value||'').normalize('NFKD').toLowerCase()
+        .replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+    }
     async function getRankData(kind){
       if(ricoRankCache[kind])return ricoRankCache[kind];
       if(ricoRankWaiting[kind])return ricoRankWaiting[kind];
       ricoRankWaiting[kind]=(async function(){
-        var res=await fetch(ricoRankConfig[kind].file+'?v=test104uctumi',{cache:'no-store'});
-        if(!res.ok)throw Error('Playlist unavailable ('+res.status+').');
-        var data=await res.json();
-        if(data.format!=='ricos-sid-playlist'||!Array.isArray(data.tracks)||data.tracks.length!==100)throw Error('Top 100 incomplete.');
-        var entries=validatedEntries(data);
-        ricoRankCache[kind]=data;
-        ricoRankEntries[kind]=entries;
+        var cfg=ricoRankConfig[kind];
+        var response=await fetch(cfg.file+'?v=test131',{cache:'no-store'});
+        if(!response.ok)throw Error('Ranking unavailable ('+response.status+').');
+        var data=await response.json();
+        if(isCsdbCategory(kind)){
+          if(data.format!=='ricos-csdb-ranking'||!Array.isArray(data.items)||data.items.length!==100)
+            throw Error('CSDb ranking incomplete.');
+          ricoRankCache[kind]=data;
+          ricoRankEntries[kind]=data.items;
+          ricoRankSongs[kind]=[];
+          if(cfg.sidFile){
+            try {
+              var tracksResponse=await fetch(cfg.sidFile+'?v=test131',{cache:'no-store'});
+              if(tracksResponse.ok){
+                var linked=await tracksResponse.json();
+                if(linked&&linked.format==='ricos-sid-playlist'&&Array.isArray(linked.tracks)){
+                  ricoRankSongs[kind]=linked.tracks;
+                }
+              }
+            }catch(err){console.warn('CSDb SID associations unavailable',err);}
+          }
+        } else {
+          if(data.format!=='ricos-sid-playlist'||!Array.isArray(data.tracks)||data.tracks.length!==100)
+            throw Error('Top 100 incomplete.');
+          var entries=validatedEntries(data);
+          ricoRankCache[kind]=data;
+          ricoRankEntries[kind]=entries;
+        }
         return data;
       })();
-      try{return await ricoRankWaiting[kind];}finally{delete ricoRankWaiting[kind];}
+      try{return await ricoRankWaiting[kind];}
+      finally{delete ricoRankWaiting[kind];}
+    }
+    function rankSongsFor(kind,item){
+      var key=normalizeRankTitle(item.title);
+      return (ricoRankSongs[kind]||[]).filter(function(track){
+        return normalizeRankTitle(kind==='groups'?track.group:track.demoTitle)===key;
+      });
+    }
+    function displayRankIntro(kind){
+      var intro=document.getElementById('ricoHvscIntro'),cfg=ricoRankConfig[kind];
+      intro.textContent=cfg.description;
+      if(isCsdbCategory(kind)){
+        var link=document.createElement('a');
+        link.href=cfg.sourceUrl;
+        link.target='_blank';
+        link.rel='noopener noreferrer';
+        link.textContent='VER RANKING ACTUAL EN CSDb';
+        link.className='rico-csdb-source';
+        intro.appendChild(link);
+      }
     }
     async function showRank(kind){
       cancelStartupPlaylist();
@@ -2754,68 +2810,126 @@
       if(hvscPanel)hvscPanel.style.display='block';
       var cfg=ricoRankConfig[kind];
       document.getElementById('ricoHvscHeading').textContent=cfg.title;
-      document.getElementById('ricoHvscIntro').textContent=cfg.description;
-      document.getElementById('ricoHvscListTitle').textContent=cfg.title+' — 100 SID';
+      displayRankIntro(kind);
+      document.getElementById('ricoHvscListTitle').textContent=cfg.title+
+        (isCsdbCategory(kind)?' — 100 entries · CSDb snapshot':' — 100 SID');
+      hvscLoad.textContent=isCsdbCategory(kind)?'PLAY IDENTIFIED SIDS':'PLAY';
+      hvscLoad.disabled=(kind==='onefile');
       refreshTabs();hvscItems.textContent='';
       if(ricoRankEntries[kind]){renderRankRows(kind);return;}
       hvscStatus.textContent='Loading '+cfg.title+'...';
       try{await getRankData(kind);if(browserTab===kind)renderRankRows(kind);}
       catch(e){if(browserTab===kind)hvscStatus.textContent=e.message;}
     }
-    // Show CSDb scene aliases, never personal names from the SID author field.
     function sceneAlias(value){
       var v=(value||'').trim();
       if(!v||v==='<?> ' .trim()||/^unknown(?: artist)?$/i.test(v))return '';
       var matches=[...v.matchAll(/\(([^()]+)\)/g)];
       if(matches.length)return matches[matches.length-1][1].trim();
-      // TEST103: A SID author like "Uctumi / PVM" credits the musician first,
-      // followed by the scene group. Keep that musician visible in TOP GROUPS.
-      var creditParts=v.split(/\s*\/\s*/);
-      if(creditParts.length>1 && /^[^\s,&/]+$/.test(creditParts[0]))return creditParts[0];
-      // A single stage name/handle can be shown. Multiword real-name credits are withheld.
+      var parts=v.split(/\s*\/\s*/);
+      if(parts.length>1&&/^[^\s,&/]+$/.test(parts[0]))return parts[0];
       if(/^[^\s,&]+$/.test(v))return v;
       return '';
     }
+    async function playRankSongs(kind,tracks,title){
+      if(!Array.isArray(tracks)||!tracks.length)return;
+      var cfg=ricoRankConfig[kind],version=tracks[0].sidBase64?1:2;
+      var selection={format:'ricos-sid-playlist',version:version,
+        name:title||cfg.title,createdBy:'CSDb / HVSC',tracks:tracks};
+      hvscStatus.textContent='Loading SID audio...';
+      try{
+        if(version===1)loadPlaylist(selection,0,false,true);
+        else await loadStoredPlaylist(selection,false);
+        hvscStatus.textContent='SID loaded · press PLAY to listen.';
+      }catch(err){
+        hvscStatus.textContent='SID unavailable: '+err.message;
+      }
+    }
+    function renderCsdbRankRows(kind){
+      var data=ricoRankCache[kind],items=data.items;
+      var found=0,mapped=0;
+      hvscItems.textContent='';
+      var fragment=document.createDocumentFragment();
+      items.forEach(function(item,index){
+        var tracks=rankSongsFor(kind,item);
+        if(tracks.length){found++;mapped+=tracks.length;}
+        var wrapper=document.createElement('div');wrapper.className='rico-csdb-entry';
+        var button=document.createElement('button');button.type='button';
+        button.className='rico-csdb-rank-head';
+        var rank=document.createElement('span');rank.textContent='#'+(index+1);
+        var name=document.createElement('span');name.className='rico-csdb-name';
+        name.textContent=item.title;
+        var group=document.createElement('span');group.className='rico-csdb-credit';
+        group.textContent=kind==='groups'?'CSDb group':(item.group||'');
+        var count=document.createElement('span');count.className='rico-csdb-count';
+        count.textContent=tracks.length?(tracks.length+' SID'):'SID PENDING';
+        button.appendChild(rank);button.appendChild(name);button.appendChild(group);
+        button.appendChild(count);
+        button.setAttribute('aria-expanded','false');
+        var details=document.createElement('div');details.className='rico-csdb-detail';
+        details.hidden=true;
+        button.addEventListener('click',function(){
+          details.hidden=!details.hidden;
+          button.setAttribute('aria-expanded',String(!details.hidden));
+        });
+        if(tracks.length){
+          tracks.forEach(function(track){
+            var row=document.createElement('div');row.className='rico-csdb-track';
+            var label=document.createElement('span');
+            label.textContent=track.title||String(track.file||'SID').split('/').pop().replace(/_/g,' ');
+            var play=document.createElement('button');play.type='button';play.textContent='PLAY SID';
+            play.addEventListener('click',function(){playRankSongs(kind,[track],item.title+' — SID');});
+            row.appendChild(label);row.appendChild(play);details.appendChild(row);
+          });
+        } else {
+          details.textContent='SID association pending in HVSC FIX. The CSDb ranking entry is preserved.';
+        }
+        wrapper.appendChild(button);wrapper.appendChild(details);fragment.appendChild(wrapper);
+      });
+      hvscItems.appendChild(fragment);
+      hvscStatus.textContent='100 '+(kind==='groups'?'groups':'demos')+
+        ' · '+found+' entries with SID · '+mapped+' SID linked · '+
+        (100-found)+' pending. Rankings are a stored snapshot; check CSDb for live order.';
+      hvscLoad.disabled=!mapped;
+    }
     function renderRankRows(kind){
+      if(isCsdbCategory(kind)){renderCsdbRankRows(kind);return;}
       var data=ricoRankCache[kind],entries=ricoRankEntries[kind];
       if(!data||!entries)return;
       hvscItems.textContent='';hvscStatus.textContent='100 SID · Click a song or press LOAD.';
       entries.forEach(function(item,index){
         var track=data.tracks[index]||{};
-        var group=kind==='groups'?(track.group||''):'';
-        var alias=kind==='groups'?sceneAlias(item.author):(item.author||'Unknown artist');
+        var alias=item.author||'Unknown artist';
         var name=item.name||item.file;
-        var row=document.createElement('button');
-        row.type='button';
-        row.className='rico-hvsc-row'+(kind==='groups'?' rico-groups-row':'');
+        var row=document.createElement('button');row.type='button';
+        row.className='rico-hvsc-row';
         var nr=document.createElement('span');nr.className='rico-hvsc-rank';nr.textContent=index+1;
         var title=document.createElement('span');title.className='rico-hvsc-title';title.textContent=name;
         var who=document.createElement('span');who.className='rico-hvsc-artist';who.textContent=alias;
-        if(kind==='groups'){
-          var groupCell=document.createElement('span');
-          groupCell.className='rico-hvsc-group';
-          groupCell.textContent=group||'Scene group';
-          row.appendChild(nr);
-          row.appendChild(groupCell);
-          row.appendChild(who);
-          row.appendChild(title);
-          row.title=(index+1)+'. '+(group||'')+(alias?' — '+alias:'')+' — '+name;
-        }else{
-          row.appendChild(nr);row.appendChild(title);row.appendChild(who);
-          row.title=(index+1)+'. '+name+' — '+alias;
-        }
+        row.appendChild(nr);row.appendChild(title);row.appendChild(who);
         row.addEventListener('click',function(){loadPlaylist(data,index,false,true);});
         hvscItems.appendChild(row);
       });
     }
     if(hvscLoad)hvscLoad.addEventListener('click',async function(){
-      var kind=ricoCurrentRank;hvscLoad.disabled=true;
-      try{loadPlaylist(await getRankData(kind),0,false,true);hvscStatus.textContent=ricoRankConfig[kind].title+' loaded.';}
+      var kind=ricoCurrentRank;
+      if(isCsdbCategory(kind)){
+        var tracks=[];
+        ricoRankCache[kind].items.forEach(function(item){
+          rankSongsFor(kind,item).forEach(function(t){tracks.push(t);});
+        });
+        await playRankSongs(kind,tracks,ricoRankConfig[kind].title+' — IDENTIFIED SID');
+        return;
+      }
+      hvscLoad.disabled=true;
+      try{loadPlaylist(await getRankData(kind),0,false,true);}
       catch(e){hvscStatus.textContent='Could not load playlist: '+e.message;}
       finally{hvscLoad.disabled=false;}
     });
-    [['ricoHvscTab','hvsc'],['ricoGroupsTab','groups'],['ricoMusiciansTab','musicians']].forEach(function(pair){
-      var button=document.getElementById(pair[0]);if(button)button.addEventListener('click',function(){showRank(pair[1]);});
+    [['ricoHvscTab','hvsc'],['ricoDemosTab','demos'],['ricoOnefileTab','onefile'],
+     ['ricoGroupsTab','groups'],['ricoMusiciansTab','musicians']].forEach(function(pair){
+      var button=document.getElementById(pair[0]);
+      if(button)button.addEventListener('click',function(){showRank(pair[1]);});
     });
 
     // TEST62: public playlist metadata on D1; static curated entries stay first.
