@@ -1,3 +1,4 @@
+# TEST128 clean deployment: TOP 100 DEMOS and HVSC FIX data, no UI changes.
 name: SpotySid Pages (static deployment)
 
 on:
