@@ -1,22 +1,8 @@
-# TEST128 clean deployment: TOP 100 DEMOS and HVSC FIX data, no UI changes.
+# SpotySid Pages: manual recovery only. Automated GitHub Pages branch publishing
+# remains the single automatic publisher; avoid concurrent competing deployments.
 name: SpotySid Pages (static deployment)
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/spotysid-pages.yml'
-      - 'index.html'
-      - 'js/**'
-      - 'css/**'
-      - 'community/**'
-      - 'library/**'
-      - 'images/**'
-      - 'sids/**'
-      - 'waveforms/**'
-      - 'old/**'
-      - 'src/**'
-      - 'website/**'
   workflow_dispatch:
 
 permissions:
