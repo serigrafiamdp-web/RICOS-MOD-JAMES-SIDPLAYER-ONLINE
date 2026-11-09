@@ -58,9 +58,13 @@ Two pairs of different uploaded SID binaries converge on the same HVSC route and
 
 ## Editing / publishing caveat
 
-This first copy is a **GitHub static curated playlist**, like the historical static community playlists. It appears under COMMUNITY PLAYLISTS and can be played or copied with EDIT into a personal REMIX. Reordering it and pressing SAVE saves a **browser-local copy**, not the static GitHub original. It does not yet have a Cloudflare D1 public playlist ID; public in-place rename/reorder/delete with the beta key would require publishing/migrating the references into Cloudflare's editable playlist registry. Do **not** present static SAVE as a confirmed Cloudflare write.
+The GitHub JSON remains a permanent **backup of 298 HVSC references**. It initially appeared as a static catalog playlist without a Cloudflare D1 ID, even though all SID references were valid. The owner confirmed that the playback list loads.
 
-The user intends that the collection eventually be editable, copyable and deletable publicly, without collecting the songs again. The GitHub JSON is a persistent authoritative reference list for that migration.
+**TEST110 adds a one-time migration through SAVE:** load OLD SID COLLECTION RICO, press SAVE, enter the beta key, then the browser creates (or reuses) a D1 editable playlist using just the existing HVSC `pack/file` references. It fetches the stored order back and must show **SAVE verified** before considering publication successful. Once published, the same list has the normal D1 editing and deleting actions, and later SAVE reorders the *same* D1 record. The static GitHub catalog row is hidden when the public D1 version exists.
+
+**TEST110 browser PASS is pending**. The GitHub source remains intentionally visible as backup until the user completes migration and confirms saved-order persistence. Once that happens, retire the historical GitHub catalog row but retain its JSON as backup to avoid reappearance after deleting the D1 list.
+
+See [TEST110 migration documentation](TEST110_OLD_SID_COLLECTION_CLOUD_ADOPTION.md).
 
 **No public SID files, existing ranked playlists, audio engine, or Cloudflare database were changed in this import.**
 
