@@ -2708,6 +2708,44 @@
 
     // TEST62: public playlist metadata on D1; static curated entries stay first.
     var communityApiBase='https://ricos-sid-community.serigrafiamdp.workers.dev';
+    // TEST120: retain one compact EDIT button per published playlist.
+    // Route metadata and song edits through a theme-colored choice dialog.
+    function chooseCommunityEditMode(item){
+      return new Promise(function(resolve){
+        var cover=document.createElement('div');cover.className='rico-beta-overlay';
+        var dialog=document.createElement('div');dialog.className='rico-beta-dialog';
+        dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');
+        dialog.setAttribute('aria-label','Edit playlist '+item.title);
+        var heading=document.createElement('strong');heading.textContent='EDIT PLAYLIST';
+        var info=document.createElement('p');info.textContent='Choose what you want to edit in '+item.title+'.';
+        var actions=document.createElement('div');actions.className='rico-beta-actions';
+        function action(label,value){
+          var button=document.createElement('button');
+          button.type='button';button.textContent=label;
+          button.addEventListener('click',function(event){
+            event.preventDefault();event.stopPropagation();finish(value);
+          });
+          actions.appendChild(button);return button;
+        }
+        var songs=action('SONGS','songs');
+        action('NAME / CREATOR','metadata');action('CANCEL',null);
+        dialog.appendChild(heading);dialog.appendChild(info);dialog.appendChild(actions);
+        cover.appendChild(dialog);document.body.appendChild(cover);
+        var done=false;
+        function finish(value){
+          if(done)return;done=true;
+          document.removeEventListener('keydown',onKey,true);
+          cover.remove();resolve(value);
+        }
+        function onKey(event){if(event.key==='Escape'){event.preventDefault();event.stopPropagation();finish(null);}}
+        ['mousedown','mouseup','pointerdown','pointerup','click','dblclick','keydown','keyup','keypress'].forEach(function(type){
+          dialog.addEventListener(type,function(event){event.stopPropagation();});
+        });
+        cover.addEventListener('click',function(event){if(event.target===cover)finish(null);});
+        document.addEventListener('keydown',onKey,true);
+        songs.focus();
+      });
+    }
     // TEST65: metadata update and delete never act on static curated JSON.
     function communityAuthorizeDialog(action,item){
       return new Promise(function(resolve){
@@ -3052,10 +3090,19 @@
             deleteButton.type='button';deleteButton.textContent='DELETE';
             editButton.addEventListener('click',async function(event){
               event.stopPropagation();
-              var auth=await communityAuthorizeDialog('edit',item);
-              if(!auth)return;
+              if(editButton.disabled)return;
               editButton.disabled=true;
               try{
+                var mode=await chooseCommunityEditMode(item);
+                if(mode==='songs'){
+                  await beginPublishedEdit(item.remoteId);
+                  if(player.dialogManager&&player.dialogManager.dialogShown==='chooseSidDialog')
+                    player.dialogManager.hideDialog('chooseSidDialog');
+                  return;
+                }
+                if(mode!=='metadata')return;
+                var auth=await communityAuthorizeDialog('edit',item);
+                if(!auth)return;
                 await ensureBetaServerReady();
                 var capabilitiesResponse=await fetch(communityApiBase+'/capabilities',{cache:'no-store'});
                 var capabilities=await capabilitiesResponse.json();
@@ -3071,7 +3118,7 @@
                   loadedPlaylistTitle=result.title;loadedPlaylistCreator=result.createdBy;renderLivePlaylist();
                 }
                 await loadCommunityCatalog();say('Playlist metadata updated: '+result.title);
-              }catch(error){say('Edit failed: '+error.message);}
+              }catch(error){say('EDIT: '+error.message);}
               finally{editButton.disabled=false;}
             });
             deleteButton.addEventListener('click',async function(event){
@@ -3098,20 +3145,7 @@
               }catch(error){say('Delete failed: '+error.message);}
               finally{deleteButton.disabled=false;}
             });
-            var contentButton=document.createElement('button');
-            contentButton.type='button';contentButton.textContent='EDIT CONTENT';
-            contentButton.setAttribute('aria-label','Edit songs in '+item.title);
-            contentButton.addEventListener('click',async function(event){
-              event.stopPropagation();
-              contentButton.disabled=true;
-              try{
-                await beginPublishedEdit(item.remoteId);
-                if(player.dialogManager&&player.dialogManager.dialogShown==='chooseSidDialog')
-                  player.dialogManager.hideDialog('chooseSidDialog');
-              }catch(error){say('EDIT CONTENT: '+error.message);}
-              finally{contentButton.disabled=false;}
-            });
-            row.appendChild(editButton);row.appendChild(contentButton);row.appendChild(deleteButton);
+            row.appendChild(editButton);row.appendChild(deleteButton);
           }else{
             var editCurated=document.createElement('button');
             editCurated.type='button';editCurated.textContent='EDIT';
