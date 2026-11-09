@@ -1,5 +1,5 @@
 # TEST94 — Reorder SID tracks (↑ ↓)
-Status: GitHub frontend and Worker source prepared; Cloudflare Worker deployment and end-to-end PASS still pending.
+Status: Cloudflare Worker manually deployed; public UCTUMI (99) contributed SID collection SAVE/reload **user-confirmed PASS in TEST108**. Other public playlist routes require separate tests. See [TEST108](TEST108_UCTUMI_SAVE_ORDER_PASS.md).
 
 ## Scope
 - Remix drafts: Up/Down arrows in REMIX PLAYLIST CREATOR, saved immediately in localStorage/sessionStorage.
