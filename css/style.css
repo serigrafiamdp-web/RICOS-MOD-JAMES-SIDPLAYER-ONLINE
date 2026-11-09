@@ -2407,16 +2407,43 @@ left: 1px;
 #ricoHvscIntro .rico-csdb-source {display:inline-block;margin-left:8px;text-decoration:underline;color:inherit;}
 @media(max-width:550px){#ricoHvscItems .rico-csdb-rank-head {grid-template-columns:28px minmax(0,1fr) auto;}#ricoHvscItems .rico-csdb-credit{grid-column:2/4;}#ricoHvscItems .rico-csdb-detail{padding-left:10px;}}
 
-/* TEST132: TOP rankings use the original floating playlist, never a dropdown. */
-#ricoLivePlaylistItems .rico-csdb-live-heading {
-  display:flex;align-items:center;flex-wrap:wrap;gap:7px;
-  padding:7px 10px 5px;
-  background:var(--rico-theme-panel,#252b40);
-  border-bottom:1px solid var(--rico-theme-border,#556);
-  font:12px Arial,sans-serif;
-  color:var(--rico-theme-fg,#fff);
+/* TEST133: TOP lists are FLAT; every row is RANK · DEMO · SONG · ARTIST.
+   The same columns are used for unlinked (SID PENDING) releases. */
+#ricoLivePlaylistItems .rico-live-csdb-row,
+#ricoLivePlaylistItems .rico-csdb-pending-row {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
 }
-#ricoLivePlaylistItems .rico-csdb-live-heading strong {font-weight:700;}
-#ricoLivePlaylistItems .rico-csdb-live-group {opacity:.85;}
-#ricoLivePlaylistItems .rico-csdb-live-status {margin-left:auto;font-size:10px;opacity:.72;}
-#ricoLivePlaylistItems .rico-csdb-live-heading:has(.rico-csdb-live-status) {min-height:24px;}
+#ricoLivePlaylistItems .rico-live-csdb-row > .rico-live-number,
+#ricoLivePlaylistItems .rico-csdb-pending-row > .rico-live-number {
+  flex:0 0 30px;
+}
+#ricoLivePlaylistItems .rico-csdb-release {
+  flex:1.25 1 0;
+  min-width:0;
+  overflow-wrap:anywhere;
+  font-weight:600;
+}
+#ricoLivePlaylistItems .rico-csdb-song {
+  flex:1.1 1 0;
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+#ricoLivePlaylistItems .rico-csdb-artist {
+  flex:1 1 0;
+  min-width:0;
+  overflow-wrap:anywhere;
+  opacity:.88;
+}
+#ricoLivePlaylistItems .rico-csdb-pending-row {
+  opacity:.62;
+  cursor:default;
+  border-bottom:1px solid var(--rico-theme-border,#666);
+}
+@media (max-width:590px){
+  #ricoLivePlaylistItems .rico-live-csdb-row,
+  #ricoLivePlaylistItems .rico-csdb-pending-row{gap:5px;font-size:12px;}
+  #ricoLivePlaylistItems .rico-csdb-artist{flex:.9 1 0;}
+}
