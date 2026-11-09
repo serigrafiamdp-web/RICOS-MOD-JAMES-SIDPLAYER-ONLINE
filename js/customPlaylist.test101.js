@@ -26,6 +26,10 @@
   var selectedLiveIndex=null;
   var queuedLiveIndex=null;
   var followPlayingRowOnce=false;
+  // TEST122: avoid rebuilding 1,376 track buttons on each song selection
+  // while ScriptProcessor audio needs the main thread for steady playback.
+  var largePlaylistStructureRevision=0;
+  var largePlaylistPainted=null;
   var fadeGainNode=null;
   // TEST100: restore gain only when the FIRST newly rendered SID buffer plays.
   // Doing it inside playSong exposes previously queued ScriptProcessor audio.
@@ -626,6 +630,7 @@
     var destination=Math.max(0,Math.min(custom.length-1,index+step));
     if(destination===index)return;
     insertAt(custom,index,destination);
+    largePlaylistStructureRevision++;
     if(embeddedHvscPaths.length===custom.length)
       insertAt(embeddedHvscPaths,index,destination);
     if(activePublicPlaylist&&activePublicPlaylist.tracks.length===custom.length){
@@ -658,6 +663,7 @@
     if(!customActive||loadedRankedPlaylist||savingCommunityEdits||activePublicCollection||index<0||index>=custom.length)return;
     var wasCurrent=player.sidListIndex===index;
     custom.splice(index,1);
+    largePlaylistStructureRevision++;
     if(activePublicPlaylist&&Array.isArray(activePublicPlaylist.tracks))activePublicPlaylist.tracks.splice(index,1);
     if(embeddedHvscPaths.length===custom.length+1)embeddedHvscPaths.splice(index,1);
     if(activeReferenceTracks&&activeReferenceTracks.length===custom.length+1)activeReferenceTracks.splice(index,1);
@@ -2183,6 +2189,26 @@
         return slot._hvscPromise;
       }
       function prefetch(){
+        // TEST122: 1,376 UNKNOWN tracks are intentionally on-demand.
+        // Decompressing every tiny SID continuously in the browser and
+        // re-rendering their rows can starve ScriptProcessor audio on click.
+        // Only warm the nearest few tracks; clicks fetch any other song.
+        if(slots.length>=1000){
+          (async function(){
+            var failures=0;
+            for(var i=1;i<Math.min(slots.length,10)&&!cancelled;i++){
+              await new Promise(function(resolve){setTimeout(resolve,55);});
+              if(cancelled)return;
+              try{await loadSlot(slots[i]);}
+              catch(error){if(!cancelled){failures++;console.warn('HVSC prefetch failed',error);}}
+            }
+            if(!cancelled&&activeReferenceStream===stream&&customActive)
+              $('#ricoPlaylistStatus').text('HVSC ready to browse: '+slots.length+
+                ' SID · additional tracks load when selected'+
+                (failures?' ('+failures+' unavailable nearby)':'')+'.');
+          })();
+          return;
+        }
         var next=1,finished=1,failures=0,ended=0;
         async function worker(){
           while(!cancelled&&next<slots.length){
