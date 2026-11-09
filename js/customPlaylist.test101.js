@@ -226,23 +226,12 @@
   function requestSidSwitch(index,source){
     var list=player.sidList||[];
     if(index<0||index>=list.length)return;
-    var entry=list[index],serial=++referenceSwitchSerial;
-    if(customActive&&activeReferenceStream&&entry&&entry._hvscRef&&!entry.localBytes){
-      // The chosen track has not yet been fetched; do not fade to silence.
-      var stream=activeReferenceStream;
-      if(source==='manual')selectedLiveIndex=index;
-      $('#ricoLiveStatus').text('Loading SID from HVSC: '+(entry.name||entry.file));
-      renderLivePlaylist();
-      stream.loadSlot(entry).then(function(){
-        if(activeReferenceStream!==stream||serial!==referenceSwitchSerial||!customActive)return;
-        var target=custom.indexOf(entry);
-        if(target>=0)requestSidSwitch(target,source);
-      }).catch(function(error){
-        if(activeReferenceStream===stream&&serial===referenceSwitchSerial)
-          $('#ricoLiveStatus').text('SID could not be loaded: '+error.message);
-      });
-      return;
-    }
+    var entry=list[index];
+    // TEST122: on a progressive list, do NOT wait for an unprepared SID
+    // before starting the fade. The upcoming SID can decode during the
+    // existing five-second fade, with the outgoing audio still playing.
+    // Starting the fade after decoding caused an audible hang/repeat on click.
+    referenceSwitchSerial++;
     if(source==='manual')selectedLiveIndex=index;
     if(transitionBusy){
       if(transitionAwaitingStart){
@@ -279,6 +268,15 @@
     $('#ricoLiveStatus').text('NEXT: '+(list[index].name||list[index].file||'SID')+
       (playing?' · fading out':' · starting'));
     renderLivePlaylist();
+    // Predecode once fade has been scheduled. The promise is shared with
+    // prefetch and with the switch at the fade boundary, never decoded twice.
+    if(customActive&&activeReferenceStream&&entry&&entry._hvscRef&&!entry.localBytes){
+      var prepareStream=activeReferenceStream;
+      prepareStream.loadSlot(entry).catch(function(error){
+        if(generation!==transitionGeneration||activeReferenceStream!==prepareStream)return;
+        $('#ricoLiveStatus').text('Cannot prepare SID: '+error.message);
+      });
+    }
     transitionTimer=setTimeout(function(){
       transitionTimer=null;
       if(generation!==transitionGeneration)return;
@@ -296,11 +294,27 @@
         $('#ricoLiveStatus').text('SID loading took too long; volume restored.');
         renderLivePlaylist();
       },6000);
-      try{performSidSwitch(next);}
-      catch(error){
-        resetSoftTransition(false);
-        $('#ricoLiveStatus').text('Could not switch SID: '+error.message);
+      function switchWhenReady(){
+        if(generation!==transitionGeneration||!transitionAwaitingStart)return;
+        try{performSidSwitch(next);}
+        catch(error){
+          resetSoftTransition(false);
+          $('#ricoLiveStatus').text('Could not switch SID: '+error.message);
+        }
       }
+      var stream=customActive?activeReferenceStream:null;
+      var nextEntry=(player.sidList||[])[next];
+      if(stream&&nextEntry&&nextEntry._hvscRef&&!nextEntry.localBytes){
+        // If decoding outlasts the fade, hold the outgoing gain at its floor
+        // until the new SID is ready; don't restore stale/repeated audio.
+        stream.loadSlot(nextEntry).then(function(){
+          if(activeReferenceStream===stream&&customActive)switchWhenReady();
+        }).catch(function(error){
+          if(generation!==transitionGeneration)return;
+          resetSoftTransition(false);
+          $('#ricoLiveStatus').text('Could not load selected SID: '+error.message);
+        });
+      }else switchWhenReady();
     },playing&&fadeGainNode?FADE_OUT_MS:20);
   }
   // Stop/pause must never leave a pending timer that starts a different track.
