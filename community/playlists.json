@@ -1,7 +1,7 @@
 {
   "format": "ricos-community-catalog",
   "version": 1,
-  "updatedAt": "2026-11-08",
+  "updatedAt": "2026-11-09",
   "playlists": [
     {
       "id": "los-pat-moritas",
@@ -26,6 +26,14 @@
       "createdBy": "RICO",
       "tracks": 298,
       "file": "community/playlists/old-sid-collection-rico.json"
+    },
+    {
+      "id": "unknown-csdb",
+      "title": "UNKNOWN CSDB",
+      "author": "RICO",
+      "createdBy": "RICO",
+      "tracks": 1376,
+      "file": "community/playlists/unknown-csdb.json"
     }
   ]
 }
