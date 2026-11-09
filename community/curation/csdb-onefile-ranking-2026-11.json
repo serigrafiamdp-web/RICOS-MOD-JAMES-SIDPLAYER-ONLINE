@@ -1,0 +1,511 @@
+{
+  "format": "ricos-csdb-ranking",
+  "version": 1,
+  "category": "onefile",
+  "title": "TOP 100 CSDb ONEFILE DEMOS",
+  "sourceUrl": "https://csdb.dk/toplist.php?type=release&subtype=%282%29",
+  "retrievedOn": "2026-11-09",
+  "note": "Indexed CSDb snapshot. Top 40 use newer index; subsequent positions adapted from older indexed page. Verify updated ranks at source.",
+  "items": [
+    {
+      "position": 1,
+      "title": "Subway Arts",
+      "group": "99.9%"
+    },
+    {
+      "position": 2,
+      "title": "Nine",
+      "group": "Lft"
+    },
+    {
+      "position": 3,
+      "title": "Neonpulse",
+      "group": "Camelot"
+    },
+    {
+      "position": 4,
+      "title": "Layers",
+      "group": "Finnish Gold"
+    },
+    {
+      "position": 5,
+      "title": "Rodents in the Attic",
+      "group": "Lft"
+    },
+    {
+      "position": 6,
+      "title": "Reworked Artifact",
+      "group": "Faith Design"
+    },
+    {
+      "position": 7,
+      "title": "SuperNoise Vol. 50",
+      "group": "EXclusive ON"
+    },
+    {
+      "position": 8,
+      "title": "Robot - Not Human",
+      "group": "Cycleburner, Pal"
+    },
+    {
+      "position": 9,
+      "title": "Ostatnia Prosta",
+      "group": "Skylight Designs"
+    },
+    {
+      "position": 10,
+      "title": "Copper Booze",
+      "group": "Booze Design"
+    },
+    {
+      "position": 11,
+      "title": "There Is No Such Thing As Too Many Scrollers",
+      "group": "The Whiz-zards Association"
+    },
+    {
+      "position": 12,
+      "title": "Rainbow Connection",
+      "group": "Vision"
+    },
+    {
+      "position": 13,
+      "title": "Party Elk 2",
+      "group": "Booze Design"
+    },
+    {
+      "position": 14,
+      "title": "Cubic Dream",
+      "group": "Lazycow"
+    },
+    {
+      "position": 15,
+      "title": "Barry Boomer - Trapped Again",
+      "group": "TSJ"
+    },
+    {
+      "position": 16,
+      "title": "Traveller",
+      "group": "Extend, Genesis Project"
+    },
+    {
+      "position": 17,
+      "title": "Pandemoniac Part 1 of 5 Framed",
+      "group": "Panoramic Designs"
+    },
+    {
+      "position": 18,
+      "title": "Dark X-Mas",
+      "group": "Atlantis"
+    },
+    {
+      "position": 19,
+      "title": "Dawnfall V1.1",
+      "group": "Oxyron"
+    },
+    {
+      "position": 20,
+      "title": "White Lines",
+      "group": "Plush"
+    },
+    {
+      "position": 21,
+      "title": "Little Things",
+      "group": "Gordian"
+    },
+    {
+      "position": 22,
+      "title": "At the Cinema",
+      "group": "Hokuto Force"
+    },
+    {
+      "position": 23,
+      "title": "Invitation Intro for ROMA.EXE 2026",
+      "group": "Tristar & Red Sector Inc."
+    },
+    {
+      "position": 24,
+      "title": "Sebaloz 50th Birthday",
+      "group": "Lepsi De"
+    },
+    {
+      "position": 25,
+      "title": "Aurora Dreams - The Final Sequence",
+      "group": "Pretzel Logic"
+    },
+    {
+      "position": 26,
+      "title": "My 64",
+      "group": "Genesis Project"
+    },
+    {
+      "position": 27,
+      "title": "Plast Ninja [2fli]",
+      "group": "Elysium"
+    },
+    {
+      "position": 28,
+      "title": "Endoskull",
+      "group": "Atlantis"
+    },
+    {
+      "position": 29,
+      "title": "Scan and Spin",
+      "group": "Fantastic 4 Cracking Group"
+    },
+    {
+      "position": 30,
+      "title": "Druid Too",
+      "group": "Atlantis, Fairlight"
+    },
+    {
+      "position": 31,
+      "title": "Sprite Runners",
+      "group": "Xenon"
+    },
+    {
+      "position": 32,
+      "title": "Boilerplate",
+      "group": "Atlantis"
+    },
+    {
+      "position": 33,
+      "title": "Pajda Always Knows",
+      "group": "Faith Design"
+    },
+    {
+      "position": 34,
+      "title": "Christmas Leftovers",
+      "group": "Pretzel Logic"
+    },
+    {
+      "position": 35,
+      "title": "Hellofiends",
+      "group": "Atlantis, Pretzel Logic"
+    },
+    {
+      "position": 36,
+      "title": "Charflasher",
+      "group": "Onslaught"
+    },
+    {
+      "position": 37,
+      "title": "Raster Time",
+      "group": "Genesis Project"
+    },
+    {
+      "position": 38,
+      "title": "Squeeze Me",
+      "group": "Finnish Gold"
+    },
+    {
+      "position": 39,
+      "title": "Bit by Bits",
+      "group": "Bonzai"
+    },
+    {
+      "position": 40,
+      "title": "Tissepause",
+      "group": ""
+    },
+    {
+      "position": 41,
+      "title": "Breadbinked",
+      "group": "Atlantis, Pretzel Logic"
+    },
+    {
+      "position": 42,
+      "title": "It's More Fun to Compute",
+      "group": "TSJ"
+    },
+    {
+      "position": 43,
+      "title": "Daah, Those Acid Pills!",
+      "group": "Censor Design"
+    },
+    {
+      "position": 44,
+      "title": "Grey",
+      "group": "Pac"
+    },
+    {
+      "position": 45,
+      "title": "Bouncy Pogo Tales!",
+      "group": "Pixel Punx"
+    },
+    {
+      "position": 46,
+      "title": "Visage ! 50",
+      "group": "Lethargy"
+    },
+    {
+      "position": 47,
+      "title": "Morphing Starball",
+      "group": "Mixer"
+    },
+    {
+      "position": 48,
+      "title": "Every Time I Go on Pouet",
+      "group": "Radiant"
+    },
+    {
+      "position": 49,
+      "title": "Trippy Tea",
+      "group": "Pretzel Logic"
+    },
+    {
+      "position": 50,
+      "title": "La Alumbrada",
+      "group": "Hokuto Force, The Codeblasters"
+    },
+    {
+      "position": 51,
+      "title": "Spectro",
+      "group": "Finnish Gold"
+    },
+    {
+      "position": 52,
+      "title": "Personal Santa",
+      "group": "Faith Design"
+    },
+    {
+      "position": 53,
+      "title": "No Listen",
+      "group": "Dinasours"
+    },
+    {
+      "position": 54,
+      "title": "Plasma Ninja",
+      "group": "Resource"
+    },
+    {
+      "position": 55,
+      "title": "Morph",
+      "group": "Mr Wegi"
+    },
+    {
+      "position": 56,
+      "title": "Veterans of Style",
+      "group": "Digital Excess, X-Ample Architectures"
+    },
+    {
+      "position": 57,
+      "title": "The Journey",
+      "group": "The Solaris Agency"
+    },
+    {
+      "position": 58,
+      "title": "Wiggly Wobbly",
+      "group": "Pretzel Logic"
+    },
+    {
+      "position": 59,
+      "title": "Crimbo 1982 (Onefiled)",
+      "group": "BiGFooT"
+    },
+    {
+      "position": 60,
+      "title": "Codey turns 50!",
+      "group": "Excess"
+    },
+    {
+      "position": 61,
+      "title": "Hacked Into the Matrix",
+      "group": "ChristopherJam"
+    },
+    {
+      "position": 62,
+      "title": "X-Mas Demo 2024",
+      "group": "Blazon"
+    },
+    {
+      "position": 63,
+      "title": "Cowboynessness",
+      "group": "Hokuto Force"
+    },
+    {
+      "position": 64,
+      "title": "Onscreen 5k",
+      "group": "Xenon"
+    },
+    {
+      "position": 65,
+      "title": "Just an Old Knob",
+      "group": "Hokuto Force"
+    },
+    {
+      "position": 66,
+      "title": "Lovecats",
+      "group": "Atlantis"
+    },
+    {
+      "position": 67,
+      "title": "HBFS",
+      "group": "Finnish Gold"
+    },
+    {
+      "position": 68,
+      "title": "PETSCII Intro",
+      "group": "Pixel Punx"
+    },
+    {
+      "position": 69,
+      "title": "Endoskull Anniversary Edition",
+      "group": "Atlantis"
+    },
+    {
+      "position": 70,
+      "title": "Press any char",
+      "group": "Gordian"
+    },
+    {
+      "position": 71,
+      "title": "WavyCube",
+      "group": "TempesT"
+    },
+    {
+      "position": 72,
+      "title": "China Thai Lunch Demo",
+      "group": "Fairlight, The Increasing Popularity Crew"
+    },
+    {
+      "position": 73,
+      "title": "Birth of a Flower",
+      "group": "Vision"
+    },
+    {
+      "position": 74,
+      "title": "Moving Balls",
+      "group": "Blazon"
+    },
+    {
+      "position": 75,
+      "title": "Computational Soup 2kb",
+      "group": "Lft"
+    },
+    {
+      "position": 76,
+      "title": "The Only AI I Will Ever Respect",
+      "group": "LDX#40"
+    },
+    {
+      "position": 77,
+      "title": "Onef1ler 2",
+      "group": "Atlantis"
+    },
+    {
+      "position": 78,
+      "title": "Doctor Dither",
+      "group": "Miami Fun Project"
+    },
+    {
+      "position": 79,
+      "title": "Feelgood",
+      "group": "Gorbat Soft"
+    },
+    {
+      "position": 80,
+      "title": "POKE 56576,1 for Unlimited AI",
+      "group": "Active"
+    },
+    {
+      "position": 81,
+      "title": "Quondam Tunneling",
+      "group": "Lft"
+    },
+    {
+      "position": 82,
+      "title": "Quadrants",
+      "group": "Genesis Project"
+    },
+    {
+      "position": 83,
+      "title": "ECM Raster Fun",
+      "group": "Bonzai"
+    },
+    {
+      "position": 84,
+      "title": "AWE - Algo Wave Extraction",
+      "group": "Algotech"
+    },
+    {
+      "position": 85,
+      "title": "Two 4 One",
+      "group": "Pixel Punx"
+    },
+    {
+      "position": 86,
+      "title": "25 or 6 to 4",
+      "group": "Artline Designs, Fairlight"
+    },
+    {
+      "position": 87,
+      "title": "Fairy Ring Techdemo",
+      "group": "eryngi"
+    },
+    {
+      "position": 88,
+      "title": "Greenland",
+      "group": "North Atlantic Fella Organization"
+    },
+    {
+      "position": 89,
+      "title": "Don't Be Square",
+      "group": "Gordian"
+    },
+    {
+      "position": 90,
+      "title": "To Norah",
+      "group": "Elysium, Wrath Designs"
+    },
+    {
+      "position": 91,
+      "title": "The Tuneful Eight [ultimate]",
+      "group": "The Tuneful Eight"
+    },
+    {
+      "position": 92,
+      "title": "Tribute to Ben - Last Ninja SID Remake",
+      "group": "Jason Page"
+    },
+    {
+      "position": 93,
+      "title": "Fallen Heroes",
+      "group": "Tristar & Red Sector Inc."
+    },
+    {
+      "position": 94,
+      "title": "Platonic Feelings",
+      "group": "Hokuto Force"
+    },
+    {
+      "position": 95,
+      "title": "Commodore Robot",
+      "group": "Hokuto Force"
+    },
+    {
+      "position": 96,
+      "title": "Xmas 2024",
+      "group": "Fairlight"
+    },
+    {
+      "position": 97,
+      "title": "Bonzieed! 2",
+      "group": "Bonzai"
+    },
+    {
+      "position": 98,
+      "title": "Back to the ECM Roots",
+      "group": "Bonzai"
+    },
+    {
+      "position": 99,
+      "title": "Happy Scrollidays",
+      "group": "Genesis Project"
+    },
+    {
+      "position": 100,
+      "title": "Burglarized",
+      "group": "Fairlight, Finnish Gold, Offence"
+    }
+  ]
+}
