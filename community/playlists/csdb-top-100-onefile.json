@@ -1,0 +1,292 @@
+{
+  "format": "ricos-sid-playlist",
+  "version": 2,
+  "name": "TOP 100 CSDb ONEFILE DEMOS",
+  "createdBy": "RICO",
+  "sourceRankingUrl": "https://csdb.dk/toplist.php?type=release&subtype=%282%29",
+  "sourceDemoCount": 100,
+  "linkedDemoCount": 35,
+  "pendingDemoCount": 65,
+  "tracks": [
+    {
+      "pack": "library/packs/musicians/L/Lft.zip",
+      "file": "Nine.sid",
+      "title": "Nine",
+      "author": "Linus Åkesson (lft)",
+      "demoTitle": "Nine",
+      "demoOrder": 2
+    },
+    {
+      "pack": "library/packs/musicians/P/Proton.zip",
+      "file": "Layers.sid",
+      "title": "Layers",
+      "author": "Sami Louko (Proton)",
+      "demoTitle": "Layers",
+      "demoOrder": 4
+    },
+    {
+      "pack": "library/packs/musicians/L/Lft.zip",
+      "file": "Rodents_in_the_Attic.sid",
+      "title": "Rodents in the Attic",
+      "author": "Linus Åkesson (lft)",
+      "demoTitle": "Rodents in the Attic",
+      "demoOrder": 5
+    },
+    {
+      "pack": "library/packs/musicians/C/Cycleburner.zip",
+      "file": "Robot-Not_Human.sid",
+      "title": "Robot - Not Human",
+      "author": "Even Scharning (Cycleburner)",
+      "demoTitle": "Robot - Not Human",
+      "demoOrder": 8
+    },
+    {
+      "pack": "library/packs/musicians/S/Sage.zip",
+      "file": "Ostatnia_prosta.sid",
+      "title": "Ostatnia Prosta",
+      "author": "Dariusz Paliga (Sage)",
+      "demoTitle": "Ostatnia Prosta",
+      "demoOrder": 9
+    },
+    {
+      "pack": "library/packs/musicians/M/Mitch_and_Dane.zip",
+      "file": "Dane/Copper_Booze.sid",
+      "title": "Copper Booze",
+      "author": "Stellan Andersson (Dane)",
+      "demoTitle": "Copper Booze",
+      "demoOrder": 10
+    },
+    {
+      "pack": "library/packs/musicians/N/Narciso.zip",
+      "file": "There_Is_No_Such_Thing_as_Too_Many_Scrollers.sid",
+      "title": "There's No Such Thing as T.M.S.",
+      "author": "Narciso Quintana (Narcisound)",
+      "demoTitle": "There Is No Such Thing As Too Many Scrollers",
+      "demoOrder": 11
+    },
+    {
+      "pack": "library/packs/musicians/H/Holt_Hein.zip",
+      "file": "Rainbow_Connection.sid",
+      "title": "Rainbow Connection",
+      "author": "Hein Holt",
+      "demoTitle": "Rainbow Connection",
+      "demoOrder": 12
+    },
+    {
+      "pack": "library/packs/musicians/C/Cyborgjeff.zip",
+      "file": "Cubic_Dream.sid",
+      "title": "Cubic Dream",
+      "author": "Pierre Martin (Cyborgjeff)",
+      "demoTitle": "Cubic Dream",
+      "demoOrder": 14
+    },
+    {
+      "pack": "library/packs/musicians/P/Psych858o.zip",
+      "file": "Traveller.sid",
+      "title": "Traveller",
+      "author": "Marcin Majdzik (psych858o)",
+      "demoTitle": "Traveller",
+      "demoOrder": 16
+    },
+    {
+      "pack": "library/packs/musicians/M/Mibri.zip",
+      "file": "Dark_X-mas.sid",
+      "title": "Dark X-mas",
+      "author": "Michael P. Bridgewater (Mibri)",
+      "demoTitle": "Dark X-Mas",
+      "demoOrder": 18
+    },
+    {
+      "pack": "library/packs/musicians/F/Flotsam.zip",
+      "file": "Aurora_Dreams-The_Final_Sequence.sid",
+      "title": "Aurora Dreams - The Final Seq.",
+      "author": "Riku Ö (Flotsam)",
+      "demoTitle": "Aurora Dreams - The Final Sequence",
+      "demoOrder": 25
+    },
+    {
+      "pack": "library/packs/musicians/C/Chiummo_Aldo.zip",
+      "file": "Druid_Too.sid",
+      "title": "Druid Too",
+      "author": "Aldo Chiummo (Ald)",
+      "demoTitle": "Druid Too",
+      "demoOrder": 30
+    },
+    {
+      "pack": "library/packs/musicians/W/Warp_8.zip",
+      "file": "Boilerplate.sid",
+      "title": "Boilerplate",
+      "author": "Sebastian Abel (Warp 8)",
+      "demoTitle": "Boilerplate",
+      "demoOrder": 32
+    },
+    {
+      "pack": "library/packs/musicians/F/Flotsam.zip",
+      "file": "Christmas_Leftovers.sid",
+      "title": "Christmas Leftovers",
+      "author": "Riku Ö (Flotsam)",
+      "demoTitle": "Christmas Leftovers",
+      "demoOrder": 34
+    },
+    {
+      "pack": "library/packs/musicians/F/Fade.zip",
+      "file": "Charflasher.sid",
+      "title": "Charflasher",
+      "author": "Sean McKenzie (Fade)",
+      "demoTitle": "Charflasher",
+      "demoOrder": 36
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Its_More_Fun_to_Compute.sid",
+      "title": "It's More Fun to Compute",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "It's More Fun to Compute",
+      "demoOrder": 42
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Daah_Those_Acid_Pills.sid",
+      "title": "Daah, Those Acid Pills",
+      "author": "Magnar Harestad",
+      "demoTitle": "Daah, Those Acid Pills!",
+      "demoOrder": 43
+    },
+    {
+      "pack": "library/packs/musicians/R/Radiantx.zip",
+      "file": "Every_Time_I_Go_on_Pouet.sid",
+      "title": "Every Time I Go on Pouet",
+      "author": "Martin Evald (Radiant)",
+      "demoTitle": "Every Time I Go on Pouet",
+      "demoOrder": 48
+    },
+    {
+      "pack": "library/packs/musicians/V/Vincenzo.zip",
+      "file": "Plasma_Ninja.sid",
+      "title": "Plasma Ninja",
+      "author": "László Vincze (Vincenzo)",
+      "demoTitle": "Plasma Ninja",
+      "demoOrder": 54
+    },
+    {
+      "pack": "library/packs/musicians/F/Feiweier_Goesta.zip",
+      "file": "Veterans_of_Style.sid",
+      "title": "Veterans of Style",
+      "author": "Gösta Bergfeld",
+      "demoTitle": "Veterans of Style",
+      "demoOrder": 56
+    },
+    {
+      "pack": "library/packs/musicians/E/Eclipse.zip",
+      "file": "Codey_Turns_50.sid",
+      "title": "Codey Turns 50",
+      "author": "Zoltán F. Földi (Eclipse)",
+      "demoTitle": "Codey turns 50!",
+      "demoOrder": 60
+    },
+    {
+      "pack": "library/packs/musicians/M/Manganoid.zip",
+      "file": "Cowboynessness.sid",
+      "title": "Cowboynessness",
+      "author": "Zack Maxis (manganoid)",
+      "demoTitle": "Cowboynessness",
+      "demoOrder": 63
+    },
+    {
+      "pack": "library/packs/musicians/D/Divertigo.zip",
+      "file": "Lovecats.sid",
+      "title": "Lovecats",
+      "author": "Steve Arms (Divertigo)",
+      "demoTitle": "Lovecats",
+      "demoOrder": 66
+    },
+    {
+      "pack": "library/packs/demos/G-L.zip",
+      "file": "HBFS.sid",
+      "title": "HBFS",
+      "author": "Serato",
+      "demoTitle": "HBFS",
+      "demoOrder": 67
+    },
+    {
+      "pack": "library/packs/musicians/M/Manganoid.zip",
+      "file": "WavyCube.sid",
+      "title": "WavyCube",
+      "author": "Zack Maxis (manganoid)",
+      "demoTitle": "WavyCube",
+      "demoOrder": 71
+    },
+    {
+      "pack": "library/packs/musicians/T/Trident.zip",
+      "file": "China_Thai_Lunch_Demo.sid",
+      "title": "China Thai Lunch Demo",
+      "author": "Adam Dunkels (Trident)",
+      "demoTitle": "China Thai Lunch Demo",
+      "demoOrder": 72
+    },
+    {
+      "pack": "library/packs/musicians/H/Holt_Hein.zip",
+      "file": "Birth_of_a_Flower.sid",
+      "title": "Birth of a Flower",
+      "author": "Hein Holt",
+      "demoTitle": "Birth of a Flower",
+      "demoOrder": 73
+    },
+    {
+      "pack": "library/packs/musicians/L/Lft.zip",
+      "file": "Computational_Soup_2KB.sid",
+      "title": "Computational Soup 2KB",
+      "author": "Linus Åkesson (lft)",
+      "demoTitle": "Computational Soup 2kb",
+      "demoOrder": 75
+    },
+    {
+      "pack": "library/packs/musicians/L/LDX40.zip",
+      "file": "Only_AI_I_Will_Ever_Respect.sid",
+      "title": "The Only AI I Will Ever Respect",
+      "author": "Tilmann Jakob (LDX#40)",
+      "demoTitle": "The Only AI I Will Ever Respect",
+      "demoOrder": 76
+    },
+    {
+      "pack": "library/packs/musicians/M/Moraff.zip",
+      "file": "Feelgood.sid",
+      "title": "Feelgood",
+      "author": "Jani Väisänen (Moraff)",
+      "demoTitle": "Feelgood",
+      "demoOrder": 79
+    },
+    {
+      "pack": "library/packs/musicians/L/Lft.zip",
+      "file": "Quondam_Tunneling.sid",
+      "title": "Quondam Tunneling",
+      "author": "Linus Åkesson (lft)",
+      "demoTitle": "Quondam Tunneling",
+      "demoOrder": 81
+    },
+    {
+      "pack": "library/packs/musicians/S/Shogoon.zip",
+      "file": "To_Norah_2SID.sid",
+      "title": "To Norah",
+      "author": "Wojciech Radziejewski (Shogoon)",
+      "demoTitle": "To Norah",
+      "demoOrder": 90
+    },
+    {
+      "pack": "library/packs/musicians/S/Spider_Jerusalem.zip",
+      "file": "Fallen_Heroes.sid",
+      "title": "Fallen Heroes",
+      "author": "J. Wassermann (Spider Jerusalem)",
+      "demoTitle": "Fallen Heroes",
+      "demoOrder": 93
+    },
+    {
+      "pack": "library/packs/musicians/V/Vandahlia.zip",
+      "file": "Commodore_Robot.sid",
+      "title": "Commodore Robot",
+      "author": "H. Warner (Vandahlia)",
+      "demoTitle": "Commodore Robot",
+      "demoOrder": 95
+    }
+  ]
+}
