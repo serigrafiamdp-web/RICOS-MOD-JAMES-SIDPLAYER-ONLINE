@@ -2068,9 +2068,12 @@ SidPlayer.prototype = {
     root.style.setProperty('--rico-theme-border', palette.line);
     root.style.setProperty('--rico-theme-panel', 'color-mix(in srgb, ' + palette.background + ' 80%, ' + palette.line + ' 20%)');
     root.style.setProperty('--rico-theme-hover', 'color-mix(in srgb, ' + palette.background + ' 65%, ' + palette.line + ' 35%)');
-    $('#oscilloscopeColorButton').text('Color: ' + palette.name)
-      .attr('title', 'Change oscilloscope palette (next: ' +
-        this.colorModes[(this.colorModeIndex + 1) % this.colorModes.length].name + ')');
+    // TEST119: keep palette selection numeric, with 1-based index in the
+    // current set. Avoid the browser's native white tooltip too.
+    $('#oscilloscopeColorButton').text('COLOR ' + (this.colorModeIndex + 1))
+      .removeAttr('title')
+      .attr('aria-label', 'COLOR ' + (this.colorModeIndex + 1) +
+        ' of ' + this.colorModes.length + '. Click to change palette.');
   },
 
   drawLines: function() {
