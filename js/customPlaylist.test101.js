@@ -971,7 +971,7 @@
     if(!target)return;
     var selected=selectedRemix();
     target.textContent='';
-    var blank=document.createElement('option');blank.value='';blank.textContent='SELECT REMIX';
+    var blank=document.createElement('option');blank.value='';blank.textContent='SELECT DESTINATION';
     target.appendChild(blank);
     remixDrafts.forEach(function(d){
       var option=document.createElement('option');
