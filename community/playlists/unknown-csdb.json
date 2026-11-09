@@ -1,0 +1,5514 @@
+{
+  "format": "ricos-sid-playlist",
+  "version": 2,
+  "name": "UNKNOWN CSDB",
+  "createdBy": "RICO",
+  "author": "RICO",
+  "createdAt": "2026-11-09",
+  "tracks": [
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "16_Bit_Machine.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "20_Jahre_Metalvotze.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "2_Minutes.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "2_Years_Faces_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "2_Years_Faces_tune_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "3-Part_Invention.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "3_Years_Crypt_tune_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "4K_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "50Sixx-6_02.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "50Sixx-6_04.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "50Sixx-6_05.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "6510.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "A_Little_Ditty.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "A_New_Digi.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "A_Secret_Galway_Sound_of_Short_Circuit.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "A_View_to_a_Kill.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "A_Waveform_Christmas_Hit_Disk.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "A_Ziggy_Christmas.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Action_News_5_tune_R3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Action_News_5_tune_V2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Action_News_Anschrift.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Actionman.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Active_Intro_14.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Actual_Info.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Addicted_1_part_6.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Adventure_Help-Disk_II.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Afresh_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Afros_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Aint_Misbehavin.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Air_on_G_String.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Alfs_Cat_Rap.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "All_Together_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Alloyrun_Highscore.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Aloha_Oe_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Amiga_Dead_Demo_tune_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Anal_Intruders_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Anon_Music_Demo_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Anonymous.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Another_Part.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Antic_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Antilamer_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Appedix_Demo_5.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Armegetdown.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Aslive_Birthday_Demo_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Aslive_Birthday_Demo_tune_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Assassin.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Asskicker.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Astronaut.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Axel-F.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Axel_F.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Baby_Elephant_Walk_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bach_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bach_Duet_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bach_Invention_8_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bach_Preludium_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bach_Tribute.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bad_Boy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bad_Boys_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bagpipes_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Ballade_Pour_Adeline_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Banana_Demo_tune_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Basic_Music_1_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Beat_Digi.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Beat_Dis_note.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Beat_Him.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Beavers_Ranks_30_1-88.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Beavers_Ranks_31_1-88.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Because.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Best_of_1993.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Best_Rythem.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Big_Bang_tune_6.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Big_Fun.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bitchaos_tune_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bizzinote_4_You.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Black_Afghane.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Black_Magic.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "BlackBird.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Blackline_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Blackline_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Blackline_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Blackline_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Blackline_5.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Blackline_6.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Blackline_7.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Blood_and_Sand.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Blowin_in_the_Wind_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Blue_Grass_Music_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Blue_Image.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Blue_Monday.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Blues.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bobby_O.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bolero.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bomb.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bonjovi_Demo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Boogie_Woogie.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Booooooo0ooring.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Borderline.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bransle.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Break_the_Walls.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Breda_Hub.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Bright_Eyes_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Britania_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Burn_Rubber.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Burp_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Busy_Scene_03_note.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "C64_5_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cameles_Cracker.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Canon_in_D.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cant_Stop.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cantina_Band.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Captain_Fred.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cascades.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Catch_a_Dream.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cavatina.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Chaotic_World.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Chevytech_1985.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Chevytech_1987.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Children_Songs.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Chimes.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "China_Syndrome.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Chrismas-Mix.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Christmas_Demo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Christmas_Demo_1988.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Christmas_Terror_loader.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Chrome_Yellow.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cinderella_87.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Classic.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Classic_Music.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cleopha.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Close_Encounters.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Close_to_You.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cobra_Logo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Colleen_Music_Compendium.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Colleen_Music_Creator.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Collision_Logo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Color_My_World.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Commo_Bam_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Competition_tune_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Compo_Tune.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Computer_Blues_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Conquer.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Contact_Bad.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Contact_Browbeat.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Contact_Demo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Contact_FLI_for_Swapping.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Contact_The_Best_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Contact_The_Warriors.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Contact_W_O_D.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Controversial_01_tune_12.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cool_Demo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cool_Music.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cooler_as_Cool.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cosmo-Liner.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cosmos_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Coventry.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Crack_TBT.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Crazy_Granpa.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Crocket_Zak.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Crocketts_Theme.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Crucified.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Crypt_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Cult_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dadidu.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Damoe.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dance_on_the_Air_note.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dataapan_tar_sig.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dataapan_Trippar.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Days_of_Rain.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "DCF_Logo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Deeence.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Delta-Music.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Demo_Against_SCC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Demo_Demon_tune_0.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Demo_Demon_tune_8.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Demo_Demon_tune_9.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Demo_Maker_De_Luxe_tune_0.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Demo_Maker_De_Luxe_tune_16.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Demo_Maker_De_Luxe_tune_17.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Demo_Maker_De_Luxe_tune_18.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Demo_Maker_De_Luxe_tune_19.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Demo_Maker_De_Luxe_tune_20.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Demo_Number_Two.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Demo_of_HCC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Demonix_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Depredators_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Deutschlandlied.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dexion.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Digi-Mega-Demo_part_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Digidrum_Delivery.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Disco.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dish_and_Tell.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dla_Outsider_a.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dog_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Donau_Music.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dont_Worry_be_Happy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Double_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Double_Dealing.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Down_Under_tune_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dr_Who.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dragons_Lair.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dream_Evil.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dreame.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dreamy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Drugnessless.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Drum_Fantastic.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Drumix.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Drummer_Boy_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dry-Cleaner.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Duelling_Banjos.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Duplex_Coder_V3_0.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "DX-7_Support.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Dynamic_Trio_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Eelco.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Egyptian.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Eko_Music_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Elite.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Elizabet.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "En_Lille_Melodi.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Encore_1_1_intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "EnsKerrallaOtetaanSittenKatriHelenakinMukaan.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Entertainer_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Entertainer_Theme.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Equator.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Equinoxe_III.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "ERT.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Eskimo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Esp_88.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Essentials_tune_00.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Essentials_tune_11.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Essentials_tune_14.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "ET_Flame.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Everything_I_Do.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Evolution_tune_6.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Exodus_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Extacy_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Eyeball.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Eyeway_to_Hell.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Falcon_Dash-The_Big_Diamond.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Falcon_Intro_03_v1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Falcon_Intro_03_v2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Fanfare.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "FCG_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Festival.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Fettenbass.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Final_Countdown.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Final_FAT_tune_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "First_Dream.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Flippy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Floppy_Disk_Construction_Set.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Flute.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Flute_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Flying_Ball.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Forgotten_Bytes_tune_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Fragile.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Frantic_Ranx.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Freestyle_tune_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Fria_bad_BBS.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Frogs_Music_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Fucked_It_tune_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Fuer_Elise.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Fugue_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Fugue_VI.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Full_Confusing_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Furulund_Demo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Galaxy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Garlic_01_part_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Gavotte.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "GeePee_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Genimi_Zak_01.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Get_Ready.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Gewoon_te_gek.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Ghost_Train.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Giantory.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Gib_Aids_Eine_Chance.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Gigue_G_Major_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Gimme_A_Beat.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Girls_Just_Want_to_Have_Fun.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Givin_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Go_into_Trance.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Goatse_Brudbilder.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "God_Save_the_King_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Gold_Tune.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Golf_Religion.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Good_Morning.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Got_TBC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Grsleeve.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Guantala.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Guess_Its_OK.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Guitar_Britania_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Guns.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Hahota_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Handling_Haendel.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Happy_Birthday.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Heroic_Fantasy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Hexagon_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "HiFi_Boogy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "High_Energy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "High_Life_Is_Cool.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Higher_Status_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Hitlerpack.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Homeboy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Hot_Stuff.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "How.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "How_Far.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "HTC_Beat_plus.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Huey_Lewis.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Human_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Hunter_O.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Hymn_to_Green_and_Blue.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Hymne_a_la_Joie_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "IBM-Remix.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Im_the_One_Who_Loves_You.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Image_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Image_Remix.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Important_Information.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Impulse.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "In_Church.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Inferno_March.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Infiltrators_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Infinite_Cube_Zoomer.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Internal_4_note.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Intrada.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Intro-Maker.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Intro_90.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Intro_Collection_tune_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Ionix_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Its_a_Sin.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Its_Again_EQ.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Its_Classic.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Its_Coming.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Its_Right.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "James_Brown_Is_Dead.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "JDS-Logoshow.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Joelbitar.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Join_Today.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Join_Us_FAM.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Jolly_and_Stupid.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Jouluilta.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Judge_Dredd_Demo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Jul.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Juliet_Bravo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Jump.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Just_a_Tune.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Just_for_Fun.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Justine_4_All_digi.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "K9teen.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Kanon.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Kansandemokratia.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Keep_Goin.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Kill_or_Cure_tune_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Kingdom.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Kluski.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Knight_Rider.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Koko-Music.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Kotimaani_Ompi_Suomi.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Kozzu.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Kullan_Ylistys.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "La_Bamba.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Lame_Beats.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Lame_Collection_note.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Lapsuuden_Toverille.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Laserdance.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Later.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Lavender.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Leave_Me_Alone.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Legend_Writer_sound_07.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Legend_Writer_sound_08.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Lemon_Remix_II.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Lepses.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Lepses_end.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Let_Da_Zak_Play.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Let_it_Be_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Letz_Fetz.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Light_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Light_My_Fire.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Lightlife.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Like_Stress.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Little_bass.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Live_in_Mokba.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Loadstar_Menu_issue_21_and_22.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Loadstar_Menu_issue_23.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Loadstar_Menu_issue_24.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Loadstar_Menu_issue_25.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Loadstar_Menu_issue_26.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Loadstar_Menu_issue_27.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Loadstar_Menu_issue_28.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Loadstar_Menu_issue_7.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Lonely_Woman.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Long_Live.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Love_Boat_Theme_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "LSD_part_8.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Lucy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "M_O_N-Medley.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Maamme.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mad_Product.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Made_for_My_Girlfriend.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Madonna_Mix.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Magic_Disk_64_intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Magic_Flute.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Magical_Song.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Magnetic_Drums.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mahavishnu.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Maid_of_Orleans.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Man_of_Noise.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Maniacs_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Maple_Leaf_Rag.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "March_Ranx.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/16_Ldi_E_C.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/18_0_Del_Ciel.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/42nd_St.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/76_Trombones.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/99_Luftballons.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/9_to_5.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/A-Team.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/A_Bit_O_Bach.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/A_Closer_Walk.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/A_View_to_a_Kill.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/A_View_to_a_Kill_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Adios_Amor.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Africa.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Afton.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Against_All_Odds.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Against_All_Odds_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Air.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Airwolf.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Alabama_Rag.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Alba_Chiara.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/All_I_Need.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/All_My_Loving.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/All_Night_Long.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/All_Night_Long_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/All_Ye_Faithful.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Allegretto.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Allegro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Allentown.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Alone_without_You.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Amico_e.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Andria_Polka.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Angelina_Polka.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Arcadia.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Aria.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/At_the_Hop.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Autostrada.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Away_in_a_Manger.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Axel_F-Beverly_Hills_Cop.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Axel_F.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Axel_F_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Axel_F_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Axel_F_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Axel_F_5.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Axel_F_6.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Axel_F_7.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Babe.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Baby_Elephant.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Baby_I_Like_You.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Bach.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Bach_1367.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Bach_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Bach_370.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Baglioni.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Ball_and_Chain.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Ball_Scene.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Bar_57.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Bark_at_the_Moon.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Be_with_You.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Beat_It.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Beethoven_Preludium_Op_39.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Beethoven_Sonata.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Beethoven_Trio_in_C_minor.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Beethoven_Waltz.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Believe_in_Music.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Ben.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Billboard_Maker.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Billie_Jean.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Birdland.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Black_Cars.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Black_Dog.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Boggie.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Bolero.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Boogie.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Boogie_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Boogie_Rag.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Book_of_Love.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Bouree.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Bread_and_Butter.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Break_My_Stride.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Break_My_Stride_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Brians_Song.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Bumbleboogie.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Buon_Natale.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Cabaret.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/California_Girls.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Cant_Fight.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Carrier_Force.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/CBM_Theme.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Chariots_of_Fire.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Cheers.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Cherie_Amour.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Chiaro_di_Luna.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Chipmunk_Song.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Chopin.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Christmas_One.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Christmas_Song.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Circus_Music.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Citta_Vuota.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Clair_de_Lune.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Classical_Gas.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Closer_to_Heart.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Col_Bogey_March.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Comin_to_Town.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Company_Way.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Cotton_Fields.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Cover-Music.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Cradle_Will_Rock.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Dance_the_Night_Away.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Dancing_in_the_Dark.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Dancing_in_the_Street.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Danza_Ungherese.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Darkness.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Dawn_of_the_Dead.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Day_Tripper.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Deck_the_Halls.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Deck_the_Halls_v2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Deer_Hunter.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Dervish_D.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Desperate_Times.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Devoted_to_You.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Diana.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Do_They_Know_Its_Xmas.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Dont_Stand.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Dont_Worry_Baby.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Dont_You_Forget.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Doodle.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Down_Under.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Drink_Coca-Cola.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Druthers.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Easter_Hymn.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Easy_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Easy_Lover.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Easy_Winners.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Easy_Winners_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Ebbtide.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Egypt.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Eleanor_Rigby.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Emblem_of_Freedom.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Endless_Love.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/ET_Theme.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Evergreen.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Evergreen_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Every_Breath.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Every_Breath_You_Take.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Every_Lil_Breath.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Every_Time.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Everythings_Alright.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Eye_in_the_Sky.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Fame.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Fantasia.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Fantasy_Impromptu.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Fascination.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Favorite.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Fiddler_Theme.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Fight_This_Feeling.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/First_Noel.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Flash_Love_Theme.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Fly_by_Night.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Folk_Song.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/For_All_We_Know.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/For_Once.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Frescobalda.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/From_Me_to_You.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Frosty_the_Snowman.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Frosty_the_Snowman_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Fuga.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Fun_Fun_Fun.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Funkytown.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/G_Minor_Fugue.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Gambler.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Gatlinburg_Boogy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Genesis.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Georgia.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Get_Back.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Ghostbusters_A.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Ghostbusters_B.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Gilligans_Island.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Godfather.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Golden_Slumbers.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Goldman_Band.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Golliwog.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Grandmas_Feather_Bed.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Haendel.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Halleluiah_Choir.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Hallelujah.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Happy_Days.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Happy_Trails.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Happy_Wander.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Hard_to_Say_Im_Sorry.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Hark_the_Herald.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Hark_the_Herald_Angels_Sing.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Hart_to_Hart.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Haunted_Mansion.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Have_to_Say.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Heat_Is_On.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Heaven.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Heavy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Hello.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Hello_Dolly.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Here_Comes_the_Rain.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Here_Comes_the_Sun.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Heres_That_Rainy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Hey_Look_Me_Over.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Hill_Street_Blues.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Hooked_on_Classics.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Hosanna.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/I_Dont_Know.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/I_Fought_the_Law.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/I_Should_Have_Known.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/I_Want_You.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/I_Will.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/If_by_Bread.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/If_You_Knew_Susie.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Im_A_Pepper.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/In_My_Room.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/In_the_Mood.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/In_the_Mood_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Inno.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Into_the_Groove.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Into_the_Mystic.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Invention_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Invisible_Sun.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Island_in_the_Sand.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/It_Came_Upon_a_Midnight.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Its_My_Party.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Jaws_Theme.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Jeanny.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Jesu_Joy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Jingle_Bell_Rock.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Judy_in_Disguise.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Karma_Chameleon.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Karma_Chameleon_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Keeping_the_Faith.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Kitten_on_the_Keys.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Klarinet_Polka.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Koochie_Koo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/L_Estate_sta_finendo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/La_Primavera.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Let_it_Snow.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Lifes_Been_Good.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Light_Up_My_Life.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Lighthouse.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Linus.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Little_Jeannie.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Little_Town_of_Bethlehem.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Logical_Song.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Lonely.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Love_Is_Blue.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Loverboy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Loving_Feeling.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Lucille.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Magic_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Magnum.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Major_Tom.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Malaguena.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Marcia_Turca.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Marine_Song.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Mash_Theme.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Master_Theme.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Material_Girl.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Maxwell.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Mean_Polly.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Memories.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Memories_B.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Menuet.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Michelle.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Midnight_Blue.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Minuetto.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Money_4_Nothing.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Money_for_Nothing.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Monty_Python.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Moon_Over_Napels.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Moonlight_Sonata.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Morn_Gestures.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Morning_Mood.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Mountain_Dew.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Mozart.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Mr_Roboto.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Mr_Sandman.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Mrs_Robinson.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Music_Box_Dancer.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Muskrat_Ramble.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/My_Life.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/My_Life_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/My_Way.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Navre.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Never_on_Sunday.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/New_Day.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Nola.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/None_but_Lonely.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Notturno_N_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/O_Come_All_Ye_Faithful.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/O_Holy_Night.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/O_Tannenbaum.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Ode_to_Joy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Officer_and_Gentleman.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Oh_Darling.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Oh_Holy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Oh_Holy_Night.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Oh_Sherrie.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Olympic.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Omegaman.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/On_Broadway.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/On_the_Road.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/One_More_Night.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Only_You.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Other_Way_Stop.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Out_of_Touch.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pan_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pan_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pan_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Paperback_Writer.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Party_All_the_Time.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Passacaglia.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pat_Benatar.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Peacherine_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Peacherine_Rag.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/People.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/People_Alone.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Peppermint_Patty.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Phantom_of_the_Opera.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Piano_Man.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Piazza_Grande.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pickin_the_Sun_Down.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Piggies.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pilates_Dream.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pineapple_Rag.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pink_Floyd.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pink_Panther.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pirates.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pizzicato_Polka.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Play_with_Fire.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Please_Hold_On.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Preludio.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pressure.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pretty_Woman.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Pretty_Woman_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Promenade_dans_les_bois.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Puttin_on_the_Ritz.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Raffy_Rag.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Ragtime_Cowboy_Joe.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Raindrops_Keep_Falling_on_My_Head.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Red_Balloons.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Red_Corvette.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Red_Roses.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Reunited.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Rhinestone_Cowboy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Rider_in_Storm.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Rig_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Ripleys.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Rise_Up.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Rising_Sun.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/River_Kwai.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Rock_n_Roll.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Romanza.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Rondo_Russo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Rosana.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Roumanian_Rhapsody.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Round_n_Round.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Running.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Russians.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sade.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/San_Antonio_Rose.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/San_Antonio_Rose_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sapore_Di_Sale.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sea_of_Love.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Second_Nature.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sentimental_J.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sentimental_Street.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Senza_Fine.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sgt_Pepper.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Shambell.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Shenandoah.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Si_la_vie_est_cadeau.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Silent_Night.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Silent_Night_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Silver_Bells.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Silver_Bells_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sinfonia_8_3_12.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Singeling.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sister_Gold_Hair.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sisters.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sky_Channel.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sleigh_Ride.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Smoke_Gets_in_Your_Eyes.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Soldiers_March.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Solid_Gold.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Something_Doing.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sommernacht.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sonatina_in_F.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sound_of_Silence.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sound_of_Silence_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Southern_Nites.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Star_Spangled_Banner.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Stars_and_Stripes.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Stay_the_Night.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Stay_the_Night_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Stuck_on_You.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Suiteing.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Summer_Nights.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Superdisk_64_Numero_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Superman_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Superman_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Superman_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Surfing_USA.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sussudio.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Swallow.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Swan_Lake.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sweet_Dreams.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Sync_Clock.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Take_Me_Back.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Take_Me_Home.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Take_on_Me.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Take_on_Me_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Telefone.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Terms_of_Endearment.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Thanksgiving.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Thats_All.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/There_Is_Love.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Thornbirds.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Those_Were_the_Days.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Thriller.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Thunderer.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Tico_Tico.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Time_After_Time.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Time_After_Time_B.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Time_in_a_Bottle.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Tinman.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Toccata.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Toccata_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Tom_Sawyer.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Truly.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Tuinplanten.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Turkey_in_the_Straw.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Turkish_Rondo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Turn_It_On.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Twelve_Days.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Twist_of_Fate.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Uptown_Girl.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/USA_Springsteen.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Valotte.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Valse.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Verdi.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Viva.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Voices.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Volo_Calabrone.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Wabash.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Wabash_Cannonball.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Walk_of_Life.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Walkiria.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Washington_Post.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/We_Are_the_World_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/We_Three_Kings.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/We_Two.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Weeping_Willow.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Wendy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Were_You_There.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/What_Luv_is.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Wheel_in_the_Sky.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/When_I_Fall.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Where_We_Belong.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Why_Me.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Wild_Boys.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Wildwood.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Wings_of_Love.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Wipe_Out.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Woman_in_You.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Working_Weekend.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Write_Stuff.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Wrong_Song.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Yesterday.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Yesterday_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/You_Are_the_One.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/You_Might_Think.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/You_Never_Give.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/You_Should_Hear.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Your_Song.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Master_Composer/Zip_Pa_De_Doo_Da.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Matulas_Theme_short_version.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Maybe_Baby.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mean_Machine_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Medley_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mega_Petshop_Boys_Tune.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Megablast.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Megachip_Software_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Megademo_tune_8.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Megalogica.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Megasound_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Megasound_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Melodie_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Menuet_Gothique.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Menuetto_D_Major_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Merry_Christmas_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Merry_X-mas_Justine.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Merry_Xmas.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Metal_Gear_One.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Metro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mexican_Hat_Dance_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Midnight_Monday.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Might_tune_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mild_part_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Milestones.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mini_Mania_4_intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Minuet_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Minuet_in_G.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Misc_Tune_05.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mission_Impossible.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mix_88.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mixin_Mania_menu.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mixtures.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mod_by_Phobos.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Moody_Git.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mork_and_Mindy_Theme.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Morning_has_Broken.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Movie_Monster_Instructions.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Moz_Req.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mr_Magig.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mr_Normal.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mr_Pre_sid_ent.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Mull_of_Kentyre_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Multitasker_note.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_1_Wox.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_2_Wox.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_3_Wox.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_4_Wox.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_7_Wox.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_8.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_8_Wox.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_9.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Magic_Two.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Absch_L_F_A_Leut.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/An_die_Freude.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Annie_Song.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Another_Suitcase.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/At_the_Hop.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Auld_Lang_Syne.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Aurora.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Axel_F.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Bach_779.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Badinerie.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Bal_w_Przedszkolu.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Banana_Boat.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Banks_of_the_Ohio.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Baranek.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Bialy_Walczyk.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Biscaya.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Bumble_Bee.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Can-Can.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Can_Can.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Careless_Whisper.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Champion_Deluxe.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Choinka.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Cramer-Bulow_42.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Cramer-Bulow_9.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Dance_Little.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Deer_Hunter.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Der_Lindenbaum.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Der_Tuermer.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Die_Glocke_Toent.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Dolannes-Melodie_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Dolannes_Melodie.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Entertainer.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Evita.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Eyhoao.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Fantasia_SBZ.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Flickan_I_Havana.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/FRG_Hymne.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Froehl_Landmann.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Gekhuis.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Ghostbusters.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Grozik.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Hard_to_Say.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Herbst.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/High_Society_G.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Hooked_on_Mozart.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Hymne_DDR.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Ich_Will_Wachen.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Ida_Dzieci.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Imieniny_Honoraty.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Jesu_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Jesu_Joy_SBZ.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Kajun_Klog_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Kalimba_de_Luna.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Kein_Schoener.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Kicia.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Kolczasty_Jez.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Kugan.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Kwiecien.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/La_Cucaracha.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Largo_SBZ.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Leise_Zieht.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Let_It_Be.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Live_Is_Life.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Losing_You.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Magic_Dragon.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Major_Tom.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Marsch.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Maybe.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Menuett.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Mikro_I.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Mirko_I.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Morning_Broken.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Musette_I.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Musette_II.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Music_Box_Dancer.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Ola_i_Liscie.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Olowek.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Orff_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Orff_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Orff_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Orff_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Orff_5.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Orff_6.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Over_the_Rainbow.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Parasole.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Pastorale_1_JSB.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Pastorale_2_JSB.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Piesn_Krolewny.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Polonaise.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Pomoge_Mamusi.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Pour_Adeline.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Preludium_SBZ.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Przyszedl_Noca_M.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Pucu_Pucu.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Rock_me_Amadeus.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Romance.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Rozmowa_z_Psem.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Sanna.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Scarborough_Fair.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Secret_Agent.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Seeraeuberlied.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Segel_Im_Wind.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Shadow_o_t_Wall.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Star_Wars.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Szla_Kaczuszka.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Thousand_Stars.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Trains_and_Boats.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Ueber_den_Wolken.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Walzer.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/We_are_the_Champions.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Wesola_Choinka.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/West_Side_Story.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/When_the_Saints.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/White_Satin.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Wiatr_i_Chmurki.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Winde_Wehn.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Wiosna_Tuz.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Wir_Setzen_Uns.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Wrobelki_Zima.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Yesterday.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Music_Shop/Young_People.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Musichetta_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "MX_6.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "My_First.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "New_Bencor_Brothers_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "New_Demo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "New_Edition_Intro_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "New_Sound.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Next_Round_tune_7.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "NGC_Theme.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Nice_and_Fill_In.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Nice_Demo_3_tune_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Nice_Tune_04.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Nice_Tune_07.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Nice_Tune_08.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Nice_Tune_10.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Night_City.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Nightwind.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Nikita.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Ninja_Remix.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "No_Name_Yet_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "No_Name_Yet_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "No_Name_Yet_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "No_Woman.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Nutcracker.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Obliging.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Ode_to_Galway.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Odetojoy.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Oh_Mama_Vib_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Oh_Susanna_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Olet_Maamme_Armahin.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "OMD.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "On_Neidolla_Punapaula.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Oneway_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Only_One.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Oscar.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "OSS_Soundmonitor_Demo_B.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Ossi_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Outrun.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "P7P_Logo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pac_Runner.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pachelbel.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pachelbels_Canon_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pagewriter_V1_3_music_04.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pagewriter_V1_3_music_05.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pagewriter_V1_3_music_06.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Paid_in_Full_part_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Paid_in_Full_part_5.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Palmleaf.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Party_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Partyfreax.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Path_Sound.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Patrol.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Paul_Soap.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pc_ok_disco.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Penile.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Perse_Sounds.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pervo_Sex-Text_9_main.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pet_Shop_Boys.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Peter.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Petscii_Worlds_Gestapo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pigman.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pilotto.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Planetenwind.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "POFF_Demo_Nr_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Poikarakkaus_20pros.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Polka.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Polka_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Polly_Rock.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Polonaise_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pong_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pop_on_the_Rocks.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pose.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Power-Cruncher_intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Power_Music_Pack_note.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Power_of_the_Art.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Power_Song.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pozdrowienia_dla_brasza.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Prelude.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Preludev.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Preludium_BWV_937_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Prlude2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Prludexi.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Profondo_Rosso.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Pulsar_Intro_24.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Question_of_Time.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rad_Writer_V2_0_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rad_Writer_V2_0_tune_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Radion_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rag.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Ragtime_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "RCS_Music_Demo_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Reactions.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Really_Cool.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rebel.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rebels_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Red_Thunder.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Remember_the_Promise.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Remix_Crew_intro_theme.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rendezvous_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Right_on_Track-Arkanoid_Drums.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Road_Runner.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rock-Mon_Construction_Kit_V1_0.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rock_Writer_tune_D.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rock_Writer_tune_F.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rock_Writer_tune_H.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rock_Writer_tune_P.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rock_Writer_V2_tune_C.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rockin_Byte.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rockin_Rip_033.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rockit_Nr_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Rockmonitor_V7.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "RoMuzak_Cosmos_Crack_note.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Ruelps_Construction_Kit_intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Salsbury.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Saltwater.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Sanctus.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Sanxion_Preview_Loader.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Sanxion_Reggae.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Sanxion_Remix.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Sarcophased.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Saulin_Penis.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Sea_Melodie.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Season_Jingles.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Session_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Shit2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Short_nin_Bread.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Short_Tune_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Short_Tune_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Short_Tunes.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Shorty.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Side-Border_Demo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Silly_64_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Simple_Rockit.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Skosh.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Slanting.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Slapdash.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Sleepless.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Slot_Mashine_tune_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Small_World_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Smashing_Hifi_Power.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Smoke_on_the_Water.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Snow_Job_part_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Software_Pirate_Group_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Sometimes_tune_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Son_and_Rice.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Song_6.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Sound_Demo_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Sound_Demo_II_part_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Sound_Tune_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Space_Wave.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Spacers.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Spec-Wonder.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Special_Delivery.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Spik_i_Foten_3_part_10.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Spik_i_Foten_3_part_15.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Spinning_Song_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Spread_Disk.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Squadron_Copy_Party.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Squadron_Logo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Star_Wars_Music.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Stop_Coders_Naughtiness_tune_5.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Streets.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Streets_of_Lond_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Stuck_on_Classics_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Subway_Sound.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Summer_Love.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Swan.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Swap_with_Me.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Sweet_Miss_Jane.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Swinging_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Syncopatin_Sid_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Syyk-Flu.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Tainted_Love.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Take_5.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "TAT_Logo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "TCB_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Techno-Mix_V1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Techtron.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Telemann.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Terminated.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Testinger.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Theme_001.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Theme_from_Our_New_Game.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Theme_from_S-Express.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Theme_Pennylane.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Thermoflash_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Thirtyfive_tune_a.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Thirtyfive_tune_f.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Thunder_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Tico_Tico_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Time_Operator_tune_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Timelord.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "TLU_Logo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "TNC_Crack_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Trans_Axel.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Transition.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Tune_2_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Tune_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Turbo-Roach.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Twinkle_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Two_Shocky_Pics_part_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Ueber_Brue.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Ueber_den_Wolken_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "UFO_Demo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Uha_Demo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Ultimate.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Ultimate_Television_V1_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unicess_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_100.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_102.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_108.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_115.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_117.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_122.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_124.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_126.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_127.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_134.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_140.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_144.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_148.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_15.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_151.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_153.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_156.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_157.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_158.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_159.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_16.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_160.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_161.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_162.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_163.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_164.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_165.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_168.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_169.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_170.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_171.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_172.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_173.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_99.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unknown_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Unlimited_DYCPs.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Verlor_nes_Glueck.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Vers_Mindenkinek.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "VIC64Demo_intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "VIC64Demo_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "VIC64Demo_tune_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "VIC64Demo_tune_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "VIC64Demo_tune_5.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "VIC_1989_tune_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Victory_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Videobasic_2_0_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Videobasic_menu.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Videobreak_04_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Videobreak_06_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Videobreak_07_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Videobreak_08_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Videobreak_09_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Videobreak_11_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Videobreak_16_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Videobreak_17_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Videobreak_18_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Vin_Intro3_Mix_11.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Vin_Intro3_Mix_13.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Vin_Intro3_Mix_21.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Vin_Intro3_Mix_22.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Vin_Intro3_Mix_31.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Virgin_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Vivaldi.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Vivaldi_Concerto.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Voicemonitor_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Wanderer_german_version.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Warning_Demo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Watch_Out.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Waveworld_90_tune_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Waveworld_90_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Waveworld_90_tune_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Waveworld_90_tune_4.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Waveworld_90_tune_5.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "We_Are_Maya.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "We_Rulez.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Wham.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "What_a_Drama.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Wheel2.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "When_the_Saints.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Whizzling_Something.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Who_Made_Who.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Whot_the_Hell.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Wierd.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Wildwood_Flower_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Wilhelmus.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "With_Just_a_Kiss.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Wolf_Woman.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "WOW_and_IRS_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Xakk_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Xakk_Intro_3.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Xmas_Demo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "XS_Intro_Music.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Yes_Tune.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Yesterday_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Yksi_Ruusu_On_Kasvanut_Laaksossa.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Yoman.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "You_Light_Up_My_Life_BASIC.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Zargon_Hit_001.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Zargon_Hit_002.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Zargon_Hit_003.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Zargon_Hit_004.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Zargon_Hit_005.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Zargon_Hit_006.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Zargon_Hit_007.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Zatkaj_jedno_ucho_dla_efektu_stereo.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Zenith_Intro.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Zuper_Demo_1.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Zynapz_Intro.sid"
+    }
+  ]
+}
