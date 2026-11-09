@@ -559,7 +559,8 @@
   function bindReorderArrows(button,direction,action){
     var word=direction<0?'up':'down';
     var instruction='Single click: move '+word+' 1 position. Double-click: move '+word+' 10 positions.';
-    button.attr('title',instruction)
+    // TEST113: custom themed hint is shown by showReorderHint; avoid native browser title tooltip.
+    button.removeAttr('title')
       .attr('aria-label',instruction);
     var pending=null;
     button.on('click',function(event){
