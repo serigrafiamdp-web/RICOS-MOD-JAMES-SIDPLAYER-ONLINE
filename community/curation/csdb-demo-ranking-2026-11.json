@@ -1,0 +1,511 @@
+{
+  "format": "ricos-csdb-ranking",
+  "version": 1,
+  "category": "demo",
+  "title": "TOP 100 CSDb DEMOS",
+  "sourceUrl": "https://csdb.dk/toplist.php?type=release&subtype=%281%29",
+  "retrievedOn": "2026-11-09",
+  "note": "Indexed CSDb snapshot. Rank changes on CSDb can be newer than this snapshot; first 15 updated from newer index, remaining ordering from older indexed page. Verify against source link.",
+  "items": [
+    {
+      "position": 1,
+      "title": "The Lab",
+      "group": "Elysium"
+    },
+    {
+      "position": 2,
+      "title": "Next Level",
+      "group": "Performers"
+    },
+    {
+      "position": 3,
+      "title": "The Hat",
+      "group": "Fairlight, Genesis Project"
+    },
+    {
+      "position": 4,
+      "title": "Viva Las Vegas",
+      "group": "Censor Design"
+    },
+    {
+      "position": 5,
+      "title": "13:37",
+      "group": "Fairlight"
+    },
+    {
+      "position": 6,
+      "title": "Codeboys & Endians",
+      "group": "Booze Design"
+    },
+    {
+      "position": 7,
+      "title": "Aloft",
+      "group": "Quiss, Genesis Project"
+    },
+    {
+      "position": 8,
+      "title": "Edge of Disgrace",
+      "group": "Booze Design"
+    },
+    {
+      "position": 9,
+      "title": "We Are The Anomaly",
+      "group": "Extend, Genesis Project"
+    },
+    {
+      "position": 10,
+      "title": "Mojo",
+      "group": "Bonzai, Pretzel Logic"
+    },
+    {
+      "position": 11,
+      "title": "Next Round",
+      "group": "Performers"
+    },
+    {
+      "position": 12,
+      "title": "Dane50",
+      "group": "Booze Design"
+    },
+    {
+      "position": 13,
+      "title": "Coma Light 13",
+      "group": "Oxyron"
+    },
+    {
+      "position": 14,
+      "title": "The Violators",
+      "group": "Censor Design"
+    },
+    {
+      "position": 15,
+      "title": "Comaland 100%",
+      "group": "Censor Design, Oxyron"
+    },
+    {
+      "position": 16,
+      "title": "Colors",
+      "group": "Lethargy"
+    },
+    {
+      "position": 17,
+      "title": "Bromance",
+      "group": "Bonzai"
+    },
+    {
+      "position": 18,
+      "title": "No Bounds",
+      "group": "Genesis Project"
+    },
+    {
+      "position": 19,
+      "title": "Uncensored",
+      "group": "Booze Design"
+    },
+    {
+      "position": 20,
+      "title": "No Sprites",
+      "group": "Fairlight"
+    },
+    {
+      "position": 21,
+      "title": "The Ghost",
+      "group": "Fairlight, Genesis Project"
+    },
+    {
+      "position": 22,
+      "title": "Sprite Bukkake 2",
+      "group": "Bonzai"
+    },
+    {
+      "position": 23,
+      "title": "Unboxed",
+      "group": "Bonzai"
+    },
+    {
+      "position": 24,
+      "title": "Hexed",
+      "group": "Element54, Xenon"
+    },
+    {
+      "position": 25,
+      "title": "CatYa Dancing Queen",
+      "group": "BOOM!, Fancy Rats"
+    },
+    {
+      "position": 26,
+      "title": "E2IRA",
+      "group": "Arise"
+    },
+    {
+      "position": 27,
+      "title": "Wonderland XIV",
+      "group": "Censor Design"
+    },
+    {
+      "position": 28,
+      "title": "Memento Mori",
+      "group": "Genesis Project"
+    },
+    {
+      "position": 29,
+      "title": "Meet Crest",
+      "group": "Crest"
+    },
+    {
+      "position": 30,
+      "title": "The X-File",
+      "group": "Chorus"
+    },
+    {
+      "position": 31,
+      "title": "Tribute to Gabi",
+      "group": "Dual Crew"
+    },
+    {
+      "position": 32,
+      "title": "Eyes",
+      "group": "Fairlight"
+    },
+    {
+      "position": 33,
+      "title": "Nightfall 100%",
+      "group": "Artline Designs"
+    },
+    {
+      "position": 34,
+      "title": "Lifecycle",
+      "group": "Offence, Prosonix"
+    },
+    {
+      "position": 35,
+      "title": "What Is The Matrix 2",
+      "group": "Censor Design"
+    },
+    {
+      "position": 36,
+      "title": "The Trip",
+      "group": "Fairlight"
+    },
+    {
+      "position": 37,
+      "title": "Lunatico",
+      "group": "Lft"
+    },
+    {
+      "position": 38,
+      "title": "Skybox",
+      "group": "Extend"
+    },
+    {
+      "position": 39,
+      "title": "The Demo Coder",
+      "group": "Fairlight"
+    },
+    {
+      "position": 40,
+      "title": "Aliens in Wonderland",
+      "group": "Censor Design"
+    },
+    {
+      "position": 41,
+      "title": "Still Rising",
+      "group": "Artline Designs, Bloodsuckers, Extend, Orange"
+    },
+    {
+      "position": 42,
+      "title": "Rest In Peace HIC",
+      "group": "Lethargy"
+    },
+    {
+      "position": 43,
+      "title": "A Fayre Glow",
+      "group": "Fairlight"
+    },
+    {
+      "position": 44,
+      "title": "Fitty",
+      "group": "Bonzai, Camelot"
+    },
+    {
+      "position": 45,
+      "title": "Halloweed 4 - Blow Your Mind",
+      "group": "Xenon"
+    },
+    {
+      "position": 46,
+      "title": "Signal Carnival",
+      "group": "Reflex"
+    },
+    {
+      "position": 47,
+      "title": "The World Is Not Enough - We Need More Scrollers",
+      "group": "Bonzai"
+    },
+    {
+      "position": 48,
+      "title": "Wonderland XII",
+      "group": "Censor Design"
+    },
+    {
+      "position": 49,
+      "title": "Nightworks",
+      "group": "Arise"
+    },
+    {
+      "position": 50,
+      "title": "3SIRA",
+      "group": "Arise"
+    },
+    {
+      "position": 51,
+      "title": "Incoherent Nightmare",
+      "group": "Arsenic"
+    },
+    {
+      "position": 52,
+      "title": "Ad Astra per Alas Porci",
+      "group": "Genesis Project"
+    },
+    {
+      "position": 53,
+      "title": "Gorba Boost",
+      "group": "Gorbat Soft"
+    },
+    {
+      "position": 54,
+      "title": "All Hallows' Eve",
+      "group": "Atlantis, Bonzai, Genesis Project, Lethargy, Offence, Pretzel Logic, Wrath Designs"
+    },
+    {
+      "position": 55,
+      "title": "Norsk Data",
+      "group": "Satellite"
+    },
+    {
+      "position": 56,
+      "title": "The 21st",
+      "group": "Resource, Singular"
+    },
+    {
+      "position": 57,
+      "title": "Unity",
+      "group": "Atlantis, Padua"
+    },
+    {
+      "position": 58,
+      "title": "Stereo Re-Issue",
+      "group": "Phonics"
+    },
+    {
+      "position": 59,
+      "title": "Still Standing",
+      "group": "Blazon"
+    },
+    {
+      "position": 60,
+      "title": "2600",
+      "group": "Fairlight"
+    },
+    {
+      "position": 61,
+      "title": "Cocktail To Go",
+      "group": "Bonzai"
+    },
+    {
+      "position": 62,
+      "title": "The Star Wars Demo",
+      "group": "Censor Design"
+    },
+    {
+      "position": 63,
+      "title": "JustinBlue",
+      "group": "Graffity"
+    },
+    {
+      "position": 64,
+      "title": "Do Pretzels Dream?",
+      "group": "Pretzel Logic"
+    },
+    {
+      "position": 65,
+      "title": "Crimbo 1982",
+      "group": "Pretzel Logic"
+    },
+    {
+      "position": 66,
+      "title": "Halloweed 3 - VIC or Weed",
+      "group": "Xenon"
+    },
+    {
+      "position": 67,
+      "title": "Kamishibai",
+      "group": "Atlantis"
+    },
+    {
+      "position": 68,
+      "title": "Comaland",
+      "group": "Censor Design, Oxyron"
+    },
+    {
+      "position": 69,
+      "title": "Oldschool Guide",
+      "group": "Genesis Project"
+    },
+    {
+      "position": 70,
+      "title": "Dual Crew 40 Years",
+      "group": "Dual Crew"
+    },
+    {
+      "position": 71,
+      "title": "A három nyúl",
+      "group": "Lethargy"
+    },
+    {
+      "position": 72,
+      "title": "Purple",
+      "group": "Censor Design"
+    },
+    {
+      "position": 73,
+      "title": "Multiverse 100%",
+      "group": "Nah-Kolor"
+    },
+    {
+      "position": 74,
+      "title": "Virsi 64",
+      "group": "Gorbat Soft"
+    },
+    {
+      "position": 75,
+      "title": "Cinque",
+      "group": "Padua"
+    },
+    {
+      "position": 76,
+      "title": "Lethal Display 6",
+      "group": "Bonzai"
+    },
+    {
+      "position": 77,
+      "title": "Sidelined 2",
+      "group": "Censor Design"
+    },
+    {
+      "position": 78,
+      "title": "Tuomiopaeivae",
+      "group": "Extend"
+    },
+    {
+      "position": 79,
+      "title": "Wonderland XIII",
+      "group": "Censor Design"
+    },
+    {
+      "position": 80,
+      "title": "Fünfzig 90%",
+      "group": "a moiré misszió bemutatja"
+    },
+    {
+      "position": 81,
+      "title": "Harminc",
+      "group": "Resource"
+    },
+    {
+      "position": 82,
+      "title": "Christmas Megademo",
+      "group": "Atlantis, Bonzai, Genesis Project, Lethargy, Offence"
+    },
+    {
+      "position": 83,
+      "title": "Ooops",
+      "group": "Atlantis"
+    },
+    {
+      "position": 84,
+      "title": "Space Beer",
+      "group": "Fossil"
+    },
+    {
+      "position": 85,
+      "title": "Zone 5",
+      "group": "Fairlight"
+    },
+    {
+      "position": 86,
+      "title": "Trapped Love",
+      "group": "Bonzai"
+    },
+    {
+      "position": 87,
+      "title": "F20",
+      "group": "Lethargy"
+    },
+    {
+      "position": 88,
+      "title": "Neon",
+      "group": "Triad"
+    },
+    {
+      "position": 89,
+      "title": "The Shores of Reflection",
+      "group": "SHAPE"
+    },
+    {
+      "position": 90,
+      "title": "Submerged",
+      "group": "Hoaxers, Wrath Designs"
+    },
+    {
+      "position": 91,
+      "title": "Fantasmolytic",
+      "group": "Censor Design, Oxyron"
+    },
+    {
+      "position": 92,
+      "title": "Sweet",
+      "group": "Bonzai"
+    },
+    {
+      "position": 93,
+      "title": "50 Years of Flex",
+      "group": "Artline Designs"
+    },
+    {
+      "position": 94,
+      "title": "Deus Ex Machina",
+      "group": "Crest, Oxyron"
+    },
+    {
+      "position": 95,
+      "title": "Wizard of Wor Sprite Comparison Demo",
+      "group": "Hokuto Force"
+    },
+    {
+      "position": 96,
+      "title": "Wavemode",
+      "group": "Lethargy"
+    },
+    {
+      "position": 97,
+      "title": "Battle Scars",
+      "group": "Samar Productions"
+    },
+    {
+      "position": 98,
+      "title": "Xcusemo",
+      "group": "Atlantis"
+    },
+    {
+      "position": 99,
+      "title": "Delirious 11",
+      "group": "Genesis Project"
+    },
+    {
+      "position": 100,
+      "title": "5 Shades of Grey",
+      "group": "Lethargy"
+    }
+  ]
+}
