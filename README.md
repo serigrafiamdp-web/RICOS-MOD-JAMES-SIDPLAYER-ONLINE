@@ -1,5 +1,13 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## TEST108 PASS — UCTUMI public save order survives reload
+
+**USER-CONFIRMED PASS:** The Cloudflare Worker was manually deployed with `playlistReorder:true`, `sidCollectionReorder:true` and `configured:true`. The owner then re-tested **UCTUMI (99)**: changed the order, entered the beta key in SAVE, reloaded the collection and confirmed that the changed order was retained (**PASS**).
+
+- [TEST108 proof, capabilities, scope and regression limits](docs/TEST108_UCTUMI_SAVE_ORDER_PASS.md)
+- [Open current player](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=108)
+- TEST107's server-readback save path for contributed SID collections is now user-verified through TEST108. Separate public HVSC playlists and REMIX publishing have **not** received this specific reload test yet.
+
 ## Current test — TEST107 persisted order verification (published, pending user PASS)
 
 **Problem:** After moving songs, using SAVE + beta key, and reloading a playlist, the old order could reappear. Two source issues were found: unpublished REMIX PUBLISH could submit an old draft order, and public SAVE did not read the saved order back from Cloudflare.
@@ -8,7 +16,7 @@
 
 - [Test TEST107](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=107orderverify2)
 - [TEST107 implementation, safeguards and reload test](docs/TEST107_SAVE_RELOAD_VERIFY.md)
-- **Status: browser user confirmation pending; no production SAVE PASS claimed.**
+- **Status: the public contributed-collection SAVE/reload path passed in TEST108 with UCTUMI (99); other public playlist paths remain to be verified separately.**
 
 ## Current test — TEST106 SAVE for non-ranked playlists (published, pending user PASS)
 
