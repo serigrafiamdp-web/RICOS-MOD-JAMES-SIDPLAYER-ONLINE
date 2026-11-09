@@ -975,8 +975,21 @@
     target.appendChild(blank);
     remixDrafts.forEach(function(d){
       var option=document.createElement('option');
-      option.value=d.id;option.textContent=d.name+' ('+d.tracks.length+')';target.appendChild(option);
+      option.value=d.id;
+      option.textContent=(d.remoteEditId?'EDITING · ':'REMIX · ')+d.name+' ('+d.tracks.length+')';
+      target.appendChild(option);
     });
+    if(publishedRemixChoices.length){
+      var publishedGroup=document.createElement('optgroup');
+      publishedGroup.label='PUBLISHED PLAYLISTS · select to edit';
+      publishedRemixChoices.forEach(function(item){
+        var choice=document.createElement('option');
+        choice.value='published:'+item.id;
+        choice.textContent='PUBLISHED · '+item.title+' ('+item.tracks+')';
+        publishedGroup.appendChild(choice);
+      });
+      target.appendChild(publishedGroup);
+    }
     target.value=selected?selected.id:'';
     if(typeof window.ricoRenderRemixCommunityRows==='function')window.ricoRenderRemixCommunityRows();
     var editorTarget=document.getElementById('ricoRemixEditorTarget');
@@ -988,16 +1001,20 @@
     $('#ricoRemixCount').text(selected?selected.tracks.length+' SID':'0 SID');
     $('#ricoRemixEditor').css('display',remixOpen?'flex':'none');
     $('#ricoRemixToggle').attr('aria-expanded',remixOpen?'true':'false');
-    $('#ricoRemixName').val(selected?selected.name:'').prop('disabled',!selected);
-    $('#ricoRemixCreator').val(selected?selected.creator:'').prop('disabled',!selected);
-    $('#ricoRemixPublish').prop('disabled',!selected||!selected.tracks.length||remixBusy);
+    $('#ricoRemixName').val(selected?selected.name:'').prop('disabled',!selected||!!selected.remoteEditId);
+    $('#ricoRemixCreator').val(selected?selected.creator:'').prop('disabled',!selected||!!selected.remoteEditId);
+    $('#ricoRemixFloatHeader strong').text(selected&&selected.remoteEditId?'EDIT PUBLISHED PLAYLIST':'REMIX PLAYLIST CREATOR');
+    $('#ricoRemixPublish').text(selected&&selected.remoteEditId?'PUBLISH CHANGES':'PUBLISH REMIX')
+      .prop('disabled',!selected||!selected.tracks.length||remixBusy);
     $('#ricoRemixPlay').prop('disabled',!selected||!selected.tracks.length||remixBusy);
     var items=$('#ricoRemixEntries').empty();
     $('#ricoRemixHelp').text(selected
-      ? (selected.tracks.length
-        ? 'REMIX creado: '+selected.tracks.length+' SID. Pulsá DONE para continuar agregando con +, o PLAY REMIX para escucharlo.'
-        : 'REMIX creado y seleccionado. Pulsá DONE y después + en las canciones que quieras agregar.')
-      : 'Pulsá NEW REMIX para crear una lista. Después DONE para seleccionar canciones con +.');
+      ? (selected.remoteEditId
+        ? 'PUBLISHED LIST EDIT: Public version stays live. Press DONE, play any other playlist and use + to add songs here. PUBLISH CHANGES updates the same ID with beta key.'
+        : (selected.tracks.length
+          ? 'REMIX creado: '+selected.tracks.length+' SID. Pulsá DONE para continuar agregando con +, o PLAY REMIX para escucharlo.'
+          : 'REMIX creado y seleccionado. Pulsá DONE y después + en las canciones que quieras agregar.'))
+      : 'Choose a REMIX or PUBLISHED PLAYLIST under ADD + TO, or press NEW REMIX.');
     if(!selected){items.empty();return;}
     if(!selected.tracks.length){items.empty();return;}
     selected.tracks.forEach(function(t,index){
