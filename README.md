@@ -1,5 +1,15 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## TEST117 — Restore theme-colored hints for + and × (code published; browser PASS pending)
+
+TEST115 removed the browser's default white HTML `title` tooltips from the floating playlist's **+** and **×** buttons, but inadvertently left them with no visual help. TEST117 restores their instructions via the existing theme-colored `#ricoReorderHint` tooltip (same palette as the ↑/↓ reorder arrows), using pointer hover and without any native `title`.
+
+- **+** hint: "Add to selected REMIX PLAYLIST without changing playback".
+- **×** hint: "Remove song temporarily" (unavailable on fixed/disabled ranked lists).
+- Existing click behavior, `aria-label`, scroll/arrow controls, playlist SAVE, audio/HVSC data and TEST116 catalog ordering are unchanged.
+- [Open TEST117](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=117themedtips)
+- Code syntax PASS, actual browser hover and playback regression checks awaiting user PASS.
+
 ## TEST116 — Community playlist manual ranking before voting (code published; browser PASS pending)
 
 - COMMUNITY PLAYLISTS displays **three empty sample stars (☆☆☆)** per public/curated playlist, as placeholders until an actual vote system exists.
