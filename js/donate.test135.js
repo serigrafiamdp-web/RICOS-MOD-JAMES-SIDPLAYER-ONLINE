@@ -16,8 +16,8 @@
       }
       if(domain==='paypal.com'||domain==='www.paypal.com'){
         // Restrict destinations to PayPal's hosted donation and PayPal.Me flows.
-        if(/^\/donate(?:\/|$)/i.test(u.pathname)&&
-           (u.searchParams.has('hosted_button_id')||u.pathname!=='/donate'))return u.href;
+        if(/^\/donate\/?$/i.test(u.pathname)&&
+           (u.searchParams.has('hosted_button_id')||u.searchParams.has('campaign_id')))return u.href;
         if(/^\/paypalme\/[^/]+/i.test(u.pathname))return u.href;
       }
     }catch(err){console.warn('PayPal URL is not configured correctly.',err);}
