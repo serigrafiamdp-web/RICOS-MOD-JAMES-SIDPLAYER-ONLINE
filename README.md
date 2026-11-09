@@ -1,5 +1,23 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## TEST122 — UNKNOWN CSDB on-click SID stutter / fade timing fix (browser PASS pending)
+
+**Reported evidence:** user video `2026-11-09 14-25-34.mkv` shows manual SID changes in the 1,376-song UNKNOWN CSDB playlist. User hears an audio 'stuck/repeated note' immediately after clicking a different track, before the existing fade-out starts.
+
+**Root-cause investigation (code):** The TEST121 progressive branch for unloaded HVSC references awaited full ZIP/SID decoding *before* calling `requestSidSwitch()` again to begin the fade. At the same time, its background workers attempted to decompress all 1,376 SIDs and refreshed the playlist's ~1,376 button rows every 40 tracks. This combination could block the audio main thread and produce repeats/glitches at clicks. The user clip supports an audible transition issue, but only a real browser replay can verify the fix.
+
+**Changes:** 
+- Fade is scheduled immediately on clicking an unprepared reference. The SID loads concurrently, and the switch waits for the chosen file at the fade boundary. Same existing 5-second fade curve, same new-buffer gain restoration; no SID synthesizer or waveform changes.
+- For playlists with 1,000+ SID tracks, prefetch only a small initial neighborhood instead of continuously decompressing all 1,376. Any other track loads on demand using its original HVSC ZIP file. OLD SID COLLECTION RICO (298 tracks) retains its established TEST112 prefetch.
+- For the 1,000+ track active list, repaint only the handful of playing/selected/queued DOM row markers on each click, avoiding full rebuild of every interactive row. Reorders/removals explicitly invalidate this fast path, so list structure is still rebuilt correctly.
+- No changes to controls, CSS, button sizes, source SID binaries, ranks, playlist order, or Cloudflare data.
+
+**Validation:** JS syntax PASS via V8 `new Function`; inspect guards for stable stream/list identity, out-of-order async switch cancellation, and user confirmation of audible transitions still needed.
+
+[Open TEST122](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=122unknownfade)
+
+**Manual test:** PLAY UNKNOWN CSDB, immediately select SID #140–160 before bulk loading, listen for clean immediate fade (without a repeated/stuck fragment), check another remote SID; confirm arrows, ×, +, AUTO NEXT and scrolling continue to function. Compare OLD SID COLLECTION RICO unchanged. **User PASS pending.**
+
 ## TEST121 — UNKNOWN CSDB (HVSC DEMOS/UNKNOWN only; browser PASS pending)
 
 Created **UNKNOWN CSDB** in COMMUNITY PLAYLISTS as a curated version-2 reference playlist. It contains exactly **1,376 distinct SID files** from HVSC #85 `DEMOS/UNKNOWN` (each source entry has author `<?>`), all pointing at the **existing** `library/packs/demos/UNKNOWN.zip`. **No GAMES, identified MUSICIANS, binary uploads or copied SID files.** The user-facing title is UNKNOWN CSDB by request; its tracks are sourced from HVSC, not fetched from the CSDb website. Creator/curator credit: RICO.
