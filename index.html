@@ -560,7 +560,7 @@
       <div id="ricoRemixBar" class="rico-remix-bar">
         <button type="button" id="ricoRemixToggle" aria-expanded="false">REMIX PLAYLIST</button>
         <label for="ricoRemixTarget">ADD + TO</label>
-        <select id="ricoRemixTarget" aria-label="Remix destination"><option value="">SELECT REMIX</option></select>
+        <select id="ricoRemixTarget" aria-label="REMIX or published playlist destination"><option value="">SELECT DESTINATION</option></select>
         <span id="ricoRemixCount">0 SID</span>
         <div id="ricoLiveTimerBar" class="rico-live-timer-bar">
           <label for="ricoLiveTimer">TIMER</label>
@@ -584,6 +584,7 @@
           <button type="button" id="ricoRemixNew">NEW REMIX</button>
           <button type="button" id="ricoRemixPlay">PLAY REMIX</button>
           <button type="button" id="ricoRemixPublish">PUBLISH REMIX</button>
+          <button type="button" id="ricoRemixDiscard" style="display:none;">DISCARD CHANGES</button>
         </div>
         <div id="ricoRemixHelp">La lista ya está creada. Pulsá DONE y agregá canciones con + desde cualquier playlist.</div>
         <div id="ricoRemixEntries" class="rico-remix-entries" role="list"></div>
@@ -703,7 +704,7 @@
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test87aboutsidclose"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script type="text/javascript" src="js/customPlaylist.test101.js?v=test117themedtips"></script>
+    <script type="text/javascript" src="js/customPlaylist.test101.js?v=test118publishedediting"></script>
     <script type="text/javascript" src="js/help.test109.js?v=test109help"></script>
   </body>
 </html>
