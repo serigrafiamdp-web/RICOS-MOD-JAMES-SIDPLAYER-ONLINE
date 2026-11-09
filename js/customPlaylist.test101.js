@@ -2199,7 +2199,7 @@
         cancel:function(){cancelled=true;controller.abort();archives.clear();}};
       return stream;
     }
-    async function loadProgressiveOldSidPlaylist(data,localImport){
+    async function loadProgressiveReferencePlaylist(data,localImport){
       var stream=createProgressiveReferenceStream(data.tracks);
       activeReferenceStream=stream;
       try{
@@ -2242,9 +2242,11 @@
       if (data.version!==2 || !Array.isArray(data.tracks) ||
           !data.tracks.length || data.tracks.length>2000) throw Error('Invalid reference playlist.');
       if(typeof JSZip==='undefined') throw Error('SID ZIP decoder not available.');
-      // Optimise only OLD SID COLLECTION RICO; other playlist loaders retain
-      // their existing fully-validated, all-at-once semantics for stability.
-      if(data.name==='OLD SID COLLECTION RICO'&&data.tracks.length>=200){
+      // TEST121: both OLD SID COLLECTION RICO and the 1376-track UNKNOWN CSDB
+      // reference list must start after the first SID is ready, not after all
+      // SIDs decode. Keep every other playlist on its existing stable loader.
+      if((data.name==='OLD SID COLLECTION RICO'||data.name==='UNKNOWN CSDB')&&
+         data.tracks.length>=200){
         for(var k=0;k<data.tracks.length;k++){
           var ref=data.tracks[k];
           if(!ref||typeof ref.pack!=='string'||typeof ref.file!=='string'||
@@ -2254,7 +2256,7 @@
              !/^[^<>:*?|]+\.sid$/i.test(ref.file))
             throw Error('Invalid catalog SID reference.');
         }
-        await loadProgressiveOldSidPlaylist(data,localImport);
+        await loadProgressiveReferencePlaylist(data,localImport);
         return;
       }
       var packages=new Map(), output=[], bytesTotal=0;
