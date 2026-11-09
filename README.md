@@ -1,5 +1,15 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## TEST109 — HELP beside ABOUT (published, browser PASS pending)
+
+**New in-app HELP** opens a bilingual **ENGLISH / ESPAÑOL** guide describing player operation, source browsers, REMIX creation, adding songs with +, single/double-click playlist reordering (±1/±10), local vs public SAVE, beta-key publication, ranked TOP 100 protection, IMPORT SID, AUTO and TIMER.
+
+The bottom player controls now read **ABOUT SID CHIP · ABOUT · HELP**: uppercase, compact, and each button sized to its text. HELP is immediately to the right of ABOUT, as requested.
+
+- [Open TEST109](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=109help)
+- [Full bilingual HELP / user guide](docs/HELP_USER_GUIDE.md)
+- **Status:** code and docs published; awaiting owner verification of the button, window, language switch and closure. No audio engine or storage changes in TEST109.
+
 ## TEST108 PASS — UCTUMI public save order survives reload
 
 **USER-CONFIRMED PASS:** The Cloudflare Worker was manually deployed with `playlistReorder:true`, `sidCollectionReorder:true` and `configured:true`. The owner then re-tested **UCTUMI (99)**: changed the order, entered the beta key in SAVE, reloaded the collection and confirmed that the changed order was retained (**PASS**).
