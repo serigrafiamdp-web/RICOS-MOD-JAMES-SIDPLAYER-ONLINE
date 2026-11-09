@@ -1,0 +1,1202 @@
+{
+  "format": "ricos-sid-playlist",
+  "version": 2,
+  "name": "OLD SID COLLECTION RICO",
+  "createdBy": "RICO",
+  "author": "RICO",
+  "createdAt": "2026-11-08",
+  "tracks": [
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Acid_Jazz.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Alfs_Cat_Rap.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Auf_Wiedersehen_Monty.sid"
+    },
+    {
+      "pack": "library/packs/musicians/P/PRI.zip",
+      "file": "Careless_Whisper.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "Cybernoid_II.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "DNA_Warrior.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Deenen_Charles.zip",
+      "file": "Double_Dragon.sid"
+    },
+    {
+      "pack": "library/packs/musicians/O/Ouwehand_Reyn.zip",
+      "file": "Dutch_Breeze_Flip_the_Flop.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Fallen_Leaves.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Highway_Guy.zip",
+      "file": "Galencia.sid"
+    },
+    {
+      "pack": "library/packs/musicians/P/PRI.zip",
+      "file": "Game_Over_2.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hannula_Antti.zip",
+      "file": "Goodmood.sid"
+    },
+    {
+      "pack": "library/packs/musicians/J/JCH.zip",
+      "file": "Hawaii.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "Hawkeye.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Holy_Daze.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Hotelli_Helpotus.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "Ice_Age.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "Ikari_Union.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Iridion.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "Kinetix.sid"
+    },
+    {
+      "pack": "library/packs/musicians/0-9/20CC.zip",
+      "file": "van_Santen_Edwin/Layla_Mix.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "La_Isla_Bonita.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Lethal_Weapon.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Monty_on_the_Run.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Nefarious.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Galway_Martin.zip",
+      "file": "Neverending_Story.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/NineOneOne.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hannula_Antti.zip",
+      "file": "Notorious.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Schneider_Markus.zip",
+      "file": "Platou.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Huelsbeck_Chris.zip",
+      "file": "R-Type.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Squamp.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Bjerregaard_Johannes.zip",
+      "file": "Street_Cred_Boxing.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Vicious_Circles.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Warhawk.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Tristesse.sid"
+    },
+    {
+      "pack": "library/packs/musicians/M/Mueller_Markus.zip",
+      "file": "Cat.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Lightforce.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Crazy_Comets.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Tarsang.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "S-Express.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/SoedeSoft.zip",
+      "file": "Soede_Jeroen/MacGyver_Title.sid"
+    },
+    {
+      "pack": "library/packs/musicians/M/MCH.zip",
+      "file": "Cloud_City.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Gone.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Schneider_Markus.zip",
+      "file": "Magic_Events.sid"
+    },
+    {
+      "pack": "library/packs/musicians/W/Whittaker_David.zip",
+      "file": "Speedball.sid"
+    },
+    {
+      "pack": "library/packs/musicians/C/Cooksey_Mark.zip",
+      "file": "Ghosts_n_Goblins.sid"
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "All_Together_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Trooper.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Commando.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Linus.zip",
+      "file": "64_Forever.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "Alloyrun.sid"
+    },
+    {
+      "pack": "library/packs/musicians/M/Mad_Donne_Marcel.zip",
+      "file": "Amyloid.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/SoedeSoft.zip",
+      "file": "Soede_Jeroen/Artax.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "A_Trace_of_Space.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Das_Boot.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Delta.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Flames.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Hysteria_Pimped.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Magnetic_Fields.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rockin_Limited.zip",
+      "file": "Hurling_Frootmig.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "RoboCop_3.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "Battle_Valley.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "Cybernoid.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "Scout.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Detert_Thomas.zip",
+      "file": "Outrun.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Pop.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Last_V8.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "One_Man_and_his_Droid.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Schneider_Markus.zip",
+      "file": "Double_Density_Commercial.sid"
+    },
+    {
+      "pack": "library/packs/musicians/J/JCH.zip",
+      "file": "Sampler_1.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "Supremacy.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Red_Kimmel_Jeroen.zip",
+      "file": "Think_Twice_III.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Link.zip",
+      "file": "Tune_Nr_2.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "D_Y_S_P_I_D_C_E_part_2.sid"
+    },
+    {
+      "pack": "library/packs/musicians/O/Ouwehand_Reyn.zip",
+      "file": "Last_Ninja_3.sid"
+    },
+    {
+      "pack": "library/packs/musicians/W/Whittaker_David.zip",
+      "file": "Panther.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Beben_Wally.zip",
+      "file": "R_I_S_K.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Beastie_Boys_Intro_Music.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Schneider_Markus.zip",
+      "file": "For_Shining_8.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "I_Ball.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Bjerregaard_Johannes.zip",
+      "file": "M_A_C_H.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Dunn_Jonathan.zip",
+      "file": "Platoon.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Deenen_Charles.zip",
+      "file": "Cool_Tune.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Gray_Matt.zip",
+      "file": "Last_Ninja_2.sid"
+    },
+    {
+      "pack": "library/packs/musicians/C/Crowther_Antony.zip",
+      "file": "R1-D1_Unit_Attack.sid"
+    },
+    {
+      "pack": "library/packs/musicians/W/Wijnhoven_Joachim.zip",
+      "file": "Shadow_of_the_Beast_demo.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Baldwin_Neil.zip",
+      "file": "Shadow_Skimmer.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Red_Kimmel_Jeroen.zip",
+      "file": "Traz.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Daglish_Ben.zip",
+      "file": "Bulldog.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Deenen_Charles.zip",
+      "file": "Give_It_a_Try.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Bjerregaard_Johannes.zip",
+      "file": "Omega_Force_One.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/SoedeSoft.zip",
+      "file": "Soede_Jeroen/Snik.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "3545_II.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Baldwin_Neil.zip",
+      "file": "Ala.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Baldwin_Neil.zip",
+      "file": "Another_Tune_for_Joanne.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Red_Kimmel_Jeroen.zip",
+      "file": "Big_Deal.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Gilmore_Adam.zip",
+      "file": "Corporation.sid"
+    },
+    {
+      "pack": "library/packs/musicians/M/Mueller_Markus.zip",
+      "file": "GCF-Intro.sid"
+    },
+    {
+      "pack": "library/packs/musicians/W/Whittaker_David.zip",
+      "file": "Poltergeist.sid"
+    },
+    {
+      "pack": "library/packs/musicians/0-9/20CC.zip",
+      "file": "Paul_Falco/Spijkerhoek_3.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Huelsbeck_Chris.zip",
+      "file": "Starball.sid"
+    },
+    {
+      "pack": "library/packs/musicians/J/JCH.zip",
+      "file": "Cant_Stop.sid"
+    },
+    {
+      "pack": "library/packs/musicians/F/Future_Freak.zip",
+      "file": "Cooperation_Demo.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Bjerregaard_Johannes.zip",
+      "file": "Eagles.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Bjerregaard_Johannes.zip",
+      "file": "Fourth_Dimension.sid"
+    },
+    {
+      "pack": "library/packs/musicians/M/Mad_Donne_Marcel.zip",
+      "file": "Ikari_Intro.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Daglish_Ben.zip",
+      "file": "Last_Ninja.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Thrust.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Deenen_Charles.zip",
+      "file": "Zamzara.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Zoids.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/SoedeSoft.zip",
+      "file": "Soede_Jeroen/Funky_Stuff.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Huelsbeck_Chris.zip",
+      "file": "Great_Giana_Sisters.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Daglish_Ben.zip",
+      "file": "Masters_of_the_Universe.sid"
+    },
+    {
+      "pack": "library/packs/musicians/J/Jensen_Henrik.zip",
+      "file": "Maximum_Overdrive_II_intro.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Nemesis_the_Warlock.sid"
+    },
+    {
+      "pack": "library/packs/musicians/0-9/20CC.zip",
+      "file": "van_Santen_Edwin/Nexion.sid"
+    },
+    {
+      "pack": "library/packs/musicians/F/Future_Freak.zip",
+      "file": "Rocky_Star_Intro.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Something.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Red_Kimmel_Jeroen.zip",
+      "file": "Crazy_Sample_II_intro.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Huelsbeck_Chris.zip",
+      "file": "Grand_Monster_Slam.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Gray_Matt.zip",
+      "file": "Professional_BMX_Simulator.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Schneider_Markus.zip",
+      "file": "Strike_Force_Introtune.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Thanatos.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Deenen_Charles.zip",
+      "file": "Thats_the_Way_It_Is_intro.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "Thats_the_Way_It_Is_main.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Gilmore_Adam.zip",
+      "file": "Draconus.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Skate_or_Die_intro.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Barrett_Steve.zip",
+      "file": "Super_Hang-On.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Twisting_88_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Bjerregaard_Johannes.zip",
+      "file": "Zoom.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Gray_Matt.zip",
+      "file": "Bangkok_Knights_Loader.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Dunn_Jonathan.zip",
+      "file": "Basket_Master.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Gray_Matt.zip",
+      "file": "Hunters_Moon.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Bjerregaard_Johannes.zip",
+      "file": "Shape.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Silence.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Selles_Ward.zip",
+      "file": "Spriffs_II.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Galway_Martin.zip",
+      "file": "Wizball.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Gilmore_Adam.zip",
+      "file": "Zybex.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Red_Kimmel_Jeroen.zip",
+      "file": "Crazy_Sample_II.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Bjerregaard_Johannes.zip",
+      "file": "DMC_Demo_IV_tune_2.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Daglish_Ben.zip",
+      "file": "Future_Knight.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Jewels.sid"
+    },
+    {
+      "pack": "library/packs/musicians/M/MC_Lord.zip",
+      "file": "Lions_of_the_Universe.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Public_Enemy.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Link.zip",
+      "file": "Take_Over.sid"
+    },
+    {
+      "pack": "library/packs/musicians/F/FAME.zip",
+      "file": "Hendriks_Michael/A_Little_Sample.sid"
+    },
+    {
+      "pack": "library/packs/musicians/J/JCH.zip",
+      "file": "Beaty_Intro.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Daglish_Ben.zip",
+      "file": "Cobra.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Gray_Matt.zip",
+      "file": "Driller.sid"
+    },
+    {
+      "pack": "library/packs/musicians/J/JCH.zip",
+      "file": "Hollow_plus.sid"
+    },
+    {
+      "pack": "library/packs/musicians/C/Clarke_Peter.zip",
+      "file": "Ocean_Loader_3.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "UniTechno.sid"
+    },
+    {
+      "pack": "library/packs/musicians/J/Jensen_Henrik.zip",
+      "file": "Unitrax_88_Killermix.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/SoedeSoft.zip",
+      "file": "Soede_Jeroen/Airwolf_Title.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "Gaplus.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Galway_Martin.zip",
+      "file": "Green_Beret.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Gray_Fred.zip",
+      "file": "Hysteria.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Ikari_Intro_Song.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/SoedeSoft.zip",
+      "file": "Soede_Jeroen/TrailMix_intro.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Brennan_Neil.zip",
+      "file": "Way_of_the_Exploding_Fist.sid"
+    },
+    {
+      "pack": "library/packs/musicians/W/Whittaker_David.zip",
+      "file": "Cosmonut.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Crosswords.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Lee_Dave.zip",
+      "file": "Erebus.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Red_Kimmel_Jeroen.zip",
+      "file": "Game_Music_3.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Galway_Martin.zip",
+      "file": "Miami_Vice.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Red_Kimmel_Jeroen.zip",
+      "file": "Playboy_the_Game.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Deenen_Charles.zip",
+      "file": "RWE_Intro.sid"
+    },
+    {
+      "pack": "library/packs/musicians/W/Whittaker_David.zip",
+      "file": "Storm.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Schneider_Markus.zip",
+      "file": "Ahead_Crack_Intro.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Contest_Demo_part_2.sid"
+    },
+    {
+      "pack": "library/packs/musicians/M/MC_Lord.zip",
+      "file": "CosMail_tune_02.sid"
+    },
+    {
+      "pack": "library/packs/musicians/F/FAME.zip",
+      "file": "Hendriks_Michael/Dynamic_Range.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Daglish_Ben.zip",
+      "file": "Footballer_of_the_Year.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Dunn_Jonathan.zip",
+      "file": "Arkanoid-Revenge_of_Doh.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Deenen_Charles.zip",
+      "file": "Soldier_of_Light.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/The_Dream_Maker.zip",
+      "file": "Crockets_Mix.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "International_Karate.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Daglish_Ben.zip",
+      "file": "Krakout.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Bjerregaard_Johannes.zip",
+      "file": "Namnam_Special.sid"
+    },
+    {
+      "pack": "library/packs/musicians/0-9/20CC.zip",
+      "file": "van_Santen_Edwin/PCW-Tune_88.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Galway_Martin.zip",
+      "file": "Rambo_First_Blood_Part_II.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Dunn_Jonathan.zip",
+      "file": "RoboCop.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/SoedeSoft.zip",
+      "file": "Simple_Music.sid"
+    },
+    {
+      "pack": "library/packs/musicians/W/Whittaker_David.zip",
+      "file": "Enduro_Racer.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Daglish_Ben.zip",
+      "file": "Firelord.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Baldwin_Neil.zip",
+      "file": "Garfield.sid"
+    },
+    {
+      "pack": "library/packs/musicians/J/JCH.zip",
+      "file": "Hoppin.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Laxace.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Sanxion.sid"
+    },
+    {
+      "pack": "library/packs/musicians/J/Joseph_Richard.zip",
+      "file": "Defender_of_the_Crown.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Selles_Ward.zip",
+      "file": "Jippie.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Nibbly_92.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Phantoms_of_the_Asteroid.sid"
+    },
+    {
+      "pack": "library/packs/musicians/J/JCH.zip",
+      "file": "Pheric.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tel_Jeroen.zip",
+      "file": "Savage.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Brennan_Neil.zip",
+      "file": "Fist_II-The_Legend_Continues.sid"
+    },
+    {
+      "pack": "library/packs/musicians/M/Mad_Donne_Marcel.zip",
+      "file": "Scorpion.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Zoolook.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Galway_Martin.zip",
+      "file": "Comic_Bakery.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hanlon_David.zip",
+      "file": "Enlightenment_Druid_II.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "Master_of_Magic.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blidon_Jens.zip",
+      "file": "Magic_Writer_tune_00.sid"
+    },
+    {
+      "pack": "library/packs/musicians/M/Mueller_Markus.zip",
+      "file": "Coco_Intro.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tracker.zip",
+      "file": "Saxophone.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hubbard_Rob.zip",
+      "file": "ACE_II.sid"
+    },
+    {
+      "pack": "library/packs/musicians/G/Gray_Fred.zip",
+      "file": "Firefly.sid"
+    },
+    {
+      "pack": "library/packs/musicians/K/Klaewer_Oliver.zip",
+      "file": "Maniax.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Red_Kimmel_Jeroen.zip",
+      "file": "Radax.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Daglish_Ben.zip",
+      "file": "Ark_Pandora.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Spino2006.zip",
+      "file": "8bit_Rock_and_Techno.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Lft.zip",
+      "file": "A_Computer_in_My_Backpack.sid"
+    },
+    {
+      "pack": "library/packs/musicians/O/Odkin.zip",
+      "file": "A-Monus.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tobikomi.zip",
+      "file": "Abandoned_Farm.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Salthe_Morten.zip",
+      "file": "Acro_Killing_Machine.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Alibi.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Scarzix.zip",
+      "file": "Ancients.sid"
+    },
+    {
+      "pack": "library/packs/musicians/0-9/4-Mat.zip",
+      "file": "And_Again.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/SigmaZeven.zip",
+      "file": "Apydia_Level_1.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Ashes_to_Ashes.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Astuva_Humppa.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Bingohon.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Linus.zip",
+      "file": "Black_Christmas.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Syntech.zip",
+      "file": "Blue_Order.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Raze.zip",
+      "file": "Boys_Dont_Cry.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Spider_Jerusalem.zip",
+      "file": "Broken_Hearts_and_Broken_Speakers.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Raze.zip",
+      "file": "Bullet_Tunie.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Spino2006.zip",
+      "file": "C64_for_Eternity.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Capripholian_Waltz.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Caught_in_the_Middle.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Chicagos_30s.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Raze.zip",
+      "file": "Chilly_Bass.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Linus.zip",
+      "file": "Cold_War_Generation.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tobikomi.zip",
+      "file": "Cold_War_II.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/SigmaZeven.zip",
+      "file": "Colored_Squares.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Spider_Jerusalem.zip",
+      "file": "Creation_Reconciled.sid"
+    },
+    {
+      "pack": "library/packs/musicians/X/Xiny6581.zip",
+      "file": "Crossing_Norway_Express.sid"
+    },
+    {
+      "pack": "library/packs/musicians/A/Alien_WOW.zip",
+      "file": "Cyberpunx_Intro.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/GRG_in_Cyberspace.sid"
+    },
+    {
+      "pack": "library/packs/musicians/O/Odkin.zip",
+      "file": "Dance1.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Dancing_in_the_Moonlight.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Raze.zip",
+      "file": "Darkland.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Salthe_Morten.zip",
+      "file": "Deadly_Devils.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Spider_Jerusalem.zip",
+      "file": "Dethl00p.sid"
+    },
+    {
+      "pack": "library/packs/musicians/O/Odkin.zip",
+      "file": "Diva.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Dont_Stop_Till_You_Get_Enough.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Shogun.zip",
+      "file": "Dreams.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Spino2006.zip",
+      "file": "Dream_World.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Elaen_Humpalla.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Snabel.zip",
+      "file": "Elephant_Stroll.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Linus.zip",
+      "file": "Elevate_me_to_the_Gallows.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Dalezy.zip",
+      "file": "elvis_copper.sid"
+    },
+    {
+      "pack": "library/packs/musicians/0-9/4-Mat.zip",
+      "file": "Empty_512_bytes.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/SigmaZeven.zip",
+      "file": "Enola_Gay_Remix.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Snabel.zip",
+      "file": "Etwas_Bass.sid"
+    },
+    {
+      "pack": "library/packs/musicians/F/Factor6.zip",
+      "file": "E_S_I_Forever.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Raze.zip",
+      "file": "Fantasy.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Linus.zip",
+      "file": "Figures_in_a_Landscape.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Spider_Jerusalem.zip",
+      "file": "Final_Boss_Defeated.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Salthe_Morten.zip",
+      "file": "Final_Curtain_Smasher.sid"
+    },
+    {
+      "pack": "library/packs/musicians/P/Palmonari_Stefano.zip",
+      "file": "Forgotten_Memories.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Scarzix.zip",
+      "file": "Forgotten_Times.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Spino2006.zip",
+      "file": "Friends_for_Life_remastered.sid"
+    },
+    {
+      "pack": "library/packs/musicians/P/Psych858o.zip",
+      "file": "Fruchtbaerchen.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Funkyhips.sid"
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Funkytown.sid"
+    },
+    {
+      "pack": "library/packs/musicians/D/Dalezy.zip",
+      "file": "galza-26.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/LMan.zip",
+      "file": "Giana_Sisters_DS.sid"
+    },
+    {
+      "pack": "library/packs/musicians/B/Blues_Muz.zip",
+      "file": "Gallefoss_Glenn/Global_Warming_Lighter_Moment.sid"
+    },
+    {
+      "pack": "library/packs/musicians/M/Mermaid.zip",
+      "file": "Goblin_Groove.sid"
+    },
+    {
+      "pack": "library/packs/musicians/T/Tobikomi.zip",
+      "file": "Gomenasai.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Spider_Jerusalem.zip",
+      "file": "Grillende_Zirpe.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Haevisin_lotossa_taas.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Hanurissa_Arja.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Happy_Birthday_Dr_J.sid"
+    },
+    {
+      "pack": "library/packs/musicians/L/Linus.zip",
+      "file": "Haze.sid"
+    },
+    {
+      "pack": "library/packs/musicians/J/JCH.zip",
+      "file": "Hollywood.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Salthe_Morten.zip",
+      "file": "Hot_Airmadrass.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Raze.zip",
+      "file": "Housemania.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Humpaten_Ympaeri_Maailman.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Humppaan_muna_tulessa.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Humppaa_Suomesta.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Humppakonehumppa.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Humppalaki.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Humppaleka.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Humppaleski.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Humppamaratooni.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Humppamedia.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Humppaneitsyt.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Humppaperhonen.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Humppasonni.sid"
+    },
+    {
+      "pack": "library/packs/musicians/R/Rock.zip",
+      "file": "Humppastara.sid"
+    },
+    {
+      "pack": "library/packs/musicians/J/JCH.zip",
+      "file": "Chordian.sid"
+    },
+    {
+      "pack": "library/packs/musicians/C/Comu.zip",
+      "file": "Masticar.sid"
+    },
+    {
+      "pack": "library/packs/musicians/S/Scarzix.zip",
+      "file": "Greatest_Pal.sid"
+    },
+    {
+      "pack": "library/packs/musicians/H/Hannula_Antti.zip",
+      "file": "Neon.sid"
+    },
+    {
+      "pack": "library/packs/musicians/U/Uctumi.zip",
+      "file": "Amor_clasificado.sid"
+    },
+    {
+      "pack": "library/packs/musicians/U/Uctumi.zip",
+      "file": "Helicoid.sid"
+    },
+    {
+      "pack": "library/packs/musicians/U/Uctumi.zip",
+      "file": "Loco_un_Poco.sid"
+    }
+  ]
+}
