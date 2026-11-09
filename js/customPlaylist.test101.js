@@ -578,7 +578,7 @@
   }
   // TEST94/105: reorder without restarting SID or losing metadata/reference sync.
   function moveLiveSong(index,step){
-    if(!customActive||loadedRankedPlaylist||index<0||index>=custom.length)return;
+    if(!customActive||loadedRankedPlaylist||savingCommunityEdits||index<0||index>=custom.length)return;
     var destination=Math.max(0,Math.min(custom.length-1,index+step));
     if(destination===index)return;
     insertAt(custom,index,destination);
@@ -611,7 +611,7 @@
       : 'Order changed. Press SAVE to keep this order without publishing.');
   }
   function removeLiveSong(index){
-    if(!customActive||loadedRankedPlaylist||activePublicCollection||index<0||index>=custom.length)return;
+    if(!customActive||loadedRankedPlaylist||savingCommunityEdits||activePublicCollection||index<0||index>=custom.length)return;
     var wasCurrent=player.sidListIndex===index;
     custom.splice(index,1);
     if(activePublicPlaylist&&Array.isArray(activePublicPlaylist.tracks))activePublicPlaylist.tracks.splice(index,1);
@@ -1254,11 +1254,11 @@
         if(customActive){
         bindReorderArrows($('<button type="button">').addClass('rico-live-move')
           .toggleClass('rico-ranked-disabled',loadedRankedPlaylist).text('↑')
-          .prop('disabled',loadedRankedPlaylist||index===0),-1,function(step){moveLiveSong(index,step);})
+          .prop('disabled',loadedRankedPlaylist||savingCommunityEdits||index===0),-1,function(step){moveLiveSong(index,step);})
           .appendTo(wrap);
         bindReorderArrows($('<button type="button">').addClass('rico-live-move')
           .toggleClass('rico-ranked-disabled',loadedRankedPlaylist).text('↓')
-          .prop('disabled',loadedRankedPlaylist||index===list.length-1),1,function(step){moveLiveSong(index,step);})
+          .prop('disabled',loadedRankedPlaylist||savingCommunityEdits||index===list.length-1),1,function(step){moveLiveSong(index,step);})
           .appendTo(wrap);
         if(!activePublicCollection){
         $('<button type="button">').addClass('rico-live-remove')
