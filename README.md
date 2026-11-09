@@ -1,5 +1,16 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+
+## OLD SID COLLECTION RICO — archive migration (published, browser test pending)
+
+Seven original ZIP archives were analyzed (**509 SID files**, **313 SHA-256 distinct**, **196 duplicate occurrences**). The new **OLD SID COLLECTION RICO** appears in **COMMUNITY PLAYLISTS** as a single **298-track version-2 reference playlist**, using **77 pre-existing HVSC #85 ZIP packs** and **zero uploaded SID binaries**. **300** old SID entries could be associated with HVSC metadata, but **two pairs** mapped to identical library paths. **13** SID files have no sufficiently reliable HVSC match and are intentionally excluded rather than replaced by a different tune.
+
+- [Static playlist source: 298 HVSC pack/file references](community/playlists/old-sid-collection-rico.json)
+- [Full audit: duplicates, version differences, unmatched originals, editing limitations](docs/OLD_SID_COLLECTION_RICO_REPORT.md)
+- [Try player / COMMUNITY PLAYLISTS](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?collection=old-sid-rico)
+
+**Important:** This initial copy is static GitHub-curated, like historical playlists. It can be loaded or copied into an editable REMIX, but saving public edits in-place with beta key requires moving its references to the Cloudflare D1 editable playlist registry. No cloud publication of this collection has been performed. **Playback PASS pending the owner's test.**
+
 ## TEST109 — HELP beside ABOUT (published, browser PASS pending)
 
 **New in-app HELP** opens a bilingual **ENGLISH / ESPAÑOL** guide describing player operation, source browsers, REMIX creation, adding songs with +, single/double-click playlist reordering (±1/±10), local vs public SAVE, beta-key publication, ranked TOP 100 protection, IMPORT SID, AUTO and TIMER.
