@@ -1,0 +1,981 @@
+{
+  "format": "spotysid-hvsc-fix-demo-source",
+  "version": 1,
+  "rankSource": "https://csdb.dk/toplist.php?subtype=%281%29&type=release",
+  "snapshotDate": "2026-11-09",
+  "rankInterpretation": "First 100 displayed demo entries in order, regardless of tied numeric place; snapshot is not a live ranking",
+  "notes": "Every path copied from the CSDb release's 'SIDs used in this release' section. Unreviewed releases are not claims of missing files. 'HVSC FIX' may later bind manually identified paths.",
+  "demos": [
+    {
+      "order": 1,
+      "title": "Next Level",
+      "csdbReleaseId": 232976,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=232976",
+      "csdbHvscPaths": [
+        "MUSICIANS/J/Jammer/Anything_GEOS.sid",
+        "MUSICIANS/J/Jammer/Anything_Next.sid",
+        "MUSICIANS/J/Jammer/Faithless_Insomnia.sid",
+        "MUSICIANS/J/Jammer/Finally_Asleep.sid",
+        "MUSICIANS/J/Jammer/Next_Level_of_Insomnia.sid",
+        "MUSICIANS/J/Jammer/Next_Level_of_Insomnia_short.sid",
+        "MUSICIANS/J/Jammer/Sky_Buster.sid",
+        "MUSICIANS/L/LMan/Make_Noise.sid",
+        "MUSICIANS/L/LMan/Party_x_Leben.sid",
+        "MUSICIANS/L/LMan/Shape.sid",
+        "MUSICIANS/D/Devilock/Next_Level_Intro.sid",
+        "MUSICIANS/D/Devilock/Next_Level_Main.sid",
+        "MUSICIANS/L/Linus/Next_Level_Side_3.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 2,
+      "title": "The Lab",
+      "csdbReleaseId": 262146,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=262146",
+      "csdbHvscPaths": [
+        "MUSICIANS/S/Shogoon/Circles.sid",
+        "MUSICIANS/S/Shogoon/Kickin_Balls.sid",
+        "MUSICIANS/S/Shogoon/Micro_World.sid",
+        "MUSICIANS/S/Shogoon/No_Way_Out.sid",
+        "MUSICIANS/S/Shogoon/Prince.sid",
+        "MUSICIANS/S/Shogoon/Lab_tune_1.sid",
+        "MUSICIANS/H/Hoffmann_Michal/Elysergic_Acid.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 3,
+      "title": "Viva Las Vegas",
+      "csdbReleaseId": 264488,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=264488",
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 4,
+      "title": "The Hat",
+      "csdbReleaseId": 259070,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=259070",
+      "csdbHvscPaths": [
+        "MUSICIANS/F/Fegolhuzz/Hat_tune_1.sid",
+        "MUSICIANS/F/Fegolhuzz/Hat_tune_2.sid",
+        "MUSICIANS/F/Fegolhuzz/Hat_tune_3.sid",
+        "MUSICIANS/F/Fegolhuzz/Hat_tune_4.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 5,
+      "title": "Next Round",
+      "csdbReleaseId": 262169,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=262169",
+      "csdbHvscPaths": [
+        "MUSICIANS/S/Schneider_Markus/Next_Round_tune_1.sid",
+        "DEMOS/UNKNOWN/Next_Round_tune_7.sid",
+        "MUSICIANS/J/Jammer/PreColor.sid",
+        "MUSICIANS/J/Jammer/Wip3Out_2k6.sid",
+        "MUSICIANS/C/C0zmo/Rimini_Remedy.sid",
+        "MUSICIANS/L/Linus/Time_Goes_Running.sid",
+        "MUSICIANS/J/Jeff/X-Large_5.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 6,
+      "title": "13:37",
+      "csdbReleaseId": 242855,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=242855",
+      "csdbHvscPaths": [
+        "MUSICIANS/F/Fegolhuzz/Fight_the_AI.sid",
+        "MUSICIANS/F/Fegolhuzz/Load_the_Demo.sid",
+        "MUSICIANS/F/Fegolhuzz/Release_the_Rastersplits.sid",
+        "MUSICIANS/F/Fegolhuzz/To_us_its_Love.sid",
+        "MUSICIANS/F/Fegolhuzz/Top_Secret_Flescos.sid",
+        "MUSICIANS/F/Fegolhuzz/You_Were_There.sid",
+        "MUSICIANS/D/Danko_Tomas/Song_for_K_urzer.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 7,
+      "title": "Codeboys & Endians",
+      "csdbReleaseId": 249805,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=249805",
+      "csdbHvscPaths": [
+        "MUSICIANS/M/Mitch_and_Dane/Dane/Tour_De_Force.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 8,
+      "title": "We Are The Anomaly",
+      "csdbReleaseId": 257561,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=257561",
+      "csdbHvscPaths": [
+        "MUSICIANS/P/Psych858o/Exordium.sid",
+        "MUSICIANS/P/Psych858o/We_Are_the_Anomaly.sid",
+        "MUSICIANS/P/Psych858o/We_Are_the_Underground.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 9,
+      "title": "Mojo",
+      "csdbReleaseId": 232966,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=232966",
+      "csdbHvscPaths": [
+        "MUSICIANS/S/SMC/Breaking_the_Law.sid",
+        "MUSICIANS/S/SMC/Flip_Flops_for_Walt.sid",
+        "MUSICIANS/S/SMC/Robots_Prefer_Cherry_MX_Blue.sid",
+        "MUSICIANS/S/SMC/Spindle.sid",
+        "MUSICIANS/T/The_Syndrom/Hearts.sid",
+        "MUSICIANS/T/The_Syndrom/Mojo_Dream_Sequences.sid",
+        "MUSICIANS/T/The_Syndrom/Mojo_Reprise.sid",
+        "MUSICIANS/X/Xiny6581/Mojo_Commando.sid",
+        "MUSICIANS/X/Xiny6581/Trip_and_Hazy_Clouds.sid",
+        "MUSICIANS/X/Xiny6581/We_Are_the_Dark_Robots.sid",
+        "MUSICIANS/L/Laxity/Mojo_Outro.sid",
+        "MUSICIANS/L/Laxity/The_Flappy_Hero_March.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 10,
+      "title": "Aloft",
+      "csdbReleaseId": 259056,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=259056",
+      "csdbHvscPaths": [
+        "MUSICIANS/S/Steel/Butterflies.sid",
+        "MUSICIANS/P/Psych858o/Cloudracer.sid",
+        "MUSICIANS/P/Psych858o/Vector_Flight.sid",
+        "MUSICIANS/P/Psych858o/Velvet_Frequencies.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 11,
+      "title": "Coma Light 13",
+      "csdbReleaseId": 112378,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=112378",
+      "csdbHvscPaths": [
+        "MUSICIANS/F/Fanta/Coma_Light_13_tune_1.sid",
+        "MUSICIANS/F/Fanta/Coma_Light_13_tune_2.sid",
+        "MUSICIANS/F/Fanta/Coma_Light_13_tune_3.sid",
+        "MUSICIANS/F/Fanta/Coma_Light_13_tune_4.sid",
+        "MUSICIANS/F/Fanta/Dedication_to_Linus_with_Love.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 12,
+      "title": "Edge of Disgrace",
+      "csdbReleaseId": 72550,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=72550",
+      "csdbHvscPaths": [
+        "MUSICIANS/M/Mitch_and_Dane/Dane/Edge_of_Disgrace.sid",
+        "MUSICIANS/M/Mitch_and_Dane/Dane/Edge_of_Disgrace_note.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 13,
+      "title": "The Violators",
+      "csdbReleaseId": 256168,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=256168",
+      "csdbHvscPaths": [
+        "MUSICIANS/P/Psych858o/MysGangster.sid",
+        "MUSICIANS/P/Psych858o/Violators.sid",
+        "MUSICIANS/M/Magnar/Violators-The_End.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 14,
+      "title": "Comaland 100%",
+      "csdbReleaseId": 139278,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=139278",
+      "csdbHvscPaths": [
+        "MUSICIANS/F/Fanta/Comaland_tune_1.sid",
+        "MUSICIANS/F/Fanta/Comaland_tune_4.sid",
+        "MUSICIANS/M/Magnar/Comaland_tune_3.sid",
+        "MUSICIANS/M/Magnar/Comaland_tune_5.sid",
+        "MUSICIANS/M/Magnar/Comaland_tune_6.sid",
+        "MUSICIANS/M/Magnar/Comaland_100_percent_end.sid",
+        "MUSICIANS/M/Magnar/Float.sid",
+        "MUSICIANS/D/Devilock/Comaland_Opening.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 15,
+      "title": "Colors",
+      "csdbReleaseId": 262141,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=262141",
+      "csdbHvscPaths": [
+        "MUSICIANS/V/Vincenzo/Colors_Side_1.sid",
+        "MUSICIANS/V/Vincenzo/Colors_Side_2.sid",
+        "MUSICIANS/V/Vincenzo/Colors_Side_3.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 16,
+      "title": "Bromance",
+      "csdbReleaseId": 205526,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=205526",
+      "csdbHvscPaths": [
+        "MUSICIANS/D/DRAX/Bromance-Bloated.sid",
+        "MUSICIANS/D/DRAX/Bromance-Intro.sid",
+        "MUSICIANS/D/DRAX/Bromance-Side_2.sid",
+        "MUSICIANS/L/Laxity/Close_to_You.sid",
+        "MUSICIANS/L/Laxity/Farfisa.sid",
+        "MUSICIANS/L/Laxity/Waves.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 17,
+      "title": "No Bounds",
+      "csdbReleaseId": 232957,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=232957",
+      "csdbHvscPaths": [
+        "MUSICIANS/A/Acrouzet/Golden.sid",
+        "MUSICIANS/S/Stinsen/Misfortunes.sid",
+        "MUSICIANS/P/Psych858o/No_Bounds.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 18,
+      "title": "Uncensored",
+      "csdbReleaseId": 133934,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=133934",
+      "csdbHvscPaths": [
+        "MUSICIANS/M/Mitch_and_Dane/Dane/Uncensored_part_1.sid",
+        "MUSICIANS/M/Mitch_and_Dane/Dane/Uncensored_part_2.sid",
+        "MUSICIANS/M/Mitch_and_Dane/Dane/Uncensored_part_3.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 19,
+      "title": "No Sprites",
+      "csdbReleaseId": 237745,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=237745",
+      "csdbHvscPaths": [
+        "MUSICIANS/F/Fegolhuzz/Demosceniors.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 20,
+      "title": "The Ghost",
+      "csdbReleaseId": 239394,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=239394",
+      "csdbHvscPaths": [
+        "MUSICIANS/F/Fegolhuzz/Ghost_tune_1.sid",
+        "MUSICIANS/F/Fegolhuzz/Ghost_tune_2.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 21,
+      "title": "Sprite Bukkake 2",
+      "csdbReleaseId": 237744,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=237744",
+      "csdbHvscPaths": [
+        "MUSICIANS/L/Laxity/Dirty_Vaiana.sid",
+        "MUSICIANS/L/Laxity/One_Note_Elevator_Music.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 22,
+      "title": "Unboxed",
+      "csdbReleaseId": 170921,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=170921",
+      "csdbHvscPaths": [
+        "MUSICIANS/M/Metal/Unboxed_4Pics.sid",
+        "MUSICIANS/M/Metal/Unboxed_DustBuster_8580.sid",
+        "MUSICIANS/M/Metal/Unboxed_KamelTis_8580.sid",
+        "MUSICIANS/D/DRAX/Unboxed_Ending_8580.sid",
+        "MUSICIANS/D/DRAX/Unboxed_Koffein_8580.sid",
+        "MUSICIANS/D/DRAX/Unboxed_Pillars_8580.sid",
+        "MUSICIANS/D/DRAX/Unboxed_Wacky_8580.sid",
+        "MUSICIANS/L/Laxity/Unboxed_Intro_8580.sid",
+        "MUSICIANS/L/Laxity/Unboxed_Turn_Disk_8580.sid",
+        "MUSICIANS/S/Scortia/Unboxed_Rubricked_8580.sid",
+        "MUSICIANS/S/Scortia/Unboxed_Rubricked_Outro.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 23,
+      "title": "Hexed",
+      "csdbReleaseId": 262148,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=262148",
+      "csdbHvscPaths": [
+        "MUSICIANS/H/HeatWave/youtH/Hexed_Side_1.sid",
+        "MUSICIANS/H/HeatWave/youtH/Hexed_Side_2.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 24,
+      "title": "CatYa Dancing Queen",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 25,
+      "title": "E2IRA",
+      "csdbReleaseId": 218343,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=218343",
+      "csdbHvscPaths": [
+        "MUSICIANS/J/Jammer/Cafe_Noir.sid",
+        "MUSICIANS/J/Jammer/DOOM_Guy.sid",
+        "MUSICIANS/J/Jammer/E2IRA.sid",
+        "MUSICIANS/J/Jammer/Press_Play_2022_Edition.sid",
+        "MUSICIANS/R/Rodney/Esira_tune_2.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 26,
+      "title": "Wonderland XIV",
+      "csdbReleaseId": 232980,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=232980",
+      "csdbHvscPaths": [
+        "MUSICIANS/L/LMan/Censor_Groove_Loader.sid",
+        "MUSICIANS/L/LMan/Detroit_Rock_City.sid",
+        "MUSICIANS/L/LMan/Empire_State_of_Mind.sid",
+        "MUSICIANS/M/Magnar/Wonderland_XIV_tune_1.sid",
+        "MUSICIANS/P/Psych858o/Wonderland_XIV_tune_3.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 27,
+      "title": "Memento Mori",
+      "csdbReleaseId": 195841,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=195841",
+      "csdbHvscPaths": [
+        "MUSICIANS/X/Xiny6581/Carbondioxide.sid",
+        "MUSICIANS/M/MCH/Memento_Mori_tune_1.sid",
+        "MUSICIANS/S/Stinsen/Memento_Mori_tune_2.sid",
+        "MUSICIANS/D/Dlx/Pinched.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 28,
+      "title": "Meet Crest",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 29,
+      "title": "The X-File",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 30,
+      "title": "Tribute to Gabi",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 31,
+      "title": "Eyes",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 32,
+      "title": "Nightfall 100%",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 33,
+      "title": "Lifecycle",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 34,
+      "title": "What Is The Matrix 2",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 35,
+      "title": "The Trip",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 36,
+      "title": "Lunatico",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 37,
+      "title": "Skybox",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 38,
+      "title": "The Demo Coder",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 39,
+      "title": "Aliens in Wonderland",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 40,
+      "title": "Still Rising",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 41,
+      "title": "Rest In Peace HIC",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 42,
+      "title": "A Fayre Glow",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 43,
+      "title": "Fitty",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 44,
+      "title": "Halloweed 4 - Blow Your Mind",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 45,
+      "title": "Signal Carnival",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 46,
+      "title": "The World Is Not Enough - We Need More Scrollers",
+      "csdbReleaseId": 219289,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=219289",
+      "csdbHvscPaths": [
+        "MUSICIANS/M/Metal/TWINE_End.sid",
+        "MUSICIANS/L/Laxity/TWINE_Intro.sid",
+        "MUSICIANS/L/Laxity/TWINE_Jam_Bond.sid",
+        "MUSICIANS/L/Laxity/TWINE_Turn_Disk.sid",
+        "MUSICIANS/D/DRAX/TWINE_Main.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 47,
+      "title": "Wonderland XII",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 48,
+      "title": "Nightworks",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 49,
+      "title": "3SIRA",
+      "csdbReleaseId": 245148,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=245148",
+      "csdbHvscPaths": [
+        "MUSICIANS/J/Jammer/My_Dearest_Pet.sid",
+        "MUSICIANS/J/Jammer/Neon_Sunrise.sid",
+        "MUSICIANS/J/Jammer/POKEYing_Funk_at_You.sid",
+        "MUSICIANS/J/Jammer/Press_Stop.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 50,
+      "title": "Incoherent Nightmare",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 51,
+      "title": "Ad Astra per Alas Porci",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 52,
+      "title": "Gorba Boost",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 53,
+      "title": "All Hallows' Eve",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 54,
+      "title": "Norsk Data",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 55,
+      "title": "The 21st",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 56,
+      "title": "Unity",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 57,
+      "title": "Stereo Re-Issue",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 58,
+      "title": "Still Standing",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 59,
+      "title": "2600",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 60,
+      "title": "Cocktail To Go",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 61,
+      "title": "The Star Wars Demo",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 62,
+      "title": "JustinBlue",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 63,
+      "title": "Do Pretzels Dream?",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 64,
+      "title": "Crimbo 1982",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 65,
+      "title": "Halloweed 3 - VIC or Weed",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 66,
+      "title": "Kamishibai",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 67,
+      "title": "Comaland",
+      "csdbReleaseId": 133940,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=133940",
+      "csdbHvscPaths": [
+        "MUSICIANS/M/Magnar/Comaland_end.sid",
+        "MUSICIANS/M/Magnar/Comaland_tune_3.sid",
+        "MUSICIANS/M/Magnar/Comaland_tune_5.sid",
+        "MUSICIANS/M/Magnar/Comaland_tune_6.sid",
+        "MUSICIANS/M/Magnar/Float.sid",
+        "MUSICIANS/F/Fanta/Comaland_tune_1.sid",
+        "MUSICIANS/F/Fanta/Comaland_tune_4.sid",
+        "MUSICIANS/D/Devilock/Comaland_Opening.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 68,
+      "title": "Oldschool Guide",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 69,
+      "title": "Dual Crew 40 Years",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 70,
+      "title": "A három nyúl",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 71,
+      "title": "Purple",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 72,
+      "title": "Multiverse 100%",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 73,
+      "title": "Virsi 64",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 74,
+      "title": "Cinque",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 75,
+      "title": "Lethal Display 6",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 76,
+      "title": "Sidelined 2",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 77,
+      "title": "Tuomiopaeivae",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 78,
+      "title": "Wonderland XIII",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 79,
+      "title": "Fünfzig 90%",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 80,
+      "title": "Harminc",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 81,
+      "title": "Christmas Megademo",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 82,
+      "title": "Ooops",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 83,
+      "title": "Space Beer",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 84,
+      "title": "Zone 5",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 85,
+      "title": "Trapped Love",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 86,
+      "title": "F20",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 87,
+      "title": "Neon",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 88,
+      "title": "The Shores of Reflection",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 89,
+      "title": "Submerged",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 90,
+      "title": "Fantasmolytic",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 91,
+      "title": "Sweet",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 92,
+      "title": "50 Years of Flex",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 93,
+      "title": "Deus Ex Machina",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 94,
+      "title": "Wizard of Wor Sprite Comparison Demo",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 95,
+      "title": "Wavemode",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 96,
+      "title": "Battle Scars",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 97,
+      "title": "Xcusemo",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 98,
+      "title": "Delirious 11",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    },
+    {
+      "order": 99,
+      "title": "5 Shades of Grey",
+      "csdbReleaseId": 192912,
+      "csdbReleaseUrl": "https://csdb.dk/release/?id=192912",
+      "csdbHvscPaths": [
+        "MUSICIANS/V/Vincenzo/Shade_on_Me.sid",
+        "MUSICIANS/V/Vincenzo/Shade_on_You.sid"
+      ],
+      "lookupStatus": "sid_paths_from_csdb"
+    },
+    {
+      "order": 100,
+      "title": "We Love to Party",
+      "csdbReleaseId": null,
+      "csdbReleaseUrl": null,
+      "csdbHvscPaths": [],
+      "lookupStatus": "release_not_reviewed"
+    }
+  ]
+}
