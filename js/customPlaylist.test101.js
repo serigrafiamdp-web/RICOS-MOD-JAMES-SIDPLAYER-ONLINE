@@ -226,6 +226,23 @@
   function requestSidSwitch(index,source){
     var list=player.sidList||[];
     if(index<0||index>=list.length)return;
+    var entry=list[index],serial=++referenceSwitchSerial;
+    if(customActive&&activeReferenceStream&&entry&&entry._hvscRef&&!entry.localBytes){
+      // The chosen track has not yet been fetched; do not fade to silence.
+      var stream=activeReferenceStream;
+      if(source==='manual')selectedLiveIndex=index;
+      $('#ricoLiveStatus').text('Loading SID from HVSC: '+(entry.name||entry.file));
+      renderLivePlaylist();
+      stream.loadSlot(entry).then(function(){
+        if(activeReferenceStream!==stream||serial!==referenceSwitchSerial||!customActive)return;
+        var target=custom.indexOf(entry);
+        if(target>=0)requestSidSwitch(target,source);
+      }).catch(function(error){
+        if(activeReferenceStream===stream&&serial===referenceSwitchSerial)
+          $('#ricoLiveStatus').text('SID could not be loaded: '+error.message);
+      });
+      return;
+    }
     if(source==='manual')selectedLiveIndex=index;
     if(transitionBusy){
       if(transitionAwaitingStart){
@@ -343,6 +360,9 @@
   // TEST106: source identity for saving editable playlists and REMIX drafts.
   var activeRemixDraftId=null;
   var activeReferenceTracks=null;
+  // TEST112: progressive load state for large HVSC reference playlists.
+  var activeReferenceStream=null;
+  var referenceSwitchSerial=0;
   var activeLocalSavedId=null;
   var activeLocalOrderDirty=false;
   // TEST110: legacy HVSC playlist can be adopted into editable Cloudflare D1.
@@ -1516,6 +1536,20 @@
     if (!customActive) activate('custom');
     if (index < 0 || index >= custom.length) return;
     var item = custom[index];
+    if(item._hvscRef&&!item.localBytes&&activeReferenceStream){
+      // Also protect direct selections outside the floating fade controller.
+      var stream=activeReferenceStream,serial=++referenceSwitchSerial;
+      $('#ricoLiveStatus').text('Loading SID from HVSC: '+item.name);
+      stream.loadSlot(item).then(function(){
+        if(activeReferenceStream!==stream||serial!==referenceSwitchSerial||!customActive)return;
+        var target=custom.indexOf(item);
+        if(target>=0)loadCustomIndex(target);
+      }).catch(function(error){
+        if(activeReferenceStream===stream&&serial===referenceSwitchSerial)
+          $('#ricoLiveStatus').text('SID could not be loaded: '+error.message);
+      });
+      return;
+    }
     player.initWebAudio();
     player.sidListIndex = index;
     player.setPath('');
