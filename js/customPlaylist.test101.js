@@ -40,7 +40,7 @@
   var silentSamples=0;
   var silenceAdvanceQueued=false;
   var SILENCE_MIN_PLAY_SECONDS=12;
-  var SILENCE_HOLD_SECONDS=2.5;
+  var SILENCE_HOLD_SECONDS=2;
   var SILENCE_RMS_THRESHOLD=0.0025;
   var SILENCE_PEAK_THRESHOLD=0.012;
   function resetSilenceDetector(){
