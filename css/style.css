@@ -2447,3 +2447,16 @@ left: 1px;
   #ricoLivePlaylistItems .rico-csdb-pending-row{gap:5px;font-size:12px;}
   #ricoLivePlaylistItems .rico-csdb-artist{flex:.9 1 0;}
 }
+
+/* TEST134: DEMOS and ONEFILE have one heading per demo, with their SID tracks below. */
+#ricoLivePlaylistItems .rico-csdb-live-heading {
+  display:flex;align-items:center;flex-wrap:wrap;gap:7px;
+  padding:7px 10px 5px;
+  background:var(--rico-theme-panel,#252b40);
+  border-bottom:1px solid var(--rico-theme-border,#556);
+  font:12px Arial,sans-serif;
+  color:var(--rico-theme-fg,#fff);
+}
+#ricoLivePlaylistItems .rico-csdb-live-heading strong {font-weight:700;}
+#ricoLivePlaylistItems .rico-csdb-live-group {opacity:.85;}
+#ricoLivePlaylistItems .rico-csdb-live-status {margin-left:auto;font-size:10px;opacity:.72;}
