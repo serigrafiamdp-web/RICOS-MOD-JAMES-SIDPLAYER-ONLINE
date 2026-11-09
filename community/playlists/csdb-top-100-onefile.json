@@ -5,8 +5,8 @@
   "createdBy": "RICO",
   "sourceRankingUrl": "https://csdb.dk/toplist.php?type=release&subtype=%282%29",
   "sourceDemoCount": 100,
-  "linkedDemoCount": 35,
-  "pendingDemoCount": 65,
+  "linkedDemoCount": 40,
+  "pendingDemoCount": 60,
   "tracks": [
     {
       "pack": "library/packs/musicians/L/Lft.zip",
@@ -73,12 +73,52 @@
       "demoOrder": 12
     },
     {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Verificeret.sid",
+      "title": "Verificeret",
+      "author": "T. Mogensen (DRAX), Mitch & Dane",
+      "demoTitle": "Party Elk 2",
+      "demoOrder": 13
+    },
+    {
       "pack": "library/packs/musicians/C/Cyborgjeff.zip",
       "file": "Cubic_Dream.sid",
       "title": "Cubic Dream",
       "author": "Pierre Martin (Cyborgjeff)",
       "demoTitle": "Cubic Dream",
       "demoOrder": 14
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Trapped_Again_tune_1.sid",
+      "title": "Trapped Again (tune 1)",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "Barry Boomer - Trapped Again",
+      "demoOrder": 15
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Trapped_Again_tune_2.sid",
+      "title": "Trapped Again (tune 2)",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "Barry Boomer - Trapped Again",
+      "demoOrder": 15
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Trapped_Again_tune_3_6581.sid",
+      "title": "Trapped Again (tune 3, 6581)",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "Barry Boomer - Trapped Again",
+      "demoOrder": 15
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Trapped_Again_tune_3_8580.sid",
+      "title": "Trapped Again (tune 3, 8580)",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "Barry Boomer - Trapped Again",
+      "demoOrder": 15
     },
     {
       "pack": "library/packs/musicians/P/Psych858o.zip",
@@ -103,6 +143,14 @@
       "author": "Riku Ö (Flotsam)",
       "demoTitle": "Aurora Dreams - The Final Sequence",
       "demoOrder": 25
+    },
+    {
+      "pack": "library/packs/musicians/M/Mermaid.zip",
+      "file": "Pretend_its_All_Fine.sid",
+      "title": "Pretend it's All Fine",
+      "author": "Vanja Utne (Mermaid)",
+      "demoTitle": "My 64",
+      "demoOrder": 26
     },
     {
       "pack": "library/packs/musicians/C/Chiummo_Aldo.zip",
@@ -135,6 +183,14 @@
       "author": "Sean McKenzie (Fade)",
       "demoTitle": "Charflasher",
       "demoOrder": 36
+    },
+    {
+      "pack": "library/packs/musicians/M/Mermaid.zip",
+      "file": "Trasig.sid",
+      "title": "Trasig",
+      "author": "Vanja Utne (Mermaid)",
+      "demoTitle": "Raster Time",
+      "demoOrder": 37
     },
     {
       "pack": "library/packs/musicians/J/Jammer.zip",
@@ -175,6 +231,22 @@
       "author": "Gösta Bergfeld",
       "demoTitle": "Veterans of Style",
       "demoOrder": 56
+    },
+    {
+      "pack": "library/packs/musicians/O/Orcan.zip",
+      "file": "Aggressive.sid",
+      "title": "Aggressive",
+      "author": "Stefan Uram (Orcan)",
+      "demoTitle": "The Journey",
+      "demoOrder": 57
+    },
+    {
+      "pack": "library/packs/musicians/S/Spider_Jerusalem.zip",
+      "file": "Megalovania.sid",
+      "title": "Megalovania",
+      "author": "J. Wassermann (Spider Jerusalem)",
+      "demoTitle": "The Journey",
+      "demoOrder": 57
     },
     {
       "pack": "library/packs/musicians/E/Eclipse.zip",
