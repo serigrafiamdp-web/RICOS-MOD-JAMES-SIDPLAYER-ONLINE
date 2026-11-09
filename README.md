@@ -1,5 +1,14 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## TEST116 — Community playlist manual ranking before voting (code published; browser PASS pending)
+
+- COMMUNITY PLAYLISTS displays **three empty sample stars (☆☆☆)** per public/curated playlist, as placeholders until an actual vote system exists.
+- Each public/curated catalog row has **↑/↓ arrows**: single click moves 1 position, double click moves 10 positions, matching the existing playlist reorder controls and palette-aware green hint. Moving rows does **not play** or modify any SID.
+- A **SAVE** button sits at the top-right of the Community Playlists section. It writes the order of catalog entries to **this browser's localStorage** (`rico-community-catalog-order-v1`); the chosen order is restored on reload or tab reopen. It does not change the Cloudflare D1 server's shared order or rankings on other browsers; server-side shared ordering would require a separate authenticated API.
+- Existing PLAY/EDIT/DELETE/PUBLISH flows, local drafts, ranked TOP 100 tabs, SID data and HVSC references remain unchanged.
+- [Open TEST116](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=116communityorder)
+- Validation: JS syntax PASS; browser test pending. Check visible 3 stars, arrows ±1 and ±10, SAVE/reload persistence, and PLAY unaffected.
+
 ## TEST115 — No native white tips on + and × (published; browser PASS pending)
 
 The floating playlist controls **+** (add to selected REMIX) and **×** (remove temporarily) were still assigning native HTML `title` text. Removed only these `title` attributes, keeping existing `aria-label`, click handlers, and behavior intact. The themed ↑/↓ hover hints from TEST113 remain unchanged, as do the song-title tooltip removals of TEST114.
