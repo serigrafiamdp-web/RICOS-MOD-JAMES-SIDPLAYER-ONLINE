@@ -1,4 +1,19 @@
-# RICOS MOD – JAMES SIDPLAYER ONLINE
+# SpotySid — Rico + James SID Player
+
+**SID Player with Oscilloscope View**  
+**PLAY · CREATE · REMIX · DISCOVER · SHARE**
+
+SpotySid is the new public name for Rico + James's C64 SID music player. The project continues James / Jojati's original work with playlist creation, discovery and authorized sharing tools, keeping the original artists' credits. "Remix" refers to curating a selection or order of existing SID tracks, not editing the compositions. The existing repository and GitHub Pages URLs stay unchanged.
+
+## TEST125 — SpotySid rebranding (browser PASS pending)
+
+- Browser tab: **SpotySid — Rico + James SID Player | Oscilloscope View**.
+- SID explorer window title: **SpotySid — DISCOVER SID MUSIC**; in-window heading: **SpotySid — Rico + James SID Player**.
+- HELP and project ABOUT headings updated to SpotySid. ABOUT describes PLAY, CREATE, REMIX, DISCOVER and SHARE while retaining James / Jojati's dedication, the WebSid / Tiny'R'Sid engine credits and the original historical About text.
+- No changes to playback, controls, playlist names, buttons, window dimensions, CSS, repository path or server endpoints.
+- [Open TEST125](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=125spotysid)
+- **Status:** Source updated, browser visual confirmation pending. TEST124 silence detector (2.0 s) stays in place.
+
 
 ## TEST122 — UNKNOWN CSDB on-click SID stutter / fade timing fix (browser PASS pending)
 
@@ -217,7 +232,7 @@ The bottom player controls now read **ABOUT SID CHIP · ABOUT · HELP**: upperca
 
 **A Commodore 64 SID Music Player — Preservation, Maintenance & Continued Development**
 
-RICOS MOD – JAMES SIDPLAYER ONLINE is a preservation and continued development project based on the original Jojati SID Player.
+SpotySid — Rico + James SID Player is a preservation and continued development project based on James / Jojati's original web SID player.
 The goal is to preserve the original player, its interface, oscilloscope, SID music collection, source code and historical credits, while introducing new features and improvements for modern browsers.
 This project continues the work of its previous developers and maintainers, respecting their contributions and preserving the original character of the software.
 
@@ -306,7 +321,7 @@ The historical version remains available in the repository under:
 
 ## Project Philosophy
 **Preserve the past. Maintain the present. Improve the future.**
-RICOS MOD – JAMES SIDPLAYER ONLINE is an effort to keep a piece of Commodore 64 music and software history accessible to future generations.
+SpotySid is an effort to keep a piece of Commodore 64 music and software history accessible to future generations.
 With respect and gratitude to James, Juergen Wothke, the SID composers and everyone who contributed to the Commodore 64 music scene.
 
 **In Memory of James (@uniquename654)**
