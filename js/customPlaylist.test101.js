@@ -556,6 +556,15 @@
     reorderHint.style.left=Math.max(5,x)+'px';
     reorderHint.style.top=Math.max(5,y)+'px';
   }
+  // TEST117: themed hints for playlist action buttons; never invoke the browser's white title tooltip.
+  function bindThemedPlaylistHint(button,message){
+    button.removeAttr('title');
+    button.on('pointerenter pointermove',function(event){
+      if(!button.prop('disabled'))showReorderHint(event,message);
+    });
+    button.on('pointerleave blur',hideReorderHint);
+    return button;
+  }
   function bindReorderArrows(button,direction,action){
     var word=direction<0?'up':'down';
     var instruction='Single click: move '+word+' 1 position. Double-click: move '+word+' 10 positions.';
@@ -1278,9 +1287,10 @@
       if(!landingPlaylists){
         var wrap=$('<div>').addClass('rico-live-edit-row');
         row.appendTo(wrap);
-        $('<button type="button">').addClass('rico-live-add').text('+')
-          .attr('aria-label','Add '+songTitle+' to selected remix')
-          .on('click',function(event){event.stopPropagation();addRemixTrack(index);})
+        bindThemedPlaylistHint($('<button type="button">').addClass('rico-live-add').text('+')
+          .attr('aria-label','Add '+songTitle+' to selected remix'),
+          'Add to selected REMIX PLAYLIST without changing playback')
+          .on('click',function(event){event.stopPropagation();hideReorderHint();addRemixTrack(index);})
           .appendTo(wrap);
         if(customActive){
         bindReorderArrows($('<button type="button">').addClass('rico-live-move')
@@ -1292,11 +1302,12 @@
           .prop('disabled',loadedRankedPlaylist||savingCommunityEdits||index===list.length-1),1,function(step){moveLiveSong(index,step);})
           .appendTo(wrap);
         if(!activePublicCollection){
-        $('<button type="button">').addClass('rico-live-remove')
+        bindThemedPlaylistHint($('<button type="button">').addClass('rico-live-remove')
           .toggleClass('rico-ranked-disabled',loadedRankedPlaylist).text('×')
           .attr('aria-label','Remove '+songTitle+' temporarily')
-          .prop('disabled',loadedRankedPlaylist)
-          .on('click',function(event){event.stopPropagation();removeLiveSong(index);})
+          .prop('disabled',loadedRankedPlaylist),
+          loadedRankedPlaylist?'Fixed original ranking entry':'Remove song temporarily')
+          .on('click',function(event){event.stopPropagation();hideReorderHint();removeLiveSong(index);})
           .appendTo(wrap);
         }
         }
