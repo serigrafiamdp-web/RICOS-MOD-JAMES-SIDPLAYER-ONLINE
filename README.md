@@ -1,6 +1,14 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
 
+## TEST112 — Faster first PLAY for OLD SID COLLECTION RICO (published, user PASS pending)
+
+The original 298-song reference playlist loaded all **77 HVSC ZIP packs** and parsed all 298 files **sequentially before starting the first SID**. TEST112 prepares and plays **the first SID after downloading just its one ZIP**, then loads the remaining songs progressively in memory using two background workers and a shared per-ZIP promise cache. Selecting an unprepared track loads that specific SID before switching. **No extra SID files, server-side duplicates, or separate HVSC database** are created. Other playlists continue using the existing stable loader.
+
+- [Open TEST112](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=112progressive)
+- [TEST112 design, mock validation (1 ZIP to first SID, then 77/298), regression checks](docs/TEST112_OLD_SID_PROGRESSIVE_LOADING.md)
+- **Status:** Logic/source verification PASS, actual browser speed and playback PASS still pending. Existing UCTUMI TEST108 PASS retained.
+
 ## TEST111 — Fix '+' on HVSC-backed playlists (published, browser PASS pending)
 
 **Root cause identified from the owner's screenshot:** The warning `Cannot add SID: This SID has no verified HVSC #85 source yet` was emitted by the floating playlist **+ (Add to REMIX)** button, **not the SAVE button**. Although all 298 OLD SID COLLECTION RICO songs are already linked to HVSC ZIP archives, the + handler incorrectly checked only `activePublicPlaylist` (Cloudflare) and ignored validated `activeReferenceTracks` for static, reference-only v2 playlists.
