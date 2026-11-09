@@ -1,13 +1,21 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## TEST113 — Keep only the themed reorder hint (published; browser PASS pending)
 
-## TEST112 — Faster first PLAY for OLD SID COLLECTION RICO (published, user PASS pending)
+The reorder arrows (↑/↓) in the floating playlist and REMIX editor previously set the native HTML `title` **and** showed the themed `#ricoReorderHint` on pointer hover, causing two overlapping tooltips. Removed the arrow buttons' native `title`, retaining their existing accessible `aria-label` and the green themed hint. The one-click (±1) and double-click (±10) handlers are unchanged. The script cache query is bumped to TEST113 so Pages reloads the fix.
+
+- [Open TEST113](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=113hint)
+- Test: hover ↑ and ↓ in both playlist and REMIX, verify only themed hint; verify ±1/±10 still work.
+- **Status:** code change committed, browser PASS pending.
+
+
+## TEST112 — Faster first PLAY for OLD SID COLLECTION RICO (user PASS confirmed)
 
 The original 298-song reference playlist loaded all **77 HVSC ZIP packs** and parsed all 298 files **sequentially before starting the first SID**. TEST112 prepares and plays **the first SID after downloading just its one ZIP**, then loads the remaining songs progressively in memory using two background workers and a shared per-ZIP promise cache. Selecting an unprepared track loads that specific SID before switching. **No extra SID files, server-side duplicates, or separate HVSC database** are created. Other playlists continue using the existing stable loader.
 
 - [Open TEST112](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=112progressive)
 - [TEST112 design, mock validation (1 ZIP to first SID, then 77/298), regression checks](docs/TEST112_OLD_SID_PROGRESSIVE_LOADING.md)
-- **Status:** Logic/source verification PASS, actual browser speed and playback PASS still pending. Existing UCTUMI TEST108 PASS retained.
+- **Status:** Browser playback PASS confirmed by project owner on 2026-11-09. Existing UCTUMI TEST108 PASS retained.
 
 ## TEST111 — Fix '+' on HVSC-backed playlists (published, browser PASS pending)
 
