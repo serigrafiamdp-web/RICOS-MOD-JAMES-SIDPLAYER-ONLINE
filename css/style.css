@@ -2393,3 +2393,16 @@ left: 1px;
   #ricoCommunityItems .rico-community-row .rico-community-order-controls {gap:2px;}
   #ricoCommunityItems .rico-community-order-controls > button {width:22px;}
 }
+
+/* TEST131: CSDb rankings show releases/groups before optional SID associations. */
+#ricoHvscItems .rico-csdb-entry {border-bottom:1px solid var(--rico-theme-border,#5a6470);font:var(--rico-ui-text,13px) Arial,sans-serif;}
+#ricoHvscItems .rico-csdb-rank-head {width:100%;display:grid;grid-template-columns:32px minmax(0,1.3fr) minmax(0,1fr) auto;align-items:center;gap:8px;text-align:left;padding:8px 7px;cursor:pointer;border:0;color:var(--rico-theme-fg,#fff);background:transparent;font:inherit;}
+#ricoHvscItems .rico-csdb-rank-head:hover {background:var(--rico-theme-hover,#29303b);}
+#ricoHvscItems .rico-csdb-rank-head .rico-csdb-name {font-weight:bold;overflow-wrap:anywhere;}
+#ricoHvscItems .rico-csdb-rank-head .rico-csdb-credit {opacity:.8;overflow-wrap:anywhere;}
+#ricoHvscItems .rico-csdb-rank-head .rico-csdb-count {font-size:11px;white-space:nowrap;}
+#ricoHvscItems .rico-csdb-detail {padding:8px 10px 12px 45px;background:var(--rico-theme-panel,#182029);}
+#ricoHvscItems .rico-csdb-track {display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0;}
+#ricoHvscItems .rico-csdb-track button {padding:4px 10px;cursor:pointer;background:var(--rico-theme-bg,#000);color:var(--rico-theme-fg,#fff);border:1px solid var(--rico-theme-border,#888);}
+#ricoHvscIntro .rico-csdb-source {display:inline-block;margin-left:8px;text-decoration:underline;color:inherit;}
+@media(max-width:550px){#ricoHvscItems .rico-csdb-rank-head {grid-template-columns:28px minmax(0,1fr) auto;}#ricoHvscItems .rico-csdb-credit{grid-column:2/4;}#ricoHvscItems .rico-csdb-detail{padding-left:10px;}}
