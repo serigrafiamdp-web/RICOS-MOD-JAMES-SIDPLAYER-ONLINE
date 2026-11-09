@@ -1,5 +1,13 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## TEST120 — Restore compact EDIT button in COMMUNITY PLAYLISTS (published; browser PASS pending)
+
+After the wide **EDIT CONTENT** action appeared beside the original **EDIT** in each published playlist row, reverted to **one compact EDIT button**, with no CSS size or row layout changes. Clicking EDIT offers two existing actions in a palette-themed choice dialog: **SONGS** (linked unpublished content draft, TEST118) or **NAME / CREATOR** (beta-authorized metadata editor, TEST65). **DELETE**, PLAY, list ordering arrows and sample rating stars are unchanged. This preserves functionality without adding or enlarging controls in the catalog rows.
+
+- [Open TEST120](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=120compactedit)
+- Code syntax PASS; check row compactness, both EDIT choices and unchanged playback.
+- User browser PASS pending. **No Cloudflare Worker deployment is included**; TEST118 public song additions still require that separate deployment.
+
 ## TEST119 — Unified REMIX PLAYLIST entry points and numbered palettes (published; browser PASS pending)
 
 - The bottom toolbar now contains **REMIX PLAYLIST** alongside CHOOSE A SID. It opens the *same* existing **REMIX PLAYLIST CREATOR** window as the button in the floating playlist; no second window and no automatic extra draft. To create a new list inside the editor use **NEW REMIX**.
