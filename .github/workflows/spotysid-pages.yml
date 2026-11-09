@@ -39,22 +39,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
-      # GitHub Pages reported the already-finished old version below as
-      # still deploying, blocking new updates. Only cancel that exact SHA.
-      - name: Clear stale Pages deployment lock
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          code=$(curl -sS -o /tmp/pages-unlock-response -w '%{http_code}' -X POST \
-            -H 'Accept: application/vnd.github+json' \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H 'X-GitHub-Api-Version: 2022-11-28' \
-            "https://api.github.com/repos/${{ github.repository }}/pages/deployments/4e7de7ffc49c2659cd55eac68fefe9345a4b0c41/cancel")
-          echo "Old Pages deployment cancellation: HTTP $code"
-          if [ "$code" != 204 ] && [ "$code" != 404 ]; then
-            cat /tmp/pages-unlock-response
-            exit 1
-          fi
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
