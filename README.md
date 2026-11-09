@@ -1,5 +1,13 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## TEST114 — Remove redundant song-name hover tooltip (published; browser PASS pending)
+
+The floating playlist song buttons displayed the full title/artist already, but also set native HTML `title` on the song row, causing an unnecessary white browser tooltip on hover. Both the standard and the scene-group row paths now use `aria-label` instead, preserving accessibility while suppressing the native tooltip. Playback handlers, reorder arrows, REMIX actions, and HVSC references are unchanged.
+
+- [Open TEST114](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=114title)
+- Test: hover song titles in the floating playlist: no tooltip. Verify clicking a title still starts the selected SID.
+- **Status:** code committed, browser PASS pending.
+
 ## TEST113 — Keep only the themed reorder hint (published; browser PASS pending)
 
 The reorder arrows (↑/↓) in the floating playlist and REMIX editor previously set the native HTML `title` **and** showed the themed `#ricoReorderHint` on pointer hover, causing two overlapping tooltips. Removed the arrow buttons' native `title`, retaining their existing accessible `aria-label` and the green themed hint. The one-click (±1) and double-click (±10) handlers are unchanged. The script cache query is bumped to TEST113 so Pages reloads the fix.
