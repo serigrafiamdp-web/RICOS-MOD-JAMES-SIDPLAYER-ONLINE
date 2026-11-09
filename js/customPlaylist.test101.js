@@ -1318,6 +1318,13 @@
       remixNotice('Unpublished changes discarded. Public playlist was not modified.');
     });
     $('#ricoRemixNew').on('click',function(event){event.stopPropagation();createRemix();});
+    // TEST119: bottom-bar shortcut opens a brand-new editable playlist.
+    // Uses the established REMIX draft workflow; no SID playback or public
+    // publication occurs until the user explicitly selects it.
+    $('#ricoCreatePlaylist').on('click',function(event){
+      event.preventDefault();event.stopPropagation();
+      createRemix();
+    });
     $('#ricoRemixPublish').on('click',function(event){event.stopPropagation();publishRemix();});
     window.ricoPublishRemixDraft=publishRemix;
     window.ricoOpenRemixDraft=function(id){
