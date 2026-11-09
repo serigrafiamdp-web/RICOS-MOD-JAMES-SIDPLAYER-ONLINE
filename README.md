@@ -1,5 +1,16 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## TEST121 — UNKNOWN CSDB (HVSC DEMOS/UNKNOWN only; browser PASS pending)
+
+Created **UNKNOWN CSDB** in COMMUNITY PLAYLISTS as a curated version-2 reference playlist. It contains exactly **1,376 distinct SID files** from HVSC #85 `DEMOS/UNKNOWN` (each source entry has author `<?>`), all pointing at the **existing** `library/packs/demos/UNKNOWN.zip`. **No GAMES, identified MUSICIANS, binary uploads or copied SID files.** The user-facing title is UNKNOWN CSDB by request; its tracks are sourced from HVSC, not fetched from the CSDb website. Creator/curator credit: RICO.
+
+- Catalog: `community/playlists.json`
+- Reference playlist: `community/playlists/unknown-csdb.json`
+- Verified source index: `library/data/demos-UNKNOWN.json`
+- Player: `js/customPlaylist.test101.js` (uses TEST112 progressive loader for both OLD SID COLLECTION RICO and UNKNOWN CSDB so the first SID can start without waiting for the entire list)
+- [Open TEST121](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=121unknowncsdb)
+- Checks: all 1,376 tracks valid, unique, `pack` is DEMOS/UNKNOWN, source authors all unknown `<?>`; source JS syntax PASS. **Browser playback and UI verification pending.**
+
 ## TEST120 — Restore compact EDIT button in COMMUNITY PLAYLISTS (published; browser PASS pending)
 
 After the wide **EDIT CONTENT** action appeared beside the original **EDIT** in each published playlist row, reverted to **one compact EDIT button**, with no CSS size or row layout changes. Clicking EDIT offers two existing actions in a palette-themed choice dialog: **SONGS** (linked unpublished content draft, TEST118) or **NAME / CREATOR** (beta-authorized metadata editor, TEST65). **DELETE**, PLAY, list ordering arrows and sample rating stars are unchanged. This preserves functionality without adding or enlarging controls in the catalog rows.
