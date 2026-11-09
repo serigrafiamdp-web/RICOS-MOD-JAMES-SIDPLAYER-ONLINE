@@ -7,6 +7,11 @@
   if (!window.sidPlayer || !window.SID) return;
 
   var player = window.sidPlayer;
+  // TEST133: nickname-first display only; original HVSC credit data stays unchanged.
+  function formatArtistCredit(value){
+    var v=String(value||'').trim(),m=v.match(/^([^()]+?)\s*\(([^()]+)\)$/);
+    return m&&m[1].trim()&&m[2].trim()?m[2].trim()+' ('+m[1].trim()+')':v;
+  }
   // TEST25: unlock Web Audio at the earliest user gesture, even before the
   // 30-second automatic playlist selection. Never synthesize a fake click.
   function unlockAudioFromGesture() {
@@ -347,7 +352,7 @@
     importedSidEntries.forEach(function(entry,index){
       var row=document.createElement('div');row.className='rico-import-track-row';
       var title=document.createElement('span');
-      title.textContent=(index+1)+'. '+(entry.name||entry.file)+' — '+(entry.author||'Unknown');
+      title.textContent=(index+1)+'. '+(entry.name||entry.file)+' — ' +formatArtistCredit(entry.author||'Unknown');
       row.appendChild(title);
       var del=document.createElement('button');del.type='button';del.textContent='×';
       del.title='Remove from local import draft';del.setAttribute('aria-label','Remove '+entry.name);
@@ -507,7 +512,7 @@
     if (!entry || !entry.localBytes) return;
     var info = $('<div>').css({padding:'5px', color:'#222', fontSize:'11px'});
     $('<strong>').text(entry.name).appendTo(info);
-    $('<p>').text('Author: ' + entry.author).appendTo(info);
+    $('<p>').text('Author: ' + formatArtistCredit(entry.author)).appendTo(info);
     $('<p>').text('Released: ' + (entry.released || 'Not provided')).appendTo(info);
     $('<p>').text('Format: ' + entry.sidFormat).appendTo(info);
     $('<p>').text('Subtunes: ' + entry.numSubtunes + ' / default: ' + entry.startSubtune).appendTo(info);
@@ -1435,7 +1440,7 @@
       if(nowActive){
         var item=list[index],title=row.querySelector('.rico-live-title');
         if(item&&title)title.textContent=(item.name||item.file||'SID')+
-          ' — '+(item.author||'Unknown artist');
+          ' — '+formatArtistCredit(item.author||'Unknown artist');
       }
     });
     painted.active=active;painted.selected=selected;painted.queued=queued;
@@ -1491,17 +1496,21 @@
       $('<div>').addClass('rico-live-empty').text("Choose a playlist from COMMUNITY PLAYLISTS to start listening.").appendTo(holder);
       return;
     }
-    function appendCsdbHeading(position){
-      var display=activeCsdbRankDisplay,entry=display.items[position],count=display.trackCounts[position]||0;
-      var header=$('<div>').addClass('rico-csdb-live-heading');
-      $('<strong>').text('#'+(position+1)+'  '+entry.title).appendTo(header);
-      if(entry.group&&display.kind!=='groups')$('<span>').addClass('rico-csdb-live-group').text(entry.group).appendTo(header);
-      $('<span>').addClass('rico-csdb-live-status').text(count?count+' SID':'SID PENDING').appendTo(header);
-      header.appendTo(holder);
+    // TOP DEMOS / ONEFILE / GROUPS: one flat row per tune; pending releases
+    // also remain flat rows. No visual groupings or expandable headers.
+    function appendPendingCsdbRow(position){
+      var item=activeCsdbRankDisplay.items[position];
+      var row=$('<div>').addClass('rico-live-row rico-csdb-pending-row')
+        .attr('role','listitem').attr('aria-label',(position+1)+'. '+item.title+' — SID pending');
+      $('<span>').addClass('rico-live-number').text(position+1).appendTo(row);
+      $('<span>').addClass('rico-csdb-release').text(item.title).appendTo(row);
+      $('<span>').addClass('rico-csdb-song').text('SID PENDING').appendTo(row);
+      $('<span>').addClass('rico-csdb-artist').text('—').appendTo(row);
+      row.appendTo(holder);
     }
     if (!list.length) {
       if(activeCsdbRankDisplay){
-        activeCsdbRankDisplay.items.forEach(function(entry,i){appendCsdbHeading(i);});
+        activeCsdbRankDisplay.items.forEach(function(entry,i){appendPendingCsdbRow(i);});
       }else{
         $('<div>').addClass('rico-live-empty').text('No SID loaded. Use Choose A SID to add music.').appendTo(holder);
       }
@@ -1511,22 +1520,31 @@
     list.forEach(function (item, index) {
       if(activeCsdbRankDisplay){
         var rank=activeCsdbRankDisplay.trackRanks[index];
-        while(nextCsdbRank<=rank&&nextCsdbRank<activeCsdbRankDisplay.items.length)
-          appendCsdbHeading(nextCsdbRank++);
+        while(nextCsdbRank<=rank&&nextCsdbRank<activeCsdbRankDisplay.items.length){
+          if(!activeCsdbRankDisplay.trackCounts[nextCsdbRank])appendPendingCsdbRow(nextCsdbRank);
+          nextCsdbRank++;
+        }
       }
       var row = $('<button type="button">').addClass('rico-live-row');
       var active = index === player.sidListIndex;
       if (active) row.addClass('rico-live-active').attr('aria-current', 'true');
       if(index===selectedLiveIndex)row.addClass('rico-live-selected');
       if(index===queuedLiveIndex)row.addClass('rico-live-queued');
-      $('<span>').addClass('rico-live-number').text(index + 1).appendTo(row);
+      var rankIndex=activeCsdbRankDisplay?activeCsdbRankDisplay.trackRanks[index]:null;
+      var csdbEntry=rankIndex!==null?activeCsdbRankDisplay.items[rankIndex]:null;
+      $('<span>').addClass('rico-live-number').text(csdbEntry?rankIndex+1:index+1).appendTo(row);
       var songTitle = item.name || item.file || 'SID ' + (index + 1);
-      var songArtist = item.author || 'Unknown artist';
-      if(item.sceneGroup){
+      var songArtist = formatArtistCredit(item.author || 'Unknown artist');
+      if(csdbEntry){
+        row.addClass('rico-live-csdb-row');
+        $('<span>').addClass('rico-csdb-release').text(csdbEntry.title).appendTo(row);
+        $('<span>').addClass('rico-csdb-song').text(songTitle).appendTo(row);
+        $('<span>').addClass('rico-csdb-artist').text(songArtist).appendTo(row);
+        row.attr('aria-label',(rankIndex+1)+'. '+csdbEntry.title+' — '+songTitle+' — '+songArtist);
+      }else if(item.sceneGroup){
         row.addClass('rico-live-group-row');
-        // Prefer the CSDb alias if it is included in parentheses.
-        var aliasMatch=String(songArtist).match(/\(([^()]*)\)\s*$/);
-        var sceneArtist=aliasMatch ? aliasMatch[1].trim() : songArtist.trim();
+        // Always preserve the whole credit, nickname first when available.
+        var sceneArtist=songArtist;
         if(/^(?:<\?>|unknown(?: artist)?)$/i.test(sceneArtist))sceneArtist='';
         $('<span>').addClass('rico-live-group').text(item.sceneGroup).appendTo(row);
         if(sceneArtist)$('<span>').addClass('rico-live-composer').text(sceneArtist).appendTo(row);
@@ -1572,8 +1590,10 @@
       }else row.appendTo(holder);
     });
     if(activeCsdbRankDisplay){
-      while(nextCsdbRank<activeCsdbRankDisplay.items.length)
-        appendCsdbHeading(nextCsdbRank++);
+      while(nextCsdbRank<activeCsdbRankDisplay.items.length){
+        if(!activeCsdbRankDisplay.trackCounts[nextCsdbRank])appendPendingCsdbRow(nextCsdbRank);
+        nextCsdbRank++;
+      }
     }
     // Save remains fixed in the header, not in the scrolling track list.
     // TEST96: never force scrolling on a manual selection or a render refresh.
@@ -1879,7 +1899,7 @@
         if (!customActive && index === player.sidListIndex) gameRow.addClass('rico-active-row');
         $('<span>').addClass('rico-game-number').text(index+1).appendTo(gameRow);
         $('<span>').addClass('rico-game-title').text(item.name || item.file || ('SID '+(index+1))).appendTo(gameRow);
-        $('<span>').addClass('rico-game-author').text(item.author || 'Unknown artist').appendTo(gameRow);
+        $('<span>').addClass('rico-game-author').text(formatArtistCredit(item.author || 'Unknown artist')).appendTo(gameRow);
         $('<span>').addClass('rico-game-year').text(item.released || '').appendTo(gameRow);
         gameRow.on('click',function(){
           // Selecting a game explicitly replaces the current playback source.
@@ -1905,7 +1925,7 @@
       if (customActive && index === player.sidListIndex) row.addClass('rico-active-row');
       $('<span>').addClass('rico-row-index').text(('0' + (index + 1)).slice(-2)).appendTo(row);
       $('<span>').addClass('rico-row-title').text(item.name).appendTo(row);
-      $('<span>').addClass('rico-row-author').text(item.author).appendTo(row);
+      $('<span>').addClass('rico-row-author').text(formatArtistCredit(item.author)).appendTo(row);
       $('<span>').addClass('rico-row-subs').text(item.numSubtunes + (item.numSubtunes === 1 ? ' sub' : ' subs')).appendTo(row);
       row.on('click', function () { loadCustomIndex(index); });
       row.appendTo(holder);
@@ -2339,7 +2359,7 @@
       var stream=createProgressiveReferenceStream(data.tracks,data.name==='UNKNOWN CSDB');
       // TOP 100 DEMOS: song metadata is already in the source manifest.
       // Load song bytes on demand without decoding the entire list at launch.
-      stream.onDemandOnly=data.name==='TOP 100 DEMOS'||/^TOP 100 CSDb DEMOS/.test(data.name);
+      stream.onDemandOnly=data.name==='TOP 100 DEMOS'||/^TOP 100 CSDb (?:ONEFILE )?DEMOS/.test(data.name);
       activeReferenceStream=stream;
       try{
         await stream.loadSlot(stream.slots[0]);
@@ -2387,7 +2407,7 @@
       // SIDs decode. Keep every other playlist on its existing stable loader.
       if(((data.name==='OLD SID COLLECTION RICO'||data.name==='UNKNOWN CSDB')&&
          data.tracks.length>=200)||
-         ((data.name==='TOP 100 DEMOS'||/^TOP 100 CSDb DEMOS/.test(data.name))&&data.tracks.length>=100)){
+         ((data.name==='TOP 100 DEMOS'||/^TOP 100 CSDb (?:ONEFILE )?DEMOS/.test(data.name))&&data.tracks.length>=1)){
         for(var k=0;k<data.tracks.length;k++){
           var ref=data.tracks[k];
           if(!ref||typeof ref.pack!=='string'||typeof ref.file!=='string'||
@@ -2695,7 +2715,7 @@
     var ricoRankConfig={
       hvsc:{file:"community/playlists/hvsc-top-100-2000.json",title:"TOP 100 HVSC GAMES",description:"Historical HVSC community ranking (2000)."},
       demos:{file:"community/curation/csdb-demo-ranking-2026-11.json",sidFile:"community/playlists/csdb-top-100-demos.json",title:"TOP 100 CSDb DEMOS",description:"100 C64 demos from the CSDb rating list.",sourceUrl:"https://csdb.dk/toplist.php?type=release&subtype=%281%29"},
-      onefile:{file:"community/curation/csdb-onefile-ranking-2026-11.json",title:"TOP 100 CSDb ONEFILE DEMOS",description:"100 one-file demos ranked separately by CSDb.",sourceUrl:"https://csdb.dk/toplist.php?type=release&subtype=%282%29"},
+      onefile:{file:"community/curation/csdb-onefile-ranking-2026-11.json",sidFile:"community/playlists/csdb-top-100-onefile.json",title:"TOP 100 CSDb ONEFILE DEMOS",description:"100 one-file demos ranked separately by CSDb.",sourceUrl:"https://csdb.dk/toplist.php?type=release&subtype=%282%29"},
       groups:{file:"community/curation/csdb-groups-ranking-2026-11.json",sidFile:"community/playlists/csdb-top-100-groups.json",title:"TOP 100 CSDb GROUPS",description:"CSDb rating of groups, not a musicians ranking.",sourceUrl:"https://csdb.dk/toplist.php?type=group"},
       musicians:{file:"community/playlists/csdb-top-100-musicians.json",title:"TOP MUSICIANS",description:"100 selected SID musicians from the CSDb scene."}
     };
@@ -2861,7 +2881,7 @@
       button.disabled=true;
       ricoCurrentRank=kind;
       // Prime browser audio during the real click, before any asynchronous fetch.
-      if(kind!=='onefile'){
+      {
         try{
           player.initWebAudio();
           if(player.audioContext&&player.audioContext.state==='suspended'){
@@ -2884,8 +2904,7 @@
             var ok=await playRankSongs(kind,tracks,cfg.title);
             if(!ok)return;
           }else{
-            // One-File still has no verified HVSC audio. Show the full ranked
-            // 100 entries in the floating playlist, not a made-up SID selection.
+            // If no linked SIDs exist, show every rank as a flat pending row.
             if(activeReferenceStream){activeReferenceStream.cancel();activeReferenceStream=null;}
             referenceSwitchSerial++;
             resetSoftTransition(true);
@@ -2905,7 +2924,7 @@
           $('#ricoLiveStatus').text(tracks.length
             ? '100 '+(kind==='groups'?'groups':'demos')+' · '+tracks.length+' playable SID · '+
               trackCounts.filter(function(n){return n===0;}).length+' pending.'
-            : '100 one-file demos · SID links pending. Playback unavailable.');
+            : '100 CSDb entries · SID associations pending. Playback unavailable.');
         }else{
           loadPlaylist(data,0,false,true);
           showLivePlaylist(true);
@@ -3000,7 +3019,7 @@
       hvscItems.textContent='';hvscStatus.textContent='100 SID · Click a song or press LOAD.';
       entries.forEach(function(item,index){
         var track=data.tracks[index]||{};
-        var alias=item.author||'Unknown artist';
+        var alias=formatArtistCredit(item.author||'Unknown artist');
         var name=item.name||item.file;
         var row=document.createElement('button');row.type='button';
         row.className='rico-hvsc-row';
@@ -3908,7 +3927,7 @@
           var row=document.createElement('div');
           row.className='rico-library-draft-row';
           var label=document.createElement('span');
-          label.textContent=item.entry.name+' — '+item.entry.author;
+          label.textContent=item.entry.name+' — '+formatArtistCredit(item.entry.author);
           var remove=makeButton('×',function(){
             if(draftBusy)return;
             var at=draft.indexOf(item);
@@ -3981,7 +4000,7 @@
         heading.textContent=selected.name+' · '+selected.tracks.length+' SID';songsEl.appendChild(heading);
         filteredTracks().forEach(function(track){
           var key=trackKey(selected,track);
-          var row=makeButton(track.title+(track.author?' — '+track.author:''),function(){
+          var row=makeButton(track.title+(track.author?' — '+formatArtistCredit(track.author):''),function(){
             addSelection(selected,[track]);
           },'rico-library-track');
           row.title='Add to MY PLAYLIST · '+(track.origin||selected.name)+' / '+track.file;
