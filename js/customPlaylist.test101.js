@@ -1006,7 +1006,10 @@
     $('#ricoRemixFloatHeader strong').text(selected&&selected.remoteEditId?'EDIT PUBLISHED PLAYLIST':'REMIX PLAYLIST CREATOR');
     $('#ricoRemixPublish').text(selected&&selected.remoteEditId?'PUBLISH CHANGES':'PUBLISH REMIX')
       .prop('disabled',!selected||!selected.tracks.length||remixBusy);
-    $('#ricoRemixPlay').prop('disabled',!selected||!selected.tracks.length||remixBusy);
+    $('#ricoRemixPlay').text(selected&&selected.remoteEditId?'PREVIEW CHANGES':'PLAY REMIX')
+      .prop('disabled',!selected||!selected.tracks.length||remixBusy);
+    $('#ricoRemixDiscard').css('display',selected&&selected.remoteEditId?'inline-block':'none')
+      .prop('disabled',remixBusy);
     var items=$('#ricoRemixEntries').empty();
     $('#ricoRemixHelp').text(selected
       ? (selected.remoteEditId
@@ -1300,10 +1303,19 @@
       if(typeof window.ricoOpenCommunityFromRemix==='function')window.ricoOpenCommunityFromRemix();
     });
     $('#ricoRemixEditorTarget').on('change',function(event){
-      event.stopPropagation();remixTarget=this.value;preserveRemixes();renderRemixes();
+      event.stopPropagation();selectRemixDestination(this.value);
     });
     target.on('change',function(event){
-      event.stopPropagation();remixTarget=this.value;preserveRemixes();renderRemixes();
+      event.stopPropagation();selectRemixDestination(this.value);
+    });
+    $('#ricoRemixDiscard').on('click',function(event){
+      event.stopPropagation();
+      var draft=selectedRemix();
+      if(!draft||!draft.remoteEditId)return;
+      if(!window.confirm('Discard the unpublished edits to '+draft.name+'? Its public playlist will stay unchanged.'))return;
+      remixDrafts=remixDrafts.filter(function(item){return item!==draft;});
+      remixTarget='';preserveRemixes();renderRemixes();
+      remixNotice('Unpublished changes discarded. Public playlist was not modified.');
     });
     $('#ricoRemixNew').on('click',function(event){event.stopPropagation();createRemix();});
     $('#ricoRemixPublish').on('click',function(event){event.stopPropagation();publishRemix();});
@@ -2908,7 +2920,7 @@
       Array.prototype.forEach.call(communityItems.querySelectorAll('.rico-community-remix-row'),function(el){el.remove();});
       if(!remixDrafts.length)return;
       var fragment=document.createDocumentFragment();
-      remixDrafts.slice().reverse().forEach(function(d){
+      remixDrafts.slice().reverse().filter(function(d){return !d.remoteEditId;}).forEach(function(d){
         var row=document.createElement('div');row.className='rico-community-row rico-community-remix-row';
         var label=document.createElement('span');label.className='rico-community-label';
         label.textContent=d.name+' — Playlist by '+(d.creator||'Unknown')+' · '+d.tracks.length+' SID';
@@ -2970,6 +2982,9 @@
               return t.id!=='old-sid-collection-rico';
             });
             // Keep remaining historical GitHub playlists after published user playlists.
+            publishedRemixChoices=newestPublished.map(function(item){
+              return {id:item.remoteId,title:item.title,tracks:item.tracks};
+            });
             catalog.playlists=newestPublished.concat(catalog.playlists);
           }
         }catch(remoteError){
@@ -3079,7 +3094,20 @@
               }catch(error){say('Delete failed: '+error.message);}
               finally{deleteButton.disabled=false;}
             });
-            row.appendChild(editButton);row.appendChild(deleteButton);
+            var contentButton=document.createElement('button');
+            contentButton.type='button';contentButton.textContent='EDIT CONTENT';
+            contentButton.setAttribute('aria-label','Edit songs in '+item.title);
+            contentButton.addEventListener('click',async function(event){
+              event.stopPropagation();
+              contentButton.disabled=true;
+              try{
+                await beginPublishedEdit(item.remoteId);
+                if(player.dialogManager&&player.dialogManager.dialogShown==='chooseSidDialog')
+                  player.dialogManager.hideDialog('chooseSidDialog');
+              }catch(error){say('EDIT CONTENT: '+error.message);}
+              finally{contentButton.disabled=false;}
+            });
+            row.appendChild(editButton);row.appendChild(contentButton);row.appendChild(deleteButton);
           }else{
             var editCurated=document.createElement('button');
             editCurated.type='button';editCurated.textContent='EDIT';
@@ -3174,6 +3202,9 @@
         });
         updateCatalogArrows();
         await renderLocalImportedCommunityRows();
+        // Refresh ADD + TO options after the remote catalog arrives. Never
+        // change playback or the currently selected editing draft.
+        renderRemixes();
         if(startupPlaylistPending && firstPlayable && firstRow) {
           firstRow.classList.add('rico-community-selected');
           if(startupPlaylistTimer!==null) clearTimeout(startupPlaylistTimer);
