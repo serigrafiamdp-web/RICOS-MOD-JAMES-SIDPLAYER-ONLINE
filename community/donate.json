@@ -1,0 +1,7 @@
+{
+  "format": "spotysid-donate-config",
+  "version": 1,
+  "paypalUrl": "",
+  "supporters": [],
+  "note": "Add only the actual public PayPal.Me / PayPal Donate URL after verification. Supporter names are voluntary and require permission."
+}
