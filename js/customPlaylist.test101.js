@@ -2303,6 +2303,71 @@
     var communityTab=document.getElementById('ricoCommunityTab');
     var communityPanel=document.getElementById('ricoCommunityPanel');
     var communityItems=document.getElementById('ricoCommunityItems');
+    var communityOrderSave=document.getElementById('ricoCommunityOrderSave');
+    var communityOrderStatus=document.getElementById('ricoCommunityOrderStatus');
+    var COMMUNITY_ORDER_STORAGE_KEY='rico-community-catalog-order-v1';
+    var communityDraftOrder=null;
+    function communityItemOrderKey(item){
+      return item.remoteId?'remote:'+item.remoteId:'static:'+item.file;
+    }
+    function readSavedCommunityOrder(){
+      try{
+        var stored=JSON.parse(localStorage.getItem(COMMUNITY_ORDER_STORAGE_KEY)||'[]');
+        return Array.isArray(stored)?stored.filter(function(key){return typeof key==='string'&&key.length<180;}).slice(0,1000):[];
+      }catch(error){return [];}
+    }
+    function sortCommunityPlaylists(playlists){
+      var ids=communityDraftOrder===null?readSavedCommunityOrder():communityDraftOrder;
+      if(!ids.length)return playlists;
+      var positions=Object.create(null);
+      ids.forEach(function(key,index){if(positions[key]===undefined)positions[key]=index;});
+      return playlists.map(function(item,index){return {item:item,index:index};}).sort(function(a,b){
+        var aPos=positions[communityItemOrderKey(a.item)],bPos=positions[communityItemOrderKey(b.item)];
+        if(aPos!==undefined&&bPos!==undefined)return aPos-bPos;
+        if(aPos!==undefined)return -1;
+        if(bPos!==undefined)return 1;
+        return a.index-b.index;
+      }).map(function(entry){return entry.item;});
+    }
+    function catalogOrderRows(){
+      return Array.prototype.slice.call(communityItems.querySelectorAll('.rico-community-catalog-row'));
+    }
+    function updateCatalogArrows(){
+      var rows=catalogOrderRows();
+      rows.forEach(function(row,index){
+        var up=row.querySelector('.rico-community-up');
+        var down=row.querySelector('.rico-community-down');
+        if(up)up.disabled=index===0;
+        if(down)down.disabled=index===rows.length-1;
+      });
+    }
+    function moveCommunityRow(row,step){
+      var rows=catalogOrderRows(),from=rows.indexOf(row);
+      if(from<0)return;
+      var to=Math.max(0,Math.min(rows.length-1,from+step));
+      if(to===from)return;
+      cancelStartupPlaylist();
+      var target=rows[to];
+      communityItems.insertBefore(row,to>from?target.nextSibling:target);
+      communityDraftOrder=catalogOrderRows().map(function(entry){return entry.dataset.communityOrderKey;});
+      updateCatalogArrows();
+      if(communityOrderStatus)communityOrderStatus.textContent='Unsaved';
+    }
+    if(communityOrderSave)communityOrderSave.addEventListener('click',function(event){
+      event.preventDefault();event.stopPropagation();
+      var rows=catalogOrderRows();
+      if(!rows.length){say('No community playlists to reorder.');return;}
+      var ids=rows.map(function(row){return row.dataset.communityOrderKey;});
+      try{
+        localStorage.setItem(COMMUNITY_ORDER_STORAGE_KEY,JSON.stringify(ids));
+        communityDraftOrder=ids;
+        if(communityOrderStatus)communityOrderStatus.textContent='Saved here';
+        say('Community playlist order saved in this browser.');
+      }catch(error){
+        if(communityOrderStatus)communityOrderStatus.textContent='Save failed';
+        say('Could not save order in this browser: '+error.message);
+      }
+    });
     var localPanel=document.getElementById('sidListHolder');
     var hvscPanel=document.getElementById('ricoHvscPanel');
     var libraryPanel=document.getElementById('ricoLibraryPanel');
@@ -2759,6 +2824,7 @@
           console.warn('Public user playlists unavailable, showing curated list only',remoteError);
         }
         if(requestNumber!==communityRequestNumber) return;
+        catalog.playlists=sortCommunityPlaylists(catalog.playlists);
         communityItems.textContent='';
         renderRemixCommunityRows();
         if(!catalog.playlists.length && !remixDrafts.length) {
@@ -2776,7 +2842,8 @@
                typeof item.file==='string' &&
                /^community\/playlists\/[a-zA-Z0-9_-]+\.json$/.test(item.file))) return;
           var row=document.createElement('div');
-          row.className='rico-community-row';
+          row.className='rico-community-row rico-community-catalog-row';
+          row.dataset.communityOrderKey=communityItemOrderKey(item);
           row.tabIndex=0;
           row.setAttribute('role','button');
           row.setAttribute('aria-label','Load playlist '+item.title);
@@ -2789,11 +2856,22 @@
           description.textContent=item.title+' — Playlist by '+(item.createdBy||'Unknown')+' · '+(Number(item.tracks)||0)+' SID';
           var stars=document.createElement('span');
           stars.className='rico-community-stars';
-          stars.textContent='☆☆☆☆☆';
-          stars.setAttribute('aria-label','Ratings coming soon');
-          stars.title='Ratings coming soon — prototype, no votes yet';
+          stars.textContent='☆☆☆';
+          stars.setAttribute('aria-label','Three sample stars; voting is not yet available');
           label.appendChild(description);
           label.appendChild(stars);
+          var orderButtons=document.createElement('span');
+          orderButtons.className='rico-community-order-controls';
+          var moveUp=document.createElement('button');
+          moveUp.type='button';moveUp.className='rico-community-up';moveUp.textContent='↑';
+          var moveDown=document.createElement('button');
+          moveDown.type='button';moveDown.className='rico-community-down';moveDown.textContent='↓';
+          bindReorderArrows($(moveUp),-1,function(step){moveCommunityRow(row,step);});
+          bindReorderArrows($(moveDown),1,function(step){moveCommunityRow(row,step);});
+          orderButtons.appendChild(moveUp);orderButtons.appendChild(moveDown);
+          label.appendChild(description);
+          label.appendChild(stars);
+          row.appendChild(orderButtons);
           var button=document.createElement('button');
           button.type='button';button.textContent='PLAY';
           row.appendChild(label);row.appendChild(button);
@@ -2931,6 +3009,7 @@
           }
           row.addEventListener('click',function(){openPlaylist(false);});
           row.addEventListener('keydown',function(event){
+            if(event.target!==row)return; // TEST116: keyboard actions on arrow buttons must not start playback.
             if(event.key==='Enter'||event.key===' ') {
               event.preventDefault();
               openPlaylist(false);
@@ -2942,6 +3021,7 @@
           });
           if(!firstPlayable){firstPlayable=function(){openPlaylist(true);};firstRow=row;}
         });
+        updateCatalogArrows();
         await renderLocalImportedCommunityRows();
         if(startupPlaylistPending && firstPlayable && firstRow) {
           firstRow.classList.add('rico-community-selected');
