@@ -1,6 +1,17 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
 
+## TEST110 — SAVE with beta key for OLD SID COLLECTION RICO (browser PASS pending)
+
+**Root cause:** HVSC references do not automatically make a GitHub-curated static playlist editable in Cloudflare. OLD SID COLLECTION RICO previously had no Cloudflare D1 playlist ID, so SAVE could only store local edits.
+
+**Now:** Loading the 298-track OLD SID COLLECTION RICO from COMMUNITY PLAYLISTS shows an enabled SAVE. The first SAVE requests the beta key and creates or reuses the matching Cloudflare D1 public playlist with its **298 HVSC references** (no uploaded SID files). The saved order is read back and verified before success is announced. Once adopted, all subsequent reorder/SAVE operations use the existing public verified-save path. A matching D1 playlist replaces the static entry in the visible catalog. Other static playlists, ranked TOP 100 and audio engine remain unchanged.
+
+- [Try TEST110](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=110adoptold2)
+- [TEST110 implementation, precautions and test checklist](docs/TEST110_OLD_SID_COLLECTION_CLOUD_ADOPTION.md)
+- **Cloudflare migration is not yet performed/verified:** the owner must click SAVE and enter their beta key. No one has published/mutated this D1 record as part of the code-only change. Keep the historical GitHub JSON as backup until after the user confirms PASS.
+- **Checkpoint retained:** TEST108 PASS (UCTUMI); TEST109 HELP UI pending its separate browser test.
+
 ## OLD SID COLLECTION RICO — archive migration (published, browser test pending)
 
 Seven original ZIP archives were analyzed (**509 SID files**, **313 SHA-256 distinct**, **196 duplicate occurrences**). The new **OLD SID COLLECTION RICO** appears in **COMMUNITY PLAYLISTS** as a single **298-track version-2 reference playlist**, using **77 pre-existing HVSC #85 ZIP packs** and **zero uploaded SID binaries**. **300** old SID entries could be associated with HVSC metadata, but **two pairs** mapped to identical library paths. **13** SID files have no sufficiently reliable HVSC match and are intentionally excluded rather than replaced by a different tune.
@@ -9,7 +20,7 @@ Seven original ZIP archives were analyzed (**509 SID files**, **313 SHA-256 dist
 - [Full audit: duplicates, version differences, unmatched originals, editing limitations](docs/OLD_SID_COLLECTION_RICO_REPORT.md)
 - [Try player / COMMUNITY PLAYLISTS](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?collection=old-sid-rico)
 
-**Important:** This initial copy is static GitHub-curated, like historical playlists. It can be loaded or copied into an editable REMIX, but saving public edits in-place with beta key requires moving its references to the Cloudflare D1 editable playlist registry. No cloud publication of this collection has been performed. **Playback PASS pending the owner's test.**
+**Important:** The owner confirmed playback of this 298-track list. TEST110 now supplies a beta-key SAVE action to adopt it into Cloudflare D1 and verifies the stored order. **Cloudflare adoption PASS pending**. The static JSON remains as a fallback until the D1 copy is verified.
 
 ## TEST109 — HELP beside ABOUT (published, browser PASS pending)
 
