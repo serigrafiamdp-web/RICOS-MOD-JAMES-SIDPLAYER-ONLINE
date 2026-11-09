@@ -2871,10 +2871,9 @@
           orderButtons.appendChild(moveUp);orderButtons.appendChild(moveDown);
           label.appendChild(description);
           label.appendChild(stars);
-          row.appendChild(orderButtons);
           var button=document.createElement('button');
           button.type='button';button.textContent='PLAY';
-          row.appendChild(label);row.appendChild(button);
+          row.appendChild(label);row.appendChild(orderButtons);row.appendChild(button);
           if(item.remoteId){
             var editButton=document.createElement('button');
             editButton.type='button';editButton.textContent='EDIT';
