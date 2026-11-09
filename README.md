@@ -1,6 +1,16 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
 
+## TEST111 — Fix '+' on HVSC-backed playlists (published, browser PASS pending)
+
+**Root cause identified from the owner's screenshot:** The warning `Cannot add SID: This SID has no verified HVSC #85 source yet` was emitted by the floating playlist **+ (Add to REMIX)** button, **not the SAVE button**. Although all 298 OLD SID COLLECTION RICO songs are already linked to HVSC ZIP archives, the + handler incorrectly checked only `activePublicPlaylist` (Cloudflare) and ignored validated `activeReferenceTracks` for static, reference-only v2 playlists.
+
+**Fixed:** + now reuses the exact already validated HVSC `pack/file` reference for the selected song; the legacy v1 fallback and Cloudflare path remain. An isolated function test accepted **298/298 references** from the old collection and rejected duplicate additions. Zero new SID bytes uploaded. The separate TEST110 beta-key **SAVE** flow is unchanged and must still be tested in the browser.
+
+- [Try TEST111](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=111hvscplus)
+- [TEST111 root cause and browser testing checklist](docs/TEST111_OLD_SID_HVSC_PLUS_FIX.md)
+- **Status:** GitHub updated, browser owner PASS pending; public SAVE is not yet confirmed for OLD SID COLLECTION RICO.
+
 ## TEST110 — SAVE with beta key for OLD SID COLLECTION RICO (browser PASS pending)
 
 **Root cause:** HVSC references do not automatically make a GitHub-curated static playlist editable in Cloudflare. OLD SID COLLECTION RICO previously had no Cloudflare D1 playlist ID, so SAVE could only store local edits.
