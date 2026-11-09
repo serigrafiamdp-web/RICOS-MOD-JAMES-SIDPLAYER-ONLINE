@@ -1,6 +1,14 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
-## TEST114 — Remove redundant song-name hover tooltip (published; browser PASS pending)
+## TEST115 — No native white tips on + and × (published; browser PASS pending)
+
+The floating playlist controls **+** (add to selected REMIX) and **×** (remove temporarily) were still assigning native HTML `title` text. Removed only these `title` attributes, keeping existing `aria-label`, click handlers, and behavior intact. The themed ↑/↓ hover hints from TEST113 remain unchanged, as do the song-title tooltip removals of TEST114.
+
+- [Open TEST115](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=115notips)
+- Verify hovering + and × displays no native white tooltip, and clicking both controls still performs the same action.
+- **Status:** code committed, browser PASS pending.
+
+## TEST114 — Remove redundant song-name hover tooltip (browser PASS confirmed)
 
 The floating playlist song buttons displayed the full title/artist already, but also set native HTML `title` on the song row, causing an unnecessary white browser tooltip on hover. Both the standard and the scene-group row paths now use `aria-label` instead, preserving accessibility while suppressing the native tooltip. Playback handlers, reorder arrows, REMIX actions, and HVSC references are unchanged.
 
