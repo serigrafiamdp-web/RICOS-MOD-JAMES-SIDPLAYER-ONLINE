@@ -345,6 +345,10 @@
   var activeReferenceTracks=null;
   var activeLocalSavedId=null;
   var activeLocalOrderDirty=false;
+  // TEST110: legacy HVSC playlist can be adopted into editable Cloudflare D1.
+  // This is a UI catalog identity, not a new SID binary collection.
+  var activeCuratedCatalogId=null;
+  function isOldSidCurated(){return activeCuratedCatalogId==='old-sid-collection-rico';}
   // TEST93: Resolve historical HVSC source filenames against the real HVSC #85
   // shelf index. Do not guess pack paths or use a filename match alone.
   var embeddedHvscPaths=[];
@@ -602,8 +606,8 @@
       if(moved.top<visible.top)scroller.scrollTop-=visible.top-moved.top+4;
       else if(moved.bottom>visible.bottom)scroller.scrollTop+=moved.bottom-visible.bottom+4;
     }
-    $('#ricoLiveStatus').text(activePublicPlaylist||activePublicCollection
-      ? 'Order changed locally. Press SAVE and enter the beta key to update the public list.'
+    $('#ricoLiveStatus').text(activePublicPlaylist||activePublicCollection||isOldSidCurated()
+      ? 'Order changed. Press SAVE and enter the beta key to keep it publicly.'
       : 'Order changed. Press SAVE to keep this order without publishing.');
   }
   function removeLiveSong(index){
@@ -691,6 +695,75 @@
     });
     if(!same)throw Error('Server order differs from the playlist. SAVE was not confirmed; do not reload yet.');
     return data;
+  }
+  // TEST110: one-time adoption of OLD SID COLLECTION RICO from GitHub to D1.
+  // Keep all 298 verified HVSC references, with no uploaded SID binaries.
+  // On an uncertain previous POST, look up the existing D1 list instead of
+  // publishing duplicates. The current playing list is never rebuilt here.
+  async function adoptOldSidCollection(){
+    if(savingCommunityEdits||!isOldSidCurated()||loadedRankedPlaylist||!customActive)return;
+    if(!activeReferenceTracks||activeReferenceTracks.length!==custom.length||!custom.length)
+      throw Error('SID references lost synchronization; reload the playlist before saving.');
+    var desired=activeReferenceTracks.map(function(t){return {pack:t.pack,file:t.file};});
+    var identity=function(t){return t.pack+'::'+t.file;};
+    if(new Set(desired.map(identity)).size!==desired.length)
+      throw Error('Duplicate reference detected; no changes published.');
+    var key=await askBetaKeyDialog('SAVE');
+    if(!key)return;
+    await ensureBetaServerReady();
+    savingCommunityEdits=true;renderLivePlaylist();
+    try{
+      var listResponse=await fetch(communityWriteApi+'/playlists',{cache:'no-store'});
+      if(!listResponse.ok)throw Error('Public playlist catalog unavailable; no upload was attempted.');
+      var listing=await listResponse.json();
+      if(!listing||!Array.isArray(listing.playlists))
+        throw Error('Invalid public playlist catalog. No upload attempted.');
+      var matches=listing.playlists.filter(function(t){
+        return t&&t.title==='OLD SID COLLECTION RICO'&&t.createdBy==='RICO'&&
+          typeof t.id==='string'&&/^[a-z0-9-]{12,48}$/i.test(t.id);
+      });
+      if(matches.length>1)throw Error('Multiple editable OLD SID COLLECTION RICO lists found. Resolve duplicates before saving.');
+      var id=matches.length?matches[0].id:'';
+      var url=id?communityWriteApi+'/playlists/'+encodeURIComponent(id):communityWriteApi+'/playlists';
+      var payload={format:'ricos-sid-playlist',version:2,
+        name:'OLD SID COLLECTION RICO',createdBy:'RICO',tracks:desired};
+      if(id){
+        var priorResponse=await fetch(url+'?compare='+Date.now(),{cache:'no-store'});
+        if(!priorResponse.ok)throw Error('Existing editable playlist could not be read.');
+        var prior=await priorResponse.json();
+        var available=new Set((prior.tracks||[]).map(identity));
+        if(prior.tracks.length!==desired.length||desired.some(function(t){return !available.has(identity(t));}))
+          throw Error('An editable version exists but its song selection changed. Load that public version instead of overwriting its changes.');
+      }
+      var response=await fetch(url,{
+        method:id?'PUT':'POST',
+        headers:{'Content-Type':'application/json','X-Beta-Key':key},
+        body:JSON.stringify(payload)
+      });
+      var raw=await response.text(),result;
+      try{result=JSON.parse(raw);}catch(parseErr){result={error:raw.slice(0,200)};}
+      if(!response.ok&&!(id&&response.status===400&&result.error==='No playlist changes to save'))
+        throw Error(result.error||'Cloudflare SAVE failed (HTTP '+response.status+').');
+      if(!id){
+        if(!result.id)throw Error('Cloudflare did not return the new playlist ID. Do not repeat POST until checking the public catalog.');
+        id=result.id;
+      }
+      var readUrl=communityWriteApi+'/playlists/'+encodeURIComponent(id);
+      await verifyRemoteOrder(readUrl,desired,'playlist');
+      activePublicPlaylist={remoteId:id,name:payload.name,createdBy:payload.createdBy,
+        tracks:desired.slice(),originalCount:desired.length,dirtyOrder:false};
+      activeCuratedCatalogId=null;
+      activeLocalOrderDirty=false;
+      renderLivePlaylist();
+      $('#ricoLiveStatus').text('SAVE verified: OLD SID COLLECTION RICO is now public and editable ('+desired.length+' HVSC SID).');
+      if(typeof window.ricoRefreshCommunityCatalog==='function'){
+        try{await window.ricoRefreshCommunityCatalog();}
+        catch(refreshError){console.warn('Cloudflare SAVE succeeded; catalog refresh pending',refreshError);}
+      }
+    }catch(error){
+      console.warn('TEST110: OLD SID collection adoption unverified',error);
+      $('#ricoLiveStatus').text('SAVE NOT VERIFIED: '+error.message+' Original order remains available. Retry only after checking the public catalog.');
+    }finally{savingCommunityEdits=false;renderLivePlaylist();}
   }
   async function savePublicRemovals(){
     var collection=activePublicCollection,playlist=activePublicPlaylist;
@@ -1114,12 +1187,15 @@
     var canSave=!!(customActive&&!landingPlaylists&&!loadedRankedPlaylist&&list.length);
     var hasChanges=canSave&&(activePublicCollection?activePublicCollection.dirtyOrder:
       activePublicPlaylist?(activePublicPlaylist.dirtyOrder||
-        activePublicPlaylist.tracks.length!==activePublicPlaylist.originalCount):activeLocalOrderDirty);
+        activePublicPlaylist.tracks.length!==activePublicPlaylist.originalCount):
+        (activeLocalOrderDirty||isOldSidCurated()));
     $('#ricoLiveSave').css('display',canSave?'inline-block':'none')
       .prop('disabled',savingCommunityEdits||!hasChanges)
       .attr('title',activePublicPlaylist||activePublicCollection
         ? 'Save updated public order (beta key required)'
-        : 'Save current song order locally; publication requires beta key');
+        : isOldSidCurated()
+          ? 'Register this HVSC reference playlist as editable in Cloudflare (beta key required)'
+          : 'Save current song order locally; publication requires beta key');
     $('#ricoLivePlaylistTitle').text(landingPlaylists ? "COMMUNITY PLAYLISTS" : (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'));
     // TEST34: keep the creator/ratings strip visible while a playlist is loaded.
     // Never confuse the playlist creator with each SID's composer.
@@ -1216,6 +1292,11 @@
     event.stopPropagation();
     if(loadedRankedPlaylist||!customActive)return;
     if(activePublicPlaylist||activePublicCollection){await savePublicRemovals();return;}
+    if(isOldSidCurated()){
+      try{await adoptOldSidCollection();}
+      catch(error){$('#ricoLiveStatus').text('SAVE failed: '+error.message);}
+      return;
+    }
     if(!activeLocalOrderDirty)return;
     try{
       if(activeRemixDraftId){
@@ -1807,7 +1888,7 @@
       });
       activePublicPlaylist=null;activePublicCollection=null;
       activeRemixDraftId=null;activeReferenceTracks=null;activeLocalSavedId=null;
-      activeLocalOrderDirty=false;
+      activeLocalOrderDirty=false;activeCuratedCatalogId=null;
       embeddedHvscPaths=data.tracks.map(function(t){
         return t&&typeof t.file==='string'&&/^(?:MUSICIANS|DEMOS)\//.test(t.file)?t.file:'';
       });
@@ -1869,7 +1950,7 @@
       activeRemixDraftId=null;
       activeReferenceTracks=data.tracks.map(function(t){return {pack:t.pack,file:t.file};});
       activeLocalSavedId=localImport&&typeof data.id==='string'?data.id:null;
-      activeLocalOrderDirty=false;
+      activeLocalOrderDirty=false;activeCuratedCatalogId=null;
       loadedRankedPlaylist=false;
       embeddedHvscPaths=[];
       cancelPendingCommunityStartup();
@@ -2495,7 +2576,15 @@
                   tracks:Number(entry.tracks)||0,remoteId:entry.id
                 };
               });
-            // Keep historical GitHub playlists after published user playlists.
+            // TEST110: Once a matching D1 playlist exists, show the editable
+            // copy instead of an identically named stale GitHub static row.
+            var adopted=newestPublished.some(function(t){
+              return t.title==='OLD SID COLLECTION RICO'&&t.createdBy==='RICO';
+            });
+            if(adopted)catalog.playlists=catalog.playlists.filter(function(t){
+              return t.id!=='old-sid-collection-rico';
+            });
+            // Keep remaining historical GitHub playlists after published user playlists.
             catalog.playlists=newestPublished.concat(catalog.playlists);
           }
         }catch(remoteError){
@@ -2623,6 +2712,8 @@
               if(isStartup && !startupPlaylistPending) return;
               if(isStartup) cancelStartupPlaylist();
               await loadStoredPlaylist(data); // Plays only after all referenced SID files resolve.
+              activeCuratedCatalogId=!item.remoteId&&item.id==='old-sid-collection-rico'
+                ? item.id:null;
               activePublicPlaylist=item.remoteId&&data.version===2?{
                 remoteId:item.remoteId,name:data.name,createdBy:data.createdBy,
                 tracks:data.tracks.map(function(t){return {pack:t.pack,file:t.file};}),
