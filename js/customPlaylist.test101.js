@@ -677,7 +677,7 @@
       var heading=document.createElement('strong');
       heading.textContent=action==='PUBLISH'?'PUBLISH PLAYLIST':'SAVE CHANGES';
       var message=document.createElement('p');
-      message.textContent=action==='PUBLISH'?'Enter the beta key to publish this playlist for everyone.':'Enter the beta key to save the new song order or removals for everyone.';
+      message.textContent=action==='PUBLISH'?'Enter the beta key to publish this playlist for everyone.':'Enter the beta key to publish changes to the original playlist for everyone (added, removed or reordered songs).';
       var input=document.createElement('input');
       input.type='password';input.placeholder='Beta key';input.autocomplete='off';
       input.setAttribute('aria-label','Beta key');
@@ -1138,6 +1138,69 @@
     renderLivePlaylist();
     return true;
   }
+  // TEST118: Preserve the original D1 playlist ID when publishing a linked
+  // editing draft. The public list remains unchanged until an authorized PUT
+  // succeeds and its complete set of references is re-read and verified.
+  async function publishPublishedChanges(draft){
+    if(!draft.remoteEditId||!Array.isArray(draft.baseTracks))
+      throw Error('This is not a linked published playlist draft.');
+    if(remixTrackKeys(draft.tracks)===remixTrackKeys(draft.baseTracks)){
+      remixNotice('No unpublished changes to '+draft.name+'.');
+      return;
+    }
+    // All references remain within the original HVSC ZIP library, no SID data.
+    var refs=draft.tracks.map(function(t){return {pack:t.pack,file:t.file};});
+    if(new Set(refs.map(function(t){return t.pack+'::'+t.file;})).size!==refs.length)
+      throw Error('Duplicate SID references cannot be published.');
+    await ensureBetaServerReady();
+    var capabilitiesResponse=await fetch(communityWriteApi+'/capabilities',{cache:'no-store'});
+    if(!capabilitiesResponse.ok)throw Error('Publication service unavailable.');
+    var cap=await capabilitiesResponse.json();
+    if(!cap.playlistTrackAdditions)
+      throw Error('Cloudflare Worker TEST118 is not deployed yet. Your draft is saved locally; no public changes were made.');
+    var endpoint=communityWriteApi+'/playlists/'+encodeURIComponent(draft.remoteEditId);
+    var currentResponse=await fetch(endpoint,{cache:'no-store'});
+    if(!currentResponse.ok)throw Error('Could not retrieve current published playlist.');
+    var current=await currentResponse.json();
+    if(!current||!Array.isArray(current.tracks)||current.name!==draft.name||
+       current.createdBy!==draft.creator||
+       remixTrackKeys(current.tracks)!==remixTrackKeys(draft.baseTracks))
+      throw Error('The public playlist changed since this draft was created. Your draft was kept; do not overwrite the newer public version.');
+    var hash=await remixSnapshotHash(draft.baseTracks);
+    var key=await askBetaKeyDialog('SAVE');
+    if(!key)return;
+    remixBusy=true;renderRemixes();
+    try{
+      var response=await fetch(endpoint,{
+        method:'PUT',
+        headers:{'Content-Type':'application/json','X-Beta-Key':key},
+        body:JSON.stringify({format:'ricos-sid-playlist',version:2,
+          name:draft.name,createdBy:draft.creator,tracks:refs,
+          contentUpdate:true,expectedBaseHash:hash})
+      });
+      var receipt=await response.json().catch(function(){return {};});
+      if(!response.ok&&!(response.status===400&&receipt.error==='No playlist changes to save'))
+        throw Error(receipt.error||'Could not publish playlist changes ('+response.status+').');
+      await verifyRemoteOrder(endpoint,refs,'playlist');
+      if(activeRemixDraftId===draft.id){
+        activeRemixDraftId=null;
+        activeLocalOrderDirty=false;
+        // Only attach the public ID if the playing preview has matching tracks.
+        var matches=activeReferenceTracks&&activeReferenceTracks.length===refs.length&&
+          activeReferenceTracks.every(function(t,i){return t.pack===refs[i].pack&&t.file===refs[i].file;});
+        activePublicPlaylist=matches?{remoteId:draft.remoteEditId,name:draft.name,
+          createdBy:draft.creator,tracks:refs.slice(),originalCount:refs.length,dirtyOrder:false}:null;
+      }
+      remixNotice('PUBLISHED CHANGES VERIFIED: '+draft.name+' · '+refs.length+' SID. Same public ID.');
+      remixDrafts=remixDrafts.filter(function(item){return item!==draft;});
+      remixTarget=remixDrafts.length?remixDrafts[0].id:'';
+      preserveRemixes();
+      if(typeof window.ricoRefreshCommunityCatalog==='function'){
+        try{await window.ricoRefreshCommunityCatalog();}
+        catch(error){console.warn('Playlist updated; catalog refresh pending',error);}
+      }
+    }finally{remixBusy=false;renderRemixes();}
+  }
   async function publishRemix(id){
     var draft=id ? remixDrafts.find(function(d){return d.id===id;}) : selectedRemix();
     if(remixBusy||!draft)return;
@@ -1154,6 +1217,11 @@
       syncPlayingRemixOrder(draft);
     }catch(error){remixNotice('Cannot publish this order: '+error.message);return;}
     preserveRemixes();
+    if(draft.remoteEditId){
+      try{await publishPublishedChanges(draft);}
+      catch(error){remixNotice('PUBLISH CHANGES failed: '+error.message);}
+      return;
+    }
     var key=await askBetaKeyDialog('PUBLISH');
     if(!key)return;
     remixBusy=true;renderRemixes();
