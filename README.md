@@ -1,5 +1,14 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## TEST119 — Unified REMIX PLAYLIST entry points and numbered palettes (published; browser PASS pending)
+
+- The bottom toolbar now contains **REMIX PLAYLIST** alongside CHOOSE A SID. It opens the *same* existing **REMIX PLAYLIST CREATOR** window as the button in the floating playlist; no second window and no automatic extra draft. To create a new list inside the editor use **NEW REMIX**.
+- Retained the existing REMIX names and editor layout at user request (do not rename to PLAYLIST CREATOR).
+- The color cycle button now displays **COLOR 1–8** instead of palette names. It still cycles the same eight original palette configurations; only its visible label and accessible text changed. Updated both JavaScript cache versions in `index.html`.
+- Source JS syntax PASS. Manual browser test: click both REMIX PLAYLIST entry points, confirm same editor, create a draft using NEW REMIX, check COLOR numbering while palette changes.
+- [Open TEST119](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=119remixcolors)
+- **Status:** GitHub source updated; user visual PASS pending.
+
 ## TEST118 — Edit existing published playlists while listening to another list (staged)
 
 **What changed:** The **ADD + TO** destination selector in the floating playlist now offers existing REMIX drafts **and D1 PUBLISHED PLAYLISTS**. Selecting a published list starts or resumes a persistent private editing draft that keeps the same original D1 ID. While playing any other playlist, + adds the selected SID's verified original HVSC `pack/file` reference into that draft, without changing the source playback or the public list.
