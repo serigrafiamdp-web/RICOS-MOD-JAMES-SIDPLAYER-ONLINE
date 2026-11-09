@@ -1392,10 +1392,69 @@
     renderRemixes();
   })();
 
+  // TEST122: cheap playback/selection paint for a thousand-plus SID list.
+  // Rebuilding 1,376 interactive DOM rows right at the click interrupts the
+  // browser's ScriptProcessor callback and can sound like a stuck SID note.
+  function paintLargePlaylistMarkers(){
+    var painted=largePlaylistPainted;
+    var scroller=document.getElementById('ricoLivePlaylistItems');
+    var list=player.sidList||[];
+    if(!painted||!scroller||!activeReferenceStream||list.length<1000||
+       painted.stream!==activeReferenceStream||painted.list!==list||
+       painted.revision!==largePlaylistStructureRevision||
+       painted.count!==list.length||scroller.children.length!==list.length)return false;
+    var active=typeof player.sidListIndex==='number'?player.sidListIndex:-1;
+    var selected=typeof selectedLiveIndex==='number'?selectedLiveIndex:-1;
+    var queued=typeof queuedLiveIndex==='number'?queuedLiveIndex:-1;
+    var changed=new Set([painted.active,painted.selected,painted.queued,active,selected,queued]);
+    changed.forEach(function(index){
+      if(index<0||index>=list.length)return;
+      var wrapper=scroller.children[index];
+      var row=wrapper&&(wrapper.matches('.rico-live-row')?wrapper:wrapper.querySelector('.rico-live-row'));
+      if(!row)return;
+      var nowActive=index===active,nowSelected=index===selected,nowQueued=index===queued;
+      row.classList.toggle('rico-live-active',nowActive);
+      row.classList.toggle('rico-live-selected',nowSelected);
+      row.classList.toggle('rico-live-queued',nowQueued);
+      if(nowActive)row.setAttribute('aria-current','true');
+      else row.removeAttribute('aria-current');
+      var currentMark=row.querySelector('.rico-live-current');
+      if(nowActive&&!currentMark){
+        currentMark=document.createElement('span');currentMark.className='rico-live-current';
+        currentMark.textContent='▶';row.appendChild(currentMark);
+      }else if(!nowActive&&currentMark)currentMark.remove();
+      var queuedMark=row.querySelector('.rico-live-next');
+      if(nowQueued&&!queuedMark){
+        queuedMark=document.createElement('span');queuedMark.className='rico-live-next';
+        queuedMark.textContent='›';row.appendChild(queuedMark);
+      }else if(!nowQueued&&queuedMark)queuedMark.remove();
+      // The active SID's actual header may replace its temporary file label.
+      if(nowActive){
+        var item=list[index],title=row.querySelector('.rico-live-title');
+        if(item&&title)title.textContent=(item.name||item.file||'SID')+
+          ' — '+(item.author||'Unknown artist');
+      }
+    });
+    painted.active=active;painted.selected=selected;painted.queued=queued;
+    if(followPlayingRowOnce&&liveVisible&&active>=0){
+      followPlayingRowOnce=false;
+      var node=scroller.children[active],view=node&&node.getBoundingClientRect(),
+        box=scroller.getBoundingClientRect();
+      if(view){
+        if(view.top<box.top)scroller.scrollTop-=box.top-view.top+4;
+        else if(view.bottom>box.bottom)scroller.scrollTop+=view.bottom-box.bottom+4;
+      }
+    }
+    return true;
+  }
+
   function renderLivePlaylist() {
+    // Ordinary short lists retain the original complete render behavior.
+    if(paintLargePlaylistMarkers())return;
     var scrollNode=document.getElementById('ricoLivePlaylistItems');
     var previousScroll=scrollNode?scrollNode.scrollTop:0;
     var holder = $('#ricoLivePlaylistItems').empty();
+    largePlaylistPainted=null;
     ensureLivePlaylistCredits();
     var list = player.sidList || [];
     if(selectedLiveIndex!==null && selectedLiveIndex>=list.length)selectedLiveIndex=null;
@@ -1503,6 +1562,13 @@
         if(activeRect.top<boxRect.top)scroller.scrollTop-=boxRect.top-activeRect.top+4;
         else if(activeRect.bottom>boxRect.bottom)scroller.scrollTop+=activeRect.bottom-boxRect.bottom+4;
       }
+    }
+    if(activeReferenceStream&&list.length>=1000){
+      largePlaylistPainted={stream:activeReferenceStream,list:list,
+        revision:largePlaylistStructureRevision,count:list.length,
+        active:typeof player.sidListIndex==='number'?player.sidListIndex:-1,
+        selected:typeof selectedLiveIndex==='number'?selectedLiveIndex:-1,
+        queued:typeof queuedLiveIndex==='number'?queuedLiveIndex:-1};
     }
   }
 
