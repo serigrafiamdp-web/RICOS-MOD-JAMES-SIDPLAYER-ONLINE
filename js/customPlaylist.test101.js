@@ -2220,8 +2220,8 @@
       var controller=new AbortController(),archives=new Map(),cancelled=false;
       var slots=refs.map(function(ref,i){
         return {id:'hvsc-slot-'+i,
-          name:ref.file.split('/').pop().replace(/\.sid$/i,'').replace(/_/g,' '),
-          author:unknownAuthors?'<?>':'Loading from HVSC…',released:'',file:ref.file,size:0,
+          name:ref.title||ref.file.split('/').pop().replace(/\.sid$/i,'').replace(/_/g,' '),
+          author:ref.author||(unknownAuthors?'<?>':'Loading from HVSC…'),released:'',file:ref.file,size:0,
           numSubtunes:1,startSubtune:1,sidFormat:'PSID',localBytes:null,
           _hvscRef:{pack:ref.pack,file:ref.file},_hvscPromise:null};
       });
@@ -2259,7 +2259,7 @@
         // Decompressing every tiny SID continuously in the browser and
         // re-rendering their rows can starve ScriptProcessor audio on click.
         // Only warm the nearest few tracks; clicks fetch any other song.
-        if(slots.length>=1000){
+        if(slots.length>=1000||stream.onDemandOnly){
           (async function(){
             var failures=0;
             for(var i=1;i<Math.min(slots.length,10)&&!cancelled;i++){
@@ -2307,6 +2307,9 @@
     }
     async function loadProgressiveReferencePlaylist(data,localImport){
       var stream=createProgressiveReferenceStream(data.tracks,data.name==='UNKNOWN CSDB');
+      // TOP 100 DEMOS: song metadata is already in the source manifest.
+      // Load song bytes on demand without decoding the entire list at launch.
+      stream.onDemandOnly=data.name==='TOP 100 DEMOS';
       activeReferenceStream=stream;
       try{
         await stream.loadSlot(stream.slots[0]);
@@ -2351,8 +2354,9 @@
       // TEST121: both OLD SID COLLECTION RICO and the 1376-track UNKNOWN CSDB
       // reference list must start after the first SID is ready, not after all
       // SIDs decode. Keep every other playlist on its existing stable loader.
-      if((data.name==='OLD SID COLLECTION RICO'||data.name==='UNKNOWN CSDB')&&
-         data.tracks.length>=200){
+      if(((data.name==='OLD SID COLLECTION RICO'||data.name==='UNKNOWN CSDB')&&
+         data.tracks.length>=200)||
+         (data.name==='TOP 100 DEMOS'&&data.tracks.length>=100)){
         for(var k=0;k<data.tracks.length;k++){
           var ref=data.tracks[k];
           if(!ref||typeof ref.pack!=='string'||typeof ref.file!=='string'||
