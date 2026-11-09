@@ -1297,7 +1297,11 @@
   (function initRemixControls(){
     var toggle=$('#ricoRemixToggle'),target=$('#ricoRemixTarget');
     if(!toggle.length)return;
-    toggle.on('click',function(event){event.stopPropagation();remixOpen=true;renderRemixes();});
+    // TEST119: the bottom REMIX PLAYLIST button and the floating REMIX
+    // PLAYLIST button open the same editor, without creating extra drafts.
+    toggle.add($('#ricoRemixToolbar')).on('click',function(event){
+      event.preventDefault();event.stopPropagation();remixOpen=true;renderRemixes();
+    });
     $('#ricoRemixClose').on('click',function(event){
       event.stopPropagation();remixOpen=false;preserveRemixes();renderRemixes();
       if(typeof window.ricoOpenCommunityFromRemix==='function')window.ricoOpenCommunityFromRemix();
@@ -1318,13 +1322,6 @@
       remixNotice('Unpublished changes discarded. Public playlist was not modified.');
     });
     $('#ricoRemixNew').on('click',function(event){event.stopPropagation();createRemix();});
-    // TEST119: bottom-bar shortcut opens a brand-new editable playlist.
-    // Uses the established REMIX draft workflow; no SID playback or public
-    // publication occurs until the user explicitly selects it.
-    $('#ricoCreatePlaylist').on('click',function(event){
-      event.preventDefault();event.stopPropagation();
-      createRemix();
-    });
     $('#ricoRemixPublish').on('click',function(event){event.stopPropagation();publishRemix();});
     window.ricoPublishRemixDraft=publishRemix;
     window.ricoOpenRemixDraft=function(id){
