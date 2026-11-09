@@ -276,6 +276,7 @@ export default {
       betaKeyRequired:true,editMode:'metadata-and-delete',
       sidUploadsEnabled:!!(sidUploadProvider(env)&&env.DB&&env.BETA_EDIT_KEY),
       playlistReorder:true,sidCollectionReorder:true,
+      playlistTrackAdditions:true,
       sidUploadProvider:sidUploadProvider(env)||null,
       sidUploadLimit:sidUploadProvider(env)==='github'?15:40,
       configured:!!env.BETA_EDIT_KEY},200,origin);
@@ -338,14 +339,25 @@ export default {
       .bind(updateMatch[1]).first();
     if(!record)return text('Playlist not found',404,origin);
     if(data.name.trim()!==record.title||data.createdBy.trim()!==record.creator)
-      return text('Name and creator cannot change in removal-only edits',400,origin);
+      return text('Playlist name or creator changed; reload before saving',409,origin);
     const original=JSON.parse(record.payload);
     if(!Array.isArray(original.tracks))return text('Stored playlist invalid',500,origin);
-    // Allow removals and reordering of the original references only.
-    // New songs and duplicate references are forbidden, even with a valid beta key.
-    const originalKeys=new Set(original.tracks.map(t=>t.pack+'::'+t.file));
-    if(tracks.some(t=>!originalKeys.has(t.pack+'::'+t.file)))
-      return text('Only reordering or removing existing SID is allowed',400,origin);
+    // TEST118: content-update may add new, verified HVSC references without
+    // changing the published ID. Require the exact source snapshot; keep legacy
+    // PUT behavior limited to removals and reordering.
+    if(data.contentUpdate===true){
+      if(typeof data.expectedBaseHash!=='string'||
+         !/^[a-f0-9]{64}$/.test(data.expectedBaseHash))
+        return text('Expected original playlist hash is required',400,origin);
+      const originalRefs=original.tracks.map(t=>[t.pack,t.file]);
+      const actualHash=await hashSecret(JSON.stringify(originalRefs));
+      if(actualHash!==data.expectedBaseHash)
+        return text('Playlist changed since editing started; keep your draft and reload the public list',409,origin);
+    }else{
+      const originalKeys=new Set(original.tracks.map(t=>t.pack+'::'+t.file));
+      if(tracks.some(t=>!originalKeys.has(t.pack+'::'+t.file)))
+        return text('Only reordering or removing existing SID is allowed',400,origin);
+    }
     if(tracks.length===original.tracks.length&&
        tracks.every((t,i)=>t.pack===original.tracks[i].pack&&t.file===original.tracks[i].file))
       return text('No playlist changes to save',400,origin);
