@@ -717,6 +717,7 @@
     $('#ricoDefaultTab').toggleClass('rico-selected-tab',browserTab==='games');
     $('#ricoCustomTab').toggleClass('rico-selected-tab',browserTab==='local');
     $('#ricoHvscTab').toggleClass('rico-selected-tab',browserTab==='hvsc');
+    $('#ricoDemosTab').toggleClass('rico-selected-tab',browserTab==='demos');
     $('#ricoGroupsTab').toggleClass('rico-selected-tab',browserTab==='groups');
     $('#ricoMusiciansTab').toggleClass('rico-selected-tab',browserTab==='musicians');
     $('#ricoLibraryTab').toggleClass('rico-selected-tab',browserTab==='library');
@@ -1352,7 +1353,7 @@
     var ricoRankEntries={};
     var ricoRankWaiting={};
     var ricoCurrentRank="hvsc";
-    var ricoRankConfig={hvsc:{file:"community/playlists/hvsc-top-100-2000.json",title:"TOP 100 HVSC GAMES",description:"Historical HVSC community ranking (2000)."},groups:{file:"community/playlists/csdb-top-100-groups.json",title:"TOP GROUPS",description:"100 selected SIDs from CSDb scene groups."},musicians:{file:"community/playlists/csdb-top-100-musicians.json",title:"TOP MUSICIANS",description:"100 selected SID musicians from the CSDb scene."}};
+    var ricoRankConfig={hvsc:{file:"community/playlists/hvsc-top-100-2000.json",title:"TOP 100 HVSC GAMES",description:"Historical HVSC community ranking (2000)."},demos:{file:"community/playlists/csdb-top-100-demos.json",title:"TOP 100 CSDb DEMOS",description:"CSDb top 100 demos · 142 identified SID tunes; remaining associations pending."},groups:{file:"community/playlists/csdb-top-100-groups.json",title:"TOP GROUPS",description:"100 selected SIDs from CSDb scene groups."},musicians:{file:"community/playlists/csdb-top-100-musicians.json",title:"TOP MUSICIANS",description:"100 selected SID musicians from the CSDb scene."}};
     var communityActive=false;
     var startupPlaylistPending=true; // TEST24: allow 30 seconds for manual selection.
     var startupPlaylistTimer=null;
@@ -1426,7 +1427,7 @@
         var res=await fetch(ricoRankConfig[kind].file,{cache:'no-store'});
         if(!res.ok)throw Error('Playlist unavailable ('+res.status+').');
         var data=await res.json();
-        if(data.format!=='ricos-sid-playlist'||!Array.isArray(data.tracks)||data.tracks.length!==100)throw Error('Top 100 incomplete.');
+        if(data.format!=='ricos-sid-playlist'||!Array.isArray(data.tracks)||data.tracks.length!==(kind==='demos'?142:100))throw Error('Top 100 incomplete.');
         var entries=validatedEntries(data);
         ricoRankCache[kind]=data;
         ricoRankEntries[kind]=entries;
@@ -1446,7 +1447,7 @@
       var cfg=ricoRankConfig[kind];
       document.getElementById('ricoHvscHeading').textContent=cfg.title;
       document.getElementById('ricoHvscIntro').textContent=cfg.description;
-      document.getElementById('ricoHvscListTitle').textContent=cfg.title+' — 100 SID';
+      document.getElementById('ricoHvscListTitle').textContent=cfg.title+' — '+(kind==='demos'?142:100)+' SID';
       refreshTabs();hvscItems.textContent='';
       if(ricoRankEntries[kind]){renderRankRows(kind);return;}
       hvscStatus.textContent='Loading '+cfg.title+'...';
@@ -1466,7 +1467,7 @@
     function renderRankRows(kind){
       var data=ricoRankCache[kind],entries=ricoRankEntries[kind];
       if(!data||!entries)return;
-      hvscItems.textContent='';hvscStatus.textContent='100 SID · Click a song or press LOAD.';
+      hvscItems.textContent='';hvscStatus.textContent=entries.length+' SID · Click a song or press LOAD.';
       entries.forEach(function(item,index){
         var track=data.tracks[index]||{};
         var group=kind==='groups'?(track.group||''):'';
@@ -1501,7 +1502,7 @@
       catch(e){hvscStatus.textContent='Could not load playlist: '+e.message;}
       finally{hvscLoad.disabled=false;}
     });
-    [['ricoHvscTab','hvsc'],['ricoGroupsTab','groups'],['ricoMusiciansTab','musicians']].forEach(function(pair){
+    [['ricoHvscTab','hvsc'],['ricoDemosTab','demos'],['ricoGroupsTab','groups'],['ricoMusiciansTab','musicians']].forEach(function(pair){
       var button=document.getElementById(pair[0]);if(button)button.addEventListener('click',function(){showRank(pair[1]);});
     });
 
