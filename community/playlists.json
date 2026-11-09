@@ -34,6 +34,14 @@
       "createdBy": "RICO",
       "tracks": 1376,
       "file": "community/playlists/unknown-csdb.json"
+    },
+    {
+      "id": "csdb-top-100-demos",
+      "title": "TOP 100 DEMOS",
+      "author": "RICO",
+      "createdBy": "RICO",
+      "tracks": 142,
+      "file": "community/playlists/csdb-top-100-demos.json"
     }
   ]
 }
