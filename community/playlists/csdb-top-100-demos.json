@@ -1,0 +1,1435 @@
+{
+  "format": "ricos-sid-playlist",
+  "version": 2,
+  "name": "TOP 100 DEMOS",
+  "createdBy": "RICO",
+  "author": "RICO",
+  "createdAt": "2026-11-09",
+  "source": "CSDb Top C64 Demo; original SID references from HVSC #85",
+  "sourceRankingUrl": "https://csdb.dk/toplist.php?subtype=%281%29&type=release",
+  "sourceDemoCount": 100,
+  "verifiedDemoCount": 29,
+  "pendingDemoCount": 71,
+  "tracks": [
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Anything_GEOS.sid",
+      "title": "Anything GEOS!",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "Next Level",
+      "demoOrder": 1,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/Anything_GEOS.sid",
+      "csdbReleaseId": 232976
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Anything_Next.sid",
+      "title": "Anything Next?",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "Next Level",
+      "demoOrder": 1,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/Anything_Next.sid",
+      "csdbReleaseId": 232976
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Faithless_Insomnia.sid",
+      "title": "Faithless Insomnia",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "Next Level",
+      "demoOrder": 1,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/Faithless_Insomnia.sid",
+      "csdbReleaseId": 232976
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Finally_Asleep.sid",
+      "title": "Finally Asleep",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "Next Level",
+      "demoOrder": 1,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/Finally_Asleep.sid",
+      "csdbReleaseId": 232976
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Next_Level_of_Insomnia.sid",
+      "title": "Next Level of Insomnia",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "Next Level",
+      "demoOrder": 1,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/Next_Level_of_Insomnia.sid",
+      "csdbReleaseId": 232976
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Next_Level_of_Insomnia_short.sid",
+      "title": "Next Level of Insomnia (short)",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "Next Level",
+      "demoOrder": 1,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/Next_Level_of_Insomnia_short.sid",
+      "csdbReleaseId": 232976
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Sky_Buster.sid",
+      "title": "Sky Buster",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "Next Level",
+      "demoOrder": 1,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/Sky_Buster.sid",
+      "csdbReleaseId": 232976
+    },
+    {
+      "pack": "library/packs/musicians/L/LMan.zip",
+      "file": "Make_Noise.sid",
+      "title": "Make Noise",
+      "author": "Markus Klein (LMan)",
+      "demoTitle": "Next Level",
+      "demoOrder": 1,
+      "csdbHvscPath": "MUSICIANS/L/LMan/Make_Noise.sid",
+      "csdbReleaseId": 232976
+    },
+    {
+      "pack": "library/packs/musicians/L/LMan.zip",
+      "file": "Party_x_Leben.sid",
+      "title": "Party x Leben",
+      "author": "Markus Klein (LMan)",
+      "demoTitle": "Next Level",
+      "demoOrder": 1,
+      "csdbHvscPath": "MUSICIANS/L/LMan/Party_x_Leben.sid",
+      "csdbReleaseId": 232976
+    },
+    {
+      "pack": "library/packs/musicians/L/LMan.zip",
+      "file": "Shape.sid",
+      "title": "Shape",
+      "author": "Markus Klein (LMan)",
+      "demoTitle": "Next Level",
+      "demoOrder": 1,
+      "csdbHvscPath": "MUSICIANS/L/LMan/Shape.sid",
+      "csdbReleaseId": 232976
+    },
+    {
+      "pack": "library/packs/musicians/D/Devilock.zip",
+      "file": "Next_Level_Intro.sid",
+      "title": "Next Level Intro",
+      "author": "Peter Siekmann (Devilock)",
+      "demoTitle": "Next Level",
+      "demoOrder": 1,
+      "csdbHvscPath": "MUSICIANS/D/Devilock/Next_Level_Intro.sid",
+      "csdbReleaseId": 232976
+    },
+    {
+      "pack": "library/packs/musicians/D/Devilock.zip",
+      "file": "Next_Level_Main.sid",
+      "title": "Next Level Main",
+      "author": "Peter Siekmann (Devilock)",
+      "demoTitle": "Next Level",
+      "demoOrder": 1,
+      "csdbHvscPath": "MUSICIANS/D/Devilock/Next_Level_Main.sid",
+      "csdbReleaseId": 232976
+    },
+    {
+      "pack": "library/packs/musicians/L/Linus.zip",
+      "file": "Next_Level_Side_3.sid",
+      "title": "Next Level Side 3",
+      "author": "Sascha Zeidler (Linus)",
+      "demoTitle": "Next Level",
+      "demoOrder": 1,
+      "csdbHvscPath": "MUSICIANS/L/Linus/Next_Level_Side_3.sid",
+      "csdbReleaseId": 232976
+    },
+    {
+      "pack": "library/packs/musicians/S/Shogoon.zip",
+      "file": "Circles.sid",
+      "title": "Circles",
+      "author": "Wojciech Radziejewski (Shogoon)",
+      "demoTitle": "The Lab",
+      "demoOrder": 2,
+      "csdbHvscPath": "MUSICIANS/S/Shogoon/Circles.sid",
+      "csdbReleaseId": 262146
+    },
+    {
+      "pack": "library/packs/musicians/S/Shogoon.zip",
+      "file": "Kickin_Balls.sid",
+      "title": "Kickin' Balls",
+      "author": "Wojciech Radziejewski (Shogoon)",
+      "demoTitle": "The Lab",
+      "demoOrder": 2,
+      "csdbHvscPath": "MUSICIANS/S/Shogoon/Kickin_Balls.sid",
+      "csdbReleaseId": 262146
+    },
+    {
+      "pack": "library/packs/musicians/S/Shogoon.zip",
+      "file": "Micro_World.sid",
+      "title": "Micro World",
+      "author": "Wojciech Radziejewski (Shogoon)",
+      "demoTitle": "The Lab",
+      "demoOrder": 2,
+      "csdbHvscPath": "MUSICIANS/S/Shogoon/Micro_World.sid",
+      "csdbReleaseId": 262146
+    },
+    {
+      "pack": "library/packs/musicians/S/Shogoon.zip",
+      "file": "No_Way_Out.sid",
+      "title": "No Way Out",
+      "author": "Wojciech Radziejewski (Shogoon)",
+      "demoTitle": "The Lab",
+      "demoOrder": 2,
+      "csdbHvscPath": "MUSICIANS/S/Shogoon/No_Way_Out.sid",
+      "csdbReleaseId": 262146
+    },
+    {
+      "pack": "library/packs/musicians/S/Shogoon.zip",
+      "file": "Prince.sid",
+      "title": "Prince",
+      "author": "Wojciech Radziejewski (Shogoon)",
+      "demoTitle": "The Lab",
+      "demoOrder": 2,
+      "csdbHvscPath": "MUSICIANS/S/Shogoon/Prince.sid",
+      "csdbReleaseId": 262146
+    },
+    {
+      "pack": "library/packs/musicians/S/Shogoon.zip",
+      "file": "Lab_tune_1.sid",
+      "title": "The Lab (tune 1)",
+      "author": "Wojciech Radziejewski (Shogoon)",
+      "demoTitle": "The Lab",
+      "demoOrder": 2,
+      "csdbHvscPath": "MUSICIANS/S/Shogoon/Lab_tune_1.sid",
+      "csdbReleaseId": 262146
+    },
+    {
+      "pack": "library/packs/musicians/H/Hoffmann_Michal.zip",
+      "file": "Elysergic_Acid.sid",
+      "title": "Elysergic Acid",
+      "author": "Michal Hoffmann (Randall)",
+      "demoTitle": "The Lab",
+      "demoOrder": 2,
+      "csdbHvscPath": "MUSICIANS/H/Hoffmann_Michal/Elysergic_Acid.sid",
+      "csdbReleaseId": 262146
+    },
+    {
+      "pack": "library/packs/musicians/F/Fegolhuzz.zip",
+      "file": "Hat_tune_1.sid",
+      "title": "The Hat (tune 1)",
+      "author": "Figge Wasberger (Fegolhuzz)",
+      "demoTitle": "The Hat",
+      "demoOrder": 4,
+      "csdbHvscPath": "MUSICIANS/F/Fegolhuzz/Hat_tune_1.sid",
+      "csdbReleaseId": 259070
+    },
+    {
+      "pack": "library/packs/musicians/F/Fegolhuzz.zip",
+      "file": "Hat_tune_2.sid",
+      "title": "The Hat (tune 2)",
+      "author": "Figge Wasberger (Fegolhuzz)",
+      "demoTitle": "The Hat",
+      "demoOrder": 4,
+      "csdbHvscPath": "MUSICIANS/F/Fegolhuzz/Hat_tune_2.sid",
+      "csdbReleaseId": 259070
+    },
+    {
+      "pack": "library/packs/musicians/F/Fegolhuzz.zip",
+      "file": "Hat_tune_3.sid",
+      "title": "The Hat (tune 3)",
+      "author": "Figge Wasberger (Fegolhuzz)",
+      "demoTitle": "The Hat",
+      "demoOrder": 4,
+      "csdbHvscPath": "MUSICIANS/F/Fegolhuzz/Hat_tune_3.sid",
+      "csdbReleaseId": 259070
+    },
+    {
+      "pack": "library/packs/musicians/F/Fegolhuzz.zip",
+      "file": "Hat_tune_4.sid",
+      "title": "The Hat (tune 4)",
+      "author": "Figge Wasberger (Fegolhuzz)",
+      "demoTitle": "The Hat",
+      "demoOrder": 4,
+      "csdbHvscPath": "MUSICIANS/F/Fegolhuzz/Hat_tune_4.sid",
+      "csdbReleaseId": 259070
+    },
+    {
+      "pack": "library/packs/musicians/S/Schneider_Markus.zip",
+      "file": "Next_Round_tune_1.sid",
+      "title": "Next Round (tune 1)",
+      "author": "Markus Schneider",
+      "demoTitle": "Next Round",
+      "demoOrder": 5,
+      "csdbHvscPath": "MUSICIANS/S/Schneider_Markus/Next_Round_tune_1.sid",
+      "csdbReleaseId": 262169
+    },
+    {
+      "pack": "library/packs/demos/UNKNOWN.zip",
+      "file": "Next_Round_tune_7.sid",
+      "title": "Next Round (tune 7)",
+      "author": "<?>",
+      "demoTitle": "Next Round",
+      "demoOrder": 5,
+      "csdbHvscPath": "DEMOS/UNKNOWN/Next_Round_tune_7.sid",
+      "csdbReleaseId": 262169
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "PreColor.sid",
+      "title": "PreColor",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "Next Round",
+      "demoOrder": 5,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/PreColor.sid",
+      "csdbReleaseId": 262169
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Wip3Out_2k6.sid",
+      "title": "Wip3Out 2k6",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "Next Round",
+      "demoOrder": 5,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/Wip3Out_2k6.sid",
+      "csdbReleaseId": 262169
+    },
+    {
+      "pack": "library/packs/musicians/C/C0zmo.zip",
+      "file": "Rimini_Remedy.sid",
+      "title": "Rimini Remedy",
+      "author": "Markus Jentsch (c0zmo)",
+      "demoTitle": "Next Round",
+      "demoOrder": 5,
+      "csdbHvscPath": "MUSICIANS/C/C0zmo/Rimini_Remedy.sid",
+      "csdbReleaseId": 262169
+    },
+    {
+      "pack": "library/packs/musicians/L/Linus.zip",
+      "file": "Time_Goes_Running.sid",
+      "title": "Time Goes Running",
+      "author": "Sascha Zeidler (Linus) & Fanta",
+      "demoTitle": "Next Round",
+      "demoOrder": 5,
+      "csdbHvscPath": "MUSICIANS/L/Linus/Time_Goes_Running.sid",
+      "csdbReleaseId": 262169
+    },
+    {
+      "pack": "library/packs/musicians/J/Jeff.zip",
+      "file": "X-Large_5.sid",
+      "title": "X-Large 5",
+      "author": "Søren Lund (Jeff)",
+      "demoTitle": "Next Round",
+      "demoOrder": 5,
+      "csdbHvscPath": "MUSICIANS/J/Jeff/X-Large_5.sid",
+      "csdbReleaseId": 262169
+    },
+    {
+      "pack": "library/packs/musicians/F/Fegolhuzz.zip",
+      "file": "Fight_the_AI.sid",
+      "title": "Fight the AI",
+      "author": "Figge Wasberger (Fegolhuzz)",
+      "demoTitle": "13:37",
+      "demoOrder": 6,
+      "csdbHvscPath": "MUSICIANS/F/Fegolhuzz/Fight_the_AI.sid",
+      "csdbReleaseId": 242855
+    },
+    {
+      "pack": "library/packs/musicians/F/Fegolhuzz.zip",
+      "file": "Load_the_Demo.sid",
+      "title": "Load the Demo",
+      "author": "Figge Wasberger (Fegolhuzz)",
+      "demoTitle": "13:37",
+      "demoOrder": 6,
+      "csdbHvscPath": "MUSICIANS/F/Fegolhuzz/Load_the_Demo.sid",
+      "csdbReleaseId": 242855
+    },
+    {
+      "pack": "library/packs/musicians/F/Fegolhuzz.zip",
+      "file": "Release_the_Rastersplits.sid",
+      "title": "Release the Rastersplits",
+      "author": "Figge Wasberger (Fegolhuzz)",
+      "demoTitle": "13:37",
+      "demoOrder": 6,
+      "csdbHvscPath": "MUSICIANS/F/Fegolhuzz/Release_the_Rastersplits.sid",
+      "csdbReleaseId": 242855
+    },
+    {
+      "pack": "library/packs/musicians/F/Fegolhuzz.zip",
+      "file": "To_us_its_Love.sid",
+      "title": "To us it's Love",
+      "author": "Figge Wasberger (Fegolhuzz)",
+      "demoTitle": "13:37",
+      "demoOrder": 6,
+      "csdbHvscPath": "MUSICIANS/F/Fegolhuzz/To_us_its_Love.sid",
+      "csdbReleaseId": 242855
+    },
+    {
+      "pack": "library/packs/musicians/F/Fegolhuzz.zip",
+      "file": "Top_Secret_Flescos.sid",
+      "title": "Top Secret Flescos",
+      "author": "Figge Wasberger (Fegolhuzz)",
+      "demoTitle": "13:37",
+      "demoOrder": 6,
+      "csdbHvscPath": "MUSICIANS/F/Fegolhuzz/Top_Secret_Flescos.sid",
+      "csdbReleaseId": 242855
+    },
+    {
+      "pack": "library/packs/musicians/F/Fegolhuzz.zip",
+      "file": "You_Were_There.sid",
+      "title": "You Were There",
+      "author": "Figge Wasberger (Fegolhuzz)",
+      "demoTitle": "13:37",
+      "demoOrder": 6,
+      "csdbHvscPath": "MUSICIANS/F/Fegolhuzz/You_Were_There.sid",
+      "csdbReleaseId": 242855
+    },
+    {
+      "pack": "library/packs/musicians/D/Danko_Tomas.zip",
+      "file": "Song_for_K_urzer.sid",
+      "title": "Song for K(urzer)",
+      "author": "Tomas Danko",
+      "demoTitle": "13:37",
+      "demoOrder": 6,
+      "csdbHvscPath": "MUSICIANS/D/Danko_Tomas/Song_for_K_urzer.sid",
+      "csdbReleaseId": 242855
+    },
+    {
+      "pack": "library/packs/musicians/M/Mitch_and_Dane.zip",
+      "file": "Dane/Tour_De_Force.sid",
+      "title": "Tour De Force",
+      "author": "Stellan Andersson (Dane)",
+      "demoTitle": "Codeboys & Endians",
+      "demoOrder": 7,
+      "csdbHvscPath": "MUSICIANS/M/Mitch_and_Dane/Dane/Tour_De_Force.sid",
+      "csdbReleaseId": 249805
+    },
+    {
+      "pack": "library/packs/musicians/P/Psych858o.zip",
+      "file": "Exordium.sid",
+      "title": "Exordium",
+      "author": "Marcin Majdzik (psych858o)",
+      "demoTitle": "We Are The Anomaly",
+      "demoOrder": 8,
+      "csdbHvscPath": "MUSICIANS/P/Psych858o/Exordium.sid",
+      "csdbReleaseId": 257561
+    },
+    {
+      "pack": "library/packs/musicians/P/Psych858o.zip",
+      "file": "We_Are_the_Anomaly.sid",
+      "title": "We Are the Anomaly",
+      "author": "Marcin Majdzik (psych858o)",
+      "demoTitle": "We Are The Anomaly",
+      "demoOrder": 8,
+      "csdbHvscPath": "MUSICIANS/P/Psych858o/We_Are_the_Anomaly.sid",
+      "csdbReleaseId": 257561
+    },
+    {
+      "pack": "library/packs/musicians/P/Psych858o.zip",
+      "file": "We_Are_the_Underground.sid",
+      "title": "We Are the Underground",
+      "author": "Marcin Majdzik (psych858o)",
+      "demoTitle": "We Are The Anomaly",
+      "demoOrder": 8,
+      "csdbHvscPath": "MUSICIANS/P/Psych858o/We_Are_the_Underground.sid",
+      "csdbReleaseId": 257561
+    },
+    {
+      "pack": "library/packs/musicians/S/SMC.zip",
+      "file": "Breaking_the_Law.sid",
+      "title": "Breaking the Law",
+      "author": "S. M. Choe & Thomas E. Petersen",
+      "demoTitle": "Mojo",
+      "demoOrder": 9,
+      "csdbHvscPath": "MUSICIANS/S/SMC/Breaking_the_Law.sid",
+      "csdbReleaseId": 232966
+    },
+    {
+      "pack": "library/packs/musicians/S/SMC.zip",
+      "file": "Flip_Flops_for_Walt.sid",
+      "title": "Flip Flops for Walt",
+      "author": "Sanke Michael Choe (SMC)",
+      "demoTitle": "Mojo",
+      "demoOrder": 9,
+      "csdbHvscPath": "MUSICIANS/S/SMC/Flip_Flops_for_Walt.sid",
+      "csdbReleaseId": 232966
+    },
+    {
+      "pack": "library/packs/musicians/S/SMC.zip",
+      "file": "Robots_Prefer_Cherry_MX_Blue.sid",
+      "title": "Robots Prefer Cherry MX Blue",
+      "author": "Sanke Michael Choe (SMC)",
+      "demoTitle": "Mojo",
+      "demoOrder": 9,
+      "csdbHvscPath": "MUSICIANS/S/SMC/Robots_Prefer_Cherry_MX_Blue.sid",
+      "csdbReleaseId": 232966
+    },
+    {
+      "pack": "library/packs/musicians/S/SMC.zip",
+      "file": "Spindle.sid",
+      "title": "Spindle",
+      "author": "Sanke Michael Choe (SMC)",
+      "demoTitle": "Mojo",
+      "demoOrder": 9,
+      "csdbHvscPath": "MUSICIANS/S/SMC/Spindle.sid",
+      "csdbReleaseId": 232966
+    },
+    {
+      "pack": "library/packs/musicians/T/The_Syndrom.zip",
+      "file": "Hearts.sid",
+      "title": "Hearts",
+      "author": "Matthias Hartung & S. M. Choe",
+      "demoTitle": "Mojo",
+      "demoOrder": 9,
+      "csdbHvscPath": "MUSICIANS/T/The_Syndrom/Hearts.sid",
+      "csdbReleaseId": 232966
+    },
+    {
+      "pack": "library/packs/musicians/T/The_Syndrom.zip",
+      "file": "Mojo_Dream_Sequences.sid",
+      "title": "Mojo Dream Sequences",
+      "author": "Matthias Hartung (The Syndrom)",
+      "demoTitle": "Mojo",
+      "demoOrder": 9,
+      "csdbHvscPath": "MUSICIANS/T/The_Syndrom/Mojo_Dream_Sequences.sid",
+      "csdbReleaseId": 232966
+    },
+    {
+      "pack": "library/packs/musicians/T/The_Syndrom.zip",
+      "file": "Mojo_Reprise.sid",
+      "title": "Mojo Reprise",
+      "author": "Matthias Hartung (The Syndrom)",
+      "demoTitle": "Mojo",
+      "demoOrder": 9,
+      "csdbHvscPath": "MUSICIANS/T/The_Syndrom/Mojo_Reprise.sid",
+      "csdbReleaseId": 232966
+    },
+    {
+      "pack": "library/packs/musicians/X/Xiny6581.zip",
+      "file": "Mojo_Commando.sid",
+      "title": "Mojo Commando",
+      "author": "Cris (Xiny6581)",
+      "demoTitle": "Mojo",
+      "demoOrder": 9,
+      "csdbHvscPath": "MUSICIANS/X/Xiny6581/Mojo_Commando.sid",
+      "csdbReleaseId": 232966
+    },
+    {
+      "pack": "library/packs/musicians/X/Xiny6581.zip",
+      "file": "Trip_and_Hazy_Clouds.sid",
+      "title": "Trip and Hazy Clouds",
+      "author": "Cris (Xiny6581)",
+      "demoTitle": "Mojo",
+      "demoOrder": 9,
+      "csdbHvscPath": "MUSICIANS/X/Xiny6581/Trip_and_Hazy_Clouds.sid",
+      "csdbReleaseId": 232966
+    },
+    {
+      "pack": "library/packs/musicians/X/Xiny6581.zip",
+      "file": "We_Are_the_Dark_Robots.sid",
+      "title": "We Are the Dark Robots!",
+      "author": "Cris (Xiny6581)",
+      "demoTitle": "Mojo",
+      "demoOrder": 9,
+      "csdbHvscPath": "MUSICIANS/X/Xiny6581/We_Are_the_Dark_Robots.sid",
+      "csdbReleaseId": 232966
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Mojo_Outro.sid",
+      "title": "Mojo Outro",
+      "author": "Thomas E. Petersen (Laxity)",
+      "demoTitle": "Mojo",
+      "demoOrder": 9,
+      "csdbHvscPath": "MUSICIANS/L/Laxity/Mojo_Outro.sid",
+      "csdbReleaseId": 232966
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Flappy_Hero_March.sid",
+      "title": "The Flappy Hero March",
+      "author": "Thomas E. Petersen & S. M. Choe",
+      "demoTitle": "Mojo",
+      "demoOrder": 9,
+      "csdbHvscPath": "MUSICIANS/L/Laxity/Flappy_Hero_March.sid",
+      "csdbReleaseId": 232966
+    },
+    {
+      "pack": "library/packs/musicians/S/Steel.zip",
+      "file": "Butterflies.sid",
+      "title": "Butterflies",
+      "author": "Mario Laugell (Steel)",
+      "demoTitle": "Aloft",
+      "demoOrder": 10,
+      "csdbHvscPath": "MUSICIANS/S/Steel/Butterflies.sid",
+      "csdbReleaseId": 259056
+    },
+    {
+      "pack": "library/packs/musicians/P/Psych858o.zip",
+      "file": "Cloudracer.sid",
+      "title": "Cloudracer",
+      "author": "Marcin Majdzik (psych858o)",
+      "demoTitle": "Aloft",
+      "demoOrder": 10,
+      "csdbHvscPath": "MUSICIANS/P/Psych858o/Cloudracer.sid",
+      "csdbReleaseId": 259056
+    },
+    {
+      "pack": "library/packs/musicians/P/Psych858o.zip",
+      "file": "Vector_Flight.sid",
+      "title": "Vector Flight",
+      "author": "Marcin Majdzik (psych858o)",
+      "demoTitle": "Aloft",
+      "demoOrder": 10,
+      "csdbHvscPath": "MUSICIANS/P/Psych858o/Vector_Flight.sid",
+      "csdbReleaseId": 259056
+    },
+    {
+      "pack": "library/packs/musicians/P/Psych858o.zip",
+      "file": "Velvet_Frequencies.sid",
+      "title": "Velvet Frequencies",
+      "author": "Marcin Majdzik (psych858o)",
+      "demoTitle": "Aloft",
+      "demoOrder": 10,
+      "csdbHvscPath": "MUSICIANS/P/Psych858o/Velvet_Frequencies.sid",
+      "csdbReleaseId": 259056
+    },
+    {
+      "pack": "library/packs/musicians/F/Fanta.zip",
+      "file": "Coma_Light_13_tune_1.sid",
+      "title": "Coma Light 13 (tune 1)",
+      "author": "Alexander Rotzsch (Fanta)",
+      "demoTitle": "Coma Light 13",
+      "demoOrder": 11,
+      "csdbHvscPath": "MUSICIANS/F/Fanta/Coma_Light_13_tune_1.sid",
+      "csdbReleaseId": 112378
+    },
+    {
+      "pack": "library/packs/musicians/F/Fanta.zip",
+      "file": "Coma_Light_13_tune_2.sid",
+      "title": "Coma Light 13 (tune 2)",
+      "author": "Alexander Rotzsch (Fanta)",
+      "demoTitle": "Coma Light 13",
+      "demoOrder": 11,
+      "csdbHvscPath": "MUSICIANS/F/Fanta/Coma_Light_13_tune_2.sid",
+      "csdbReleaseId": 112378
+    },
+    {
+      "pack": "library/packs/musicians/F/Fanta.zip",
+      "file": "Coma_Light_13_tune_3.sid",
+      "title": "Coma Light 13 (tune 3)",
+      "author": "Alexander Rotzsch (Fanta)",
+      "demoTitle": "Coma Light 13",
+      "demoOrder": 11,
+      "csdbHvscPath": "MUSICIANS/F/Fanta/Coma_Light_13_tune_3.sid",
+      "csdbReleaseId": 112378
+    },
+    {
+      "pack": "library/packs/musicians/F/Fanta.zip",
+      "file": "Coma_Light_13_tune_4.sid",
+      "title": "Coma Light 13 (tune 4)",
+      "author": "Alexander Rotzsch (Fanta)",
+      "demoTitle": "Coma Light 13",
+      "demoOrder": 11,
+      "csdbHvscPath": "MUSICIANS/F/Fanta/Coma_Light_13_tune_4.sid",
+      "csdbReleaseId": 112378
+    },
+    {
+      "pack": "library/packs/musicians/F/Fanta.zip",
+      "file": "Dedication_to_Linus_with_Love.sid",
+      "title": "Dedication to Linus with Love",
+      "author": "Alexander Rotzsch (Fanta)",
+      "demoTitle": "Coma Light 13",
+      "demoOrder": 11,
+      "csdbHvscPath": "MUSICIANS/F/Fanta/Dedication_to_Linus_with_Love.sid",
+      "csdbReleaseId": 112378
+    },
+    {
+      "pack": "library/packs/musicians/M/Mitch_and_Dane.zip",
+      "file": "Dane/Edge_of_Disgrace.sid",
+      "title": "Edge of Disgrace",
+      "author": "Stellan Andersson (Dane)",
+      "demoTitle": "Edge of Disgrace",
+      "demoOrder": 12,
+      "csdbHvscPath": "MUSICIANS/M/Mitch_and_Dane/Dane/Edge_of_Disgrace.sid",
+      "csdbReleaseId": 72550
+    },
+    {
+      "pack": "library/packs/musicians/M/Mitch_and_Dane.zip",
+      "file": "Dane/Edge_of_Disgrace_note.sid",
+      "title": "Edge of Disgrace (note)",
+      "author": "Stellan Andersson (Dane)",
+      "demoTitle": "Edge of Disgrace",
+      "demoOrder": 12,
+      "csdbHvscPath": "MUSICIANS/M/Mitch_and_Dane/Dane/Edge_of_Disgrace_note.sid",
+      "csdbReleaseId": 72550
+    },
+    {
+      "pack": "library/packs/musicians/P/Psych858o.zip",
+      "file": "MysGangster.sid",
+      "title": "MysGangster",
+      "author": "psych858o & LMan",
+      "demoTitle": "The Violators",
+      "demoOrder": 13,
+      "csdbHvscPath": "MUSICIANS/P/Psych858o/MysGangster.sid",
+      "csdbReleaseId": 256168
+    },
+    {
+      "pack": "library/packs/musicians/P/Psych858o.zip",
+      "file": "Violators.sid",
+      "title": "The Violators",
+      "author": "Marcin Majdzik (psych858o)",
+      "demoTitle": "The Violators",
+      "demoOrder": 13,
+      "csdbHvscPath": "MUSICIANS/P/Psych858o/Violators.sid",
+      "csdbReleaseId": 256168
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Violators-The_End.sid",
+      "title": "The Violators - The End",
+      "author": "Magnar Harestad",
+      "demoTitle": "The Violators",
+      "demoOrder": 13,
+      "csdbHvscPath": "MUSICIANS/M/Magnar/Violators-The_End.sid",
+      "csdbReleaseId": 256168
+    },
+    {
+      "pack": "library/packs/musicians/F/Fanta.zip",
+      "file": "Comaland_tune_1.sid",
+      "title": "Comaland (tune 1)",
+      "author": "Alexander Rotzsch (Fanta)",
+      "demoTitle": "Comaland 100%",
+      "demoOrder": 14,
+      "csdbHvscPath": "MUSICIANS/F/Fanta/Comaland_tune_1.sid",
+      "csdbReleaseId": 139278
+    },
+    {
+      "pack": "library/packs/musicians/F/Fanta.zip",
+      "file": "Comaland_tune_4.sid",
+      "title": "Comaland (tune 4)",
+      "author": "Alexander Rotzsch (Fanta)",
+      "demoTitle": "Comaland 100%",
+      "demoOrder": 14,
+      "csdbHvscPath": "MUSICIANS/F/Fanta/Comaland_tune_4.sid",
+      "csdbReleaseId": 139278
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Comaland_tune_3.sid",
+      "title": "Comaland (tune 3)",
+      "author": "Magnar Harestad&Fredrik Ternell",
+      "demoTitle": "Comaland 100%",
+      "demoOrder": 14,
+      "csdbHvscPath": "MUSICIANS/M/Magnar/Comaland_tune_3.sid",
+      "csdbReleaseId": 139278
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Comaland_tune_5.sid",
+      "title": "Comaland (tune 5)",
+      "author": "Magnar Harestad",
+      "demoTitle": "Comaland 100%",
+      "demoOrder": 14,
+      "csdbHvscPath": "MUSICIANS/M/Magnar/Comaland_tune_5.sid",
+      "csdbReleaseId": 139278
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Comaland_tune_6.sid",
+      "title": "Comaland (tune 6)",
+      "author": "Magnar Harestad",
+      "demoTitle": "Comaland 100%",
+      "demoOrder": 14,
+      "csdbHvscPath": "MUSICIANS/M/Magnar/Comaland_tune_6.sid",
+      "csdbReleaseId": 139278
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Comaland_100_percent_end.sid",
+      "title": "Comaland 100% (end)",
+      "author": "Magnar Harestad",
+      "demoTitle": "Comaland 100%",
+      "demoOrder": 14,
+      "csdbHvscPath": "MUSICIANS/M/Magnar/Comaland_100_percent_end.sid",
+      "csdbReleaseId": 139278
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Float.sid",
+      "title": "Float",
+      "author": "Magnar Harestad",
+      "demoTitle": "Comaland 100%",
+      "demoOrder": 14,
+      "csdbHvscPath": "MUSICIANS/M/Magnar/Float.sid",
+      "csdbReleaseId": 139278
+    },
+    {
+      "pack": "library/packs/musicians/D/Devilock.zip",
+      "file": "Comaland_Opening.sid",
+      "title": "Comaland Opening",
+      "author": "Peter Siekmann (Devilock)",
+      "demoTitle": "Comaland 100%",
+      "demoOrder": 14,
+      "csdbHvscPath": "MUSICIANS/D/Devilock/Comaland_Opening.sid",
+      "csdbReleaseId": 139278
+    },
+    {
+      "pack": "library/packs/musicians/V/Vincenzo.zip",
+      "file": "Colors_Side_1.sid",
+      "title": "Colors (Side 1)",
+      "author": "László Vincze (Vincenzo)",
+      "demoTitle": "Colors",
+      "demoOrder": 15,
+      "csdbHvscPath": "MUSICIANS/V/Vincenzo/Colors_Side_1.sid",
+      "csdbReleaseId": 262141
+    },
+    {
+      "pack": "library/packs/musicians/V/Vincenzo.zip",
+      "file": "Colors_Side_2.sid",
+      "title": "Colors (Side 2)",
+      "author": "László Vincze (Vincenzo)",
+      "demoTitle": "Colors",
+      "demoOrder": 15,
+      "csdbHvscPath": "MUSICIANS/V/Vincenzo/Colors_Side_2.sid",
+      "csdbReleaseId": 262141
+    },
+    {
+      "pack": "library/packs/musicians/V/Vincenzo.zip",
+      "file": "Colors_Side_3.sid",
+      "title": "Colors (Side 3)",
+      "author": "László Vincze (Vincenzo)",
+      "demoTitle": "Colors",
+      "demoOrder": 15,
+      "csdbHvscPath": "MUSICIANS/V/Vincenzo/Colors_Side_3.sid",
+      "csdbReleaseId": 262141
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Bromance-Bloated.sid",
+      "title": "Bromance - Bloated",
+      "author": "Thomas Mogensen (DRAX)",
+      "demoTitle": "Bromance",
+      "demoOrder": 16,
+      "csdbHvscPath": "MUSICIANS/D/DRAX/Bromance-Bloated.sid",
+      "csdbReleaseId": 205526
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Bromance-Intro.sid",
+      "title": "Bromance - Intro",
+      "author": "Thomas Mogensen (DRAX)",
+      "demoTitle": "Bromance",
+      "demoOrder": 16,
+      "csdbHvscPath": "MUSICIANS/D/DRAX/Bromance-Intro.sid",
+      "csdbReleaseId": 205526
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Bromance-Side_2.sid",
+      "title": "Bromance - Side 2",
+      "author": "Thomas Mogensen (DRAX) & Laxity",
+      "demoTitle": "Bromance",
+      "demoOrder": 16,
+      "csdbHvscPath": "MUSICIANS/D/DRAX/Bromance-Side_2.sid",
+      "csdbReleaseId": 205526
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Close_to_You.sid",
+      "title": "Close to You",
+      "author": "Thomas E. Petersen (Laxity)",
+      "demoTitle": "Bromance",
+      "demoOrder": 16,
+      "csdbHvscPath": "MUSICIANS/L/Laxity/Close_to_You.sid",
+      "csdbReleaseId": 205526
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Farfisa.sid",
+      "title": "Farfisa",
+      "author": "Thomas E. Petersen (Laxity)",
+      "demoTitle": "Bromance",
+      "demoOrder": 16,
+      "csdbHvscPath": "MUSICIANS/L/Laxity/Farfisa.sid",
+      "csdbReleaseId": 205526
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Waves.sid",
+      "title": "Waves",
+      "author": "Thomas E. Petersen (Laxity)",
+      "demoTitle": "Bromance",
+      "demoOrder": 16,
+      "csdbHvscPath": "MUSICIANS/L/Laxity/Waves.sid",
+      "csdbReleaseId": 205526
+    },
+    {
+      "pack": "library/packs/musicians/A/Acrouzet.zip",
+      "file": "Golden.sid",
+      "title": "Golden",
+      "author": "Aidan Crouzet-Pascal (acrouzet)",
+      "demoTitle": "No Bounds",
+      "demoOrder": 17,
+      "csdbHvscPath": "MUSICIANS/A/Acrouzet/Golden.sid",
+      "csdbReleaseId": 232957
+    },
+    {
+      "pack": "library/packs/musicians/S/Stinsen.zip",
+      "file": "Misfortunes.sid",
+      "title": "Misfortunes",
+      "author": "Johan Samuelson (Stinsen)",
+      "demoTitle": "No Bounds",
+      "demoOrder": 17,
+      "csdbHvscPath": "MUSICIANS/S/Stinsen/Misfortunes.sid",
+      "csdbReleaseId": 232957
+    },
+    {
+      "pack": "library/packs/musicians/P/Psych858o.zip",
+      "file": "No_Bounds.sid",
+      "title": "No Bounds",
+      "author": "Marcin Majdzik (psych858o)",
+      "demoTitle": "No Bounds",
+      "demoOrder": 17,
+      "csdbHvscPath": "MUSICIANS/P/Psych858o/No_Bounds.sid",
+      "csdbReleaseId": 232957
+    },
+    {
+      "pack": "library/packs/musicians/M/Mitch_and_Dane.zip",
+      "file": "Dane/Uncensored_part_1.sid",
+      "title": "Uncensored (part 1)",
+      "author": "Stellan Andersson (Dane)",
+      "demoTitle": "Uncensored",
+      "demoOrder": 18,
+      "csdbHvscPath": "MUSICIANS/M/Mitch_and_Dane/Dane/Uncensored_part_1.sid",
+      "csdbReleaseId": 133934
+    },
+    {
+      "pack": "library/packs/musicians/M/Mitch_and_Dane.zip",
+      "file": "Dane/Uncensored_part_2.sid",
+      "title": "Uncensored (part 2)",
+      "author": "Stellan Andersson (Dane)",
+      "demoTitle": "Uncensored",
+      "demoOrder": 18,
+      "csdbHvscPath": "MUSICIANS/M/Mitch_and_Dane/Dane/Uncensored_part_2.sid",
+      "csdbReleaseId": 133934
+    },
+    {
+      "pack": "library/packs/musicians/M/Mitch_and_Dane.zip",
+      "file": "Dane/Uncensored_part_3.sid",
+      "title": "Uncensored (part 3)",
+      "author": "Stellan Andersson (Dane)",
+      "demoTitle": "Uncensored",
+      "demoOrder": 18,
+      "csdbHvscPath": "MUSICIANS/M/Mitch_and_Dane/Dane/Uncensored_part_3.sid",
+      "csdbReleaseId": 133934
+    },
+    {
+      "pack": "library/packs/musicians/F/Fegolhuzz.zip",
+      "file": "Demosceniors.sid",
+      "title": "The DemoSceniors",
+      "author": "Figge Wasberger (Fegolhuzz)",
+      "demoTitle": "No Sprites",
+      "demoOrder": 19,
+      "csdbHvscPath": "MUSICIANS/F/Fegolhuzz/Demosceniors.sid",
+      "csdbReleaseId": 237745
+    },
+    {
+      "pack": "library/packs/musicians/F/Fegolhuzz.zip",
+      "file": "Ghost_tune_1.sid",
+      "title": "The Ghost (tune 1)",
+      "author": "Figge Wasberger (Fegolhuzz)",
+      "demoTitle": "The Ghost",
+      "demoOrder": 20,
+      "csdbHvscPath": "MUSICIANS/F/Fegolhuzz/Ghost_tune_1.sid",
+      "csdbReleaseId": 239394
+    },
+    {
+      "pack": "library/packs/musicians/F/Fegolhuzz.zip",
+      "file": "Ghost_tune_2.sid",
+      "title": "The Ghost (tune 2)",
+      "author": "Figge Wasberger (Fegolhuzz)",
+      "demoTitle": "The Ghost",
+      "demoOrder": 20,
+      "csdbHvscPath": "MUSICIANS/F/Fegolhuzz/Ghost_tune_2.sid",
+      "csdbReleaseId": 239394
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Dirty_Vaiana.sid",
+      "title": "Dirty Vaiana",
+      "author": "Thomas E. Petersen (Laxity)",
+      "demoTitle": "Sprite Bukkake 2",
+      "demoOrder": 21,
+      "csdbHvscPath": "MUSICIANS/L/Laxity/Dirty_Vaiana.sid",
+      "csdbReleaseId": 237744
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "One_Note_Elevator_Music.sid",
+      "title": "One Note Elevator Music",
+      "author": "Thomas E. Petersen (Laxity)",
+      "demoTitle": "Sprite Bukkake 2",
+      "demoOrder": 21,
+      "csdbHvscPath": "MUSICIANS/L/Laxity/One_Note_Elevator_Music.sid",
+      "csdbReleaseId": 237744
+    },
+    {
+      "pack": "library/packs/musicians/M/Metal.zip",
+      "file": "Unboxed_4Pics.sid",
+      "title": "Unboxed 4Pics",
+      "author": "Torben Hansen (Metal)",
+      "demoTitle": "Unboxed",
+      "demoOrder": 22,
+      "csdbHvscPath": "MUSICIANS/M/Metal/Unboxed_4Pics.sid",
+      "csdbReleaseId": 170921
+    },
+    {
+      "pack": "library/packs/musicians/M/Metal.zip",
+      "file": "Unboxed_DustBuster_8580.sid",
+      "title": "Unboxed DustBuster (8580)",
+      "author": "Torben Hansen (Metal)",
+      "demoTitle": "Unboxed",
+      "demoOrder": 22,
+      "csdbHvscPath": "MUSICIANS/M/Metal/Unboxed_DustBuster_8580.sid",
+      "csdbReleaseId": 170921
+    },
+    {
+      "pack": "library/packs/musicians/M/Metal.zip",
+      "file": "Unboxed_KamelTis_8580.sid",
+      "title": "Unboxed KamelTis (8580)",
+      "author": "Torben Hansen (Metal)",
+      "demoTitle": "Unboxed",
+      "demoOrder": 22,
+      "csdbHvscPath": "MUSICIANS/M/Metal/Unboxed_KamelTis_8580.sid",
+      "csdbReleaseId": 170921
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Unboxed_Ending_8580.sid",
+      "title": "Unboxed Ending (8580)",
+      "author": "Thomas Mogensen (DRAX)",
+      "demoTitle": "Unboxed",
+      "demoOrder": 22,
+      "csdbHvscPath": "MUSICIANS/D/DRAX/Unboxed_Ending_8580.sid",
+      "csdbReleaseId": 170921
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Unboxed_Koffein_8580.sid",
+      "title": "Unboxed Koffein (8580)",
+      "author": "Thomas Mogensen (DRAX)",
+      "demoTitle": "Unboxed",
+      "demoOrder": 22,
+      "csdbHvscPath": "MUSICIANS/D/DRAX/Unboxed_Koffein_8580.sid",
+      "csdbReleaseId": 170921
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Unboxed_Pillars_8580.sid",
+      "title": "Unboxed Pillars (8580)",
+      "author": "Thomas Mogensen (DRAX)",
+      "demoTitle": "Unboxed",
+      "demoOrder": 22,
+      "csdbHvscPath": "MUSICIANS/D/DRAX/Unboxed_Pillars_8580.sid",
+      "csdbReleaseId": 170921
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "Unboxed_Wacky_8580.sid",
+      "title": "Unboxed Wacky (8580)",
+      "author": "Thomas Mogensen (DRAX)",
+      "demoTitle": "Unboxed",
+      "demoOrder": 22,
+      "csdbHvscPath": "MUSICIANS/D/DRAX/Unboxed_Wacky_8580.sid",
+      "csdbReleaseId": 170921
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Unboxed_Intro_8580.sid",
+      "title": "Unboxed Intro (8580)",
+      "author": "Thomas E. Petersen (Laxity)",
+      "demoTitle": "Unboxed",
+      "demoOrder": 22,
+      "csdbHvscPath": "MUSICIANS/L/Laxity/Unboxed_Intro_8580.sid",
+      "csdbReleaseId": 170921
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "Unboxed_Turn_Disk_8580.sid",
+      "title": "Unboxed Turn Disk (8580)",
+      "author": "Thomas E. Petersen (Laxity)",
+      "demoTitle": "Unboxed",
+      "demoOrder": 22,
+      "csdbHvscPath": "MUSICIANS/L/Laxity/Unboxed_Turn_Disk_8580.sid",
+      "csdbReleaseId": 170921
+    },
+    {
+      "pack": "library/packs/musicians/S/Scortia.zip",
+      "file": "Unboxed_Rubricked_8580.sid",
+      "title": "Unboxed Rubricked (8580)",
+      "author": "Thomas Bendt (Scortia)",
+      "demoTitle": "Unboxed",
+      "demoOrder": 22,
+      "csdbHvscPath": "MUSICIANS/S/Scortia/Unboxed_Rubricked_8580.sid",
+      "csdbReleaseId": 170921
+    },
+    {
+      "pack": "library/packs/musicians/S/Scortia.zip",
+      "file": "Unboxed_Rubricked_Outro.sid",
+      "title": "Unboxed Rubricked Outro",
+      "author": "Thomas Bendt (Scortia)",
+      "demoTitle": "Unboxed",
+      "demoOrder": 22,
+      "csdbHvscPath": "MUSICIANS/S/Scortia/Unboxed_Rubricked_Outro.sid",
+      "csdbReleaseId": 170921
+    },
+    {
+      "pack": "library/packs/musicians/H/HeatWave.zip",
+      "file": "youtH/Hexed_Side_1.sid",
+      "title": "Hexed Side 1",
+      "author": "Michel de Bree (youtH)",
+      "demoTitle": "Hexed",
+      "demoOrder": 23,
+      "csdbHvscPath": "MUSICIANS/H/HeatWave/youtH/Hexed_Side_1.sid",
+      "csdbReleaseId": 262148
+    },
+    {
+      "pack": "library/packs/musicians/H/HeatWave.zip",
+      "file": "youtH/Hexed_Side_2.sid",
+      "title": "Hexed Side 2",
+      "author": "Michel de Bree (youtH)",
+      "demoTitle": "Hexed",
+      "demoOrder": 23,
+      "csdbHvscPath": "MUSICIANS/H/HeatWave/youtH/Hexed_Side_2.sid",
+      "csdbReleaseId": 262148
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Cafe_Noir.sid",
+      "title": "Cafe Noir",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "E2IRA",
+      "demoOrder": 25,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/Cafe_Noir.sid",
+      "csdbReleaseId": 218343
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "DOOM_Guy.sid",
+      "title": "DOOM Guy",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "E2IRA",
+      "demoOrder": 25,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/DOOM_Guy.sid",
+      "csdbReleaseId": 218343
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "E2IRA.sid",
+      "title": "E2IRA",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "E2IRA",
+      "demoOrder": 25,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/E2IRA.sid",
+      "csdbReleaseId": 218343
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Press_Play_2022_Edition.sid",
+      "title": "Press Play 2022 Edition",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "E2IRA",
+      "demoOrder": 25,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/Press_Play_2022_Edition.sid",
+      "csdbReleaseId": 218343
+    },
+    {
+      "pack": "library/packs/musicians/R/Rodney.zip",
+      "file": "Esira_tune_2.sid",
+      "title": "Esira (tune 2)",
+      "author": "Wojciech Lyszkowski (Rodney)",
+      "demoTitle": "E2IRA",
+      "demoOrder": 25,
+      "csdbHvscPath": "MUSICIANS/R/Rodney/Esira_tune_2.sid",
+      "csdbReleaseId": 218343
+    },
+    {
+      "pack": "library/packs/musicians/L/LMan.zip",
+      "file": "Censor_Groove_Loader.sid",
+      "title": "Censor Groove Loader",
+      "author": "Markus Klein (LMan) & Swallow",
+      "demoTitle": "Wonderland XIV",
+      "demoOrder": 26,
+      "csdbHvscPath": "MUSICIANS/L/LMan/Censor_Groove_Loader.sid",
+      "csdbReleaseId": 232980
+    },
+    {
+      "pack": "library/packs/musicians/L/LMan.zip",
+      "file": "Detroit_Rock_City.sid",
+      "title": "Detroit Rock City",
+      "author": "Markus Klein (LMan)",
+      "demoTitle": "Wonderland XIV",
+      "demoOrder": 26,
+      "csdbHvscPath": "MUSICIANS/L/LMan/Detroit_Rock_City.sid",
+      "csdbReleaseId": 232980
+    },
+    {
+      "pack": "library/packs/musicians/L/LMan.zip",
+      "file": "Empire_State_of_Mind.sid",
+      "title": "Empire State of Mind",
+      "author": "Markus Klein (LMan)",
+      "demoTitle": "Wonderland XIV",
+      "demoOrder": 26,
+      "csdbHvscPath": "MUSICIANS/L/LMan/Empire_State_of_Mind.sid",
+      "csdbReleaseId": 232980
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Wonderland_XIV_tune_1.sid",
+      "title": "Wonderland XIV (tune 1)",
+      "author": "Magnar Harestad",
+      "demoTitle": "Wonderland XIV",
+      "demoOrder": 26,
+      "csdbHvscPath": "MUSICIANS/M/Magnar/Wonderland_XIV_tune_1.sid",
+      "csdbReleaseId": 232980
+    },
+    {
+      "pack": "library/packs/musicians/P/Psych858o.zip",
+      "file": "Wonderland_XIV_tune_3.sid",
+      "title": "Wonderland XIV (tune 3)",
+      "author": "Marcin Majdzik (psych858o)",
+      "demoTitle": "Wonderland XIV",
+      "demoOrder": 26,
+      "csdbHvscPath": "MUSICIANS/P/Psych858o/Wonderland_XIV_tune_3.sid",
+      "csdbReleaseId": 232980
+    },
+    {
+      "pack": "library/packs/musicians/X/Xiny6581.zip",
+      "file": "Carbondioxide.sid",
+      "title": "Carbondioxide",
+      "author": "Cris (Xiny6581)",
+      "demoTitle": "Memento Mori",
+      "demoOrder": 27,
+      "csdbHvscPath": "MUSICIANS/X/Xiny6581/Carbondioxide.sid",
+      "csdbReleaseId": 195841
+    },
+    {
+      "pack": "library/packs/musicians/M/MCH.zip",
+      "file": "Memento_Mori_tune_1.sid",
+      "title": "Memento Mori (tune 1)",
+      "author": "mch & Psycho",
+      "demoTitle": "Memento Mori",
+      "demoOrder": 27,
+      "csdbHvscPath": "MUSICIANS/M/MCH/Memento_Mori_tune_1.sid",
+      "csdbReleaseId": 195841
+    },
+    {
+      "pack": "library/packs/musicians/S/Stinsen.zip",
+      "file": "Memento_Mori_tune_2.sid",
+      "title": "Memento Mori (tune 2)",
+      "author": "J. Samuelson (Stinsen) & Steel",
+      "demoTitle": "Memento Mori",
+      "demoOrder": 27,
+      "csdbHvscPath": "MUSICIANS/S/Stinsen/Memento_Mori_tune_2.sid",
+      "csdbReleaseId": 195841
+    },
+    {
+      "pack": "library/packs/musicians/D/Dlx.zip",
+      "file": "Pinched.sid",
+      "title": "Pinched",
+      "author": "Joakim Falk (dLx)",
+      "demoTitle": "Memento Mori",
+      "demoOrder": 27,
+      "csdbHvscPath": "MUSICIANS/D/Dlx/Pinched.sid",
+      "csdbReleaseId": 195841
+    },
+    {
+      "pack": "library/packs/musicians/M/Metal.zip",
+      "file": "TWINE_End.sid",
+      "title": "TWINE End",
+      "author": "Torben Hansen (Metal)",
+      "demoTitle": "The World Is Not Enough - We Need More Scrollers",
+      "demoOrder": 46,
+      "csdbHvscPath": "MUSICIANS/M/Metal/TWINE_End.sid",
+      "csdbReleaseId": 219289
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "TWINE_Intro.sid",
+      "title": "TWINE Intro",
+      "author": "Thomas E. Petersen (Laxity)",
+      "demoTitle": "The World Is Not Enough - We Need More Scrollers",
+      "demoOrder": 46,
+      "csdbHvscPath": "MUSICIANS/L/Laxity/TWINE_Intro.sid",
+      "csdbReleaseId": 219289
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "TWINE_Jam_Bond.sid",
+      "title": "TWINE Jam Bond",
+      "author": "Thomas E. Petersen (Laxity)",
+      "demoTitle": "The World Is Not Enough - We Need More Scrollers",
+      "demoOrder": 46,
+      "csdbHvscPath": "MUSICIANS/L/Laxity/TWINE_Jam_Bond.sid",
+      "csdbReleaseId": 219289
+    },
+    {
+      "pack": "library/packs/musicians/L/Laxity.zip",
+      "file": "TWINE_Turn_Disk.sid",
+      "title": "TWINE Turn Disk",
+      "author": "Thomas E. Petersen (Laxity)",
+      "demoTitle": "The World Is Not Enough - We Need More Scrollers",
+      "demoOrder": 46,
+      "csdbHvscPath": "MUSICIANS/L/Laxity/TWINE_Turn_Disk.sid",
+      "csdbReleaseId": 219289
+    },
+    {
+      "pack": "library/packs/musicians/D/DRAX.zip",
+      "file": "TWINE_Main.sid",
+      "title": "TWINE Main",
+      "author": "Thomas Mogensen (DRAX)",
+      "demoTitle": "The World Is Not Enough - We Need More Scrollers",
+      "demoOrder": 46,
+      "csdbHvscPath": "MUSICIANS/D/DRAX/TWINE_Main.sid",
+      "csdbReleaseId": 219289
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "My_Dearest_Pet.sid",
+      "title": "My Dearest Pet",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "3SIRA",
+      "demoOrder": 49,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/My_Dearest_Pet.sid",
+      "csdbReleaseId": 245148
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Neon_Sunrise.sid",
+      "title": "Neon Sunrise",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "3SIRA",
+      "demoOrder": 49,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/Neon_Sunrise.sid",
+      "csdbReleaseId": 245148
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "POKEYing_Funk_at_You.sid",
+      "title": "POKEYing Funk at You",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "3SIRA",
+      "demoOrder": 49,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/POKEYing_Funk_at_You.sid",
+      "csdbReleaseId": 245148
+    },
+    {
+      "pack": "library/packs/musicians/J/Jammer.zip",
+      "file": "Press_Stop.sid",
+      "title": "Press Stop",
+      "author": "Kamil Wolnikowski (Jammer)",
+      "demoTitle": "3SIRA",
+      "demoOrder": 49,
+      "csdbHvscPath": "MUSICIANS/J/Jammer/Press_Stop.sid",
+      "csdbReleaseId": 245148
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Comaland_end.sid",
+      "title": "Comaland (end)",
+      "author": "Magnar Harestad",
+      "demoTitle": "Comaland",
+      "demoOrder": 67,
+      "csdbHvscPath": "MUSICIANS/M/Magnar/Comaland_end.sid",
+      "csdbReleaseId": 133940
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Comaland_tune_3.sid",
+      "title": "Comaland (tune 3)",
+      "author": "Magnar Harestad&Fredrik Ternell",
+      "demoTitle": "Comaland",
+      "demoOrder": 67,
+      "csdbHvscPath": "MUSICIANS/M/Magnar/Comaland_tune_3.sid",
+      "csdbReleaseId": 133940
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Comaland_tune_5.sid",
+      "title": "Comaland (tune 5)",
+      "author": "Magnar Harestad",
+      "demoTitle": "Comaland",
+      "demoOrder": 67,
+      "csdbHvscPath": "MUSICIANS/M/Magnar/Comaland_tune_5.sid",
+      "csdbReleaseId": 133940
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Comaland_tune_6.sid",
+      "title": "Comaland (tune 6)",
+      "author": "Magnar Harestad",
+      "demoTitle": "Comaland",
+      "demoOrder": 67,
+      "csdbHvscPath": "MUSICIANS/M/Magnar/Comaland_tune_6.sid",
+      "csdbReleaseId": 133940
+    },
+    {
+      "pack": "library/packs/musicians/M/Magnar.zip",
+      "file": "Float.sid",
+      "title": "Float",
+      "author": "Magnar Harestad",
+      "demoTitle": "Comaland",
+      "demoOrder": 67,
+      "csdbHvscPath": "MUSICIANS/M/Magnar/Float.sid",
+      "csdbReleaseId": 133940
+    },
+    {
+      "pack": "library/packs/musicians/F/Fanta.zip",
+      "file": "Comaland_tune_1.sid",
+      "title": "Comaland (tune 1)",
+      "author": "Alexander Rotzsch (Fanta)",
+      "demoTitle": "Comaland",
+      "demoOrder": 67,
+      "csdbHvscPath": "MUSICIANS/F/Fanta/Comaland_tune_1.sid",
+      "csdbReleaseId": 133940
+    },
+    {
+      "pack": "library/packs/musicians/F/Fanta.zip",
+      "file": "Comaland_tune_4.sid",
+      "title": "Comaland (tune 4)",
+      "author": "Alexander Rotzsch (Fanta)",
+      "demoTitle": "Comaland",
+      "demoOrder": 67,
+      "csdbHvscPath": "MUSICIANS/F/Fanta/Comaland_tune_4.sid",
+      "csdbReleaseId": 133940
+    },
+    {
+      "pack": "library/packs/musicians/D/Devilock.zip",
+      "file": "Comaland_Opening.sid",
+      "title": "Comaland Opening",
+      "author": "Peter Siekmann (Devilock)",
+      "demoTitle": "Comaland",
+      "demoOrder": 67,
+      "csdbHvscPath": "MUSICIANS/D/Devilock/Comaland_Opening.sid",
+      "csdbReleaseId": 133940
+    },
+    {
+      "pack": "library/packs/musicians/V/Vincenzo.zip",
+      "file": "Shade_on_Me.sid",
+      "title": "Shade on Me",
+      "author": "László Vincze (Vincenzo)",
+      "demoTitle": "5 Shades of Grey",
+      "demoOrder": 99,
+      "csdbHvscPath": "MUSICIANS/V/Vincenzo/Shade_on_Me.sid",
+      "csdbReleaseId": 192912
+    },
+    {
+      "pack": "library/packs/musicians/V/Vincenzo.zip",
+      "file": "Shade_on_You.sid",
+      "title": "Shade on You",
+      "author": "László Vincze (Vincenzo)",
+      "demoTitle": "5 Shades of Grey",
+      "demoOrder": 99,
+      "csdbHvscPath": "MUSICIANS/V/Vincenzo/Shade_on_You.sid",
+      "csdbReleaseId": 192912
+    }
+  ]
+}
