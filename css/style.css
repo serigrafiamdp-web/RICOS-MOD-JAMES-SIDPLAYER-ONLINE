@@ -2460,3 +2460,102 @@ left: 1px;
 #ricoLivePlaylistItems .rico-csdb-live-heading strong {font-weight:700;}
 #ricoLivePlaylistItems .rico-csdb-live-group {opacity:.85;}
 #ricoLivePlaylistItems .rico-csdb-live-status {margin-left:auto;font-size:10px;opacity:.72;}
+
+/* TEST135 — DONATE uses SpotySid's existing colour variables and dialog UI. */
+#ricoDonateDialog {
+  box-sizing:border-box;
+  width:min(540px,calc(100vw - 20px)) !important;
+  max-width:calc(100vw - 20px);
+  background:var(--rico-theme-bg,#171b25) !important;
+  color:var(--rico-theme-fg,#fff) !important;
+  border-color:var(--rico-theme-border,#777) !important;
+}
+#ricoDonateDialog .title,
+#ricoDonateDialog .buttons {
+  color:var(--rico-theme-fg,#fff) !important;
+  background:var(--rico-theme-panel,#222) !important;
+  border-color:var(--rico-theme-border,#777) !important;
+}
+#ricoDonateDialog .content {
+  box-sizing:border-box;
+  padding:10px 14px;
+  color:var(--rico-theme-fg,#fff) !important;
+  background:var(--rico-theme-bg,#171b25) !important;
+  overflow:auto;
+}
+#ricoDonateContent {
+  box-sizing:border-box;
+  color:var(--rico-theme-fg,#fff) !important;
+  font:13px/1.52 Tahoma,Arial,sans-serif;
+}
+#ricoDonateContent h2 {
+  margin:4px 0 10px;
+  font-size:17px;line-height:1.25;
+  font-weight:bold;
+  color:var(--rico-theme-fg,#fff);
+  border-bottom:1px solid var(--rico-theme-border,#777);
+  padding-bottom:8px;
+}
+#ricoDonateContent p {margin:8px 0;color:inherit;}
+#ricoDonateContent .rico-donate-motto {font-weight:bold;}
+#ricoDonateDialog .rico-donate-action {
+  margin:13px 0 9px;
+  text-align:center;
+  padding:12px;
+  border:1px solid var(--rico-theme-border,#777);
+  background:var(--rico-theme-panel,#222);
+  border-radius:4px;
+}
+#ricoDonateDialog .rico-donate-paypal {
+  box-sizing:border-box;display:inline-flex;
+  align-items:center;justify-content:center;
+  padding:8px 16px;
+  border:1px solid var(--rico-theme-border,#888);
+  background:var(--rico-theme-bg,#111);
+  color:var(--rico-theme-fg,#fff);
+  font:bold 12px/1.2 Tahoma,Arial,sans-serif;
+  text-decoration:none;
+  cursor:pointer;
+  border-radius:4px;
+}
+#ricoDonateDialog .rico-donate-paypal:hover:not([aria-disabled="true"]) {
+  background:var(--rico-theme-hover,#444);
+}
+#ricoDonateDialog .rico-donate-paypal[aria-disabled="true"] {
+  opacity:.55;cursor:not-allowed;
+}
+#ricoDonateDialog #ricoDonateStatus {
+  margin-top:7px;font:11px/1.3 Tahoma,Arial,sans-serif;
+  color:var(--rico-theme-fg,#fff);opacity:.78;
+}
+#ricoDonateDialog .rico-donate-note {font-size:11px;opacity:.82;}
+#ricoDonateDialog .rico-donate-credits {
+  margin:14px 0 0;
+  padding-top:7px;
+  border-top:1px solid var(--rico-theme-border,#777);
+}
+#ricoDonateDialog .rico-donate-credits h3 {
+  margin:3px 0 6px;font:bold 13px/1.3 Tahoma,Arial,sans-serif;
+  color:var(--rico-theme-fg,#fff);
+}
+#ricoDonateDialog #ricoDonateSupporters {
+  display:block;
+  list-style:disc;
+  padding:6px 0 6px 26px;
+  margin:7px 0;
+  border:1px solid var(--rico-theme-border,#777);
+  background:var(--rico-theme-panel,#222);
+  max-height:130px;
+  overflow-y:auto;
+  color:var(--rico-theme-fg,#fff);
+  font:12px/1.55 Tahoma,Arial,sans-serif;
+}
+#ricoDonateDialog #ricoDonateSupporters li {padding:1px 0;}
+#ricoDonateDialog #ricoDonateSupporters .rico-donate-empty {
+  list-style:none;opacity:.72;font-style:italic;
+  margin-left:-12px;
+}
+#ricoDonateDialog .buttons button {
+  min-width:68px;min-height:29px;
+  cursor:pointer;
+}
