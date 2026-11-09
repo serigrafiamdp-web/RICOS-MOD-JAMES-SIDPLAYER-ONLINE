@@ -2,7 +2,7 @@
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css?v=test134demogroups">
+    <link rel="stylesheet" href="css/style.css?v=test135donate">
     <title>SpotySid — Rico + James SID Player | Oscilloscope View</title>
 
     <link rel="shortcut icon" type="image/png" href="images/icon16.png"/>
@@ -228,6 +228,49 @@
       </div>
       <div class="buttons">
         <button type="button" id="ricoHelpClose">CLOSE</button>
+      </div>
+    </div>
+
+    <div id="ricoDonateDialog" class="dialog" style="width: 540px; height: 470px"
+      role="dialog" aria-modal="true" aria-labelledby="ricoDonateHeading">
+      <div class="title">DONATE — SpotySid</div>
+      <div class="content">
+        <div id="ricoDonateContent">
+          <h2 id="ricoDonateHeading">HELP KEEP SPOTYSID ALIVE</h2>
+          <p>
+            SpotySid is an independent Commodore 64 SID music preservation and
+            continued-development project, based on the original James / Jojati SID Player
+            and carried forward by Rico / RicoSerigrafia.
+          </p>
+          <p>
+            Your voluntary support helps keep the project available, maintain the player,
+            preserve its credits and C64 music history, and continue improving tools for
+            discovering, playing, creating and sharing SID playlists.
+          </p>
+          <p class="rico-donate-motto">Play the classics. Discover hidden SID treasures.
+            Respect the artists. Keep the scene alive.</p>
+          <div class="rico-donate-action">
+            <a id="ricoDonatePayPal" class="rico-donate-paypal" target="_blank"
+              rel="noopener noreferrer" aria-disabled="true" tabindex="-1">SUPPORT WITH PAYPAL</a>
+            <div id="ricoDonateStatus" role="status">PAYPAL LINK NOT CONNECTED YET</div>
+          </div>
+          <p class="rico-donate-note">
+            SpotySid remains free for everyone. Contributions are optional and do not
+            purchase or transfer rights to SID music.
+          </p>
+          <section class="rico-donate-credits" aria-labelledby="ricoDonateFriendsTitle">
+            <h3 id="ricoDonateFriendsTitle">FRIENDS &amp; TESTERS WHO HELPED</h3>
+            <p>Thank you to everyone supporting the preservation and improvement
+              of this project.</p>
+            <ul id="ricoDonateSupporters" aria-label="Supporters">
+              <li class="rico-donate-empty">Supporter credits will appear here once approved.</li>
+            </ul>
+            <p class="rico-donate-note">Names are added only with each supporter's permission.</p>
+          </section>
+        </div>
+      </div>
+      <div class="buttons">
+        <button type="button" id="ricoDonateClose">CLOSE</button>
       </div>
     </div>
 
@@ -698,6 +741,7 @@
 
       <div class="rico-bottom-about">
         <button type="button" id="aboutSIDButton" title="Learn about the SID chip">ABOUT SID CHIP</button>
+        <button type="button" id="ricoDonateButton" title="Support the maintenance and continued development of SpotySid" aria-haspopup="dialog" aria-controls="ricoDonateDialog">DONATE</button>
         <button type="button" id="aboutButton" title="Project information and credits">ABOUT</button>
         <button type="button" id="ricoHelpButton" title="Player instructions and playlist guide" aria-haspopup="dialog" aria-controls="ricoHelpDialog">HELP</button>
       </div>
@@ -710,5 +754,6 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script type="text/javascript" src="js/customPlaylist.test101.js?v=test134demogroups"></script>
     <script type="text/javascript" src="js/help.test109.js?v=test109help"></script>
+    <script type="text/javascript" src="js/donate.test135.js?v=test135donate"></script>
   </body>
 </html>
