@@ -1265,10 +1265,10 @@
         $('<span>').addClass('rico-live-group').text(item.sceneGroup).appendTo(row);
         if(sceneArtist)$('<span>').addClass('rico-live-composer').text(sceneArtist).appendTo(row);
         $('<span>').addClass('rico-live-song').text(songTitle).appendTo(row);
-        row.attr('title',(index+1)+'. '+item.sceneGroup+(sceneArtist?' — '+sceneArtist:'')+' — '+songTitle);
+        row.attr('aria-label',(index+1)+'. '+item.sceneGroup+(sceneArtist?' — '+sceneArtist:'')+' — '+songTitle);
       } else {
         $('<span>').addClass('rico-live-title').text(songTitle + ' — ' + songArtist).appendTo(row);
-        row.attr('title',songTitle+' — '+songArtist);
+        row.attr('aria-label',songTitle+' — '+songArtist);
       }
       if (active) $('<span>').addClass('rico-live-current').text('▶').appendTo(row);
       if(index===queuedLiveIndex) $('<span>').addClass('rico-live-next').text('›').appendTo(row);
