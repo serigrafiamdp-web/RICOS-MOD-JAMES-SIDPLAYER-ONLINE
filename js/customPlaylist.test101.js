@@ -2216,12 +2216,12 @@
     // TEST112: first-play fast path for the large historical HVSC playlist.
     // The browser still gets bytes from the existing HVSC ZIP packs; no SID
     // files are published, duplicated, or permanently stored as new tracks.
-    function createProgressiveReferenceStream(refs){
+    function createProgressiveReferenceStream(refs,unknownAuthors){
       var controller=new AbortController(),archives=new Map(),cancelled=false;
       var slots=refs.map(function(ref,i){
         return {id:'hvsc-slot-'+i,
           name:ref.file.split('/').pop().replace(/\.sid$/i,'').replace(/_/g,' '),
-          author:'Loading from HVSC…',released:'',file:ref.file,size:0,
+          author:unknownAuthors?'<?>':'Loading from HVSC…',released:'',file:ref.file,size:0,
           numSubtunes:1,startSubtune:1,sidFormat:'PSID',localBytes:null,
           _hvscRef:{pack:ref.pack,file:ref.file},_hvscPromise:null};
       });
@@ -2306,7 +2306,7 @@
       return stream;
     }
     async function loadProgressiveReferencePlaylist(data,localImport){
-      var stream=createProgressiveReferenceStream(data.tracks);
+      var stream=createProgressiveReferenceStream(data.tracks,data.name==='UNKNOWN CSDB');
       activeReferenceStream=stream;
       try{
         await stream.loadSlot(stream.slots[0]);
