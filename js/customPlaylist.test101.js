@@ -1280,7 +1280,6 @@
         row.appendTo(wrap);
         $('<button type="button">').addClass('rico-live-add').text('+')
           .attr('aria-label','Add '+songTitle+' to selected remix')
-          .attr('title','Add to selected REMIX PLAYLIST without changing playback')
           .on('click',function(event){event.stopPropagation();addRemixTrack(index);})
           .appendTo(wrap);
         if(customActive){
@@ -1296,7 +1295,6 @@
         $('<button type="button">').addClass('rico-live-remove')
           .toggleClass('rico-ranked-disabled',loadedRankedPlaylist).text('×')
           .attr('aria-label','Remove '+songTitle+' temporarily')
-          .attr('title',loadedRankedPlaylist?'Fixed original ranking entry':'Remove song temporarily')
           .prop('disabled',loadedRankedPlaylist)
           .on('click',function(event){event.stopPropagation();removeLiveSong(index);})
           .appendTo(wrap);
