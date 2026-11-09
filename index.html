@@ -2,7 +2,7 @@
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css?v=test109help">
+    <link rel="stylesheet" href="css/style.css?v=test116communityorder">
     <title>RICOS MOD - JAMES SIDPLAYER ONLINE</title>
 
     <link rel="shortcut icon" type="image/png" href="images/icon16.png"/>
@@ -50,7 +50,11 @@
           <div id="sidList"></div>
         </div>
         <div id="ricoCommunityPanel" style="display:block;position:absolute;top:327px;bottom:10px;left:10px;right:10px;overflow:auto;border:1px solid #555;background:#eee;color:#222;padding:9px;">
-          <strong>COMMUNITY PLAYLISTS</strong>
+          <div class="rico-community-toolbar">
+            <strong>COMMUNITY PLAYLISTS</strong>
+            <span id="ricoCommunityOrderStatus" role="status" aria-live="polite"></span>
+            <button type="button" id="ricoCommunityOrderSave" aria-label="Save community playlist order in this browser">SAVE</button>
+          </div>
           <div style="margin:5px 0 10px;font-size:11px;">Public playlists created by the community. Every playlist references songs in the fixed HVSC library.</div>
           <div id="ricoCommunityItems" role="list">No public playlists published yet.</div>
         </div>
@@ -699,7 +703,7 @@
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test87aboutsidclose"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script type="text/javascript" src="js/customPlaylist.test101.js?v=test115notips"></script>
+    <script type="text/javascript" src="js/customPlaylist.test101.js?v=test116communityorder"></script>
     <script type="text/javascript" src="js/help.test109.js?v=test109help"></script>
   </body>
 </html>
