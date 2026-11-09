@@ -1,5 +1,15 @@
 # RICOS MOD – JAMES SIDPLAYER ONLINE
 
+## TEST118 — Edit existing published playlists while listening to another list (staged)
+
+**What changed:** The **ADD + TO** destination selector in the floating playlist now offers existing REMIX drafts **and D1 PUBLISHED PLAYLISTS**. Selecting a published list starts or resumes a persistent private editing draft that keeps the same original D1 ID. While playing any other playlist, + adds the selected SID's verified original HVSC `pack/file` reference into that draft, without changing the source playback or the public list.
+
+In the REMIX editor, linked drafts show **PUBLISH CHANGES**, **PREVIEW CHANGES** and **DISCARD CHANGES**. The public catalog has an **EDIT CONTENT** shortcut. Upon authorized publication, the app checks that the original remote list is unchanged, PUTs additions/removals/order back to the **same ID**, and verifies the resulting full list from the server. Never POST a duplicate.
+
+- [Open TEST118](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/?test=118publishedediting)
+- [TEST118 workflow, safety rules, deployment and test checklist](docs/TEST118_EDIT_PUBLISHED_PLAYLIST_CONTENT.md)
+- **Status:** Frontend and `community/api/worker.js` source committed; code syntax checks passed. **Cloudflare Worker must be manually deployed** to enable `playlistTrackAdditions:true` for new-song publication; browser end-to-end PASS pending. Until then, editing drafts work locally and publication is blocked safely. No live Cloudflare worker deployment is claimed.
+
 ## TEST117 — Restore theme-colored hints for + and × (code published; browser PASS pending)
 
 TEST115 removed the browser's default white HTML `title` tooltips from the floating playlist's **+** and **×** buttons, but inadvertently left them with no visual help. TEST117 restores their instructions via the existing theme-colored `#ricoReorderHint` tooltip (same palette as the ↑/↓ reorder arrows), using pointer hover and without any native `title`.
