@@ -2,7 +2,7 @@
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css?v=test105reorder">
+    <link rel="stylesheet" href="css/style.css?v=test109help">
     <title>RICOS MOD - JAMES SIDPLAYER ONLINE</title>
 
     <link rel="shortcut icon" type="image/png" href="images/icon16.png"/>
@@ -113,6 +113,117 @@
 
     </div>
 
+
+
+    <!-- TEST109: general user help, bilingual. Registered with the existing dialog manager. -->
+    <div id="ricoHelpDialog" class="dialog" style="width: 580px; height: 540px"
+         role="dialog" aria-modal="true" aria-label="RICOS SIDPLAYER HELP">
+      <div class="title">HELP — RICOS MOD SIDPLAYER</div>
+      <div class="content">
+        <div id="ricoHelpContent">
+          <div class="rico-help-language-buttons" role="group" aria-label="Help language">
+            <button type="button" id="ricoHelpEnglishButton" aria-pressed="true">ENGLISH</button>
+            <button type="button" id="ricoHelpSpanishButton" aria-pressed="false">ESPAÑOL</button>
+          </div>
+
+          <section id="ricoHelpEnglish" lang="en">
+            <h3>1. PLAY SID MUSIC</h3>
+            <p>Select <strong>CHOOSE A SID</strong> to browse <strong>COMMUNITY PLAYLISTS</strong>,
+            <strong>OUR COLLECTION</strong>, <strong>GAMES</strong> or the <strong>HVSC LIBRARY</strong>.
+            Click PLAY on a playlist or choose a SID. <strong>PLAYLIST</strong> opens the floating list.
+            Use PLAY, STOP and NEXT SID to control playback.</p>
+
+            <h3>2. CREATE A REMIX PLAYLIST</h3>
+            <ol>
+              <li>Open <strong>REMIX PLAYLIST</strong> in the floating playlist and select <strong>NEW REMIX</strong>.</li>
+              <li>Enter a playlist name and the <strong>Playlist by</strong> creator credit.</li>
+              <li>Click <strong>DONE</strong>, browse songs, then click <strong>+</strong> next to each SID to add it to your selected REMIX.</li>
+              <li>Open the creator again to edit its order, or select <strong>PLAY REMIX</strong> to hear a preview.</li>
+              <li>The unpublished REMIX is a browser-local draft. Choose <strong>PUBLISH REMIX</strong> and enter your beta key to share it publicly.</li>
+            </ol>
+
+            <h3>3. REORDER AND SAVE</h3>
+            <p>Use <strong>↑</strong> and <strong>↓</strong> in an editable playlist:
+            <strong>single click = 1 position</strong>, <strong>double-click = 10 positions</strong>.
+            Hover over an arrow to see its hint. Reordering does not restart the SID playing.</p>
+            <p>After changing the order, press <strong>SAVE</strong>.
+            For <strong>unpublished REMIX or local playlists</strong>, SAVE keeps it in this browser
+            (no beta key). For an <strong>already published playlist or collection</strong>, SAVE
+            asks for the beta key and only shows <strong>SAVE verified</strong> when the server
+            confirms the new order. Reload after that confirmation.</p>
+            <p><strong>TOP 100 ranked lists are protected:</strong> they cannot be reordered or saved.
+            You can still add their songs to your own REMIX using + when a supported reference is available.</p>
+
+            <h3>4. IMPORT SID / LOCAL LISTS</h3>
+            <p><strong>IMPORT SID</strong> opens tools for importing SID files from your computer
+            and saving a local list in this browser; you can export a list as JSON.
+            Local saves are not visible to other visitors. Publishing is a separate action
+            and requires the beta key.</p>
+
+            <h3>5. AUTO PLAY & TIMER</h3>
+            <p>Enable <strong>AUTO</strong> to move to the next SID.
+            The playlist <strong>TIMER (MM:SS)</strong> sets the maximum playback time per tune.
+            The player can also advance sooner if sustained audio silence is detected.
+            Songs with several subtunes have separate &lt; and &gt; controls.</p>
+
+            <h3>6. NOTES</h3>
+            <p>The floating playlist can be moved and resized. A saved public order is shared
+            with everyone; local REMIX drafts and local imported lists stay in your browser.
+            For project credits and technical history, see <strong>ABOUT</strong>.</p>
+          </section>
+
+          <section id="ricoHelpSpanish" lang="es" hidden>
+            <h3>1. ESCUCHAR MÚSICA SID</h3>
+            <p>Abrí <strong>CHOOSE A SID</strong> para explorar <strong>COMMUNITY PLAYLISTS</strong>,
+            <strong>OUR COLLECTION</strong>, <strong>GAMES</strong> o <strong>HVSC LIBRARY</strong>.
+            Elegí PLAY en una lista o seleccioná un SID. <strong>PLAYLIST</strong> abre la lista flotante.
+            PLAY, STOP y NEXT SID controlan la reproducción.</p>
+
+            <h3>2. CREAR UNA PLAYLIST REMIX</h3>
+            <ol>
+              <li>Abrí <strong>REMIX PLAYLIST</strong> y elegí <strong>NEW REMIX</strong>.</li>
+              <li>Escribí el nombre de la lista y el autor en <strong>Playlist by</strong>.</li>
+              <li>Pulsá <strong>DONE</strong>; buscá música y usá <strong>+</strong> para agregar cada SID a tu REMIX.</li>
+              <li>Volvé al editor para ordenar las canciones o elegí <strong>PLAY REMIX</strong> para escuchar la lista.</li>
+              <li>El REMIX sin publicar es un borrador local del navegador. Usá <strong>PUBLISH REMIX</strong> y la clave beta para publicarlo.</li>
+            </ol>
+
+            <h3>3. ORDENAR Y GUARDAR</h3>
+            <p>Usá las flechas <strong>↑</strong> y <strong>↓</strong>:
+            <strong>un clic mueve 1 lugar</strong> y <strong>doble clic mueve 10 lugares</strong>.
+            Al pasar el mouse aparece una ayuda. Ordenar no interrumpe el SID que está sonando.</p>
+            <p>Después de ordenar, pulsá <strong>SAVE</strong>.
+            En un <strong>REMIX sin publicar o lista local</strong>, guarda en este navegador
+            sin clave. Si la <strong>playlist o colección ya está publicada</strong>, SAVE pide la
+            clave beta y confirma <strong>SAVE verified</strong> cuando el servidor guarda
+            el nuevo orden. Recién entonces conviene recargar.</p>
+            <p><strong>Las listas TOP 100 rankeadas están protegidas:</strong>
+            no se pueden reordenar ni guardar. Podés agregar sus canciones a un REMIX
+            cuando exista una referencia SID compatible.</p>
+
+            <h3>4. IMPORTAR SID Y LISTAS LOCALES</h3>
+            <p><strong>IMPORT SID</strong> permite agregar archivos SID de tu computadora,
+            guardar listas en el navegador y exportarlas como JSON.
+            Las listas locales no son públicas; para publicar se necesita la clave beta.</p>
+
+            <h3>5. AUTO Y TIMER</h3>
+            <p>Activá <strong>AUTO</strong> para avanzar automáticamente.
+            <strong>TIMER (MM:SS)</strong> indica la duración máxima por canción.
+            El reproductor también puede avanzar antes si detecta silencio sostenido.
+            Los SID con varios subtunes tienen controles &lt; y &gt;.</p>
+
+            <h3>6. INFORMACIÓN</h3>
+            <p>La playlist flotante se puede mover y redimensionar.
+            Los cambios públicos son visibles para otros usuarios;
+            los borradores y listas locales permanecen en este navegador.
+            Encontrás créditos e historia del proyecto en <strong>ABOUT</strong>.</p>
+          </section>
+        </div>
+      </div>
+      <div class="buttons">
+        <button type="button" id="ricoHelpClose">CLOSE</button>
+      </div>
+    </div>
 
     <div id="aboutSIDDialog" class="dialog" style="width: 560px; height: 520px">
       <div class="title">About</div>
@@ -577,8 +688,9 @@
 
 
       <div class="rico-bottom-about">
-        <button type="button" id="aboutSIDButton">About the SID Chip...</button>
-        <button type="button" id="aboutButton">About...</button>
+        <button type="button" id="aboutSIDButton" title="Learn about the SID chip">ABOUT SID CHIP</button>
+        <button type="button" id="aboutButton" title="Project information and credits">ABOUT</button>
+        <button type="button" id="ricoHelpButton" title="Player instructions and playlist guide" aria-haspopup="dialog" aria-controls="ricoHelpDialog">HELP</button>
       </div>
     </div>
     <script type="text/javascript" src="js/jquery.js"></script>
@@ -588,5 +700,6 @@
     <script type="text/javascript" src="js/sidPlayer.js?v=test87aboutsidclose"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script type="text/javascript" src="js/customPlaylist.test101.js?v=test107orderverify2"></script>
+    <script type="text/javascript" src="js/help.test109.js?v=test109help"></script>
   </body>
 </html>
