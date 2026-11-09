@@ -375,6 +375,9 @@
   var activePublicCollection = null;
   // TEST95: ranked TOP 100 sources retain their published order and entries.
   var loadedRankedPlaylist=false;
+  // TEST132: render ranked releases in the standard floating playlist.
+  var activeCsdbRankDisplay=null;
+  function resetCsdbRankDisplay(){activeCsdbRankDisplay=null;$('#playButton,#nextSid,#prevSid').prop('disabled',false);}
   // TEST106: source identity for saving editable playlists and REMIX drafts.
   var activeRemixDraftId=null;
   var activeReferenceTracks=null;
@@ -1450,7 +1453,7 @@
 
   function renderLivePlaylist() {
     // Ordinary short lists retain the original complete render behavior.
-    if(paintLargePlaylistMarkers())return;
+    if(!activeCsdbRankDisplay&&paintLargePlaylistMarkers())return;
     var scrollNode=document.getElementById('ricoLivePlaylistItems');
     var previousScroll=scrollNode?scrollNode.scrollTop:0;
     var holder = $('#ricoLivePlaylistItems').empty();
@@ -1459,7 +1462,7 @@
     var list = player.sidList || [];
     if(selectedLiveIndex!==null && selectedLiveIndex>=list.length)selectedLiveIndex=null;
     $('#ricoRemixBar').css('display',(!landingPlaylists&&list.length)?'flex':'none');
-    $('#ricoLiveCount').text('(' + list.length + ')');
+    $('#ricoLiveCount').text('(' + (activeCsdbRankDisplay?activeCsdbRankDisplay.items.length:list.length) + ')');
     // TEST106: SAVE is visible for any editable loaded list, never TOP 100.
     var canSave=!!(customActive&&!landingPlaylists&&!loadedRankedPlaylist&&list.length);
     var hasChanges=canSave&&(activePublicCollection?activePublicCollection.dirtyOrder:
@@ -1488,11 +1491,29 @@
       $('<div>').addClass('rico-live-empty').text("Choose a playlist from COMMUNITY PLAYLISTS to start listening.").appendTo(holder);
       return;
     }
+    function appendCsdbHeading(position){
+      var display=activeCsdbRankDisplay,entry=display.items[position],count=display.trackCounts[position]||0;
+      var header=$('<div>').addClass('rico-csdb-live-heading');
+      $('<strong>').text('#'+(position+1)+'  '+entry.title).appendTo(header);
+      if(entry.group&&display.kind!=='groups')$('<span>').addClass('rico-csdb-live-group').text(entry.group).appendTo(header);
+      $('<span>').addClass('rico-csdb-live-status').text(count?count+' SID':'SID PENDING').appendTo(header);
+      header.appendTo(holder);
+    }
     if (!list.length) {
-      $('<div>').addClass('rico-live-empty').text('No SID loaded. Use Choose A SID to add music.').appendTo(holder);
+      if(activeCsdbRankDisplay){
+        activeCsdbRankDisplay.items.forEach(function(entry,i){appendCsdbHeading(i);});
+      }else{
+        $('<div>').addClass('rico-live-empty').text('No SID loaded. Use Choose A SID to add music.').appendTo(holder);
+      }
       return;
     }
+    var nextCsdbRank=0;
     list.forEach(function (item, index) {
+      if(activeCsdbRankDisplay){
+        var rank=activeCsdbRankDisplay.trackRanks[index];
+        while(nextCsdbRank<=rank&&nextCsdbRank<activeCsdbRankDisplay.items.length)
+          appendCsdbHeading(nextCsdbRank++);
+      }
       var row = $('<button type="button">').addClass('rico-live-row');
       var active = index === player.sidListIndex;
       if (active) row.addClass('rico-live-active').attr('aria-current', 'true');
@@ -1550,6 +1571,10 @@
         wrap.appendTo(holder);
       }else row.appendTo(holder);
     });
+    if(activeCsdbRankDisplay){
+      while(nextCsdbRank<activeCsdbRankDisplay.items.length)
+        appendCsdbHeading(nextCsdbRank++);
+    }
     // Save remains fixed in the header, not in the scrolling track list.
     // TEST96: never force scrolling on a manual selection or a render refresh.
     // Follow the newly playing row only on NEXT/AUTO, within this list's scrollbox.
@@ -1766,6 +1791,7 @@
       : 'Original 22 SID playlist. Your local files remain available in CUSTOM.');
   }
   function activate(mode) {
+    resetCsdbRankDisplay();
     resetSoftTransition(true);
     var wantCustom = mode === 'custom';
     if(!wantCustom&&activeReferenceStream){
@@ -2179,6 +2205,7 @@
       return entries;
     }
     function loadPlaylist(data,startIndex,localImport,ranked) {
+      resetCsdbRankDisplay();
       resetSoftTransition(true);
       if(activeReferenceStream){activeReferenceStream.cancel();activeReferenceStream=null;}
       referenceSwitchSerial++;
@@ -2308,6 +2335,7 @@
       return stream;
     }
     async function loadProgressiveReferencePlaylist(data,localImport){
+      resetCsdbRankDisplay();
       var stream=createProgressiveReferenceStream(data.tracks,data.name==='UNKNOWN CSDB');
       // TOP 100 DEMOS: song metadata is already in the source manifest.
       // Load song bytes on demand without decoding the entire list at launch.
@@ -2341,6 +2369,7 @@
     // TEST61: reference-only playlists resolve SID files from one immutable HVSC base.
     // Existing v1 playlists with embedded SID remain fully supported.
     async function loadStoredPlaylist(data,localImport) {
+      resetCsdbRankDisplay();
       resetSoftTransition(true);
       if(activeReferenceStream){activeReferenceStream.cancel();activeReferenceStream=null;}
       referenceSwitchSerial++;
@@ -2821,27 +2850,74 @@
         intro.appendChild(link);
       }
     }
+    // TEST132: select a TOP to start the existing floating playlist immediately.
     async function showRank(kind){
       cancelStartupPlaylist();
-      ricoCurrentRank=kind;browserTab=kind;communityActive=false;
-      var dialog=document.getElementById('chooseSidDialog');
-      if(dialog){dialog.classList.remove('rico-view-community','rico-view-games','rico-view-local','rico-view-hvsc','rico-view-library','rico-view-ours');dialog.classList.add('rico-view-hvsc');}
-      if(communityPanel)communityPanel.style.display='none';
-      if(libraryPanel)libraryPanel.style.display='none';
-      if(localPanel)localPanel.style.display='none';
-      if(hvscPanel)hvscPanel.style.display='block';
-      var cfg=ricoRankConfig[kind];
-      document.getElementById('ricoHvscHeading').textContent=cfg.title;
-      displayRankIntro(kind);
-      document.getElementById('ricoHvscListTitle').textContent=cfg.title+
-        (isCsdbCategory(kind)?' — 100 entries · CSDb snapshot':' — 100 SID');
-      hvscLoad.textContent=isCsdbCategory(kind)?'PLAY IDENTIFIED SIDS':'PLAY';
-      hvscLoad.disabled=(kind==='onefile');
-      refreshTabs();layoutChooseSidTabs();hvscItems.textContent='';
-      if(ricoRankEntries[kind]){renderRankRows(kind);return;}
-      hvscStatus.textContent='Loading '+cfg.title+'...';
-      try{await getRankData(kind);if(browserTab===kind)renderRankRows(kind);}
-      catch(e){if(browserTab===kind)hvscStatus.textContent=e.message;}
+      var cfg=ricoRankConfig[kind],buttonId={
+        hvsc:'ricoHvscTab',demos:'ricoDemosTab',onefile:'ricoOnefileTab',
+        groups:'ricoGroupsTab',musicians:'ricoMusiciansTab'
+      }[kind],button=document.getElementById(buttonId);
+      if(!cfg||!button)return;
+      button.disabled=true;
+      ricoCurrentRank=kind;
+      // Prime browser audio during the real click, before any asynchronous fetch.
+      if(kind!=='onefile'){
+        try{
+          player.initWebAudio();
+          if(player.audioContext&&player.audioContext.state==='suspended'){
+            var resume=player.audioContext.resume();
+            if(resume&&resume.catch)resume.catch(function(){});
+          }
+        }catch(err){console.warn('Browser audio requires PLAY',err);}
+      }
+      $('#ricoLiveStatus').text('Loading '+cfg.title+'...');
+      try{
+        var data=await getRankData(kind);
+        if(isCsdbCategory(kind)){
+          var items=data.items,tracks=[],trackRanks=[],trackCounts=[];
+          items.forEach(function(item,rank){
+            var linked=rankSongsFor(kind,item);
+            trackCounts.push(linked.length);
+            linked.forEach(function(song){tracks.push(song);trackRanks.push(rank);});
+          });
+          if(tracks.length){
+            var ok=await playRankSongs(kind,tracks,cfg.title);
+            if(!ok)return;
+          }else{
+            // One-File still has no verified HVSC audio. Show the full ranked
+            // 100 entries in the floating playlist, not a made-up SID selection.
+            if(activeReferenceStream){activeReferenceStream.cancel();activeReferenceStream=null;}
+            referenceSwitchSerial++;
+            resetSoftTransition(true);
+            player.isPlaying=false;player.isPaused=false;
+            $('#playButton').text('Play');
+            custom.length=0;
+            if(!customActive)activate('custom');
+            player.sidList=custom;player.sidListIndex=false;
+            player.initFileSelection();
+            loadedPlaylistTitle=cfg.title;loadedPlaylistCreator='CSDb ranking';
+            nameEl.value=cfg.title;landingPlaylists=false;
+          }
+          activeCsdbRankDisplay={kind:kind,items:items,trackRanks:trackRanks,trackCounts:trackCounts};
+          loadedRankedPlaylist=true;
+          if(!tracks.length)$('#playButton,#nextSid,#prevSid').prop('disabled',true);
+          showLivePlaylist(true);
+          $('#ricoLiveStatus').text(tracks.length
+            ? '100 '+(kind==='groups'?'groups':'demos')+' · '+tracks.length+' playable SID · '+
+              trackCounts.filter(function(n){return n===0;}).length+' pending.'
+            : '100 one-file demos · SID links pending. Playback unavailable.');
+        }else{
+          loadPlaylist(data,0,false,true);
+          showLivePlaylist(true);
+          $('#ricoLiveStatus').text(cfg.title+' · 100 SID loaded.');
+        }
+        browserTab=kind;refreshTabs();
+        if(player.dialogManager&&player.dialogManager.dialogShown==='chooseSidDialog')
+          player.dialogManager.hideDialog('chooseSidDialog');
+      }catch(err){
+        console.error('Could not start TOP ranking',kind,err);
+        $('#ricoLiveStatus').text('Cannot load '+cfg.title+': '+err.message);
+      }finally{button.disabled=false;}
     }
     function sceneAlias(value){
       var v=(value||'').trim();
@@ -2862,9 +2938,12 @@
       try{
         if(version===1)loadPlaylist(selection,0,false,true);
         else await loadStoredPlaylist(selection,false);
-        hvscStatus.textContent='SID loaded · press PLAY to listen.';
+        hvscStatus.textContent='SID playback ready.';
+        return true;
       }catch(err){
         hvscStatus.textContent='SID unavailable: '+err.message;
+        $('#ricoLiveStatus').text('SID unavailable: '+err.message);
+        return false;
       }
     }
     function renderCsdbRankRows(kind){
