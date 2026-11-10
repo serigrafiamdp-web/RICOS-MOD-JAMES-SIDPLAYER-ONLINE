@@ -253,6 +253,70 @@ async function contributedCollections(request,env,url,origin){
   }
 }
 
+
+// TEST159 — Persist the DISPLAY order of Community Playlist rows, not SID tracks.
+// The beta key authorizes global writes; GET is public. D1 revision avoids
+// silently overwriting another editor's more recent ordering.
+async function communityCatalogOrder(request,env,origin){
+  if(!env.DB)return text('Community database unavailable',503,origin);
+  const save=request.method==='PUT';
+  if(save){
+    if(origin!==ORIGIN)return text('Origin not allowed',403,origin);
+    if(!(await hasValidBetaKey(request,env)))
+      return text('Invalid beta key or server beta key not configured',403,origin);
+  }
+  try {
+    await env.DB.prepare(
+      'CREATE TABLE IF NOT EXISTS community_catalog_order ('+
+      'scope TEXT PRIMARY KEY, order_json TEXT NOT NULL, '+
+      'revision INTEGER NOT NULL DEFAULT 0, updated_at INTEGER NOT NULL DEFAULT 0)'
+    ).run();
+    await env.DB.prepare(
+      "INSERT OR IGNORE INTO community_catalog_order(scope,order_json,revision,updated_at) "+
+      "VALUES('community','[]',0,0)"
+    ).run();
+    const read=()=>env.DB.prepare(
+      "SELECT order_json,revision,updated_at FROM community_catalog_order WHERE scope='community'"
+    ).first();
+    if(!save){
+      const row=await read();
+      const order=JSON.parse(row?.order_json||'[]');
+      return json({format:'ricos-community-catalog-order',version:1,
+        order,revision:Number(row?.revision)||0,updatedAt:Number(row?.updated_at)||0},200,origin);
+    }
+    if((Number(request.headers.get('Content-Length'))||0)>90000)
+      return text('Catalog order payload too large',413,origin);
+    let payload;
+    try{
+      const body=await request.text();
+      if(body.length>90000)return text('Catalog order payload too large',413,origin);
+      payload=JSON.parse(body);
+    }catch(error){return text('Invalid catalog order JSON',400,origin);}
+    const keys=payload?.order;
+    const revision=payload?.expectedRevision;
+    const validKey=key=>typeof key==='string'&&(
+      /^remote:[a-z0-9-]{12,48}$/.test(key)||
+      /^static:community\/playlists\/[a-zA-Z0-9_-]+\.json$/.test(key)
+    );
+    if(!Array.isArray(keys)||!keys.length||keys.length>550||
+       !keys.every(validKey)||new Set(keys).size!==keys.length||
+       !Number.isSafeInteger(revision)||revision<0)
+      return text('Invalid community order or revision',400,origin);
+    const now=Date.now();
+    const write=await env.DB.prepare(
+      "UPDATE community_catalog_order SET order_json=?, revision=revision+1, updated_at=? "+
+      "WHERE scope='community' AND revision=?"
+    ).bind(JSON.stringify(keys),now,revision).run();
+    if(write.meta?.changes!==1)
+      return text('Community order changed elsewhere; reload before saving',409,origin);
+    return json({format:'ricos-community-catalog-order',version:1,
+      order:keys,revision:revision+1,updatedAt:now,saved:true},200,origin);
+  }catch(error){
+    console.error('Community order save/read failed',error);
+    return text('Community catalog order unavailable',503,origin);
+  }
+}
+
 export default {
  async fetch(request,env){
   const origin=request.headers.get('Origin')||'';
@@ -264,6 +328,8 @@ export default {
     'access-control-allow-headers':'Content-Type, X-Beta-Key','access-control-max-age':'86400'}});
   }
   if(request.method==='POST' && origin!==ORIGIN)return text('Origin not allowed',403,origin);
+  if(url.pathname==='/catalog-order' && (request.method==='GET'||request.method==='PUT'))
+    return communityCatalogOrder(request,env,origin);
   // Independent non-HVSC binary collection endpoints.
   if(url.pathname==='/collections'||url.pathname.startsWith('/collections/')||
      url.pathname.startsWith('/sid-assets/')){
@@ -276,7 +342,7 @@ export default {
       betaKeyRequired:true,editMode:'metadata-and-delete',
       sidUploadsEnabled:!!(sidUploadProvider(env)&&env.DB&&env.BETA_EDIT_KEY),
       playlistReorder:true,sidCollectionReorder:true,
-      playlistTrackAdditions:true,
+      playlistTrackAdditions:true,catalogOrder:true,
       sidUploadProvider:sidUploadProvider(env)||null,
       sidUploadLimit:sidUploadProvider(env)==='github'?15:40,
       configured:!!env.BETA_EDIT_KEY},200,origin);
