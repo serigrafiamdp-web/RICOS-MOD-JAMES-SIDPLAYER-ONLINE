@@ -3454,11 +3454,11 @@
         }).forEach(function(item){
         var row=document.createElement('div');
         row.className='rico-community-row rico-community-import-row';
-        addPrivateCommunityArrows(row,'local:'+item.id);
         var label=document.createElement('span');label.className='rico-community-label';
         label.textContent=item.name+' — Playlist by '+(item.createdBy||'Unknown')+
           ' · '+item.tracks.length+' SID';
         row.appendChild(label);
+        addPrivateCommunityArrows(row,'local:'+item.id);
         function action(name,callback,disabled){
           var button=document.createElement('button');button.type='button';
           button.textContent=name;button.disabled=!!disabled;
@@ -3631,10 +3631,10 @@
       var fragment=document.createDocumentFragment();
       remixDrafts.slice().reverse().filter(function(d){return !d.remoteEditId;}).forEach(function(d){
         var row=document.createElement('div');row.className='rico-community-row rico-community-remix-row';
-        addPrivateCommunityArrows(row,'remix:'+d.id);
         var label=document.createElement('span');label.className='rico-community-label';
         label.textContent=d.name+' — Playlist by '+(d.creator||'Unknown')+' · '+d.tracks.length+' SID';
         row.appendChild(label);
+        addPrivateCommunityArrows(row,'remix:'+d.id);
         function action(name,callback,disabled){
           var button=document.createElement('button');button.type='button';button.textContent=name;
           button.disabled=!!disabled;button.addEventListener('click',function(e){e.stopPropagation();callback();});
