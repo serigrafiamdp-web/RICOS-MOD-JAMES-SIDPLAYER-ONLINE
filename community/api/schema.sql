@@ -29,3 +29,18 @@ CREATE TABLE IF NOT EXISTS sid_collection_tracks (
   PRIMARY KEY (collection_id, position)
 );
 CREATE INDEX IF NOT EXISTS sid_collection_tracks_sid ON sid_collection_tracks(sid_id);
+
+-- TEST166: provenance for the permanent NO HVSC archive. This is metadata
+-- only: the original PSID/RSID binary stays in the existing SID asset store.
+-- A SID is unverified against HVSC until independently matched; SHA-256 IDs
+-- are immutable and support safe deduplication across imported playlists.
+CREATE TABLE IF NOT EXISTS sid_provenance (
+  sid_id TEXT PRIMARY KEY,
+  filename TEXT NOT NULL,
+  title TEXT NOT NULL,
+  author TEXT NOT NULL,
+  released TEXT NOT NULL,
+  data_hash TEXT NOT NULL,
+  hvsc_status TEXT NOT NULL DEFAULT 'unverified',
+  first_seen INTEGER NOT NULL
+);
