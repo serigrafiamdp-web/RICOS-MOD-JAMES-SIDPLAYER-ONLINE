@@ -660,17 +660,17 @@
       if(reorderedDraft&&reorderedDraft.remoteEditId&&
          activeReferenceTracks&&activeReferenceTracks.length===custom.length){
         var trackByKey=new Map(reorderedDraft.tracks.map(function(t){
-          return [t.pack+'::'+t.file,t];
+          return [remixRefKey(t),t];
         }));
         var used=new Set(),newOrder=[];
         activeReferenceTracks.forEach(function(ref){
-          var key=ref.pack+'::'+ref.file;
+          var key=remixRefKey(ref);
           if(trackByKey.has(key)&&!used.has(key)){
             newOrder.push(trackByKey.get(key));used.add(key);
           }
         });
         reorderedDraft.tracks.forEach(function(t){
-          var key=t.pack+'::'+t.file;
+          var key=remixRefKey(t);
           if(!used.has(key)){newOrder.push(t);used.add(key);}
         });
         reorderedDraft.tracks=newOrder;
@@ -780,7 +780,7 @@
       var want=expected[index];
       return kind==='collection'
         ? row.sidId===want.sidId&&row.file===want.file
-        : row.pack===want.pack&&row.file===want.file;
+        : remixRefKey(row)===remixRefKey(want);
     });
     if(!same)throw Error('Server order differs from the playlist. SAVE was not confirmed; do not reload yet.');
     return data;
@@ -793,8 +793,8 @@
     if(savingCommunityEdits||!isOldSidCurated()||loadedRankedPlaylist||!customActive)return;
     if(!activeReferenceTracks||activeReferenceTracks.length!==custom.length||!custom.length)
       throw Error('SID references lost synchronization; reload the playlist before saving.');
-    var desired=activeReferenceTracks.map(function(t){return {pack:t.pack,file:t.file};});
-    var identity=function(t){return t.pack+'::'+t.file;};
+    var desired=activeReferenceTracks.map(remixCanonicalRef);
+    var identity=remixRefKey;
     if(new Set(desired.map(identity)).size!==desired.length)
       throw Error('Duplicate reference detected; no changes published.');
     var key=await askBetaKeyDialog('SAVE');
@@ -886,7 +886,7 @@
         url=communityWriteApi+'/playlists/'+encodeURIComponent(playlist.remoteId);
         payload={format:'ricos-sid-playlist',version:2,
           name:playlist.name,createdBy:playlist.createdBy,
-          tracks:playlist.tracks.map(function(t){return {pack:t.pack,file:t.file};})};
+          tracks:playlist.tracks.map(remixCanonicalRef)};
       }
       var response=await fetch(url,{
         method:method,headers:{'Content-Type':'application/json','X-Beta-Key':key},
@@ -903,7 +903,7 @@
         : communityWriteApi+'/playlists/'+encodeURIComponent(playlist.remoteId);
       var expectedRows=collection
         ? collection.tracks.map(function(t){return {sidId:t.sidId,file:t.file};})
-        : playlist.tracks.map(function(t){return {pack:t.pack,file:t.file};});
+        : playlist.tracks.map(remixCanonicalRef);
       await verifyRemoteOrder(readUrl,expectedRows,collection?'collection':'playlist');
       if(collection){
         collection.originalTracks=collection.tracks.map(function(t){return {sidId:t.sidId,file:t.file};});
@@ -971,14 +971,14 @@
     if(!manifest||manifest.format!=='spotysid-lpm-migration'||manifest.version!==1||
       manifest.publishedPlaylistId!==draft.remoteEditId||!Array.isArray(manifest.additions)||
       manifest.additions.length!==14)throw Error('Invalid Los Pat Moritas migration data.');
-    var current=new Set(draft.tracks.map(function(t){return t.pack+'::'+t.file;}));
+    var current=new Set(draft.tracks.map(function(t){return remixRefKey(t);}));
     var added=0;
     manifest.additions.forEach(function(ref){
       if(!ref||typeof ref.pack!=='string'||typeof ref.file!=='string'||!ref.title||
         !/^library\/packs\/musicians\/L\/[A-Za-z0-9_.-]+\.zip$/.test(ref.pack)||
         !/^[A-Za-z0-9_.-]+\.sid$/.test(ref.file))
         throw Error('Invalid additional Los Pat Moritas SID reference.');
-      var key=ref.pack+'::'+ref.file;
+      var key=remixRefKey(ref);
       if(current.has(key))return;
       current.add(key);
       draft.tracks.push({pack:ref.pack,file:ref.file,title:ref.title,artist:'Los Pat Moritas'});
@@ -1241,15 +1241,17 @@
         remixNotice('Playlist changed while checking HVSC. Select the SID again.');return;
       }
       if(target.tracks.length>=2000)throw Error('Remix limit: 2000 SID.');
-      if(target.tracks.some(function(t){return t.pack===reference.pack&&t.file===reference.file;})){
+      if(target.tracks.some(function(t){return remixRefKey(t)===remixRefKey(reference);})){
         remixNotice('This SID is already in '+target.name+'.');return;
       }
-      target.tracks.push({pack:reference.pack,file:reference.file,
+      target.tracks.push(Object.assign(remixCanonicalRef(reference),{
         title:reference.title||sidEntry.name||reference.file,
-        artist:reference.artist||sidEntry.author||''});
+        artist:reference.artist||sidEntry.author||''
+      }));
       preserveRemixes();renderRemixes();
       remixNotice('Added '+(reference.title||sidEntry.name||reference.file)+
-        ' to '+target.name+' using verified HVSC #85 source. Playback unchanged.');
+        ' to '+target.name+(reference.sidId?' from NO HVSC archive.':' from HVSC.')+
+        ' Playback unchanged.');
     }catch(error){
       remixNotice('Cannot add SID: '+error.message);
     }
@@ -1264,7 +1266,7 @@
       remixNotice('Loading '+draft.name+' for preview...');
       var payload={format:'ricos-sid-playlist',version:2,
         name:draft.name.trim()||'MY REMIX',createdBy:draft.creator.trim()||'REMIX PREVIEW',
-        tracks:draft.tracks.map(function(t){return {pack:t.pack,file:t.file};})};
+        tracks:draft.tracks.map(remixCanonicalRef)};
       await window.ricoPlayRemixDraft(payload);
       activeRemixDraftId=draft.id;
       activeLocalOrderDirty=false;
@@ -1278,17 +1280,17 @@
     if(!draft||draft.id!==activeRemixDraftId||!activeLocalOrderDirty)return false;
     if(!activeReferenceTracks||activeReferenceTracks.length!==custom.length)
       throw Error('REMIX preview references do not match the playing list.');
-    var byKey=new Map(draft.tracks.map(function(t){return [t.pack+'::'+t.file,t];}));
+    var byKey=new Map(draft.tracks.map(function(t){return [remixRefKey(t),t];}));
     var ordered=[],included=new Set();
     activeReferenceTracks.forEach(function(t){
-      var k=t.pack+'::'+t.file;
+      var k=remixRefKey(t);
       if(!byKey.has(k))throw Error('Song missing from the REMIX draft: '+t.file);
       if(included.has(k))throw Error('Duplicate song in REMIX preview.');
       ordered.push(byKey.get(k));included.add(k);
     });
     // Song additions made in the REMIX editor since PLAY are preserved.
     draft.tracks.forEach(function(t){
-      var k=t.pack+'::'+t.file;
+      var k=remixRefKey(t);
       if(!included.has(k)){ordered.push(t);included.add(k);}
     });
     draft.tracks=ordered;
@@ -1309,8 +1311,8 @@
       return;
     }
     // All references remain within the original HVSC ZIP library, no SID data.
-    var refs=draft.tracks.map(function(t){return {pack:t.pack,file:t.file};});
-    if(new Set(refs.map(function(t){return t.pack+'::'+t.file;})).size!==refs.length)
+    var refs=draft.tracks.map(remixCanonicalRef);
+    if(new Set(refs.map(function(t){return remixRefKey(t);})).size!==refs.length)
       throw Error('Duplicate SID references cannot be published.');
     await ensureBetaServerReady();
     var capabilitiesResponse=await fetch(communityWriteApi+'/capabilities',{cache:'no-store'});
@@ -1357,7 +1359,7 @@
         activeLocalOrderDirty=false;
         // Only attach the public ID if the playing preview has matching tracks.
         var matches=activeReferenceTracks&&activeReferenceTracks.length===refs.length&&
-          activeReferenceTracks.every(function(t,i){return t.pack===refs[i].pack&&t.file===refs[i].file;});
+          activeReferenceTracks.every(function(t,i){return remixRefKey(t)===remixRefKey(refs[i]);});
         activePublicPlaylist=matches?{remoteId:draft.remoteEditId,name:draft.name,
           createdBy:draft.creator,tracks:refs.slice(),originalCount:refs.length,dirtyOrder:false}:null;
       }
@@ -1399,7 +1401,7 @@
     remixBusy=true;renderRemixes();
     try{
       await ensureBetaServerReady();
-      var expectedDraftRefs=draft.tracks.map(function(t){return {pack:t.pack,file:t.file};});
+      var expectedDraftRefs=draft.tracks.map(remixCanonicalRef);
       var remoteId=draft.pendingPublishedId||'';
       var remoteUrl='';
       if(!remoteId){
@@ -1438,7 +1440,7 @@
         var samePlayingOrder=activeReferenceTracks &&
           activeReferenceTracks.length===expectedDraftRefs.length&&
           activeReferenceTracks.every(function(t,i){
-            return t.pack===expectedDraftRefs[i].pack&&t.file===expectedDraftRefs[i].file;
+            return remixRefKey(t)===remixRefKey(expectedDraftRefs[i]);
           });
         activePublicPlaylist=samePlayingOrder?{remoteId:remoteId,name:draft.name,
           createdBy:draft.creator,tracks:expectedDraftRefs.slice(),
@@ -2569,7 +2571,7 @@
       }
       activePublicPlaylist=null;activePublicCollection=null;
       activeRemixDraftId=null;
-      activeReferenceTracks=data.tracks.map(function(t){return {pack:t.pack,file:t.file};});
+      activeReferenceTracks=data.tracks.map(remixCanonicalRef);
       activeLocalSavedId=localImport&&typeof data.id==='string'?data.id:null;
       activeLocalOrderDirty=false;activeCuratedCatalogId=null;
       loadedRankedPlaylist=false;embeddedHvscPaths=[];
@@ -2647,7 +2649,7 @@
       // Do not change playback until every reference has been resolved and validated.
       activePublicPlaylist=null;activePublicCollection=null;
       activeRemixDraftId=null;
-      activeReferenceTracks=data.tracks.map(function(t){return {pack:t.pack,file:t.file};});
+      activeReferenceTracks=data.tracks.map(remixCanonicalRef);
       activeLocalSavedId=localImport&&typeof data.id==='string'?data.id:null;
       activeLocalOrderDirty=false;activeCuratedCatalogId=null;
       loadedRankedPlaylist=false;
@@ -3919,7 +3921,7 @@
               var chosen=pending?{
                 format:'ricos-sid-playlist',version:2,
                 name:pending.name,createdBy:pending.creator,
-                tracks:pending.tracks.map(function(t){return {pack:t.pack,file:t.file};})
+                tracks:pending.tracks.map(remixCanonicalRef)
               }:data;
               // Ignore a late auto-load if the visitor picked a different source.
               if(isStartup && !startupPlaylistPending) return;
@@ -3930,7 +3932,7 @@
               activeRemixDraftId=pending?pending.id:null;
               activePublicPlaylist=!pending&&item.remoteId&&data.version===2?{
                 remoteId:item.remoteId,name:data.name,createdBy:data.createdBy,
-                tracks:data.tracks.map(function(t){return {pack:t.pack,file:t.file};}),
+                tracks:data.tracks.map(remixCanonicalRef),
                 originalCount:data.tracks.length,dirtyOrder:false
               }:null;
               renderLivePlaylist();
