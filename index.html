@@ -622,21 +622,14 @@
       <div id="ricoLiveResizeGrip" title="Drag to change playlist height" aria-label="Resize playlist height"></div>
     </aside>
 
-    <aside id="ricoRemixEditor" class="rico-remix-editor" style="display:none;" role="dialog" aria-label="Remix playlist creator" aria-modal="false">
-      <div id="ricoRemixFloatHeader"><strong>REMIX PLAYLIST CREATOR</strong><button type="button" id="ricoRemixClose" aria-label="Finish editing remix">DONE</button></div>
-      <div id="ricoRemixDraftChooser"><label for="ricoRemixEditorTarget">REMIX ACTIVO</label><select id="ricoRemixEditorTarget" aria-label="Remix being edited"><option value="">SELECT REMIX</option></select></div>
-        <div class="rico-remix-fields">
-          <input id="ricoRemixName" type="text" maxlength="100" placeholder="Remix name" aria-label="Remix name" />
-          <input id="ricoRemixCreator" type="text" maxlength="60" placeholder="Playlist by" aria-label="Remix creator" />
-          <button type="button" id="ricoRemixNew">NEW REMIX</button>
-          <button type="button" id="ricoRemixPlay">PLAY REMIX</button>
-          <button type="button" id="ricoRemixPublish">PUBLISH REMIX</button>
-          <button type="button" id="ricoRemixDiscard" style="display:none;">DISCARD CHANGES</button>
-        </div>
-        <div id="ricoRemixHelp">La lista ya está creada. Pulsá DONE y agregá canciones con + desde cualquier playlist.</div>
-        <div id="ricoRemixEntries" class="rico-remix-entries" role="list" style="display:none;" aria-hidden="true"></div>
-        <div id="ricoRemixStatus" role="status"></div>
-      </aside>
+    <aside id="ricoRemixEditor" class="rico-remix-editor" style="display:none;" role="dialog" aria-label="Create playlist" aria-modal="false">
+      <div id="ricoRemixFloatHeader"><strong>CREATE PLAYLIST</strong><button type="button" id="ricoRemixClose" aria-label="Finish creating playlist">DONE</button></div>
+      <div class="rico-remix-fields">
+        <input id="ricoRemixName" type="text" maxlength="100" placeholder="Playlist name" aria-label="Playlist name" />
+        <input id="ricoRemixCreator" type="text" maxlength="60" placeholder="Playlist by" aria-label="Playlist creator" />
+      </div>
+      <div id="ricoRemixStatus" role="status" style="display:none;"></div>
+    </aside>
 
     <aside id="ricoImportSidWindow" role="dialog" aria-label="Import SID - local playlists" aria-modal="false" style="display:none;">
       <div id="ricoImportSidHeader">
@@ -754,7 +747,7 @@
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test119numericcolors"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script type="text/javascript" src="js/customPlaylist.test101.js?v=test154inputfocus"></script>
+    <script type="text/javascript" src="js/customPlaylist.test101.js?v=test155cleancreator"></script>
     <script type="text/javascript" src="js/help.test109.js?v=test109help"></script>
     <script type="text/javascript" src="js/donate.test135.js?v=test137hearts"></script>
   </body>
