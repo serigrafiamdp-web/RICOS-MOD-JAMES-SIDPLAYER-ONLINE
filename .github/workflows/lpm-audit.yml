@@ -1,0 +1,85 @@
+name: Audit Los Pat Moritas migration (read-only)
+on:
+  push:
+    branches: [lpm-migration-audit]
+    paths: ['.github/workflows/lpm-audit.yml']
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare old embedded SIDs with published HVSC playlist (read only)
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, os, re, unicodedata, urllib.request, zipfile
+          from difflib import SequenceMatcher
+          def get(url):
+              req=urllib.request.Request(url,headers={'User-Agent':'SpotySid-LPM-Migration-Audit/1','Cache-Control':'no-cache'})
+              with urllib.request.urlopen(req,timeout=25) as f:return json.load(f)
+          api='https://ricos-sid-community.serigrafiamdp.workers.dev'
+          catalog=get(api+'/playlists')
+          targets=[p for p in catalog['playlists'] if p.get('title','').strip().upper()=='LPM HVSC 2026']
+          if len(targets)!=1:raise Exception('Expected 1 LPM HVSC 2026 playlist; got '+str(len(targets)))
+          target=targets[0]
+          remote=get(api+'/playlists/'+target['id'])
+          if remote.get('version')!=2:raise Exception('Unexpected target format')
+          old=json.load(open('community/playlists/los-pat-moritas.json'))
+          def psid_meta(b):
+              if b[:4] not in (b'PSID',b'RSID'):return {}
+              n=int.from_bytes(b[6:8],'big')
+              def field(a):return b[a:a+32].split(b'\x00')[0].decode('latin-1','replace').strip()
+              return dict(title=field(22),author=field(54),released=field(86),data_hash=hashlib.sha256(b[n:]).hexdigest(),length=len(b))
+          def normalized(s):
+              s=unicodedata.normalize('NFKD',s).encode('ascii','ignore').decode().lower()
+              return re.sub(r'[^a-z0-9]+','',s.replace('.sid',''))
+          old_tracks=[]
+          for i,t in enumerate(old['tracks']):
+              b=base64.b64decode(t['sidBase64'])
+              old_tracks.append(dict(i=i+1,file=t['file'],sha=hashlib.sha256(b).hexdigest(),**psid_meta(b)))
+          packs={};remote_tracks=[]
+          for i,t in enumerate(remote['tracks']):
+              name=t['file'];path=t['pack']
+              if path not in packs:
+                  packs[path]=zipfile.ZipFile(path)
+              b=packs[path].read(name)
+              remote_tracks.append(dict(i=i+1,file=name,pack=path,sha=hashlib.sha256(b).hexdigest(),**psid_meta(b)))
+          matches=[];missing=[]
+          for o in old_tracks:
+              exact=[n for n in remote_tracks if n['sha']==o['sha']]
+              if exact: 
+                  matches.append(dict(old=o['file'],remote=exact[0]['file'],method='sha256'));continue
+              payload=[n for n in remote_tracks if n['data_hash']==o.get('data_hash')]
+              if payload:
+                  matches.append(dict(old=o['file'],remote=payload[0]['file'],method='payload-sha256'));continue
+              ranked=sorted(remote_tracks,key=lambda x:max(
+                  SequenceMatcher(None,normalized(o['file']),normalized(x['file'])).ratio(),
+                  SequenceMatcher(None,normalized(o.get('title','')),normalized(x.get('title',''))).ratio()),reverse=True)
+              top=ranked[0] if ranked else None
+              if top and max(SequenceMatcher(None,normalized(o['file']),normalized(top['file'])).ratio(),
+                            SequenceMatcher(None,normalized(o.get('title','')),normalized(top.get('title',''))).ratio())>=0.81:
+                  matches.append(dict(old=o['file'],remote=top['file'],method='similar-name (verify SID manually)',original_sha=o['sha']));continue
+              missing.append(dict(i=o['i'],file=o['file'],title=o.get('title'),length=o.get('length'),sha256=o['sha']))
+          duplicate_payloads={}
+          for o in old_tracks:duplicate_payloads.setdefault(o.get('data_hash'),[]).append(o['file'])
+          extra=[dict(file=n['file'],title=n.get('title')) for n in remote_tracks
+                 if not any(m['remote']==n['file'] for m in matches)]
+          report=dict(old_count=len(old_tracks),target=target,new_count=len(remote_tracks),
+                 old=old_tracks,new=remote_tracks,matched=matches,missing=missing,
+                 new_only=extra,old_duplicates=[v for v in duplicate_payloads.values() if len(v)>1])
+          os.makedirs('out',exist_ok=True)
+          with open('out/lpm-audit.json','w') as f:json.dump(report,f,indent=2)
+          print('OLD:',len(old_tracks),'NEW:',len(remote_tracks),'MATCHED:',len(matches),'MISSING:',len(missing))
+          print('REMOTE ID:',target['id'])
+          print('MATCHED:',json.dumps(matches,ensure_ascii=False))
+          print('MISSING:',json.dumps(missing,ensure_ascii=False))
+          print('NEW-ONLY:',json.dumps(extra,ensure_ascii=False))
+          print('DUPLICATE-OLD:',json.dumps(report['old_duplicates'],ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lpm-migration-audit
+          path: out/lpm-audit.json
+          retention-days: 7
