@@ -1,1 +1,191 @@
-{"format":"ricos-hvsc-library","version":1,"source":"HVSC #85","categories":{"musicians":{"count":56568,"shelves":[{"name":"0-9","file":"library/data/musicians-0-9.json","count":310},{"name":"A","file":"library/data/musicians-A.json","count":2935},{"name":"B","file":"library/data/musicians-B.json","count":5490},{"name":"C","file":"library/data/musicians-C.json","count":2616},{"name":"D","file":"library/data/musicians-D.json","count":4684},{"name":"E","file":"library/data/musicians-E.json","count":898},{"name":"F","file":"library/data/musicians-F.json","count":2084},{"name":"G","file":"library/data/musicians-G.json","count":1645},{"name":"H","file":"library/data/musicians-H.json","count":2209},{"name":"I","file":"library/data/musicians-I.json","count":705},{"name":"J","file":"library/data/musicians-J.json","count":1726},{"name":"K","file":"library/data/musicians-K.json","count":1745},{"name":"L","file":"library/data/musicians-L.json","count":1615},{"name":"M","file":"library/data/musicians-M.json","count":5173},{"name":"N","file":"library/data/musicians-N.json","count":2171},{"name":"O","file":"library/data/musicians-O.json","count":705},{"name":"P","file":"library/data/musicians-P.json","count":2439},{"name":"Q","file":"library/data/musicians-Q.json","count":54},{"name":"R","file":"library/data/musicians-R.json","count":2750},{"name":"S","file":"library/data/musicians-S.json","count":6271},{"name":"T","file":"library/data/musicians-T.json","count":3139},{"name":"U","file":"library/data/musicians-U.json","count":166},{"name":"V","file":"library/data/musicians-V.json","count":1045},{"name":"W","file":"library/data/musicians-W.json","count":2302},{"name":"X","file":"library/data/musicians-X.json","count":297},{"name":"Y","file":"library/data/musicians-Y.json","count":281},{"name":"Z","file":"library/data/musicians-Z.json","count":1113}]},"demos":{"count":3058,"shelves":[{"name":"0-9","file":"library/data/demos-0-9.json","count":36},{"name":"A-F","file":"library/data/demos-A-F.json","count":533},{"name":"Commodore","file":"library/data/demos-Commodore.json","count":28},{"name":"G-L","file":"library/data/demos-G-L.json","count":300},{"name":"M-R","file":"library/data/demos-M-R.json","count":388},{"name":"S-Z","file":"library/data/demos-S-Z.json","count":397},{"name":"UNKNOWN","file":"library/data/demos-UNKNOWN.json","count":1376}]}}}
+{
+  "format": "ricos-hvsc-library",
+  "version": 1,
+  "source": "HVSC #85 with SpotySid supplemental SIDs",
+  "categories": {
+    "musicians": {
+      "count": 56580,
+      "shelves": [
+        {
+          "name": "0-9",
+          "file": "library/data/musicians-0-9.json",
+          "count": 310
+        },
+        {
+          "name": "A",
+          "file": "library/data/musicians-A.json",
+          "count": 2935
+        },
+        {
+          "name": "B",
+          "file": "library/data/musicians-B.json",
+          "count": 5490
+        },
+        {
+          "name": "C",
+          "file": "library/data/musicians-C.json",
+          "count": 2616
+        },
+        {
+          "name": "D",
+          "file": "library/data/musicians-D.json",
+          "count": 4684
+        },
+        {
+          "name": "E",
+          "file": "library/data/musicians-E.json",
+          "count": 898
+        },
+        {
+          "name": "F",
+          "file": "library/data/musicians-F.json",
+          "count": 2084
+        },
+        {
+          "name": "G",
+          "file": "library/data/musicians-G.json",
+          "count": 1645
+        },
+        {
+          "name": "H",
+          "file": "library/data/musicians-H.json",
+          "count": 2209
+        },
+        {
+          "name": "I",
+          "file": "library/data/musicians-I.json",
+          "count": 705
+        },
+        {
+          "name": "J",
+          "file": "library/data/musicians-J.json",
+          "count": 1726
+        },
+        {
+          "name": "K",
+          "file": "library/data/musicians-K.json",
+          "count": 1745
+        },
+        {
+          "name": "L",
+          "file": "library/data/musicians-L.json",
+          "count": 1627
+        },
+        {
+          "name": "M",
+          "file": "library/data/musicians-M.json",
+          "count": 5173
+        },
+        {
+          "name": "N",
+          "file": "library/data/musicians-N.json",
+          "count": 2171
+        },
+        {
+          "name": "O",
+          "file": "library/data/musicians-O.json",
+          "count": 705
+        },
+        {
+          "name": "P",
+          "file": "library/data/musicians-P.json",
+          "count": 2439
+        },
+        {
+          "name": "Q",
+          "file": "library/data/musicians-Q.json",
+          "count": 54
+        },
+        {
+          "name": "R",
+          "file": "library/data/musicians-R.json",
+          "count": 2750
+        },
+        {
+          "name": "S",
+          "file": "library/data/musicians-S.json",
+          "count": 6271
+        },
+        {
+          "name": "T",
+          "file": "library/data/musicians-T.json",
+          "count": 3139
+        },
+        {
+          "name": "U",
+          "file": "library/data/musicians-U.json",
+          "count": 166
+        },
+        {
+          "name": "V",
+          "file": "library/data/musicians-V.json",
+          "count": 1045
+        },
+        {
+          "name": "W",
+          "file": "library/data/musicians-W.json",
+          "count": 2302
+        },
+        {
+          "name": "X",
+          "file": "library/data/musicians-X.json",
+          "count": 297
+        },
+        {
+          "name": "Y",
+          "file": "library/data/musicians-Y.json",
+          "count": 281
+        },
+        {
+          "name": "Z",
+          "file": "library/data/musicians-Z.json",
+          "count": 1113
+        }
+      ]
+    },
+    "demos": {
+      "count": 3058,
+      "shelves": [
+        {
+          "name": "0-9",
+          "file": "library/data/demos-0-9.json",
+          "count": 36
+        },
+        {
+          "name": "A-F",
+          "file": "library/data/demos-A-F.json",
+          "count": 533
+        },
+        {
+          "name": "Commodore",
+          "file": "library/data/demos-Commodore.json",
+          "count": 28
+        },
+        {
+          "name": "G-L",
+          "file": "library/data/demos-G-L.json",
+          "count": 300
+        },
+        {
+          "name": "M-R",
+          "file": "library/data/demos-M-R.json",
+          "count": 388
+        },
+        {
+          "name": "S-Z",
+          "file": "library/data/demos-S-Z.json",
+          "count": 397
+        },
+        {
+          "name": "UNKNOWN",
+          "file": "library/data/demos-UNKNOWN.json",
+          "count": 1376
+        }
+      ]
+    }
+  },
+  "spotysidSupplementalSids": {
+    "count": 12,
+    "origin": "Original Los Pat Moritas playlist; SID not found in the HVSC #85 index"
+  }
+}

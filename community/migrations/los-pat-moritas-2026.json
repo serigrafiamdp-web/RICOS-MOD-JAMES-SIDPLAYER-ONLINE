@@ -1,0 +1,99 @@
+{
+  "format": "spotysid-lpm-migration",
+  "version": 1,
+  "publishedPlaylistId": "8cf5e857-19d3-48cf-a154-53f046ee65e2",
+  "name": "LOS PAT MORITAS",
+  "originalSids": 34,
+  "publishedSidsBefore": 20,
+  "additions": [
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas_SpotySid_Extras.zip",
+      "file": "Chacabeza_3.sid",
+      "title": "Chacabeza 3",
+      "source": "SpotySid supplemental"
+    },
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas_SpotySid_Extras.zip",
+      "file": "Comeme.sid",
+      "title": "Comeme",
+      "source": "SpotySid supplemental"
+    },
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas_SpotySid_Extras.zip",
+      "file": "Turroreggae_1.sid",
+      "title": "Turroreggae 1",
+      "source": "SpotySid supplemental"
+    },
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas_SpotySid_Extras.zip",
+      "file": "Espacial.sid",
+      "title": "Espacial",
+      "source": "SpotySid supplemental"
+    },
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas.zip",
+      "file": "Indiecito_de_tripa.sid",
+      "title": "Indiecito de tripa",
+      "source": "HVSC"
+    },
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas_SpotySid_Extras.zip",
+      "file": "Perroculo.sid",
+      "title": "Perroculo",
+      "source": "SpotySid supplemental"
+    },
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas.zip",
+      "file": "Porro.sid",
+      "title": "Porro",
+      "source": "HVSC"
+    },
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas_SpotySid_Extras.zip",
+      "file": "Power_Power_1.sid",
+      "title": "Power Power 1",
+      "source": "SpotySid supplemental"
+    },
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas_SpotySid_Extras.zip",
+      "file": "Power_Power_2.sid",
+      "title": "Power Power 2",
+      "source": "SpotySid supplemental"
+    },
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas_SpotySid_Extras.zip",
+      "file": "Psciidsk2.sid",
+      "title": "Psciidsk2",
+      "source": "SpotySid supplemental"
+    },
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas_SpotySid_Extras.zip",
+      "file": "Rapcito.sid",
+      "title": "Rapcito",
+      "source": "SpotySid supplemental"
+    },
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas_SpotySid_Extras.zip",
+      "file": "Turro1.sid",
+      "title": "Turro1",
+      "source": "SpotySid supplemental"
+    },
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas_SpotySid_Extras.zip",
+      "file": "Turroreggae_2.sid",
+      "title": "Turroreggae 2",
+      "source": "SpotySid supplemental"
+    },
+    {
+      "pack": "library/packs/musicians/L/Los_Pat_Moritas_SpotySid_Extras.zip",
+      "file": "Floppy_Club.sid",
+      "title": "Floppy Club",
+      "source": "SpotySid supplemental"
+    }
+  ],
+  "notices": [
+    "Use the HVSC file when available",
+    "Publish only through existing REPUBLISH with authorized beta key",
+    "Once verified, delete old 34-track static version"
+  ]
+}
