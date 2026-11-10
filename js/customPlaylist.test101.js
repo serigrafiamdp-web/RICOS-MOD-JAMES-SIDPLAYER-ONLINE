@@ -1022,14 +1022,17 @@
       }
     }catch(error){console.warn('Remix drafts were not restored',error);}
   }
-  function createRemix(){
+  function createRemix(shouldFocus){
     if(remixDrafts.length>=25){remixNotice('Maximum 25 drafts. Publish or finish an existing remix first.');return;}
     remixCounter++;
     var next={id:'remix-'+Date.now()+'-'+remixCounter,name:'REMIX '+remixCounter,creator:'',tracks:[]};
     remixDrafts.push(next);remixTarget=next.id;remixOpen=true;
     rememberRemixDestination(next.id);
     preserveRemixes();renderRemixes();
-    $('#ricoRemixName').trigger('focus');
+    if(shouldFocus!==false){
+      var field=document.getElementById('ricoRemixName');
+      if(field){field.focus();field.select();}
+    }
   }
   function remixNotice(message){
     $('#ricoRemixStatus').text(message);
@@ -1419,10 +1422,17 @@
       remixTarget='';preserveRemixes();renderRemixes();
       remixNotice('Unpublished changes discarded. Public playlist was not modified.');
     });
-    $('#ricoRemixName,#ricoRemixCreator').on('focus',function(){
-      // TEST153: empty creation window must allow typing without a
-      // previously selected draft. Focus creates the draft only once.
-      if(!selectedRemix())createRemix();
+    // TEST154: the creation fields must accept clicks and keyboard input,
+    // even if no draft was previously selected. Do not manufacture multiple
+    // automatic REMIX records from focus/blur cycles.
+    $('#ricoRemixName,#ricoRemixCreator').on('pointerdown mousedown',function(event){
+      event.stopPropagation();
+    }).on('focus',function(){
+      if(!selectedRemix()){
+        var activeInput=this;
+        createRemix(false);
+        activeInput.focus();
+      }
     });
     $('#ricoRemixNew').on('click',function(event){event.stopPropagation();createRemix();});
     $('#ricoRemixPublish').on('click',function(event){event.stopPropagation();publishRemix();});
@@ -1444,7 +1454,7 @@
       if(typeof window.ricoRenderRemixCommunityRows==='function')window.ricoRenderRemixCommunityRows();
       // Avoid redrawing inputs while the visitor is typing.
       var opt=target.find('option:selected');
-      if(opt.length)opt.text((current.name||'UNTITLED')+' ('+current.tracks.length+')');
+      if(opt.length)opt.text(current.name||'UNTITLED');
     });
     $('#ricoRemixEditor').on('mousedown mouseup pointerdown pointerup keydown keyup keypress',function(event){
       if(event.target.tagName==='INPUT'||event.target.tagName==='SELECT')event.stopPropagation();
