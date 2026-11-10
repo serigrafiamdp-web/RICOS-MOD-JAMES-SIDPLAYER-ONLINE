@@ -1224,6 +1224,7 @@
       }
       remixNotice('PUBLISHED CHANGES VERIFIED: '+draft.name+' · '+refs.length+' SID. Same public ID.');
       remixDrafts=remixDrafts.filter(function(item){return item!==draft;});
+      renderLivePlaylist();
       remixTarget=remixDrafts.length?remixDrafts[0].id:'';
       preserveRemixes();
       if(typeof window.ricoRefreshCommunityCatalog==='function'){
@@ -1470,12 +1471,19 @@
     $('#ricoLiveCount').text('(' + (activeCsdbRankDisplay?activeCsdbRankDisplay.items.length:list.length) + ')');
     // TEST106: SAVE is visible for any editable loaded list, never TOP 100.
     var canSave=!!(customActive&&!landingPlaylists&&!loadedRankedPlaylist&&list.length);
-    var hasChanges=canSave&&(activePublicCollection?activePublicCollection.dirtyOrder:
+    var pendingDraft=remixDrafts.find(function(d){
+      return d.remoteEditId&&Array.isArray(d.baseTracks)&&
+        ((activeRemixDraftId&&d.id===activeRemixDraftId)||
+          (activePublicPlaylist&&d.remoteEditId===activePublicPlaylist.remoteId))&&
+        remixTrackKeys(d.tracks)!==remixTrackKeys(d.baseTracks);
+    });
+    var hasChanges=canSave&&(!!pendingDraft||(activePublicCollection?activePublicCollection.dirtyOrder:
       activePublicPlaylist?(activePublicPlaylist.dirtyOrder||
         activePublicPlaylist.tracks.length!==activePublicPlaylist.originalCount):
-        (activeLocalOrderDirty||isOldSidCurated()));
-    $('#ricoLiveSave').css('display',canSave?'inline-block':'none')
-      .prop('disabled',savingCommunityEdits||!hasChanges)
+        (activeLocalOrderDirty||isOldSidCurated())));
+    $('#ricoLiveSave').text(pendingDraft?'REPUBLISH':'SAVE')
+      .css('display',canSave?'inline-block':'none')
+      .prop('disabled',savingCommunityEdits||remixBusy||!hasChanges)
       .attr('title',activePublicPlaylist||activePublicCollection
         ? 'Save updated public order (beta key required)'
         : isOldSidCurated()
@@ -1637,6 +1645,13 @@
   $('#ricoLiveSave').on('click',async function(event){
     event.stopPropagation();
     if(loadedRankedPlaylist||!customActive)return;
+    var pendingDraft=remixDrafts.find(function(d){
+      return d.remoteEditId&&Array.isArray(d.baseTracks)&&
+        ((activeRemixDraftId&&d.id===activeRemixDraftId)||
+          (activePublicPlaylist&&d.remoteEditId===activePublicPlaylist.remoteId))&&
+        remixTrackKeys(d.tracks)!==remixTrackKeys(d.baseTracks);
+    });
+    if(pendingDraft){await publishRemix(pendingDraft.id);return;}
     if(activePublicPlaylist||activePublicCollection){await savePublicRemovals();return;}
     if(isOldSidCurated()){
       try{await adoptOldSidCollection();}
@@ -3332,11 +3347,18 @@
         if(!edit)return;
         var key=row.dataset.communityOrderKey||'';
         var id=key.indexOf('remote:')===0?key.slice(7):'';
-        var pending=id&&remixDrafts.some(function(d){
+        var pending=id&&remixDrafts.find(function(d){
           return d.remoteEditId===id&&Array.isArray(d.baseTracks)&&
             remixTrackKeys(d.tracks)!==remixTrackKeys(d.baseTracks);
         });
         edit.textContent=pending?'REPUBLISH':'EDIT';
+        var description=row.querySelector('.rico-community-description');
+        if(description){
+          var original=row.dataset.communityBaseDescription||description.textContent;
+          description.textContent=pending
+            ? original.replace(/ · \d+ SID$/, ' · '+pending.tracks.length+' SID')
+            : original;
+        }
       });
       Array.prototype.forEach.call(communityItems.querySelectorAll('.rico-community-remix-row'),function(el){el.remove();});
       if(!remixDrafts.length)return;
@@ -3441,6 +3463,7 @@
           var description=document.createElement('span');
           description.className='rico-community-description';
           description.textContent=item.title+' — Playlist by '+(item.createdBy||'Unknown')+' · '+(Number(item.tracks)||0)+' SID';
+          row.dataset.communityBaseDescription=description.textContent;
           var stars=document.createElement('span');
           stars.className='rico-community-stars';
           stars.textContent='☆☆☆';
@@ -3476,7 +3499,13 @@
                   return d.remoteEditId===item.remoteId&&Array.isArray(d.baseTracks)&&
                     remixTrackKeys(d.tracks)!==remixTrackKeys(d.baseTracks);
                 });
-                if(pending){await publishRemix(pending.id);return;}
+                if(pending){
+                  await publishRemix(pending.id);
+                  if(communityOrderStatus)communityOrderStatus.textContent=
+                    remixDrafts.some(function(d){return d.id===pending.id;})
+                      ? $('#ricoRemixStatus').text() : 'REPUBLISH OK';
+                  return;
+                }
                 var mode=await chooseCommunityEditMode(item);
                 if(mode==='songs'){
                   await beginPublishedEdit(item.remoteId);
@@ -3502,7 +3531,10 @@
                   loadedPlaylistTitle=result.title;loadedPlaylistCreator=result.createdBy;renderLivePlaylist();
                 }
                 await loadCommunityCatalog();say('Playlist metadata updated: '+result.title);
-              }catch(error){say('EDIT: '+error.message);}
+              }catch(error){
+                say('EDIT: '+error.message);
+                if(communityOrderStatus)communityOrderStatus.textContent=error.message;
+              }
               finally{editButton.disabled=false;}
             });
             deleteButton.addEventListener('click',async function(event){
@@ -3555,13 +3587,25 @@
               var body=await result.text();
               if(body.length>90*1024*1024) throw Error('Playlist too large.');
               var data=JSON.parse(body);
+              // A user's explicit PLAY opens the locally edited version of the
+              // same published playlist, so + additions are visible before REPUBLISH.
+              var pending=!isStartup&&item.remoteId?remixDrafts.find(function(d){
+                return d.remoteEditId===item.remoteId&&Array.isArray(d.baseTracks)&&
+                  remixTrackKeys(d.tracks)!==remixTrackKeys(d.baseTracks);
+              }):null;
+              var chosen=pending?{
+                format:'ricos-sid-playlist',version:2,
+                name:pending.name,createdBy:pending.creator,
+                tracks:pending.tracks.map(function(t){return {pack:t.pack,file:t.file};})
+              }:data;
               // Ignore a late auto-load if the visitor picked a different source.
               if(isStartup && !startupPlaylistPending) return;
               if(isStartup) cancelStartupPlaylist();
-              await loadStoredPlaylist(data); // Plays only after all referenced SID files resolve.
+              await loadStoredPlaylist(chosen); // SID order and original public record remain untouched.
               activeCuratedCatalogId=!item.remoteId&&item.id==='old-sid-collection-rico'
                 ? item.id:null;
-              activePublicPlaylist=item.remoteId&&data.version===2?{
+              activeRemixDraftId=pending?pending.id:null;
+              activePublicPlaylist=!pending&&item.remoteId&&data.version===2?{
                 remoteId:item.remoteId,name:data.name,createdBy:data.createdBy,
                 tracks:data.tracks.map(function(t){return {pack:t.pack,file:t.file};}),
                 originalCount:data.tracks.length,dirtyOrder:false
