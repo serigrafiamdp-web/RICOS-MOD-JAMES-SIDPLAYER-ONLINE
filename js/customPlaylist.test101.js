@@ -734,16 +734,19 @@
       dialog.setAttribute('aria-modal','true');
       dialog.setAttribute('aria-label','Beta key for saving playlist');
       var heading=document.createElement('strong');
-      heading.textContent=action==='PUBLISH'?'PUBLISH PLAYLIST':'SAVE CHANGES';
+      heading.textContent=action==='ARCHIVE'?'ARCHIVE NO HVSC':(action==='PUBLISH'?'PUBLISH PLAYLIST':'SAVE CHANGES');
       var message=document.createElement('p');
-      message.textContent=action==='PUBLISH'?'Enter the beta key to publish this playlist for everyone.':'Enter the beta key to publish changes to the original playlist for everyone (added, removed or reordered songs).';
+      message.textContent=action==='ARCHIVE'
+        ?'Save these SID files publicly in NO HVSC for preservation and REMIX. Only archive music you have permission to share. Enter your beta key.'
+        :(action==='PUBLISH'?'Enter the beta key to publish this playlist for everyone.':
+          'Enter the beta key to publish changes to the original playlist for everyone (added, removed or reordered songs).');
       var input=document.createElement('input');
       input.type='password';input.placeholder='Beta key';input.autocomplete='off';
       input.setAttribute('aria-label','Beta key');
       input.required=true;
       var actions=document.createElement('div');actions.className='rico-beta-actions';
       var cancel=document.createElement('button');cancel.type='button';cancel.textContent='CANCEL';
-      var save=document.createElement('button');save.type='submit';save.textContent=action==='PUBLISH'?'PUBLISH':'SAVE';
+      var save=document.createElement('button');save.type='submit';save.textContent=action==='ARCHIVE'?'ARCHIVE':(action==='PUBLISH'?'PUBLISH':'SAVE');
       actions.appendChild(cancel);actions.appendChild(save);
       dialog.appendChild(heading);dialog.appendChild(message);dialog.appendChild(input);dialog.appendChild(actions);
       cover.appendChild(dialog);document.body.appendChild(cover);
@@ -767,6 +770,103 @@
       document.addEventListener('keydown',onKey,true);
       input.focus();
     });
+  }
+
+  // TEST165: NO HVSC is a permanent public SID archive. Import alone keeps
+  // files local. The beta-key dialog explicitly authorizes archival.
+  function toNoHvscBase64(bytes){
+    var binary='';
+    for(var at=0;at<bytes.length;at+=8192)
+      binary+=String.fromCharCode.apply(null,bytes.subarray(at,at+8192));
+    return btoa(binary);
+  }
+  async function binarySidHash(bytes){
+    var digest=await crypto.subtle.digest('SHA-256',bytes);
+    return Array.prototype.map.call(new Uint8Array(digest),function(v){
+      return v.toString(16).padStart(2,'0');
+    }).join('');
+  }
+  function noHvscFileName(item){
+    var name=String(item.file||item.name||'sid').split(/[\/\\]/).pop()
+      .replace(/[<>:*?|]/g,'_').slice(0,195);
+    return /\.sid$/i.test(name)?name:name.replace(/\.[^.]*$/,'')+'.sid';
+  }
+  async function archiveImportedSidFiles(items,required){
+    var entries=items.filter(function(item){
+      return item&&item.localBytes instanceof Uint8Array&&
+        !item._noHvscAssetId;
+    });
+    if(!entries.length)return 0;
+    var capResponse=await fetch(communityWriteApi+'/capabilities',{cache:'no-store'});
+    if(!capResponse.ok)throw Error('NO HVSC archive service unavailable.');
+    var cap=await capResponse.json();
+    if(!cap.noHvscArchive||!cap.sidUploadsEnabled){
+      if(required)throw Error('NO HVSC archive needs the updated Cloudflare Worker and SID storage. Files remain local.');
+      $('#ricoPlaylistStatus').text('Imported locally. NO HVSC archiving needs Cloudflare Worker TEST165.');
+      return 0;
+    }
+    // A previously archived identical binary can be reused without uploading.
+    var archived=await fetch(communityWriteApi+'/no-hvsc',{cache:'no-store'});
+    if(!archived.ok)throw Error('Cannot verify the NO HVSC archive.');
+    var catalog=await archived.json();
+    if(!Array.isArray(catalog.tracks))throw Error('Invalid NO HVSC catalog.');
+    var known=new Map(catalog.tracks.map(function(t){return [t.sidId,t];}));
+    var pending=[];
+    for(var entry of entries){
+      var id=await binarySidHash(entry.localBytes);
+      var stored=known.get(id);
+      if(stored){
+        entry._noHvscAssetId=id;
+        entry._noHvscFile=stored.file;
+      }else pending.push({entry:entry,id:id,file:noHvscFileName(entry)});
+    }
+    if(!pending.length)return 0;
+    var key=await askBetaKeyDialog('ARCHIVE');
+    if(!key){
+      if(required)throw Error('NO HVSC archive cancelled; SID remains local.');
+      return 0;
+    }
+    var maxBatch=Math.max(1,Number(cap.sidUploadLimit)||15),saved=0;
+    // Reuse the existing GitHub/R2 upload batch size.
+    for(var start=0;start<pending.length;start+=maxBatch){
+      var batch=pending.slice(start,start+maxBatch);
+      $('#ricoPlaylistStatus').text('Archiving '+(start+1)+'–'+Math.min(start+batch.length,pending.length)+' of '+pending.length+' SID in NO HVSC...');
+      var result=await fetch(communityWriteApi+'/no-hvsc',{
+        method:'POST',headers:{'Content-Type':'application/json','X-Beta-Key':key},
+        body:JSON.stringify({format:'ricos-no-hvsc-upload',version:1,
+          tracks:batch.map(function(row){return {file:row.file,
+            sidBase64:toNoHvscBase64(row.entry.localBytes)};})})
+      });
+      var receipt=await result.json().catch(function(){return {};});
+      if(!result.ok)throw Error(receipt.error||'NO HVSC archive failed (HTTP '+result.status+')');
+      if(receipt.format!=='ricos-no-hvsc-receipt'||!Array.isArray(receipt.tracks)||
+         receipt.tracks.length!==batch.length)
+        throw Error('NO HVSC server did not confirm the SID archives.');
+      // A confirmed D1 GET is required before a track can be used in Remix.
+      var check=await fetch(communityWriteApi+'/no-hvsc?check='+Date.now(),{cache:'no-store'});
+      if(!check.ok)throw Error('NO HVSC archive verification failed.');
+      var reloaded=await check.json();
+      var verified=new Map((reloaded.tracks||[]).map(function(t){return [t.sidId,t];}));
+      for(var i=0;i<batch.length;i++){
+        var row=batch[i],remote=receipt.tracks[i],confirmed=verified.get(row.id);
+        if(remote.sidId!==row.id||!confirmed)
+          throw Error('NO HVSC could not verify '+row.file+'. Keep the original file.');
+        row.entry._noHvscAssetId=row.id;
+        row.entry._noHvscFile=confirmed.file||row.file;
+        saved++;
+      }
+    }
+    $('#ricoPlaylistStatus').text(saved+' new SID archived in NO HVSC and available for REMIX.');
+    return saved;
+  }
+  function startNoHvscArchive(entries,required){
+    var running=archiveImportedSidFiles(entries,required);
+    entries.forEach(function(entry){entry._noHvscPending=running;});
+    var clean=function(){entries.forEach(function(entry){
+      if(entry._noHvscPending===running)entry._noHvscPending=null;
+    });};
+    running.then(clean,clean);
+    return running;
   }
   // TEST107: a 2xx response is not proof that the ordering was persisted.
   // Re-read the canonical Cloudflare record and compare every immutable SID ref.
