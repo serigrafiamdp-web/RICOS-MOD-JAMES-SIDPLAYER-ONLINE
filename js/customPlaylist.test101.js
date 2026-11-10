@@ -943,12 +943,43 @@
     var digest=await crypto.subtle.digest('SHA-256',bytes);
     return Array.from(new Uint8Array(digest),function(v){return v.toString(16).padStart(2,'0');}).join('');
   }
+  // TEST162 — prepare the missing Los Pat Moritas SID for the existing
+  // 20-track D1 playlist. Prefer HVSC references; originals are only used
+  // when absent from the indexed HVSC collection. This is a PRIVATE DRAFT:
+  // it NEVER changes the published playlist without REPUBLISH + beta key.
+  async function stagePatMoritasAdditions(draft){
+    if(!draft||draft.remoteEditId!=='8cf5e857-19d3-48cf-a154-53f046ee65e2')
+      return 0;
+    var response=await fetch('community/migrations/los-pat-moritas-2026.json',{cache:'no-store'});
+    if(!response.ok)throw Error('Los Pat Moritas additions are not available ('+response.status+').');
+    var manifest=await response.json();
+    if(!manifest||manifest.format!=='spotysid-lpm-migration'||manifest.version!==1||
+      manifest.publishedPlaylistId!==draft.remoteEditId||!Array.isArray(manifest.additions)||
+      manifest.additions.length!==14)throw Error('Invalid Los Pat Moritas migration data.');
+    var current=new Set(draft.tracks.map(function(t){return t.pack+'::'+t.file;}));
+    var added=0;
+    manifest.additions.forEach(function(ref){
+      if(!ref||typeof ref.pack!=='string'||typeof ref.file!=='string'||!ref.title||
+        !/^library\/packs\/musicians\/L\/[A-Za-z0-9_.-]+\.zip$/.test(ref.pack)||
+        !/^[A-Za-z0-9_.-]+\.sid$/.test(ref.file))
+        throw Error('Invalid additional Los Pat Moritas SID reference.');
+      var key=ref.pack+'::'+ref.file;
+      if(current.has(key))return;
+      current.add(key);
+      draft.tracks.push({pack:ref.pack,file:ref.file,title:ref.title,artist:'Los Pat Moritas'});
+      added++;
+    });
+    return added;
+  }
   async function beginPublishedEdit(id){
     if(!/^[a-z0-9-]{12,48}$/i.test(id))throw Error('Invalid published playlist ID.');
     var existing=remixDrafts.find(function(d){return d.remoteEditId===id;});
     if(existing){
+      var addedExisting=await stagePatMoritasAdditions(existing);
       remixTarget=existing.id;preserveRemixes();renderRemixes();
-      remixNotice('Continuing unpublished changes for '+existing.name+'. ADD + TO is ready.');
+      remixNotice(addedExisting?
+        'LOS PAT MORITAS: '+addedExisting+' missing SID added to your private draft. Use REPUBLISH to save the same public list.':
+        'Continuing unpublished changes for '+existing.name+'. ADD + TO is ready.');
       return;
     }
     if(remixDrafts.length>=25)throw Error('Maximum 25 editable drafts. Finish an existing one first.');
@@ -966,9 +997,12 @@
       creator:source.createdBy,remoteEditId:id,
       baseTracks:tracks.map(function(t){return {pack:t.pack,file:t.file};}),
       tracks:tracks};
+    var addedSids=await stagePatMoritasAdditions(draft);
     remixDrafts.push(draft);remixTarget=draft.id;
     preserveRemixes();renderRemixes();
-    remixNotice('Editing '+draft.name+' privately. Play any other list and press + to add its songs. PUBLISH CHANGES keeps the same public ID.');
+    remixNotice(addedSids?
+      'LOS PAT MORITAS: '+addedSids+' missing SID prepared ('+draft.tracks.length+' total). Press REPUBLISH and enter the beta key to update the existing public list.':
+      'Editing '+draft.name+' privately. Play any other list and press + to add its songs. PUBLISH CHANGES keeps the same public ID.');
   }
   async function selectRemixDestination(value){
     rememberRemixDestination(value);
