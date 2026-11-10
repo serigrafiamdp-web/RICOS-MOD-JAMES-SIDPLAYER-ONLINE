@@ -21,8 +21,9 @@ jobs:
               with urllib.request.urlopen(req,timeout=25) as f:return json.load(f)
           api='https://ricos-sid-community.serigrafiamdp.workers.dev'
           catalog=get(api+'/playlists')
-          targets=[p for p in catalog['playlists'] if p.get('title','').strip().upper()=='LPM HVSC 2026']
-          if len(targets)!=1:raise Exception('Expected 1 LPM HVSC 2026 playlist; got '+str(len(targets)))
+          print('PUBLIC TITLES:', [(p.get('title'),p.get('id'),p.get('tracks')) for p in catalog['playlists']])
+          targets=[p for p in catalog['playlists'] if 'LPM' in p.get('title','').upper() or 'LOS PAT MORITAS' in p.get('title','').upper()]
+          if len(targets)!=1:raise Exception('Expected 1 published LPM list; got '+str(len(targets)))
           target=targets[0]
           remote=get(api+'/playlists/'+target['id'])
           if remote.get('version')!=2:raise Exception('Unexpected target format')
