@@ -4212,8 +4212,31 @@
                 var response=await fetch(communityWriteApi+'/collections/'+encodeURIComponent(c.id));
                 if(!response.ok)throw Error('Published collection unavailable.');
                 var manifest=await response.json();
-                if(!Array.isArray(manifest.tracks)||!manifest.tracks.length||manifest.tracks.length>40)
+                if(!Array.isArray(manifest.tracks)||!manifest.tracks.length||
+                   manifest.tracks.length>(c.id==='00000000-0000-4000-8000-000000000001'?2000:40))
                   throw Error('Invalid published collection.');
+                if(c.id==='00000000-0000-4000-8000-000000000001'){
+                  // TEST165: NO HVSC is a persistent asset archive, not a
+                  // temporary v1 memory playlist. The v2 reference player
+                  // also allows each archived SID to be sent to REMIX via +.
+                  var refs=manifest.tracks.map(function(t){
+                    if(!/^[0-9a-f]{64}$/.test(t.sidId)||!t.file)
+                      throw Error('Invalid NO HVSC asset reference.');
+                    return {sidId:t.sidId,file:t.file};
+                  });
+                  await loadStoredPlaylist({format:'ricos-sid-playlist',version:2,
+                    name:c.name,createdBy:c.creator,tracks:refs},false);
+                  activePublicCollection={id:c.id,name:c.name,creator:c.creator,
+                    originalTracks:refs.map(remixCanonicalRef),
+                    tracks:refs.map(function(t,i){
+                      return {sidId:t.sidId,file:t.file,originalIndex:i};
+                    }),dirtyOrder:false};
+                  renderLivePlaylist();
+                  status.textContent='Loaded NO HVSC · '+refs.length+' SID.';
+                  if(player.dialogManager&&player.dialogManager.dialogShown==='chooseSidDialog')
+                    player.dialogManager.hideDialog('chooseSidDialog');
+                  return;
+                }
                 songs=[];
                 for(var track of manifest.tracks){
                   if(!/^[0-9a-f]{64}$/.test(track.sidId))throw Error('Invalid SID reference');
