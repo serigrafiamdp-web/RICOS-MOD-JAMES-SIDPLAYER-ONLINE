@@ -2796,6 +2796,25 @@
     var communityOrderStatus=document.getElementById('ricoCommunityOrderStatus');
     var COMMUNITY_ORDER_STORAGE_KEY='rico-community-catalog-order-v1';
     var communityDraftOrder=null;
+    var communityServerOrder=null;
+    var communityServerRevision=null;
+    // TEST159: the shared catalog order lives in D1, not just this browser.
+    async function readCommunityServerOrder(){
+      try{
+        var response=await fetch(communityWriteApi+'/catalog-order',{cache:'no-store'});
+        if(!response.ok)throw Error('Catalog order endpoint unavailable ('+response.status+').');
+        var data=await response.json();
+        if(!data||data.format!=='ricos-community-catalog-order'||data.version!==1||
+           !Array.isArray(data.order)||!Number.isSafeInteger(data.revision))
+          throw Error('Unexpected catalog order response.');
+        communityServerOrder=data.order;
+        communityServerRevision=data.revision;
+      }catch(error){
+        communityServerOrder=null;
+        communityServerRevision=null;
+        console.warn('Shared community playlist order not available yet',error);
+      }
+    }
     function communityItemOrderKey(item){
       return item.remoteId?'remote:'+item.remoteId:'static:'+item.file;
     }
@@ -2806,7 +2825,8 @@
       }catch(error){return [];}
     }
     function sortCommunityPlaylists(playlists){
-      var ids=communityDraftOrder===null?readSavedCommunityOrder():communityDraftOrder;
+      var ids=communityDraftOrder!==null?communityDraftOrder:
+        (communityServerOrder&&communityServerOrder.length?communityServerOrder:readSavedCommunityOrder());
       if(!ids.length)return playlists;
       var positions=Object.create(null);
       ids.forEach(function(key,index){if(positions[key]===undefined)positions[key]=index;});
@@ -2842,20 +2862,47 @@
       updateCatalogArrows();
       if(communityOrderStatus)communityOrderStatus.textContent='Unsaved';
     }
-    if(communityOrderSave)communityOrderSave.addEventListener('click',function(event){
+    if(communityOrderSave)communityOrderSave.addEventListener('click',async function(event){
       event.preventDefault();event.stopPropagation();
       var rows=catalogOrderRows();
       if(!rows.length){say('No community playlists to reorder.');return;}
       var ids=rows.map(function(row){return row.dataset.communityOrderKey;});
-      try{
-        localStorage.setItem(COMMUNITY_ORDER_STORAGE_KEY,JSON.stringify(ids));
-        communityDraftOrder=ids;
-        if(communityOrderStatus)communityOrderStatus.textContent='Saved here';
-        say('Community playlist order saved in this browser.');
-      }catch(error){
-        if(communityOrderStatus)communityOrderStatus.textContent='Save failed';
-        say('Could not save order in this browser: '+error.message);
+      if(communityServerRevision===null){
+        if(communityOrderStatus)communityOrderStatus.textContent='Server update needed';
+        say('Public SAVE requires the new Community Worker. This order has NOT been published.');
+        return;
       }
+      var key=await askBetaKeyDialog('SAVE');
+      if(!key)return;
+      communityOrderSave.disabled=true;
+      if(communityOrderStatus)communityOrderStatus.textContent='Saving...';
+      try{
+        var write=await fetch(communityWriteApi+'/catalog-order',{
+          method:'PUT',headers:{'Content-Type':'application/json','X-Beta-Key':key},
+          body:JSON.stringify({order:ids,expectedRevision:communityServerRevision})
+        });
+        var receipt=await write.json().catch(function(){return {};});
+        if(!write.ok)throw Error(receipt.error||('Public SAVE rejected ('+write.status+').'));
+        if(!receipt.saved||!Number.isSafeInteger(receipt.revision))
+          throw Error('Server did not confirm the published order.');
+        var verification=await fetch(communityWriteApi+'/catalog-order?check='+Date.now(),{cache:'no-store'});
+        if(!verification.ok)throw Error('Could not verify the saved order. Reload before retrying.');
+        var latest=await verification.json();
+        if(!Array.isArray(latest.order)||latest.order.length!==ids.length||
+           !ids.every(function(id,i){return latest.order[i]===id;}))
+          throw Error('Published order differs from the requested order. Reload before retrying.');
+        communityServerOrder=ids.slice();
+        communityServerRevision=latest.revision;
+        communityDraftOrder=null;
+        try{localStorage.removeItem(COMMUNITY_ORDER_STORAGE_KEY);}catch(ignore){}
+        if(communityOrderStatus)communityOrderStatus.textContent='Saved for everyone';
+        say('Community playlist order published and verified.');
+      }catch(error){
+        if(communityOrderStatus)communityOrderStatus.textContent='Not saved';
+        say('Community order SAVE: '+error.message);
+        // Leave the moved rows in place so an error never discards editing work.
+        // Reload to reconcile if the server changed or verification was interrupted.
+      }finally{communityOrderSave.disabled=false;}
     });
     var localPanel=document.getElementById('sidListHolder');
     var hvscPanel=document.getElementById('ricoHvscPanel');
@@ -3559,6 +3606,8 @@
         }catch(remoteError){
           console.warn('Public user playlists unavailable, showing curated list only',remoteError);
         }
+        if(requestNumber!==communityRequestNumber) return;
+        await readCommunityServerOrder();
         if(requestNumber!==communityRequestNumber) return;
         catalog.playlists=sortCommunityPlaylists(catalog.playlists);
         communityItems.textContent='';
