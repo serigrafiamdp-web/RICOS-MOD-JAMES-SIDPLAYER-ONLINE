@@ -276,9 +276,18 @@ async function noHvscArchive(request,env,url,origin){
   if(url.pathname!=='/no-hvsc')return null;
   if(!env.DB)return text('Community database unavailable',503,origin);
   const provider=sidUploadProvider(env);
-  // Create the provenance schema lazily. This does not modify any existing
-  // playlist, SID data or metadata from other collections.
+  // Create only missing archive tables. Existing D1 playlists, SID assets,
+  // collections and their content are not replaced or reset.
   try{
+    await env.DB.prepare('CREATE TABLE IF NOT EXISTS sid_assets ('+
+      'id TEXT PRIMARY KEY,size INTEGER NOT NULL,created_at INTEGER NOT NULL)').run();
+    await env.DB.prepare('CREATE TABLE IF NOT EXISTS sid_collections ('+
+      'id TEXT PRIMARY KEY,title TEXT NOT NULL,creator TEXT NOT NULL,'+
+      'track_count INTEGER NOT NULL,created_at INTEGER NOT NULL)').run();
+    await env.DB.prepare('CREATE TABLE IF NOT EXISTS sid_collection_tracks ('+
+      'collection_id TEXT NOT NULL,position INTEGER NOT NULL,'+
+      'sid_id TEXT NOT NULL,filename TEXT NOT NULL,'+
+      'PRIMARY KEY (collection_id,position))').run();
     await env.DB.prepare('CREATE TABLE IF NOT EXISTS sid_provenance ('+
       'sid_id TEXT PRIMARY KEY, filename TEXT NOT NULL, title TEXT NOT NULL,'+
       'author TEXT NOT NULL, released TEXT NOT NULL, data_hash TEXT NOT NULL,'+
