@@ -2,6 +2,31 @@
   "format": "spotysid-donate-config",
   "version": 1,
   "paypalUrl": "",
-  "supporters": [],
+  "supporters": [
+    {
+      "name": "NAKU / LOS PAT MORITAS",
+      "hearts": 1
+    },
+    {
+      "name": "JUANETE OF MEGASOFT",
+      "hearts": 1
+    },
+    {
+      "name": "UCTUMI",
+      "hearts": 1
+    },
+    {
+      "name": "DON EPI",
+      "hearts": 1
+    },
+    {
+      "name": "PSENOUGH",
+      "hearts": 1
+    },
+    {
+      "name": "KRAKATOA",
+      "hearts": 1
+    }
+  ],
   "note": "Add only the actual public PayPal.Me / PayPal Donate URL after verification. Supporter names are voluntary and require permission."
 }
