@@ -1077,8 +1077,8 @@
     $('#ricoRemixCount').text(selected?selected.tracks.length+' SID':'0 SID');
     $('#ricoRemixEditor').css('display',remixOpen?'flex':'none');
     $('#ricoRemixToggle').attr('aria-expanded',remixOpen?'true':'false');
-    $('#ricoRemixName').val(selected?selected.name:'').prop('disabled',!selected||!!selected.remoteEditId);
-    $('#ricoRemixCreator').val(selected?selected.creator:'').prop('disabled',!selected||!!selected.remoteEditId);
+    $('#ricoRemixName').val(selected?selected.name:'').prop('disabled',!!(selected&&selected.remoteEditId));
+    $('#ricoRemixCreator').val(selected?selected.creator:'').prop('disabled',!!(selected&&selected.remoteEditId));
     $('#ricoRemixFloatHeader strong').text(selected&&selected.remoteEditId?'EDIT PUBLISHED PLAYLIST':'REMIX PLAYLIST CREATOR');
     $('#ricoRemixPublish').text(selected&&selected.remoteEditId?'REPUBLISH':'PUBLISH REMIX')
       .prop('disabled',!selected||!selected.tracks.length||remixBusy);
@@ -1418,6 +1418,11 @@
       remixDrafts=remixDrafts.filter(function(item){return item!==draft;});
       remixTarget='';preserveRemixes();renderRemixes();
       remixNotice('Unpublished changes discarded. Public playlist was not modified.');
+    });
+    $('#ricoRemixName,#ricoRemixCreator').on('focus',function(){
+      // TEST153: empty creation window must allow typing without a
+      // previously selected draft. Focus creates the draft only once.
+      if(!selectedRemix())createRemix();
     });
     $('#ricoRemixNew').on('click',function(event){event.stopPropagation();createRemix();});
     $('#ricoRemixPublish').on('click',function(event){event.stopPropagation();publishRemix();});
