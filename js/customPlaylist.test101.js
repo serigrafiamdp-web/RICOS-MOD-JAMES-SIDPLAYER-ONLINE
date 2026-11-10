@@ -935,8 +935,23 @@
     preferredRemixDestination=value;
     try{localStorage.setItem('rico-add-to-destination',value);}catch(e){}
   }
+  // TEST165: immutable SID assets from NO HVSC and original HVSC ZIP references.
+  function remixRefKey(ref){return (ref.sidId?'sid:'+ref.sidId:'pack:'+ref.pack)+'::'+ref.file;}
+  function remixRefPair(ref){return [ref.sidId||ref.pack,ref.file];}
+  function remixCanonicalRef(ref){
+    return ref.sidId?{sidId:ref.sidId,file:ref.file}:{pack:ref.pack,file:ref.file};
+  }
+  function validRemixRef(ref){
+    return !!ref&&typeof ref.file==='string'&&
+      (/^[a-f0-9]{64}$/.test(ref.sidId||'')||
+        (typeof ref.pack==='string'&&
+        /^library\/packs\/(?:musicians|demos)\/[A-Za-z0-9_./-]+\.zip$/.test(ref.pack)&&
+        !ref.pack.includes('..'))) &&
+      !ref.file.includes('..')&&!ref.file.includes('\\')&&
+      /^[^<>:*?|\\/]+\.sid$/i.test(ref.file);
+  }
   function remixTrackKeys(tracks){
-    return JSON.stringify(tracks.map(function(t){return [t.pack,t.file];}));
+    return JSON.stringify(tracks.map(remixRefPair));
   }
   async function remixSnapshotHash(tracks){
     var bytes=new TextEncoder().encode(remixTrackKeys(tracks));
@@ -988,14 +1003,14 @@
     var source=await response.json();
     if(!source||source.format!=='ricos-sid-playlist'||source.version!==2||
        !Array.isArray(source.tracks)||!source.tracks.length||source.tracks.length>2000||
-       !source.tracks.every(function(t){return t&&typeof t.pack==='string'&&typeof t.file==='string';}))
-      throw Error('This published playlist has no editable HVSC references.');
+       !source.tracks.every(validRemixRef))
+      throw Error('This published playlist has invalid SID references.');
     // Do not start playback; copy reference paths into a private draft only.
-    var tracks=source.tracks.map(function(t){return {pack:t.pack,file:t.file,title:t.title||t.file,artist:t.artist||''};});
+    var tracks=source.tracks.map(function(t){return Object.assign(remixCanonicalRef(t),{title:t.title||t.file,artist:t.artist||''});});
     remixCounter++;
     var draft={id:'remix-'+Date.now()+'-'+remixCounter,name:source.name,
       creator:source.createdBy,remoteEditId:id,
-      baseTracks:tracks.map(function(t){return {pack:t.pack,file:t.file};}),
+      baseTracks:tracks.map(remixCanonicalRef),
       tracks:tracks};
     var addedSids=await stagePatMoritasAdditions(draft);
     remixDrafts.push(draft);remixTarget=draft.id;
@@ -1038,17 +1053,10 @@
         remixDrafts=data.drafts.filter(function(d){
           return d&&typeof d.id==='string'&&typeof d.name==='string'&&
             typeof d.creator==='string'&&Array.isArray(d.tracks)
-            &&d.tracks.length<=2000&&d.tracks.every(function(t){
-              return t&&typeof t.pack==='string'&&typeof t.file==='string'&&
-                /^library\/packs\/(?:musicians|demos)\/[A-Za-z0-9_./-]+\.zip$/.test(t.pack)&&
-                !t.pack.includes('..')&&!t.file.includes('..');
-            })&&(!d.remoteEditId||(
+            &&d.tracks.length<=2000&&d.tracks.every(validRemixRef)&&
+            (!d.remoteEditId||(
               /^[a-z0-9-]{12,48}$/i.test(d.remoteEditId)&&Array.isArray(d.baseTracks)&&
-              d.baseTracks.length<=2000&&d.baseTracks.every(function(t){
-                return t&&typeof t.pack==='string'&&typeof t.file==='string'&&
-                  /^library\/packs\/(?:musicians|demos)\/[A-Za-z0-9_./-]+\.zip$/.test(t.pack)&&
-                  !t.pack.includes('..')&&!t.file.includes('..');
-              })
+              d.baseTracks.length<=2000&&d.baseTracks.every(validRemixRef)
             ));
         });
         remixCounter=Number(data.counter)||remixDrafts.length;
