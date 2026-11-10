@@ -22,6 +22,14 @@ jobs:
           api='https://ricos-sid-community.serigrafiamdp.workers.dev'
           catalog=get(api+'/playlists')
           print('PUBLIC TITLES:', [(p.get('title'),p.get('id'),p.get('tracks')) for p in catalog['playlists']])
+          target_id='8cf5e857-19d3-48cf-a154-53f046ee65e2'
+          target_remote=get(api+'/playlists/'+target_id)
+          migration=json.load(open('community/migrations/los-pat-moritas-2026.json'))
+          remote_keys={(t['pack'],t['file']) for t in target_remote['tracks']}
+          missing_refs=[t for t in migration['additions'] if (t['pack'],t['file']) not in remote_keys]
+          print('VERIFICATION PUBLIC:', json.dumps(dict(id=target_id,actual=len(target_remote['tracks']),expected=34,missing_from_migration=len(missing_refs),missing=missing_refs)))
+          if len(target_remote['tracks'])!=34 or missing_refs:
+              raise Exception('Public 34-SID migration not confirmed; original static list must stay intact.')
           targets=[p for p in catalog['playlists'] if 'LPM' in p.get('title','').upper() or 'LOS PAT MORITAS' in p.get('title','').upper()]
           if len(targets)!=1:raise Exception('Expected 1 published LPM list; got '+str(len(targets)))
           target=targets[0]
