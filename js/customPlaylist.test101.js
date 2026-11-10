@@ -851,6 +851,12 @@
         var row=batch[i],remote=receipt.tracks[i],confirmed=verified.get(row.id);
         if(remote.sidId!==row.id||!confirmed)
           throw Error('NO HVSC could not verify '+row.file+'. Keep the original file.');
+        var checkAsset=await fetch(communityWriteApi+'/sid-assets/'+row.id,{cache:'no-store'});
+        if(!checkAsset.ok)
+          throw Error('NO HVSC binary cannot be downloaded: '+row.file+'. Keep the original file.');
+        var storedBytes=new Uint8Array(await checkAsset.arrayBuffer());
+        if((await binarySidHash(storedBytes))!==row.id)
+          throw Error('NO HVSC binary integrity verification failed: '+row.file+'.');
         row.entry._noHvscAssetId=row.id;
         row.entry._noHvscFile=confirmed.file||row.file;
         saved++;
