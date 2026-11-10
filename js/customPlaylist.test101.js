@@ -2868,8 +2868,17 @@
       if(!rows.length){say('No community playlists to reorder.');return;}
       var ids=rows.map(function(row){return row.dataset.communityOrderKey;});
       if(communityServerRevision===null){
-        if(communityOrderStatus)communityOrderStatus.textContent='Server update needed';
-        say('Public SAVE requires the new Community Worker. This order has NOT been published.');
+        // Keep the previously working browser-local SAVE until the Worker update
+        // is deployed. Never describe a local save as a public publication.
+        try{
+          localStorage.setItem(COMMUNITY_ORDER_STORAGE_KEY,JSON.stringify(ids));
+          communityDraftOrder=ids.slice();
+          if(communityOrderStatus)communityOrderStatus.textContent='Saved here only';
+          say('Order saved in this browser only. Public SAVE requires the Community Worker update.');
+        }catch(error){
+          if(communityOrderStatus)communityOrderStatus.textContent='Not saved';
+          say('Local order save failed: '+error.message);
+        }
         return;
       }
       var key=await askBetaKeyDialog('SAVE');
