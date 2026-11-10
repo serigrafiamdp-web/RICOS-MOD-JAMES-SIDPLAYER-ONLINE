@@ -1194,10 +1194,34 @@
     if(!currentResponse.ok)throw Error('Could not retrieve current published playlist.');
     var current=await currentResponse.json();
     if(!current||!Array.isArray(current.tracks)||current.name!==draft.name||
-       current.createdBy!==draft.creator||
-       remixTrackKeys(current.tracks)!==remixTrackKeys(draft.baseTracks))
-      throw Error('The public playlist changed since this draft was created. Your draft was kept; do not overwrite the newer public version.');
-    var hash=await remixSnapshotHash(draft.baseTracks);
+       current.createdBy!==draft.creator)
+      throw Error('The published playlist metadata changed. Your draft was kept.');
+    var baseForSave=draft.baseTracks;
+    if(remixTrackKeys(current.tracks)!==remixTrackKeys(baseForSave)){
+      // TEST147: only automatically rebase pure additions. Never silently
+      // overwrite a newer public order or merge local removals/reordering.
+      var identity=function(t){return t.pack+'::'+t.file;};
+      var baseSet=new Set(baseForSave.map(identity));
+      var draftBaseOrder=draft.tracks.filter(function(t){return baseSet.has(identity(t));});
+      if(remixTrackKeys(draftBaseOrder)!==remixTrackKeys(baseForSave))
+        throw Error('Public list changed and local order/removals also changed. Draft retained; nothing overwritten.');
+      var remoteSet=new Set(current.tracks.map(identity));
+      var additions=draft.tracks.filter(function(t){return !baseSet.has(identity(t));});
+      var merged=current.tracks.map(function(t){return {pack:t.pack,file:t.file};});
+      additions.forEach(function(t){
+        if(!remoteSet.has(identity(t))){merged.push({pack:t.pack,file:t.file});remoteSet.add(identity(t));}
+      });
+      refs=merged;
+      baseForSave=current.tracks;
+      if(remixTrackKeys(refs)===remixTrackKeys(current.tracks)){
+        remixNotice('All added songs are already published in '+draft.name+'. Same public ID.');
+        remixDrafts=remixDrafts.filter(function(item){return item!==draft;});
+        remixTarget=remixDrafts.length?remixDrafts[0].id:'';
+        preserveRemixes();renderRemixes();renderLivePlaylist();
+        return;
+      }
+    }
+    var hash=await remixSnapshotHash(baseForSave);
     var key=await askBetaKeyDialog('SAVE');
     if(!key)return;
     remixBusy=true;renderRemixes();
