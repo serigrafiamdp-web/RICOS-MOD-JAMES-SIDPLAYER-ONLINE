@@ -908,7 +908,7 @@
     if(!/^[a-z0-9-]{12,48}$/i.test(id))throw Error('Invalid published playlist ID.');
     var existing=remixDrafts.find(function(d){return d.remoteEditId===id;});
     if(existing){
-      remixTarget=existing.id;remixOpen=true;preserveRemixes();renderRemixes();
+      remixTarget=existing.id;preserveRemixes();renderRemixes();
       remixNotice('Continuing unpublished changes for '+existing.name+'. ADD + TO is ready.');
       return;
     }
@@ -927,7 +927,7 @@
       creator:source.createdBy,remoteEditId:id,
       baseTracks:tracks.map(function(t){return {pack:t.pack,file:t.file};}),
       tracks:tracks};
-    remixDrafts.push(draft);remixTarget=draft.id;remixOpen=true;
+    remixDrafts.push(draft);remixTarget=draft.id;
     preserveRemixes();renderRemixes();
     remixNotice('Editing '+draft.name+' privately. Play any other list and press + to add its songs. PUBLISH CHANGES keeps the same public ID.');
   }
