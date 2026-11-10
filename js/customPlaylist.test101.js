@@ -1016,7 +1016,7 @@
                   !t.pack.includes('..')&&!t.file.includes('..');
               })
             ));
-        }).slice(0,25);
+        });
         remixCounter=Number(data.counter)||remixDrafts.length;
         remixTarget=remixDrafts.some(function(d){return d.id===data.target;})?data.target:'';
       }
