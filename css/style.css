@@ -2559,3 +2559,37 @@ left: 1px;
   min-width:68px;min-height:29px;
   cursor:pointer;
 }
+
+/* TEST137 — one shared donor-and-tester list, hearts instead of dollar values. */
+#ricoDonateDialog #ricoDonateSupporters {
+  list-style:none;
+  padding:5px 7px;
+  max-height:190px;
+}
+#ricoDonateDialog #ricoDonateSupporters .rico-donate-supporter {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:6px 5px;
+  border-bottom:1px solid var(--rico-theme-border,#777);
+}
+#ricoDonateDialog #ricoDonateSupporters .rico-donate-supporter:last-child {
+  border-bottom:0;
+}
+#ricoDonateDialog .rico-donate-supporter-name {
+  min-width:0;
+  flex:1 1 auto;
+  overflow-wrap:anywhere;
+}
+#ricoDonateDialog .rico-donate-hearts {
+  flex:0 0 auto;
+  color:var(--rico-theme-fg,#fff);
+  font:17px/1 Tahoma,Arial,sans-serif;
+  letter-spacing:2px;
+  white-space:nowrap;
+}
+#ricoDonateDialog #ricoDonateSupporters .rico-donate-empty {
+  margin-left:0;
+  padding:6px 5px;
+}

@@ -53,7 +53,7 @@
       if(!Array.isArray(items)||!items.length){
         var pending=document.createElement('li');
         pending.className='rico-donate-empty';
-        pending.textContent='Supporter credits will appear here once approved.';
+        pending.textContent='Names will appear here when approved.';
         supporters.appendChild(pending);
         return;
       }
@@ -65,7 +65,20 @@
         if(!name||seen.has(name.toLowerCase()))return;
         seen.add(name.toLowerCase());
         var li=document.createElement('li');
-        li.textContent=name;
+        li.className='rico-donate-supporter';
+        li.setAttribute('aria-label',name+', thanked by SpotySid');
+        var supporterName=document.createElement('span');
+        supporterName.className='rico-donate-supporter-name';
+        supporterName.textContent=name;
+        var hearts=document.createElement('span');
+        hearts.className='rico-donate-hearts';
+        hearts.setAttribute('aria-hidden','true');
+        // Optional 1..5 appreciation hearts, never a payment amount.
+        var amount=item&&typeof item==='object'?Number(item.hearts):1;
+        var count=Number.isInteger(amount)?Math.min(5,Math.max(1,amount)):1;
+        hearts.textContent='♥'.repeat(count);
+        li.appendChild(supporterName);
+        li.appendChild(hearts);
         supporters.appendChild(li);
       });
       if(!supporters.children.length)setSupporters([]);
