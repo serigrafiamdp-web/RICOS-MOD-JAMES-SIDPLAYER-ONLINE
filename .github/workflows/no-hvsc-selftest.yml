@@ -27,7 +27,7 @@ jobs:
           const origin='https://serigrafiamdp-web.github.io';
           const base='https://ricos-sid-community.serigrafiamdp.workers.dev';
           const header={Origin:origin,'X-Beta-Key':'secret123','Content-Type':'application/json'};
-          const archive=new Map(),assets=new Map(),provenance=new Map(),collections=new Map(),records=[];
+          const archive=new Map(),assets=new Map(),provenance=new Map(),collections=new Map(),records=[],playlists=new Map();
           const stmt=sql=>({
             values:[],
             bind(...v){this.values=v;return this},
@@ -44,6 +44,10 @@ jobs:
                 records.push({collection_id:v[0],position:v[1],sid_id:v[2],filename:v[3]});
               }else if(sql.includes('UPDATE sid_collections SET track_count=')){
                 const c=collections.get(v[1]);c.track_count=records.filter(x=>x.collection_id===v[0]).length;
+              }else if(sql.includes('UPDATE playlists SET track_count=')){
+                const current=playlists.get(v[2]);
+                if(!current||current.payload!==v[3])return {meta:{changes:0}};
+                current.track_count=v[0];current.payload=v[1];
               }
               return {meta:{changes:1}};
             },
@@ -58,6 +62,7 @@ jobs:
             },
             async first(){
               if(sql.includes('FROM sid_assets'))return assets.get(this.values[0])||null;
+              if(sql.includes('FROM playlists'))return playlists.get(this.values[0])||null;
               return null;
             }
           });
@@ -108,6 +113,33 @@ jobs:
              body:JSON.stringify({format:'ricos-sid-playlist',version:2,name:'Legacy HVSC',createdBy:'RICO',
                tracks:[{pack:'library/packs/musicians/U/Uctumi.zip',file:'Nested/File.sid'}]})}),env);
           assert.notEqual(old.status,400,'nested HVSC filenames must remain valid');
-          console.log('TEST165 PASS: signed archive, NO HVSC dedup, provenance, asset read, wrong key rejection, HVSC paths.');
+          // Simulate UCTUMI's published 99 SID and add one archived NO HVSC
+          // without creating a second playlist. Existing SID refs stay in order.
+          const pid='079d2b72-bee5-4cef-abc5-6bc1f7c8bb86';
+          const originalTracks=Array.from({length:99},(_,i)=>({
+            pack:'library/packs/musicians/U/Uctumi.zip',
+            file:'Track_'+String(i+1).padStart(3,'0')+'.sid'
+          }));
+          const original={
+            format:'ricos-sid-playlist',version:2,id:pid,name:'UCTUMI',
+            createdBy:'RICO',tracks:originalTracks
+          };
+          playlists.set(pid,{id:pid,title:'UCTUMI',creator:'RICO',created_at:123,
+            payload:JSON.stringify(original),track_count:99});
+          const pairs=originalTracks.map(t=>[t.pack,t.file]);
+          const hashed=Buffer.from(await crypto.subtle.digest('SHA-256',
+            new TextEncoder().encode(JSON.stringify(pairs)))).toString('hex');
+          const extended=[...originalTracks,{sidId,file:'test.sid'}];
+          const update=await worker.fetch(new Request(base+'/playlists/'+pid,{
+             method:'PUT',headers:header,body:JSON.stringify({
+               format:'ricos-sid-playlist',version:2,name:'UCTUMI',createdBy:'RICO',
+               tracks:extended,contentUpdate:true,expectedBaseHash:hashed
+             })}),env);
+          assert.equal(update.status,200,'UCTUMI REPUBLISH must accept archived SID');
+          const updated=JSON.parse(playlists.get(pid).payload);
+          assert.equal(updated.tracks.length,100);
+          assert.deepEqual(updated.tracks.slice(0,99),originalTracks);
+          assert.deepEqual(updated.tracks[99],{sidId,file:'test.sid'});
+          console.log('TEST165 PASS: archive, dedup, provenance, access, beta key, HVSC paths and 99→100 UCTUMI REPUBLISH.');
           EOF
           node /tmp/check-nohvsc.mjs
