@@ -8,13 +8,24 @@ function json(value,status=200,origin=''){
   return new Response(JSON.stringify(value),{status,headers});
 }
 function text(value,status,origin){return json({error:value},status,origin);}
+// TEST165: playlists may reference the verified HVSC pack OR one immutable
+// contributed SID asset from NO HVSC (never arbitrary remote URLs).
 function validReference(x){
-  return !!x && typeof x.pack==='string' && typeof x.file==='string'
-    && x.pack.length<=260 && x.file.length<=220
-    && /^library\/packs\/(?:musicians|demos)\/[A-Za-z0-9_./-]+\.zip$/.test(x.pack)
-    && !x.pack.includes('..') && !x.file.includes('..') && !x.file.startsWith('/')
-    && !x.file.includes('\\') && /^[^<>:*?|]+\.sid$/i.test(x.file);
+  if(!x||typeof x.file!=='string'||x.file.length>220||
+     !/^[^<>:*?|\\/]{1,220}\.sid$/i.test(x.file))return false;
+  if(typeof x.sidId==='string')return /^[a-f0-9]{64}$/.test(x.sidId)&&!x.pack;
+  return typeof x.pack==='string'&&x.pack.length<=260&&
+    /^library\/packs\/(?:musicians|demos)\/[A-Za-z0-9_./-]+\.zip$/.test(x.pack)&&
+    !x.pack.includes('..')&&!x.file.includes('..')&&!x.file.startsWith('/')&&
+    !x.file.includes('\\');
 }
+function canonicalReference(x){
+  return x.sidId?{sidId:x.sidId,file:x.file}:{pack:x.pack,file:x.file};
+}
+function referenceKey(x){
+  return (x.sidId?'sid:'+x.sidId:'pack:'+x.pack)+'::'+x.file;
+}
+function referencePair(x){return [x.sidId||x.pack,x.file];}
 async function hashSecret(secret){
  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(secret));
  return [...new Uint8Array(digest)].map(v=>v.toString(16).padStart(2,'0')).join('');
@@ -254,6 +265,127 @@ async function contributedCollections(request,env,url,origin){
 }
 
 
+
+// TEST165 — Non-HVSC preservation collection, independent of HVSC. Files are
+// immutable and addressed by SHA-256, so re-imports are idempotent. A separate
+// payload hash can identify renamed PSID headers during later HVSC research.
+const NO_HVSC_COLLECTION_ID='00000000-0000-4000-8000-000000000001';
+async function noHvscArchive(request,env,url,origin){
+  if(url.pathname!=='/no-hvsc')return null;
+  if(!env.DB)return text('Community database unavailable',503,origin);
+  const provider=sidUploadProvider(env);
+  // Create the provenance schema lazily. This does not modify any existing
+  // playlist, SID data or metadata from other collections.
+  try{
+    await env.DB.prepare('CREATE TABLE IF NOT EXISTS sid_provenance ('+
+      'sid_id TEXT PRIMARY KEY, filename TEXT NOT NULL, title TEXT NOT NULL,'+
+      'author TEXT NOT NULL, released TEXT NOT NULL, data_hash TEXT NOT NULL,'+
+      "hvsc_status TEXT NOT NULL DEFAULT 'unverified', "+
+      'first_seen INTEGER NOT NULL)').run();
+  }catch(error){console.error('NO HVSC schema failed',error);return text('NO HVSC database unavailable',503,origin);}
+  if(request.method==='GET'){
+    try{
+      const rows=await env.DB.prepare(
+        'SELECT sid_id,filename,title,author,released,data_hash,hvsc_status,first_seen '+
+        'FROM sid_provenance ORDER BY first_seen DESC LIMIT 10000'
+      ).all();
+      return json({format:'ricos-no-hvsc',version:1,collectionId:NO_HVSC_COLLECTION_ID,
+        tracks:rows.results.map(row=>({sidId:row.sid_id,file:row.filename,
+          title:row.title,author:row.author,released:row.released,
+          dataHash:row.data_hash,hvscStatus:row.hvsc_status,
+          firstSeen:row.first_seen}))},200,origin);
+    }catch(error){console.error('NO HVSC fetch failed',error);return text('NO HVSC archive unavailable',503,origin);}
+  }
+  if(request.method!=='POST')return text('Method not allowed',405,origin);
+  if(origin!==ORIGIN)return text('Origin not allowed',403,origin);
+  if(!provider||!env.BETA_EDIT_KEY)return text('SID archive storage not configured',503,origin);
+  if(!(await hasValidBetaKey(request,env)))return text('Invalid beta key',403,origin);
+  if((Number(request.headers.get('Content-Length'))||0)>1800000)
+    return text('SID archive request too large',413,origin);
+  let data,raw;
+  try{
+    raw=await request.text();
+    if(raw.length>1800000)throw Error('Request too large');
+    data=JSON.parse(raw);
+  }catch(error){return text('Invalid NO HVSC upload request',400,origin);}
+  const maxBatch=provider==='github'?15:40;
+  if(!data||data.format!=='ricos-no-hvsc-upload'||data.version!==1||
+    !Array.isArray(data.tracks)||!data.tracks.length||data.tracks.length>maxBatch)
+    return text('Invalid NO HVSC upload batch',400,origin);
+  const entries=[];let total=0;
+  try{
+    for(const track of data.tracks){
+      if(!track||typeof track.file!=='string'||
+        !/^[^<>:*?|\/\\]{1,200}\.sid$/i.test(track.file))
+        throw Error('Invalid SID filename');
+      const bytes=sidBase64Bytes(track.sidBase64);
+      total+=bytes.length;if(total>1200000)throw Error('SID batch exceeds storage capacity');
+      const offset=(bytes[6]<<8)|bytes[7];
+      function field(at){
+        return new TextDecoder('latin1').decode(bytes.slice(at,at+32))
+          .replace(/\x00.*$/s,'').trim();
+      }
+      entries.push({id:await sidSha(bytes),bytes,file:track.file,
+        title:field(22)||track.file.replace(/\.sid$/i,''),
+        author:field(54)||'Unknown',released:field(86)||'',
+        dataHash:await sidSha(bytes.subarray(offset))});
+    }
+  }catch(error){return text(error.message,400,origin);}
+  // Always store the original bytes first. If D1 later fails, retrying with
+  // the same beta key resumes safely without duplicating the binary assets.
+  try{
+    const unique=new Map(entries.map(x=>[x.id,x]));
+    for(const asset of unique.values()){
+      if(provider==='r2'){
+        if(!(await env.SID_BUCKET.head('sid/'+asset.id+'.sid')))
+          await env.SID_BUCKET.put('sid/'+asset.id+'.sid',asset.bytes,{
+            httpMetadata:{contentType:'application/octet-stream'}});
+      }else await githubSidPut(asset,env);
+    }
+    const now=Date.now();
+    await env.DB.prepare(
+      "INSERT OR IGNORE INTO sid_collections(id,title,creator,track_count,created_at) VALUES(?,?,?,0,?)"
+    ).bind(NO_HVSC_COLLECTION_ID,'NO HVSC','SpotySid',now).run();
+    const oldRows=await env.DB.prepare(
+      'SELECT sid_id FROM sid_collection_tracks WHERE collection_id=? ORDER BY position ASC'
+    ).bind(NO_HVSC_COLLECTION_ID).all();
+    const known=new Set(oldRows.results.map(x=>x.sid_id));
+    const operations=[];
+    let added=0;
+    for(const asset of unique.values()){
+      operations.push(env.DB.prepare(
+        'INSERT OR IGNORE INTO sid_assets(id,size,created_at) VALUES(?,?,?)'
+      ).bind(asset.id,asset.bytes.length,now));
+      operations.push(env.DB.prepare(
+        'INSERT OR IGNORE INTO sid_provenance('+
+        'sid_id,filename,title,author,released,data_hash,hvsc_status,first_seen) '+
+        "VALUES(?,?,?,?,?,?,'unverified',?)"
+      ).bind(asset.id,asset.file,asset.title,asset.author,asset.released,asset.dataHash,now));
+      if(!known.has(asset.id)){
+        known.add(asset.id);
+        operations.push(env.DB.prepare(
+          'INSERT INTO sid_collection_tracks(collection_id,position,sid_id,filename) VALUES(?,?,?,?)'
+        ).bind(NO_HVSC_COLLECTION_ID,oldRows.results.length+added,asset.id,asset.file));
+        added++;
+      }
+    }
+    operations.push(env.DB.prepare(
+      'UPDATE sid_collections SET track_count=('+
+      'SELECT COUNT(*) FROM sid_collection_tracks WHERE collection_id=?) WHERE id=?'
+    ).bind(NO_HVSC_COLLECTION_ID,NO_HVSC_COLLECTION_ID));
+    await env.DB.batch(operations);
+    // Return the deduplicated stable references in the uploaded order.
+    return json({format:'ricos-no-hvsc-receipt',version:1,
+      collectionId:NO_HVSC_COLLECTION_ID,added,tracks:entries.map(x=>({
+        sidId:x.id,file:x.file,title:x.title,author:x.author,
+        released:x.released,dataHash:x.dataHash,hvscStatus:'unverified'
+      }))},200,origin);
+  }catch(error){
+    console.error('NO HVSC archive write failed',error);
+    return text('SID was not confirmed in NO HVSC. Try again; the original local file is unchanged.',503,origin);
+  }
+}
+
 // TEST159 — Persist the DISPLAY order of Community Playlist rows, not SID tracks.
 // The beta key authorizes global writes; GET is public. D1 revision avoids
 // silently overwriting another editor's more recent ordering.
@@ -330,6 +462,7 @@ export default {
   if(request.method==='POST' && origin!==ORIGIN)return text('Origin not allowed',403,origin);
   if(url.pathname==='/catalog-order' && (request.method==='GET'||request.method==='PUT'))
     return communityCatalogOrder(request,env,origin);
+  if(url.pathname==='/no-hvsc')return noHvscArchive(request,env,url,origin);
   // Independent non-HVSC binary collection endpoints.
   if(url.pathname==='/collections'||url.pathname.startsWith('/collections/')||
      url.pathname.startsWith('/sid-assets/')){
@@ -342,7 +475,7 @@ export default {
       betaKeyRequired:true,editMode:'metadata-and-delete',
       sidUploadsEnabled:!!(sidUploadProvider(env)&&env.DB&&env.BETA_EDIT_KEY),
       playlistReorder:true,sidCollectionReorder:true,
-      playlistTrackAdditions:true,catalogOrder:true,
+      playlistTrackAdditions:true,catalogOrder:true,noHvscArchive:true,
       sidUploadProvider:sidUploadProvider(env)||null,
       sidUploadLimit:sidUploadProvider(env)==='github'?15:40,
       configured:!!env.BETA_EDIT_KEY},200,origin);
@@ -397,8 +530,8 @@ export default {
     typeof data.createdBy!=='string'||!data.createdBy.trim()||data.createdBy.length>60||
     !Array.isArray(data.tracks)||!data.tracks.length||data.tracks.length>2000||
     !data.tracks.every(validReference))return text('Invalid playlist metadata or SID references',400,origin);
-  const tracks=data.tracks.map(x=>({pack:x.pack,file:x.file}));
-  if(new Set(tracks.map(t=>t.pack+'::'+t.file)).size!==tracks.length)return text('Duplicate SID reference',400,origin);
+  const tracks=data.tracks.map(canonicalReference);
+  if(new Set(tracks.map(referenceKey)).size!==tracks.length)return text('Duplicate SID reference',400,origin);
   const now=Date.now();
   if(isUpdate){
     const record=await env.DB.prepare('SELECT id,title,creator,created_at,payload FROM playlists WHERE id=?')
@@ -415,17 +548,17 @@ export default {
       if(typeof data.expectedBaseHash!=='string'||
          !/^[a-f0-9]{64}$/.test(data.expectedBaseHash))
         return text('Expected original playlist hash is required',400,origin);
-      const originalRefs=original.tracks.map(t=>[t.pack,t.file]);
+      const originalRefs=original.tracks.map(referencePair);
       const actualHash=await hashSecret(JSON.stringify(originalRefs));
       if(actualHash!==data.expectedBaseHash)
         return text('Playlist changed since editing started; keep your draft and reload the public list',409,origin);
     }else{
-      const originalKeys=new Set(original.tracks.map(t=>t.pack+'::'+t.file));
-      if(tracks.some(t=>!originalKeys.has(t.pack+'::'+t.file)))
+      const originalKeys=new Set(original.tracks.map(referenceKey));
+      if(tracks.some(t=>!originalKeys.has(referenceKey(t))))
         return text('Only reordering or removing existing SID is allowed',400,origin);
     }
     if(tracks.length===original.tracks.length&&
-       tracks.every((t,i)=>t.pack===original.tracks[i].pack&&t.file===original.tracks[i].file))
+       tracks.every((t,i)=>referenceKey(t)===referenceKey(original.tracks[i])))
       return text('No playlist changes to save',400,origin);
     const payload={...original,tracks,updatedAt:new Date(now).toISOString()};
     // Optimistic concurrency: old payload must still match, to avoid stale overwrites.
