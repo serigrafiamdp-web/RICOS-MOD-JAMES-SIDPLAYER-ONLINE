@@ -1332,25 +1332,26 @@
       }else if(candidate&&candidate.pack&&candidate.file){
         reference={pack:candidate.pack,file:candidate.file,
           title:sidEntry.name||candidate.file,artist:sidEntry.author||''};
-      }else if(customActive&&sidEntry.localBytes instanceof Uint8Array){
-        // IMPORT SID without HVSC: archive the *original* binary, then add
-        // its durable sidId. Never put a temporary browser-only URL in a
-        // public playlist, and never delete the local bytes on failure.
-        if(sidEntry._noHvscPending)await sidEntry._noHvscPending;
-        if(!sidEntry._noHvscAssetId)
-          await startNoHvscArchive([sidEntry],true);
-        if(!sidEntry._noHvscAssetId)
-          throw Error('SID not archived. Local import is still available.');
-        reference={sidId:sidEntry._noHvscAssetId,
-          file:sidEntry._noHvscFile||noHvscFileName(sidEntry),
-          title:sidEntry.name||sidEntry.file,artist:sidEntry.author||''};
       }else{
+        // Prefer a known, verifiable HVSC path over a contributed upload.
+        // IMPORT SID with no HVSC match may be archived in NO HVSC.
         var originalPath=customActive?embeddedHvscPaths[index]:
           originalGamesHvscPaths[(originalList[index]||{}).file];
-        if(!originalPath)
+        if(originalPath){
+          remixNotice('Checking original HVSC path for '+(sidEntry.name||sidEntry.file)+'...');
+          reference=await resolveOriginalHvscPath(originalPath);
+        }else if(customActive&&sidEntry.localBytes instanceof Uint8Array){
+          if(sidEntry._noHvscPending)await sidEntry._noHvscPending;
+          if(!sidEntry._noHvscAssetId)
+            await startNoHvscArchive([sidEntry],true);
+          if(!sidEntry._noHvscAssetId)
+            throw Error('SID not archived. Local import is still available.');
+          reference={sidId:sidEntry._noHvscAssetId,
+            file:sidEntry._noHvscFile||noHvscFileName(sidEntry),
+            title:sidEntry.name||sidEntry.file,artist:sidEntry.author||''};
+        }else{
           throw Error('This SID has no stored NO HVSC asset or verified HVSC reference.');
-        remixNotice('Checking original HVSC path for '+(sidEntry.name||sidEntry.file)+'...');
-        reference=await resolveOriginalHvscPath(originalPath);
+        }
       }
       // Discard a late lookup when the user changes the active playlist or draft.
       if((player.sidList||[])[index]!==sidEntry||
@@ -2501,7 +2502,7 @@
       var version,tracks;
       if(activeReferenceTracks&&activeReferenceTracks.length===custom.length){
         version=2;
-        tracks=activeReferenceTracks.map(function(t){return {pack:t.pack,file:t.file};});
+        tracks=activeReferenceTracks.map(remixCanonicalRef);
       }else{
         if(!custom.every(function(t){return t.localBytes instanceof Uint8Array;}))
           throw Error('Original SID data unavailable; cannot save locally.');
