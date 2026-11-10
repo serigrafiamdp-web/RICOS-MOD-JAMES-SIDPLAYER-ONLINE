@@ -3726,6 +3726,16 @@
             if(adopted)catalog.playlists=catalog.playlists.filter(function(t){
               return t.id!=='old-sid-collection-rico';
             });
+            // TEST162: once the 20-track public Los Pat Moritas list has been
+            // successfully expanded to 34, remove the obsolete embedded/static
+            // copy from the visible Community catalog. Never hide it before then.
+            var lpmComplete=newestPublished.some(function(t){
+              return t.remoteId==='8cf5e857-19d3-48cf-a154-53f046ee65e2'&&
+                Number(t.tracks)>=34;
+            });
+            if(lpmComplete)catalog.playlists=catalog.playlists.filter(function(t){
+              return t.id!=='los-pat-moritas';
+            });
             // Keep remaining historical GitHub playlists after published user playlists.
             publishedRemixChoices=newestPublished.map(function(item){
               return {id:item.remoteId,title:item.title,tracks:item.tracks};
