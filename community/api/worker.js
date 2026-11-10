@@ -12,8 +12,10 @@ function text(value,status,origin){return json({error:value},status,origin);}
 // contributed SID asset from NO HVSC (never arbitrary remote URLs).
 function validReference(x){
   if(!x||typeof x.file!=='string'||x.file.length>220||
-     !/^[^<>:*?|\\/]{1,220}\.sid$/i.test(x.file))return false;
-  if(typeof x.sidId==='string')return /^[a-f0-9]{64}$/.test(x.sidId)&&!x.pack;
+     !/^[^<>:*?|]+\.sid$/i.test(x.file)||x.file.includes('..')||
+     x.file.includes('\\')||x.file.startsWith('/'))return false;
+  if(typeof x.sidId==='string')return /^[a-f0-9]{64}$/.test(x.sidId)&&
+    !x.pack&&!x.file.includes('/');
   return typeof x.pack==='string'&&x.pack.length<=260&&
     /^library\/packs\/(?:musicians|demos)\/[A-Za-z0-9_./-]+\.zip$/.test(x.pack)&&
     !x.pack.includes('..')&&!x.file.includes('..')&&!x.file.startsWith('/')&&
@@ -287,7 +289,7 @@ async function noHvscArchive(request,env,url,origin){
     try{
       const rows=await env.DB.prepare(
         'SELECT sid_id,filename,title,author,released,data_hash,hvsc_status,first_seen '+
-        'FROM sid_provenance ORDER BY first_seen DESC LIMIT 10000'
+        'FROM sid_provenance ORDER BY first_seen DESC'
       ).all();
       return json({format:'ricos-no-hvsc',version:1,collectionId:NO_HVSC_COLLECTION_ID,
         tracks:rows.results.map(row=>({sidId:row.sid_id,file:row.filename,
@@ -532,6 +534,13 @@ export default {
     !data.tracks.every(validReference))return text('Invalid playlist metadata or SID references',400,origin);
   const tracks=data.tracks.map(canonicalReference);
   if(new Set(tracks.map(referenceKey)).size!==tracks.length)return text('Duplicate SID reference',400,origin);
+  // An immutable asset must exist before it can be published as a reference.
+  // This check applies only to contributed SID, not to existing HVSC files.
+  const assetIds=[...new Set(tracks.filter(t=>t.sidId).map(t=>t.sidId))];
+  for(const id of assetIds){
+    const saved=await env.DB.prepare('SELECT id FROM sid_assets WHERE id=?').bind(id).first();
+    if(!saved)return text('NO HVSC SID not archived: '+id.slice(0,12),400,origin);
+  }
   const now=Date.now();
   if(isUpdate){
     const record=await env.DB.prepare('SELECT id,title,creator,created_at,payload FROM playlists WHERE id=?')
