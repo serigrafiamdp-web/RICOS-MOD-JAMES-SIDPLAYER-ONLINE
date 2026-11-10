@@ -1022,17 +1022,37 @@
       }
     }catch(error){console.warn('Remix drafts were not restored',error);}
   }
-  function createRemix(shouldFocus){
-    if(remixDrafts.length>=25){remixNotice('Maximum 25 drafts. Publish or finish an existing remix first.');return;}
-    remixCounter++;
-    var next={id:'remix-'+Date.now()+'-'+remixCounter,name:'REMIX '+remixCounter,creator:'',tracks:[]};
-    remixDrafts.push(next);remixTarget=next.id;remixOpen=true;
-    rememberRemixDestination(next.id);
-    preserveRemixes();renderRemixes();
-    if(shouldFocus!==false){
-      var field=document.getElementById('ricoRemixName');
-      if(field){field.focus();field.select();}
+  // TEST155: creation window only creates a new playlist. Existing lists
+  // are managed from their own playlist windows, not this dialog.
+  var creatingNewRemix=false;
+  function createRemix(){
+    creatingNewRemix=true;
+    remixOpen=true;
+    renderRemixes();
+    $('#ricoRemixName,#ricoRemixCreator').prop('disabled',false).val('');
+    $('#ricoRemixFloatHeader strong').text('CREATE PLAYLIST');
+    var field=document.getElementById('ricoRemixName');
+    if(field)field.focus();
+  }
+  function finishNewRemix(){
+    if(!creatingNewRemix)return;
+    var name=$('#ricoRemixName').val().trim();
+    var creator=$('#ricoRemixCreator').val().trim();
+    // DONE with an empty form simply closes it without creating junk drafts.
+    if(name||creator){
+      if(!name){$('#ricoRemixName').trigger('focus');return;}
+      if(!creator){$('#ricoRemixCreator').trigger('focus');return;}
+      remixCounter++;
+      var draft={id:'remix-'+Date.now()+'-'+remixCounter,
+        name:name.slice(0,100),creator:creator.slice(0,60),tracks:[]};
+      remixDrafts.push(draft);
+      remixTarget=draft.id;
+      rememberRemixDestination(draft.id);
+      preserveRemixes();
     }
+    creatingNewRemix=false;
+    remixOpen=false;
+    renderRemixes();
   }
   function remixNotice(message){
     $('#ricoRemixStatus').text(message);
@@ -1080,9 +1100,12 @@
     $('#ricoRemixCount').text(selected?selected.tracks.length+' SID':'0 SID');
     $('#ricoRemixEditor').css('display',remixOpen?'flex':'none');
     $('#ricoRemixToggle').attr('aria-expanded',remixOpen?'true':'false');
-    $('#ricoRemixName').val(selected?selected.name:'').prop('disabled',!!(selected&&selected.remoteEditId));
-    $('#ricoRemixCreator').val(selected?selected.creator:'').prop('disabled',!!(selected&&selected.remoteEditId));
-    $('#ricoRemixFloatHeader strong').text(selected&&selected.remoteEditId?'EDIT PUBLISHED PLAYLIST':'REMIX PLAYLIST CREATOR');
+    if(!creatingNewRemix){
+      $('#ricoRemixName').val(selected?selected.name:'').prop('disabled',!!(selected&&selected.remoteEditId));
+      $('#ricoRemixCreator').val(selected?selected.creator:'').prop('disabled',!!(selected&&selected.remoteEditId));
+    }
+    $('#ricoRemixFloatHeader strong').text(creatingNewRemix?'CREATE PLAYLIST':
+      selected&&selected.remoteEditId?'EDIT PUBLISHED PLAYLIST':'REMIX PLAYLIST CREATOR');
     $('#ricoRemixPublish').text(selected&&selected.remoteEditId?'REPUBLISH':'PUBLISH REMIX')
       .prop('disabled',!selected||!selected.tracks.length||remixBusy);
     $('#ricoRemixPlay').text(selected&&selected.remoteEditId?'PREVIEW CHANGES':'PLAY REMIX')
@@ -1401,10 +1424,12 @@
     // TEST119: the bottom REMIX PLAYLIST button and the floating REMIX
     // PLAYLIST button open the same editor, without creating extra drafts.
     toggle.add($('#ricoRemixToolbar')).on('click',function(event){
-      event.preventDefault();event.stopPropagation();remixOpen=true;renderRemixes();
+      event.preventDefault();event.stopPropagation();createRemix();
     });
     $('#ricoRemixClose').on('click',function(event){
-      event.stopPropagation();remixOpen=false;preserveRemixes();renderRemixes();
+      event.stopPropagation();
+      if(creatingNewRemix)finishNewRemix();
+      else{remixOpen=false;preserveRemixes();renderRemixes();}
       if(typeof window.ricoOpenCommunityFromRemix==='function')window.ricoOpenCommunityFromRemix();
     });
     $('#ricoRemixEditorTarget').on('change',function(event){
@@ -1422,19 +1447,9 @@
       remixTarget='';preserveRemixes();renderRemixes();
       remixNotice('Unpublished changes discarded. Public playlist was not modified.');
     });
-    // TEST154: the creation fields must accept clicks and keyboard input,
-    // even if no draft was previously selected. Do not manufacture multiple
-    // automatic REMIX records from focus/blur cycles.
     $('#ricoRemixName,#ricoRemixCreator').on('pointerdown mousedown',function(event){
       event.stopPropagation();
-    }).on('focus',function(){
-      if(!selectedRemix()){
-        var activeInput=this;
-        createRemix(false);
-        activeInput.focus();
-      }
     });
-    $('#ricoRemixNew').on('click',function(event){event.stopPropagation();createRemix();});
     $('#ricoRemixPublish').on('click',function(event){event.stopPropagation();publishRemix();});
     window.ricoPublishRemixDraft=publishRemix;
     window.ricoOpenRemixDraft=function(id){
@@ -1447,12 +1462,12 @@
     };
     $('#ricoRemixPlay').on('click',function(event){event.stopPropagation();playRemixDraft();});
     $('#ricoRemixName,#ricoRemixCreator').on('input',function(){
-      var current=selectedRemix();if(!current)return;
+      if(creatingNewRemix)return;
+      var current=selectedRemix();if(!current||current.remoteEditId)return;
       current.name=$('#ricoRemixName').val().slice(0,100);
       current.creator=$('#ricoRemixCreator').val().slice(0,60);
       preserveRemixes();
       if(typeof window.ricoRenderRemixCommunityRows==='function')window.ricoRenderRemixCommunityRows();
-      // Avoid redrawing inputs while the visitor is typing.
       var opt=target.find('option:selected');
       if(opt.length)opt.text(current.name||'UNTITLED');
     });
