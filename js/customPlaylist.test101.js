@@ -3822,9 +3822,10 @@
                 }
                 var mode=await chooseCommunityEditMode(item);
                 if(mode==='songs'){
+                  // TEST163: editing a published playlist prepares a private
+                  // draft, not a playback session. Keep COMMUNITY PLAYLISTS
+                  // visible so its updated SID count and REPUBLISH are usable.
                   await beginPublishedEdit(item.remoteId);
-                  if(player.dialogManager&&player.dialogManager.dialogShown==='chooseSidDialog')
-                    player.dialogManager.hideDialog('chooseSidDialog');
                   return;
                 }
                 if(mode!=='metadata')return;
