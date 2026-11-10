@@ -4,14 +4,6 @@
   "updatedAt": "2026-11-09",
   "playlists": [
     {
-      "id": "los-pat-moritas",
-      "title": "LOS PAT MORITAS",
-      "author": "RICO",
-      "createdBy": "RICO",
-      "tracks": 34,
-      "file": "community/playlists/los-pat-moritas.json"
-    },
-    {
       "id": "rico",
       "title": "RICO",
       "author": "RICO",
