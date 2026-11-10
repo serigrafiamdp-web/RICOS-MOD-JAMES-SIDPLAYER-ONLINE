@@ -1032,7 +1032,7 @@
     $('#ricoRemixName').val(selected?selected.name:'').prop('disabled',!selected||!!selected.remoteEditId);
     $('#ricoRemixCreator').val(selected?selected.creator:'').prop('disabled',!selected||!!selected.remoteEditId);
     $('#ricoRemixFloatHeader strong').text(selected&&selected.remoteEditId?'EDIT PUBLISHED PLAYLIST':'REMIX PLAYLIST CREATOR');
-    $('#ricoRemixPublish').text(selected&&selected.remoteEditId?'PUBLISH CHANGES':'PUBLISH REMIX')
+    $('#ricoRemixPublish').text(selected&&selected.remoteEditId?'REPUBLISH':'PUBLISH REMIX')
       .prop('disabled',!selected||!selected.tracks.length||remixBusy);
     $('#ricoRemixPlay').text(selected&&selected.remoteEditId?'PREVIEW CHANGES':'PLAY REMIX')
       .prop('disabled',!selected||!selected.tracks.length||remixBusy);
@@ -3325,6 +3325,19 @@
     // They exist only within this visitor's browser session until PUBLISH succeeds.
     function renderRemixCommunityRows(){
       if(!communityItems)return;
+      // TEST144: re-use EDIT as REPUBLISH on the published row only when +
+      // has left changes pending; do not add another button or duplicate a list.
+      Array.prototype.forEach.call(communityItems.querySelectorAll('.rico-community-catalog-row'),function(row){
+        var edit=row.querySelector('.rico-community-edit');
+        if(!edit)return;
+        var key=row.dataset.communityOrderKey||'';
+        var id=key.indexOf('remote:')===0?key.slice(7):'';
+        var pending=id&&remixDrafts.some(function(d){
+          return d.remoteEditId===id&&Array.isArray(d.baseTracks)&&
+            remixTrackKeys(d.tracks)!==remixTrackKeys(d.baseTracks);
+        });
+        edit.textContent=pending?'REPUBLISH':'EDIT';
+      });
       Array.prototype.forEach.call(communityItems.querySelectorAll('.rico-community-remix-row'),function(el){el.remove();});
       if(!remixDrafts.length)return;
       var fragment=document.createDocumentFragment();
@@ -3451,6 +3464,7 @@
           if(item.remoteId){
             var editButton=document.createElement('button');
             editButton.type='button';editButton.textContent='EDIT';
+            editButton.className='rico-community-edit';
             var deleteButton=document.createElement('button');
             deleteButton.type='button';deleteButton.textContent='DELETE';
             editButton.addEventListener('click',async function(event){
@@ -3458,6 +3472,11 @@
               if(editButton.disabled)return;
               editButton.disabled=true;
               try{
+                var pending=remixDrafts.find(function(d){
+                  return d.remoteEditId===item.remoteId&&Array.isArray(d.baseTracks)&&
+                    remixTrackKeys(d.tracks)!==remixTrackKeys(d.baseTracks);
+                });
+                if(pending){await publishRemix(pending.id);return;}
                 var mode=await chooseCommunityEditMode(item);
                 if(mode==='songs'){
                   await beginPublishedEdit(item.remoteId);
