@@ -1,0 +1,113 @@
+name: TEST165 NO HVSC Worker + Remix integration checks
+on:
+  push:
+    branches: [lpm-migration-audit]
+    paths: ['.github/workflows/no-hvsc-selftest.yml']
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Syntax and simulated Worker storage checks (no Cloudflare writes)
+        shell: bash
+        run: |
+          node --check js/customPlaylist.test101.js
+          cp community/api/worker.js /tmp/spotysid-test-worker.mjs
+          node --check /tmp/spotysid-test-worker.mjs
+          cat >/tmp/check-nohvsc.mjs <<'EOF'
+          import assert from 'node:assert/strict';
+          import {webcrypto} from 'node:crypto';
+          import {pathToFileURL} from 'node:url';
+          globalThis.crypto=webcrypto;
+          const {default:worker}=await import(pathToFileURL('/tmp/spotysid-test-worker.mjs').href);
+          const origin='https://serigrafiamdp-web.github.io';
+          const base='https://ricos-sid-community.serigrafiamdp.workers.dev';
+          const header={Origin:origin,'X-Beta-Key':'secret123','Content-Type':'application/json'};
+          const archive=new Map(),assets=new Map(),provenance=new Map(),collections=new Map(),records=[];
+          const stmt=sql=>({
+            values:[],
+            bind(...v){this.values=v;return this},
+            async run(){
+              const v=this.values;
+              if(sql.includes('INSERT OR IGNORE INTO sid_collections')){
+                collections.set(v[0],{id:v[0],title:v[1],creator:v[2],track_count:0,created_at:v[3]});
+              }else if(sql.includes('INSERT OR IGNORE INTO sid_assets')){
+                assets.set(v[0],{id:v[0],size:v[1]});
+              }else if(sql.includes('INSERT OR IGNORE INTO sid_provenance')){
+                if(!provenance.has(v[0]))provenance.set(v[0],{sid_id:v[0],filename:v[1],title:v[2],
+                  author:v[3],released:v[4],data_hash:v[5],hvsc_status:'unverified',first_seen:v[6]});
+              }else if(sql.includes('INSERT INTO sid_collection_tracks')){
+                records.push({collection_id:v[0],position:v[1],sid_id:v[2],filename:v[3]});
+              }else if(sql.includes('UPDATE sid_collections SET track_count=')){
+                const c=collections.get(v[1]);c.track_count=records.filter(x=>x.collection_id===v[0]).length;
+              }
+              return {meta:{changes:1}};
+            },
+            async all(){
+              if(sql.includes('FROM sid_provenance')){
+                return {results:[...provenance.values()].sort((a,b)=>b.first_seen-a.first_seen)};
+              }
+              if(sql.includes('FROM sid_collection_tracks')){
+                return {results:records.filter(x=>x.collection_id===this.values[0]).map(x=>({sid_id:x.sid_id,filename:x.filename}))};
+              }
+              return {results:[]};
+            },
+            async first(){
+              if(sql.includes('FROM sid_assets'))return assets.get(this.values[0])||null;
+              return null;
+            }
+          });
+          const env={
+            DB:{prepare:stmt,async batch(operations){for(const op of operations)await op.run();}},
+            BETA_EDIT_KEY:'secret123',
+            SID_BUCKET:{
+              async head(k){return archive.has(k)?{size:archive.get(k).length}:null},
+              async put(k,b){archive.set(k,new Uint8Array(b))},
+              async get(k){return archive.has(k)?{body:archive.get(k)}:null}
+            }
+          };
+          const sid=new Uint8Array(150);
+          sid.set([80,83,73,68,0,1,0,118],0);
+          sid.set(new TextEncoder().encode('TEST SONG'),22);
+          sid.set(new TextEncoder().encode('UCTUMI'),54);
+          for(let i=118;i<150;i++)sid[i]=i;
+          const b64=Buffer.from(sid).toString('base64');
+          const post=async()=>worker.fetch(new Request(base+'/no-hvsc',{
+             method:'POST',headers:header,
+             body:JSON.stringify({format:'ricos-no-hvsc-upload',version:1,
+               tracks:[{file:'test.sid',sidBase64:b64}]})}),env);
+          const first=await post(),firstData=await first.json();
+          assert.equal(first.status,200,'first upload must succeed');
+          assert.equal(firstData.added,1);
+          assert.equal(firstData.tracks.length,1);
+          const sidId=firstData.tracks[0].sidId;
+          assert.match(sidId,/^[0-9a-f]{64}$/);
+          const second=await post(),secondData=await second.json();
+          assert.equal(second.status,200);
+          assert.equal(secondData.added,0,'second identical upload must dedupe');
+          assert.equal(records.length,1);
+          const listed=await worker.fetch(new Request(base+'/no-hvsc',{headers:{Origin:origin}}),env);
+          const listData=await listed.json();
+          assert.equal(listData.tracks.length,1);
+          assert.equal(listData.tracks[0].author,'UCTUMI');
+          assert.equal(listData.tracks[0].hvscStatus,'unverified');
+          const raw=await worker.fetch(new Request(base+'/sid-assets/'+sidId,{headers:{Origin:origin}}),env);
+          assert.equal(raw.status,200);
+          assert.equal(Buffer.compare(Buffer.from(await raw.arrayBuffer()),Buffer.from(sid)),0);
+          const perm=await worker.fetch(new Request(base+'/no-hvsc',{
+             method:'POST',headers:{...header,'X-Beta-Key':'wrong'},
+             body:JSON.stringify({format:'ricos-no-hvsc-upload',version:1,tracks:[{file:'test.sid',sidBase64:b64}]})}),env);
+          assert.equal(perm.status,403);
+          // Ensure legacy nested ZIP paths remain accepted in public playlist validation.
+          const old=await worker.fetch(new Request(base+'/playlists',{
+             method:'POST',headers:header,
+             body:JSON.stringify({format:'ricos-sid-playlist',version:2,name:'Legacy HVSC',createdBy:'RICO',
+               tracks:[{pack:'library/packs/musicians/U/Uctumi.zip',file:'Nested/File.sid'}]})}),env);
+          assert.notEqual(old.status,400,'nested HVSC filenames must remain valid');
+          console.log('TEST165 PASS: signed archive, NO HVSC dedup, provenance, asset read, wrong key rejection, HVSC paths.');
+          EOF
+          node /tmp/check-nohvsc.mjs
