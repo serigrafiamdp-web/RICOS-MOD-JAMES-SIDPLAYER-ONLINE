@@ -942,13 +942,12 @@
     return ref.sidId?{sidId:ref.sidId,file:ref.file}:{pack:ref.pack,file:ref.file};
   }
   function validRemixRef(ref){
-    return !!ref&&typeof ref.file==='string'&&
-      (/^[a-f0-9]{64}$/.test(ref.sidId||'')||
-        (typeof ref.pack==='string'&&
-        /^library\/packs\/(?:musicians|demos)\/[A-Za-z0-9_./-]+\.zip$/.test(ref.pack)&&
-        !ref.pack.includes('..'))) &&
-      !ref.file.includes('..')&&!ref.file.includes('\\')&&
-      /^[^<>:*?|\\/]+\.sid$/i.test(ref.file);
+    if(!ref||typeof ref.file!=='string'||ref.file.includes('..')||
+       ref.file.includes('\\')||!/^[^<>:*?|]+\.sid$/i.test(ref.file))return false;
+    if(ref.sidId)return /^[a-f0-9]{64}$/.test(ref.sidId)&&!ref.file.includes('/')&&!ref.pack;
+    return typeof ref.pack==='string'&&
+      /^library\/packs\/(?:musicians|demos)\/[A-Za-z0-9_./-]+\.zip$/.test(ref.pack)&&
+      !ref.pack.includes('..');
   }
   function remixTrackKeys(tracks){
     return JSON.stringify(tracks.map(remixRefPair));
@@ -2473,7 +2472,7 @@
           name:ref.title||ref.file.split('/').pop().replace(/\.sid$/i,'').replace(/_/g,' '),
           author:ref.author||(unknownAuthors?'<?>':'Loading from HVSC…'),released:'',file:ref.file,size:0,
           numSubtunes:1,startSubtune:1,sidFormat:'PSID',localBytes:null,
-          _hvscRef:{pack:ref.pack,file:ref.file},_hvscPromise:null};
+          _hvscRef:remixCanonicalRef(ref),_hvscPromise:null};
       });
       function archiveFor(pack){
         if(!archives.has(pack)){
@@ -2491,10 +2490,18 @@
         if(slot._hvscPromise)return slot._hvscPromise;
         slot._hvscPromise=(async function(){
           if(cancelled)throw Error('Playlist loading cancelled');
-          var archive=await archiveFor(slot._hvscRef.pack);
-          var sid=archive.file(slot._hvscRef.file);
-          if(!sid)throw Error('SID not found in HVSC ZIP: '+slot._hvscRef.file);
-          var bytes=await sid.async('uint8array');
+          var bytes;
+          if(slot._hvscRef.sidId){
+            var asset=await fetch(communityWriteApi+'/sid-assets/'+slot._hvscRef.sidId,
+              {signal:controller.signal,cache:'no-store'});
+            if(!asset.ok)throw Error('NO HVSC SID unavailable: '+slot._hvscRef.file+' ('+asset.status+')');
+            bytes=new Uint8Array(await asset.arrayBuffer());
+          }else{
+            var archive=await archiveFor(slot._hvscRef.pack);
+            var sid=archive.file(slot._hvscRef.file);
+            if(!sid)throw Error('SID not found in HVSC ZIP: '+slot._hvscRef.file);
+            bytes=await sid.async('uint8array');
+          }
           if(cancelled)throw Error('Playlist loading cancelled');
           var parsed=parseSID(bytes,{name:slot._hvscRef.file,size:bytes.length});
           if(!parsed)throw Error('Invalid PSID/RSID: '+slot._hvscRef.file);
@@ -2606,18 +2613,14 @@
       // TEST121: both OLD SID COLLECTION RICO and the 1376-track UNKNOWN CSDB
       // reference list must start after the first SID is ready, not after all
       // SIDs decode. Keep every other playlist on its existing stable loader.
-      if(((data.name==='OLD SID COLLECTION RICO'||data.name==='UNKNOWN CSDB')&&
+      if((data.tracks.some(function(t){return !!t.sidId;})&&data.tracks.length>=120)||
+         ((data.name==='OLD SID COLLECTION RICO'||data.name==='UNKNOWN CSDB')&&
          data.tracks.length>=200)||
          (data.name==="RICO'S BEST OF MUS"&&data.tracks.length>=80)||
          ((data.name==='TOP 100 DEMOS'||/^TOP 100 CSDb (?:ONEFILE )?DEMOS/.test(data.name))&&data.tracks.length>=1)){
         for(var k=0;k<data.tracks.length;k++){
           var ref=data.tracks[k];
-          if(!ref||typeof ref.pack!=='string'||typeof ref.file!=='string'||
-             !/^library\/packs\/(?:musicians|demos)\/[a-zA-Z0-9_./-]+\.zip$/.test(ref.pack)||
-             ref.pack.includes('..')||ref.file.includes('..')||
-             ref.file.startsWith('/')||ref.file.includes('\\')||
-             !/^[^<>:*?|]+\.sid$/i.test(ref.file))
-            throw Error('Invalid catalog SID reference.');
+          if(!validRemixRef(ref))throw Error('Invalid catalog SID reference.');
         }
         await loadProgressiveReferencePlaylist(data,localImport);
         return;
@@ -2625,21 +2628,24 @@
       var packages=new Map(), output=[], bytesTotal=0;
       for(var i=0;i<data.tracks.length;i++){
         var track=data.tracks[i];
-        if(!track || typeof track.pack!=='string' || typeof track.file!=='string' ||
-           !/^library\/packs\/(?:musicians|demos)\/[a-zA-Z0-9_./-]+\.zip$/.test(track.pack) ||
-           track.pack.includes('..') || track.file.includes('..') ||
-           track.file.startsWith('/') || track.file.includes('\\') ||
-           !/^[^<>:*?|]+\.sid$/i.test(track.file)) throw Error('Invalid catalog SID reference.');
-        var archive=packages.get(track.pack);
-        if(!archive){
-          var response=await fetch(track.pack);
-          if(!response.ok)throw Error('SID pack missing ('+response.status+'): '+track.pack);
-          archive=await JSZip.loadAsync(await response.arrayBuffer());
-          packages.set(track.pack,archive);
+        if(!validRemixRef(track))throw Error('Invalid catalog SID reference.');
+        var bytes;
+        if(track.sidId){
+          var assetResponse=await fetch(communityWriteApi+'/sid-assets/'+track.sidId,{cache:'no-store'});
+          if(!assetResponse.ok)throw Error('NO HVSC SID unavailable ('+assetResponse.status+'): '+track.file);
+          bytes=new Uint8Array(await assetResponse.arrayBuffer());
+        }else{
+          var archive=packages.get(track.pack);
+          if(!archive){
+            var response=await fetch(track.pack);
+            if(!response.ok)throw Error('SID pack missing ('+response.status+'): '+track.pack);
+            archive=await JSZip.loadAsync(await response.arrayBuffer());
+            packages.set(track.pack,archive);
+          }
+          var file=archive.file(track.file);
+          if(!file)throw Error('SID not found in catalog: '+track.file);
+          bytes=await file.async('uint8array');
         }
-        var file=archive.file(track.file);
-        if(!file)throw Error('SID not found in catalog: '+track.file);
-        var bytes=await file.async('uint8array');
         bytesTotal+=bytes.length;
         if(bytesTotal>64*1024*1024) throw Error('Playlist exceeds 64 MB.');
         var entry=parseSID(bytes,{name:track.file,size:bytes.length});
