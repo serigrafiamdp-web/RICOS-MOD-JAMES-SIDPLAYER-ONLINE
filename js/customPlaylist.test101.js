@@ -2463,6 +2463,7 @@
       // SIDs decode. Keep every other playlist on its existing stable loader.
       if(((data.name==='OLD SID COLLECTION RICO'||data.name==='UNKNOWN CSDB')&&
          data.tracks.length>=200)||
+         (data.name==="RICO'S BEST OF MUS"&&data.tracks.length>=80)||
          ((data.name==='TOP 100 DEMOS'||/^TOP 100 CSDb (?:ONEFILE )?DEMOS/.test(data.name))&&data.tracks.length>=1)){
         for(var k=0;k<data.tracks.length;k++){
           var ref=data.tracks[k];
