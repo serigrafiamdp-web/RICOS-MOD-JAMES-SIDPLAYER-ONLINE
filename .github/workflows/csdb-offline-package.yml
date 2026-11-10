@@ -1,0 +1,21 @@
+name: SpotySid Beta 1 Offline Distribution
+on:
+  push:
+    branches: [csdb-spotysid-beta1]
+    paths:
+      - '.github/workflows/csdb-offline-package.yml'
+      - 'downloads/SpotySid_Beta_1_Offline_CSDb.zip'
+permissions:
+  contents: read
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify CSDb archive
+        run: unzip -t downloads/SpotySid_Beta_1_Offline_CSDb.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SpotySid_Beta_1_Offline_CSDb
+          path: downloads/SpotySid_Beta_1_Offline_CSDb.zip
+          retention-days: 30
