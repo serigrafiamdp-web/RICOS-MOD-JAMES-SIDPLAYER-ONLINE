@@ -1,7 +1,7 @@
 {
   "format": "spotysid-donate-config",
   "version": 1,
-  "paypalUrl": "https://www.paypal.com/paypalme/marinamendezcursos",
+  "paypalUrl": "https://www.paypal.com/donate/?hosted_button_id=NNBJPW92RQSSY",
   "supporters": [
     {
       "name": "NAKU / LOS PAT MORITAS",
