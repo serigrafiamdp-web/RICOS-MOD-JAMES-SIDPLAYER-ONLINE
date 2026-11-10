@@ -652,6 +652,33 @@
     if(activeReferenceTracks&&activeReferenceTracks.length===custom.length)
       insertAt(activeReferenceTracks,index,destination);
     if(!activePublicPlaylist&&!activePublicCollection)activeLocalOrderDirty=true;
+    // TEST152: moving a song inside a linked published draft must update the
+    // private draft order (not only a temporary local playback order).
+    // Keep any new songs added to the draft since playback opened.
+    if(activeRemixDraftId){
+      var reorderedDraft=remixDrafts.find(function(d){return d.id===activeRemixDraftId;});
+      if(reorderedDraft&&reorderedDraft.remoteEditId&&
+         activeReferenceTracks&&activeReferenceTracks.length===custom.length){
+        var trackByKey=new Map(reorderedDraft.tracks.map(function(t){
+          return [t.pack+'::'+t.file,t];
+        }));
+        var used=new Set(),newOrder=[];
+        activeReferenceTracks.forEach(function(ref){
+          var key=ref.pack+'::'+ref.file;
+          if(trackByKey.has(key)&&!used.has(key)){
+            newOrder.push(trackByKey.get(key));used.add(key);
+          }
+        });
+        reorderedDraft.tracks.forEach(function(t){
+          var key=t.pack+'::'+t.file;
+          if(!used.has(key)){newOrder.push(t);used.add(key);}
+        });
+        reorderedDraft.tracks=newOrder;
+        activeLocalOrderDirty=false;
+        preserveRemixes();
+        renderRemixes();
+      }
+    }
     player.sidListIndex=relocateCursor(player.sidListIndex,index,destination);
     selectedLiveIndex=relocateCursor(selectedLiveIndex,index,destination);
     queuedLiveIndex=relocateCursor(queuedLiveIndex,index,destination);
@@ -663,9 +690,13 @@
       if(moved.top<visible.top)scroller.scrollTop-=visible.top-moved.top+4;
       else if(moved.bottom>visible.bottom)scroller.scrollTop+=moved.bottom-visible.bottom+4;
     }
-    $('#ricoLiveStatus').text(activePublicPlaylist||activePublicCollection||isOldSidCurated()
-      ? 'Order changed. Press SAVE and enter the beta key to keep it publicly.'
-      : 'Order changed. Press SAVE to keep this order without publishing.');
+    $('#ricoLiveStatus').text((activeRemixDraftId&&remixDrafts.some(function(d){
+      return d.id===activeRemixDraftId&&d.remoteEditId;
+    }))||activePublicPlaylist
+      ? 'Order changed. Press REPUBLISH to update the published playlist.'
+      : activePublicCollection||isOldSidCurated()
+        ? 'Order changed. Press SAVE and enter the beta key to keep it publicly.'
+        : 'Order changed. Press SAVE to keep this order without publishing.');
   }
   function removeLiveSong(index){
     if(!customActive||loadedRankedPlaylist||savingCommunityEdits||activePublicCollection||index<0||index>=custom.length)return;
@@ -1520,7 +1551,7 @@
       activePublicPlaylist?(activePublicPlaylist.dirtyOrder||
         activePublicPlaylist.tracks.length!==activePublicPlaylist.originalCount):
         (activeLocalOrderDirty||isOldSidCurated())));
-    $('#ricoLiveSave').text(pendingDraft?'REPUBLISH':'SAVE')
+    $('#ricoLiveSave').text(pendingDraft||activePublicPlaylist?'REPUBLISH':'SAVE')
       .css('display',canSave?'inline-block':'none')
       .prop('disabled',savingCommunityEdits||remixBusy||!hasChanges)
       .attr('title',activePublicPlaylist||activePublicCollection
@@ -1692,6 +1723,17 @@
         remixTrackKeys(d.tracks)!==remixTrackKeys(d.baseTracks);
     });
     if(pendingDraft){await publishRemix(pendingDraft.id);return;}
+    if(activeRemixDraftId){
+      var linkedDraft=remixDrafts.find(function(d){
+        return d.id===activeRemixDraftId&&d.remoteEditId;
+      });
+      if(linkedDraft&&activeLocalOrderDirty){
+        try{syncPlayingRemixOrder(linkedDraft);}
+        catch(error){$('#ricoLiveStatus').text('REPUBLISH failed: '+error.message);return;}
+        await publishRemix(linkedDraft.id);
+        return;
+      }
+    }
     if(activePublicPlaylist||activePublicCollection){await savePublicRemovals();return;}
     if(isOldSidCurated()){
       try{await adoptOldSidCollection();}
