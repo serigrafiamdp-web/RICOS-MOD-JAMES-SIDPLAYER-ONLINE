@@ -1036,6 +1036,15 @@
     var field=document.getElementById('ricoRemixName');
     if(field){field.focus();field.setSelectionRange(0,0);}
   }
+  // TEST158: cancellation discards form text only; no draft is created
+  // and the selected ADD + TO destination is untouched.
+  function cancelNewRemix(){
+    if(!creatingNewRemix)return;
+    creatingNewRemix=false;
+    remixOpen=false;
+    $('#ricoRemixName,#ricoRemixCreator').val('');
+    renderRemixes();
+  }
   function finishNewRemix(){
     if(!creatingNewRemix)return;
     var name=$('#ricoRemixName').val().trim();
@@ -1421,11 +1430,23 @@
     toggle.add($('#ricoRemixToolbar')).on('click',function(event){
       event.preventDefault();event.stopPropagation();createRemix();
     });
+    $('#ricoRemixCancel').on('click',function(event){
+      event.preventDefault();event.stopPropagation();
+      cancelNewRemix();
+    });
+    // Capture Esc before the existing input keyboard handlers stop bubbling.
+    document.addEventListener('keydown',function(event){
+      if(event.key==='Escape'&&creatingNewRemix){
+        event.preventDefault();event.stopPropagation();
+        cancelNewRemix();
+      }
+    },true);
     $('#ricoRemixClose').on('click',function(event){
-      event.stopPropagation();
+      event.preventDefault();event.stopPropagation();
       if(creatingNewRemix)finishNewRemix();
       else{remixOpen=false;preserveRemixes();renderRemixes();}
-      if(typeof window.ricoOpenCommunityFromRemix==='function')window.ricoOpenCommunityFromRemix();
+      if(!remixOpen&&typeof window.ricoOpenCommunityFromRemix==='function')
+        window.ricoOpenCommunityFromRemix();
     });
     target.on('change',function(event){
       event.stopPropagation();selectRemixDestination(this.value);
