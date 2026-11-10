@@ -1,0 +1,26 @@
+name: Check SpotySid NO HVSC storage capability (read-only)
+on:
+  push:
+    branches: [lpm-migration-audit]
+    paths: ['.github/workflows/no-hvsc-check.yml']
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read deployed Worker capabilities (no writes)
+        run: |
+          python3 - <<'PY'
+          import json,urllib.request
+          u='https://ricos-sid-community.serigrafiamdp.workers.dev'
+          for path in ('/capabilities','/no-hvsc'):
+              try:
+                  with urllib.request.urlopen(u+path,timeout=15) as f:
+                      data=json.load(f)
+                  if path=='/capabilities':
+                      print('CAPABILITIES:',json.dumps(data))
+                  else:
+                      print('NO HVSC:',json.dumps({'format':data.get('format'), 'count':len(data.get('tracks',[]))}))
+              except Exception as e:print('ENDPOINT:',path,'unavailable:',str(e))
+          PY
