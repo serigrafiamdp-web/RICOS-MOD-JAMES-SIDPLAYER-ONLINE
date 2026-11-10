@@ -2798,6 +2798,7 @@
     var communityDraftOrder=null;
     var communityServerOrder=null;
     var communityServerRevision=null;
+    var communityPublicOrderDirty=false;
     // TEST159: the shared catalog order lives in D1, not just this browser.
     async function readCommunityServerOrder(){
       try{
@@ -2841,8 +2842,19 @@
     function catalogOrderRows(){
       return Array.prototype.slice.call(communityItems.querySelectorAll('.rico-community-catalog-row'));
     }
+    // TEST160: Include local imported and unpublished draft rows in visible order.
+    // Only published/static catalog rows may be sent to the D1 public ordering API.
+    function allCommunityOrderRows(){
+      return Array.prototype.slice.call(
+        communityItems.querySelectorAll('.rico-community-row[data-community-order-key]')
+      );
+    }
+    function isPublicCommunityKey(key){
+      return typeof key==='string'&&
+        (key.indexOf('remote:')===0||key.indexOf('static:')===0);
+    }
     function updateCatalogArrows(){
-      var rows=catalogOrderRows();
+      var rows=allCommunityOrderRows();
       rows.forEach(function(row,index){
         var up=row.querySelector('.rico-community-up');
         var down=row.querySelector('.rico-community-down');
@@ -2850,31 +2862,96 @@
         if(down)down.disabled=index===rows.length-1;
       });
     }
+    function addPrivateCommunityArrows(row,key){
+      row.dataset.communityOrderKey=key;
+      var controls=document.createElement('span');
+      controls.className='rico-community-order-controls';
+      var up=document.createElement('button');
+      up.type='button';up.className='rico-community-up';up.textContent='↑';
+      var down=document.createElement('button');
+      down.type='button';down.className='rico-community-down';down.textContent='↓';
+      bindReorderArrows($(up),-1,function(step){moveCommunityRow(row,step);});
+      bindReorderArrows($(down),1,function(step){moveCommunityRow(row,step);});
+      controls.appendChild(up);controls.appendChild(down);
+      // Use the exact same layout as published Community playlists.
+      row.insertBefore(controls,row.querySelector('button'));
+    }
+    function restorePrivateCommunityPositions(){
+      var stored=communityDraftOrder===null?readSavedCommunityOrder():communityDraftOrder;
+      if(!stored||!stored.some(function(k){return !isPublicCommunityKey(k);}))return;
+      var rows=allCommunityOrderRows();
+      if(!rows.length)return;
+      var publicQueue=rows.filter(function(row){
+        return isPublicCommunityKey(row.dataset.communityOrderKey);
+      });
+      var privateRows=rows.filter(function(row){
+        return !isPublicCommunityKey(row.dataset.communityOrderKey);
+      });
+      var privateByKey=new Map(privateRows.map(function(row){
+        return [row.dataset.communityOrderKey,row];
+      }));
+      var ordered=[],used=new Set(),nextPublic=0;
+      stored.forEach(function(key){
+        var row=null;
+        if(isPublicCommunityKey(key)){
+          row=publicQueue[nextPublic++]||null;
+        }else{
+          row=privateByKey.get(key)||null;
+        }
+        if(row&&!used.has(row)){ordered.push(row);used.add(row);}
+      });
+      rows.forEach(function(row){if(!used.has(row))ordered.push(row);});
+      ordered.forEach(function(row){communityItems.appendChild(row);});
+      updateCatalogArrows();
+    }
     function moveCommunityRow(row,step){
-      var rows=catalogOrderRows(),from=rows.indexOf(row);
+      var rows=allCommunityOrderRows(),from=rows.indexOf(row);
       if(from<0)return;
       var to=Math.max(0,Math.min(rows.length-1,from+step));
       if(to===from)return;
+      var previousPublic=catalogOrderRows().map(function(entry){
+        return entry.dataset.communityOrderKey;
+      }).join('\n');
       cancelStartupPlaylist();
       var target=rows[to];
       communityItems.insertBefore(row,to>from?target.nextSibling:target);
-      communityDraftOrder=catalogOrderRows().map(function(entry){return entry.dataset.communityOrderKey;});
+      communityDraftOrder=allCommunityOrderRows().map(function(entry){
+        return entry.dataset.communityOrderKey;
+      });
+      if(previousPublic!==catalogOrderRows().map(function(entry){
+        return entry.dataset.communityOrderKey;
+      }).join('\n'))communityPublicOrderDirty=true;
       updateCatalogArrows();
       if(communityOrderStatus)communityOrderStatus.textContent='Unsaved';
     }
     if(communityOrderSave)communityOrderSave.addEventListener('click',async function(event){
       event.preventDefault();event.stopPropagation();
-      var rows=catalogOrderRows();
+      var rows=allCommunityOrderRows();
       if(!rows.length){say('No community playlists to reorder.');return;}
-      var ids=rows.map(function(row){return row.dataset.communityOrderKey;});
-      if(communityServerRevision===null){
-        // Keep the previously working browser-local SAVE until the Worker update
-        // is deployed. Never describe a local save as a public publication.
+      var allIds=rows.map(function(row){return row.dataset.communityOrderKey;});
+      var ids=catalogOrderRows().map(function(row){return row.dataset.communityOrderKey;});
+      // Local copies and unpublished drafts stay private. They can be reordered
+      // and remembered without the public publishing key.
+      if(!communityPublicOrderDirty){
         try{
-          localStorage.setItem(COMMUNITY_ORDER_STORAGE_KEY,JSON.stringify(ids));
-          communityDraftOrder=ids.slice();
+          localStorage.setItem(COMMUNITY_ORDER_STORAGE_KEY,JSON.stringify(allIds));
+          communityDraftOrder=null;
+          if(communityOrderStatus)communityOrderStatus.textContent='Saved here';
+          say('Local Community playlist positions saved in this browser.');
+        }catch(error){
+          if(communityOrderStatus)communityOrderStatus.textContent='Not saved';
+          say('Community order SAVE: '+error.message);
+        }
+        return;
+      }
+      if(communityServerRevision===null){
+        // Offline/old Worker: retain the browser-only fallback explicitly.
+        try{
+          localStorage.setItem(COMMUNITY_ORDER_STORAGE_KEY,JSON.stringify(allIds));
+          communityDraftOrder=null;
+          communityPublicOrderDirty=false;
           if(communityOrderStatus)communityOrderStatus.textContent='Saved here only';
-          say('Order saved in this browser only. Public SAVE requires the Community Worker update.');
+          say('Order saved in this browser only. Public SAVE requires the Community Worker.');
         }catch(error){
           if(communityOrderStatus)communityOrderStatus.textContent='Not saved';
           say('Local order save failed: '+error.message);
@@ -2902,15 +2979,19 @@
           throw Error('Published order differs from the requested order. Reload before retrying.');
         communityServerOrder=ids.slice();
         communityServerRevision=latest.revision;
+        communityPublicOrderDirty=false;
         communityDraftOrder=null;
-        try{localStorage.removeItem(COMMUNITY_ORDER_STORAGE_KEY);}catch(ignore){}
+        try{
+          if(allIds.some(function(id){return !isPublicCommunityKey(id);}))
+            localStorage.setItem(COMMUNITY_ORDER_STORAGE_KEY,JSON.stringify(allIds));
+          else localStorage.removeItem(COMMUNITY_ORDER_STORAGE_KEY);
+        }catch(ignore){}
         if(communityOrderStatus)communityOrderStatus.textContent='Saved for everyone';
-        say('Community playlist order published and verified.');
+        say('Published Community order verified. Local draft positions remain private.');
       }catch(error){
         if(communityOrderStatus)communityOrderStatus.textContent='Not saved';
         say('Community order SAVE: '+error.message);
-        // Leave the moved rows in place so an error never discards editing work.
-        // Reload to reconcile if the server changed or verification was interrupted.
+        // Leave moved rows visible; do not publish a partial or stale order.
       }finally{communityOrderSave.disabled=false;}
     });
     var localPanel=document.getElementById('sidListHolder');
@@ -3373,6 +3454,7 @@
         }).forEach(function(item){
         var row=document.createElement('div');
         row.className='rico-community-row rico-community-import-row';
+        addPrivateCommunityArrows(row,'local:'+item.id);
         var label=document.createElement('span');label.className='rico-community-label';
         label.textContent=item.name+' — Playlist by '+(item.createdBy||'Unknown')+
           ' · '+item.tracks.length+' SID';
@@ -3457,6 +3539,8 @@
       });
       // Newly saved local imports are shown above published catalogs.
       communityItems.insertBefore(fragment,communityItems.firstChild);
+      restorePrivateCommunityPositions();
+      updateCatalogArrows();
     }
 
     // TEST89: consistent EDIT controls. Static GitHub catalogs must never be
@@ -3547,6 +3631,7 @@
       var fragment=document.createDocumentFragment();
       remixDrafts.slice().reverse().filter(function(d){return !d.remoteEditId;}).forEach(function(d){
         var row=document.createElement('div');row.className='rico-community-row rico-community-remix-row';
+        addPrivateCommunityArrows(row,'remix:'+d.id);
         var label=document.createElement('span');label.className='rico-community-label';
         label.textContent=d.name+' — Playlist by '+(d.creator||'Unknown')+' · '+d.tracks.length+' SID';
         row.appendChild(label);
@@ -3568,6 +3653,8 @@
         fragment.appendChild(row);
       });
       communityItems.appendChild(fragment);
+      restorePrivateCommunityPositions();
+      updateCatalogArrows();
     }
     window.ricoRenderRemixCommunityRows=renderRemixCommunityRows;
     async function loadCommunityCatalog() {
