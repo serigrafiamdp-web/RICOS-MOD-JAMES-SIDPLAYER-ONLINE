@@ -3015,12 +3015,11 @@
       musicians:{file:"community/playlists/csdb-top-100-musicians.json",title:"TOP MUSICIANS",description:"100 selected SID musicians from the CSDb scene."}
     };
     var communityActive=false;
-    var startupPlaylistPending=true; // TEST24: allow 30 seconds for manual selection.
+    var startupPlaylistPending=false; // TEST161: never start a playlist on page load.
     var startupPlaylistTimer=null;
     var selectedCommunityId='';
     var communityRequestNumber=0;
-    // TEST143: advance to the next available COMMUNITY playlist on each new visit.
-    // The catalog rows and songs remain in their original published order.
+    // TEST161: preserve manually selected playlist order; no startup autoplay.
     var COMMUNITY_STARTUP_LAST_KEY='rico-community-startup-last-v1';
     function cancelStartupPlaylist() {
       startupPlaylistPending=false;
@@ -3951,21 +3950,8 @@
         // Refresh ADD + TO options after the remote catalog arrives. Never
         // change playback or the currently selected editing draft.
         renderRemixes();
-        if(startupPlaylistPending && startupPlayable.length) {
-          var lastStartupKey='';
-          try{lastStartupKey=localStorage.getItem(COMMUNITY_STARTUP_LAST_KEY)||'';}
-          catch(storageError){console.warn('Community startup rotation memory unavailable',storageError);}
-          var lastStartupIndex=startupPlayable.findIndex(function(entry){
-            return entry.key===lastStartupKey;
-          });
-          var nextStartup=startupPlayable[(lastStartupIndex+1)%startupPlayable.length];
-          nextStartup.row.classList.add('rico-community-selected');
-          if(startupPlaylistTimer!==null) clearTimeout(startupPlaylistTimer);
-          startupPlaylistTimer=setTimeout(function(){
-            startupPlaylistTimer=null;
-            if(startupPlaylistPending && communityActive) nextStartup.play();
-          },30000);
-        }
+        // TEST161: No automatic playlist selection or playback after loading
+        // COMMUNITY PLAYLISTS. Tracks start only after the visitor selects PLAY.
       } catch(error){
         if(requestNumber===communityRequestNumber)
           communityItems.textContent='Could not load COMMUNITY PLAYLISTS: '+error.message;
