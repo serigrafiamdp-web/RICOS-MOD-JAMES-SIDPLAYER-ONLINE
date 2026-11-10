@@ -1196,32 +1196,17 @@
     if(!current||!Array.isArray(current.tracks)||current.name!==draft.name||
        current.createdBy!==draft.creator)
       throw Error('The published playlist metadata changed. Your draft was kept.');
-    var baseForSave=draft.baseTracks;
-    if(remixTrackKeys(current.tracks)!==remixTrackKeys(baseForSave)){
-      // TEST147: only automatically rebase pure additions. Never silently
-      // overwrite a newer public order or merge local removals/reordering.
-      var identity=function(t){return t.pack+'::'+t.file;};
-      var baseSet=new Set(baseForSave.map(identity));
-      var draftBaseOrder=draft.tracks.filter(function(t){return baseSet.has(identity(t));});
-      if(remixTrackKeys(draftBaseOrder)!==remixTrackKeys(baseForSave))
-        throw Error('Public list changed and local order/removals also changed. Draft retained; nothing overwritten.');
-      var remoteSet=new Set(current.tracks.map(identity));
-      var additions=draft.tracks.filter(function(t){return !baseSet.has(identity(t));});
-      var merged=current.tracks.map(function(t){return {pack:t.pack,file:t.file};});
-      additions.forEach(function(t){
-        if(!remoteSet.has(identity(t))){merged.push({pack:t.pack,file:t.file});remoteSet.add(identity(t));}
-      });
-      refs=merged;
-      baseForSave=current.tracks;
-      if(remixTrackKeys(refs)===remixTrackKeys(current.tracks)){
-        remixNotice('All added songs are already published in '+draft.name+'. Same public ID.');
-        remixDrafts=remixDrafts.filter(function(item){return item!==draft;});
-        remixTarget=remixDrafts.length?remixDrafts[0].id:'';
-        preserveRemixes();renderRemixes();renderLivePlaylist();
-        return;
-      }
+    // TEST149: save the selected draft to its existing public ID.
+    // Do not reject the user's edit based on an old full-track snapshot.
+    // The Worker still checks the freshly read version atomically at PUT.
+    if(remixTrackKeys(refs)===remixTrackKeys(current.tracks)){
+      remixNotice('Already published: '+draft.name+'. Same public ID.');
+      remixDrafts=remixDrafts.filter(function(item){return item!==draft;});
+      remixTarget=remixDrafts.length?remixDrafts[0].id:'';
+      preserveRemixes();renderRemixes();renderLivePlaylist();
+      return;
     }
-    var hash=await remixSnapshotHash(baseForSave);
+    var hash=await remixSnapshotHash(current.tracks);
     var key=await askBetaKeyDialog('SAVE');
     if(!key)return;
     remixBusy=true;renderRemixes();
@@ -1498,7 +1483,8 @@
     var pendingDraft=remixDrafts.find(function(d){
       return d.remoteEditId&&Array.isArray(d.baseTracks)&&
         ((activeRemixDraftId&&d.id===activeRemixDraftId)||
-          (activePublicPlaylist&&d.remoteEditId===activePublicPlaylist.remoteId))&&
+          (activePublicPlaylist&&d.remoteEditId===activePublicPlaylist.remoteId)||
+          (customActive&&loadedPlaylistTitle===d.name&&loadedPlaylistCreator===d.creator))&&
         remixTrackKeys(d.tracks)!==remixTrackKeys(d.baseTracks);
     });
     var hasChanges=canSave&&(!!pendingDraft||(activePublicCollection?activePublicCollection.dirtyOrder:
@@ -1672,7 +1658,8 @@
     var pendingDraft=remixDrafts.find(function(d){
       return d.remoteEditId&&Array.isArray(d.baseTracks)&&
         ((activeRemixDraftId&&d.id===activeRemixDraftId)||
-          (activePublicPlaylist&&d.remoteEditId===activePublicPlaylist.remoteId))&&
+          (activePublicPlaylist&&d.remoteEditId===activePublicPlaylist.remoteId)||
+          (customActive&&loadedPlaylistTitle===d.name&&loadedPlaylistCreator===d.creator))&&
         remixTrackKeys(d.tracks)!==remixTrackKeys(d.baseTracks);
     });
     if(pendingDraft){await publishRemix(pendingDraft.id);return;}
