@@ -2741,6 +2741,9 @@
     var startupPlaylistTimer=null;
     var selectedCommunityId='';
     var communityRequestNumber=0;
+    // TEST143: advance to the next available COMMUNITY playlist on each new visit.
+    // The catalog rows and songs remain in their original published order.
+    var COMMUNITY_STARTUP_LAST_KEY='rico-community-startup-last-v1';
     function cancelStartupPlaylist() {
       startupPlaylistPending=false;
       if(startupPlaylistTimer!==null) {
@@ -3406,8 +3409,7 @@
           communityItems.textContent='No additional published playlists available.';
           return;
         }
-        var firstPlayable=null;
-        var firstRow=null;
+        var startupPlayable=[];
         catalog.playlists.forEach(function(item){
           if(!item || typeof item.title!=='string' ||
              !(item.remoteId ? /^[a-z0-9-]{12,48}$/i.test(item.remoteId) :
@@ -3547,6 +3549,12 @@
               }:null;
               renderLivePlaylist();
               selectedCommunityId=item.id||item.file;
+              if(isStartup){
+                // Save only successful automatic selections, so a failed load
+                // never consumes a rotation slot.
+                try{localStorage.setItem(COMMUNITY_STARTUP_LAST_KEY,communityItemOrderKey(item));}
+                catch(storageError){console.warn('Community startup rotation cannot be saved',storageError);}
+              }
               Array.prototype.forEach.call(communityItems.querySelectorAll('.rico-community-row'),function(other){
                 other.classList.toggle('rico-community-selected',other===row);
               });
@@ -3599,19 +3607,29 @@
             event.stopPropagation();
             openPlaylist(false);
           });
-          if(!firstPlayable){firstPlayable=function(){openPlaylist(true);};firstRow=row;}
+          // Only published COMMUNITY playlists with playable SID tracks participate.
+          // Nothing is shuffled or moved in the visible playlist or its track list.
+          if(Number(item.tracks)>0)
+            startupPlayable.push({key:communityItemOrderKey(item),row:row,play:function(){openPlaylist(true);}});
         });
         updateCatalogArrows();
         await renderLocalImportedCommunityRows();
         // Refresh ADD + TO options after the remote catalog arrives. Never
         // change playback or the currently selected editing draft.
         renderRemixes();
-        if(startupPlaylistPending && firstPlayable && firstRow) {
-          firstRow.classList.add('rico-community-selected');
+        if(startupPlaylistPending && startupPlayable.length) {
+          var lastStartupKey='';
+          try{lastStartupKey=localStorage.getItem(COMMUNITY_STARTUP_LAST_KEY)||'';}
+          catch(storageError){console.warn('Community startup rotation memory unavailable',storageError);}
+          var lastStartupIndex=startupPlayable.findIndex(function(entry){
+            return entry.key===lastStartupKey;
+          });
+          var nextStartup=startupPlayable[(lastStartupIndex+1)%startupPlayable.length];
+          nextStartup.row.classList.add('rico-community-selected');
           if(startupPlaylistTimer!==null) clearTimeout(startupPlaylistTimer);
           startupPlaylistTimer=setTimeout(function(){
             startupPlaylistTimer=null;
-            if(startupPlaylistPending && communityActive) firstPlayable();
+            if(startupPlaylistPending && communityActive) nextStartup.play();
           },30000);
         }
       } catch(error){
