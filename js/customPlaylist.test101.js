@@ -1014,16 +1014,16 @@
     remixDrafts.forEach(function(d){
       var option=document.createElement('option');
       option.value=d.id;
-      option.textContent=(d.remoteEditId?'EDITING · ':'REMIX · ')+d.name+' ('+d.tracks.length+')';
+      option.textContent=d.name;
       target.appendChild(option);
     });
     if(publishedRemixChoices.length){
       var publishedGroup=document.createElement('optgroup');
-      publishedGroup.label='PUBLISHED PLAYLISTS · select to edit';
+      publishedGroup.label='PUBLISHED PLAYLISTS';
       publishedRemixChoices.forEach(function(item){
         var choice=document.createElement('option');
         choice.value='published:'+item.id;
-        choice.textContent='PUBLISHED · '+item.title+' ('+item.tracks+')';
+        choice.textContent=item.title;
         publishedGroup.appendChild(choice);
       });
       target.appendChild(publishedGroup);
