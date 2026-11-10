@@ -896,6 +896,14 @@
   // TEST118: Published lists can be selected as destinations while another
   // playlist is playing. Only D1 reference lists can be updated in place.
   var publishedRemixChoices=[];
+  // TEST150: the ADD + TO choice belongs to the listener, not playback.
+  // Keep it independent from the current editing draft.
+  var preferredRemixDestination='';
+  try{preferredRemixDestination=localStorage.getItem('rico-add-to-destination')||'';}catch(e){}
+  function rememberRemixDestination(value){
+    preferredRemixDestination=value;
+    try{localStorage.setItem('rico-add-to-destination',value);}catch(e){}
+  }
   function remixTrackKeys(tracks){
     return JSON.stringify(tracks.map(function(t){return [t.pack,t.file];}));
   }
@@ -932,15 +940,16 @@
     remixNotice('Editing '+draft.name+' privately. Play any other list and press + to add its songs. PUBLISH CHANGES keeps the same public ID.');
   }
   async function selectRemixDestination(value){
+    rememberRemixDestination(value);
     if(value.indexOf('published:')!==0){
       remixTarget=value;
       preserveRemixes();renderRemixes();
       return;
     }
     var id=value.slice('published:'.length);
-    remixTarget='';renderRemixes();
+    renderRemixes();
     try{await beginPublishedEdit(id);}
-    catch(error){remixNotice('Could not open published playlist for editing: '+error.message);renderRemixes();}
+    catch(error){remixNotice('Could not select published playlist: '+error.message);renderRemixes();}
   }
   function selectedRemix(){return remixDrafts.find(function(d){return d.id===remixTarget;})||null;}
   function preserveRemixes(){
@@ -987,6 +996,7 @@
     remixCounter++;
     var next={id:'remix-'+Date.now()+'-'+remixCounter,name:'REMIX '+remixCounter,creator:'',tracks:[]};
     remixDrafts.push(next);remixTarget=next.id;remixOpen=true;
+    rememberRemixDestination(next.id);
     preserveRemixes();renderRemixes();
     $('#ricoRemixName').trigger('focus');
   }
@@ -1018,7 +1028,14 @@
       });
       target.appendChild(publishedGroup);
     }
-    target.value=selected?selected.id:'';
+    // Select the saved destination, even when the playing playlist changes.
+    var preferredDraft=remixDrafts.find(function(d){
+      return d.id===preferredRemixDestination||
+        (d.remoteEditId&&preferredRemixDestination==='published:'+d.remoteEditId);
+    });
+    var optionValue=preferredDraft?preferredDraft.id:preferredRemixDestination;
+    target.value=Array.prototype.some.call(target.options,function(o){return o.value===optionValue;})
+      ?optionValue:'';
     if(typeof window.ricoRenderRemixCommunityRows==='function')window.ricoRenderRemixCommunityRows();
     var editorTarget=document.getElementById('ricoRemixEditorTarget');
     if(editorTarget){
@@ -1077,8 +1094,17 @@
     remixOpen=false;
     $('#ricoRemixEditor').css('display','none');
     $('#ricoRemixToggle').attr('aria-expanded','false');
-    var target=selectedRemix();
-    if(!target){remixNotice('Select a REMIX destination first using ADD + TO.');return;}
+    var target=remixDrafts.find(function(d){
+      return d.id===preferredRemixDestination||
+        (d.remoteEditId&&preferredRemixDestination==='published:'+d.remoteEditId);
+    })||null;
+    if(!target&&preferredRemixDestination.indexOf('published:')===0){
+      try{
+        await beginPublishedEdit(preferredRemixDestination.slice('published:'.length));
+        target=selectedRemix();
+      }catch(error){remixNotice('Cannot select destination: '+error.message);return;}
+    }
+    if(!target){remixNotice('Select a destination first using ADD + TO.');return;}
     var sidEntry=(player.sidList||[])[index];
     if(!sidEntry){remixNotice('SID selection no longer available.');return;}
     // TEST111: reference-only v2 playlists already validated and loaded every
@@ -1202,7 +1228,8 @@
     if(remixTrackKeys(refs)===remixTrackKeys(current.tracks)){
       remixNotice('Already published: '+draft.name+'. Same public ID.');
       remixDrafts=remixDrafts.filter(function(item){return item!==draft;});
-      remixTarget=remixDrafts.length?remixDrafts[0].id:'';
+      if(preferredRemixDestination===draft.id)rememberRemixDestination('published:'+draft.remoteEditId);
+      remixTarget='';
       preserveRemixes();renderRemixes();renderLivePlaylist();
       return;
     }
@@ -1234,7 +1261,8 @@
       remixNotice('PUBLISHED CHANGES VERIFIED: '+draft.name+' · '+refs.length+' SID. Same public ID.');
       remixDrafts=remixDrafts.filter(function(item){return item!==draft;});
       renderLivePlaylist();
-      remixTarget=remixDrafts.length?remixDrafts[0].id:'';
+      if(preferredRemixDestination===draft.id)rememberRemixDestination('published:'+draft.remoteEditId);
+      remixTarget='';
       preserveRemixes();
       if(typeof window.ricoRefreshCommunityCatalog==='function'){
         try{await window.ricoRefreshCommunityCatalog();}
@@ -1318,7 +1346,8 @@
       }
       remixNotice('PUBLISHED AND VERIFIED: '+draft.name+' · '+expectedDraftRefs.length+' SID in the correct order.');
       remixDrafts=remixDrafts.filter(function(d){return d!==draft;});
-      remixTarget=remixDrafts.length?remixDrafts[0].id:'';
+      if(preferredRemixDestination===draft.id)rememberRemixDestination('published:'+remoteId);
+      remixTarget='';
       preserveRemixes();
       if(typeof window.ricoRefreshCommunityCatalog==='function'){
         try{await window.ricoRefreshCommunityCatalog();}
