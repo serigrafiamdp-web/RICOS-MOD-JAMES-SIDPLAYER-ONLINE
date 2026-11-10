@@ -1320,17 +1320,35 @@
     }else if(customActive&&activePublicPlaylist&&
              activePublicPlaylist.tracks.length===(player.sidList||[]).length){
       candidate=activePublicPlaylist.tracks[index];
+    }else if(customActive&&activePublicCollection&&
+             activePublicCollection.tracks.length===(player.sidList||[]).length){
+      candidate=activePublicCollection.tracks[index];
     }
     try{
       var reference=null;
-      if(candidate&&candidate.pack&&candidate.file){
+      if(candidate&&candidate.sidId&&candidate.file){
+        reference={sidId:candidate.sidId,file:candidate.file,
+          title:sidEntry.name||candidate.file,artist:sidEntry.author||''};
+      }else if(candidate&&candidate.pack&&candidate.file){
         reference={pack:candidate.pack,file:candidate.file,
           title:sidEntry.name||candidate.file,artist:sidEntry.author||''};
+      }else if(customActive&&sidEntry.localBytes instanceof Uint8Array){
+        // IMPORT SID without HVSC: archive the *original* binary, then add
+        // its durable sidId. Never put a temporary browser-only URL in a
+        // public playlist, and never delete the local bytes on failure.
+        if(sidEntry._noHvscPending)await sidEntry._noHvscPending;
+        if(!sidEntry._noHvscAssetId)
+          await startNoHvscArchive([sidEntry],true);
+        if(!sidEntry._noHvscAssetId)
+          throw Error('SID not archived. Local import is still available.');
+        reference={sidId:sidEntry._noHvscAssetId,
+          file:sidEntry._noHvscFile||noHvscFileName(sidEntry),
+          title:sidEntry.name||sidEntry.file,artist:sidEntry.author||''};
       }else{
         var originalPath=customActive?embeddedHvscPaths[index]:
           originalGamesHvscPaths[(originalList[index]||{}).file];
         if(!originalPath)
-          throw Error('This SID has no verified HVSC #85 source yet; cannot add it to a reference-only Remix.');
+          throw Error('This SID has no stored NO HVSC asset or verified HVSC reference.');
         remixNotice('Checking original HVSC path for '+(sidEntry.name||sidEntry.file)+'...');
         reference=await resolveOriginalHvscPath(originalPath);
       }
@@ -2246,7 +2264,7 @@
     }
     importing = true;
     $('#ricoPlaylistStatus').text('Reading ' + files.length + ' files...');
-    var accepted = 0, rejected = 0;
+    var accepted = 0, rejected = 0, newlyImported=[];
     for (var i = 0; i < files.length; i++) {
       try {
         var buf = new Uint8Array(await files[i].arrayBuffer());
@@ -2255,6 +2273,7 @@
         parsed.id = 'local-' + (importedSidEntries.length + accepted);
         importedSidEntries.push(parsed);
         custom.push(parsed);
+        newlyImported.push(parsed);
         accepted++;
       } catch (error) {
         rejected++;
@@ -2273,6 +2292,12 @@
       showLivePlaylist(true);
     }
     $('#ricoPlaylistStatus').text(accepted + ' SID imported' + (rejected ? ' · ' + rejected + ' skipped' : '') + '. Use SAVE LIST for persistent local storage.');
+    // Import is always usable locally. Public archiving is optional and
+    // explicitly authorized via the existing beta-key dialog, not automatic.
+    if(newlyImported.length)startNoHvscArchive(newlyImported,false).catch(function(error){
+      $('#ricoPlaylistStatus').text('Import succeeded locally; NO HVSC not archived: '+error.message);
+      console.warn('NO HVSC upload was not confirmed; local SID data is intact',error);
+    });
   }
 
   function getEntryFiles(entry) {
