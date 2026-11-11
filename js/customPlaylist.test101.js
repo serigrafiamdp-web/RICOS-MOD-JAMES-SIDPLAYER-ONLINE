@@ -1809,7 +1809,13 @@
         : isOldSidCurated()
           ? 'Register this HVSC reference playlist as editable in Cloudflare (beta key required)'
           : 'Save current song order locally; publication requires beta key');
-    $('#ricoLivePlaylistTitle').text(landingPlaylists ? "COMMUNITY PLAYLISTS" : (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'));
+    // TEST177: show active LFT MODE on any playlist while an approved
+    // LFT track actually plays; never label an entire mixed playlist as LFT.
+    var lftModeTitle=!landingPlaylists&&customActive&&
+      window.RicoLftMode&&window.RicoLftMode.playingApproved();
+    $('#ricoLivePlaylistTitle').text((landingPlaylists ? "COMMUNITY PLAYLISTS" :
+      (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'))+
+      (lftModeTitle?' · LFT MODE ON':''));
     // TEST34: keep the creator/ratings strip visible while a playlist is loaded.
     // Never confuse the playlist creator with each SID's composer.
     var hasLoadedPlaylist = !!loadedPlaylistTitle && customActive;
@@ -2217,6 +2223,8 @@
       : 'Original 22 SID playlist. Your local files remain available in CUSTOM.');
   }
   function activate(mode) {
+    // TEST173: leaving custom playback restores native TinySID immediately.
+    if(mode!=='custom'&&window.RicoLftMode)window.RicoLftMode.deactivate();
     resetCsdbRankDisplay();
     resetSoftTransition(true);
     var wantCustom = mode === 'custom';
@@ -2266,6 +2274,12 @@
     player.setPath('');
     player.autoLoading = true;
     try {
+      // Only the verified LFT.zip progressive slot may enter the experimental WASM.
+      // TEST177: every song, in any v2/REMIX playlist, carries its own
+      // approved HVSC reference. Switch engines by track, never by list title.
+      if(window.RicoLftMode)
+        window.RicoLftMode.approveTrustedReference(item._hvscRef||
+          (activeReferenceTracks&&activeReferenceTracks[index])||null);
       var loaded = player.loadSIDData(item.localBytes);
       if (loaded === false) {
         player.initFileSelection();
@@ -2343,6 +2357,8 @@
   // Browser file handles are kept in memory. Upload is never sent to GitHub.
   async function importFiles(inputFiles) {
     if (importing) return;
+    // A new manual import is never the published LFT list.
+    if(window.RicoLftMode)window.RicoLftMode.deactivate();
     var files = Array.from(inputFiles || []).filter(function (file) {
       return file && file.size >= 118; // Validate actual PSID/RSID header, not extension.
     });
@@ -2638,6 +2654,8 @@
       return entries;
     }
     function loadPlaylist(data,startIndex,localImport,ranked) {
+      // Legacy/local source: preserve unchanged TinySID behavior.
+      if(window.RicoLftMode)window.RicoLftMode.deactivate();
       resetCsdbRankDisplay();
       resetSoftTransition(true);
       if(activeReferenceStream){activeReferenceStream.cancel();activeReferenceStream=null;}
@@ -2809,7 +2827,9 @@
     }
     // TEST61: reference-only playlists resolve SID files from one immutable HVSC base.
     // Existing v1 playlists with embedded SID remain fully supported.
-    async function loadStoredPlaylist(data,localImport) {
+    async function loadStoredPlaylist(data,localImport,sourceRemoteId) {
+      // TEST177: do not activate an engine by list name, owner or publication.
+      // The selected track's verified HVSC reference decides its engine.
       resetCsdbRankDisplay();
       resetSoftTransition(true);
       if(activeReferenceStream){activeReferenceStream.cancel();activeReferenceStream=null;}
@@ -4145,7 +4165,7 @@
               // Ignore a late auto-load if the visitor picked a different source.
               if(isStartup && !startupPlaylistPending) return;
               if(isStartup) cancelStartupPlaylist();
-              await loadStoredPlaylist(chosen); // SID order and original public record remain untouched.
+              await loadStoredPlaylist(chosen,false,item.remoteId||null); // Only published LFT may use TEST173.
               activeCuratedCatalogId=!item.remoteId&&item.id==='old-sid-collection-rico'
                 ? item.id:null;
               activeRemixDraftId=pending?pending.id:null;
@@ -4758,15 +4778,14 @@
       document.getElementById('ricoLibraryMusicians').addEventListener('click',function(){category='musicians';shelf='';openLibrary();});
       document.getElementById('ricoLibraryDemos').addEventListener('click',function(){category='demos';shelf='';openLibrary();});
       document.getElementById('ricoLibraryGroups').addEventListener('click',function(){category='groups';shelf='';openLibrary();});
-      // TEST180: GROUPS keyboard search navigates to the appropriate letter automatically.
-      // Keep the typed query when loading a shelf; manual letter clicks still reset it.
+      // TEST180: navigate the GROUPS alphabet directly while typing.
       searchEl.addEventListener('input',function(){
         if(category!=='groups'){renderSections();return;}
         var q=searchEl.value.trim().toLocaleLowerCase();
         if(!q){renderSections();return;}
-        var initial=q.charAt(0).toUpperCase();
-        var expected=/[A-Z]/.test(initial)?initial:'0-9';
-        var item=manifest&&manifest.categories.groups&&manifest.categories.groups.shelves.find(function(entry){return entry.name===expected;});
+        var first=q.charAt(0).toUpperCase();
+        var letter=/[A-Z]/.test(first)?first:'0-9';
+        var item=manifest&&manifest.categories.groups&&manifest.categories.groups.shelves.find(function(s){return s.name===letter;});
         if(item&&item.name!==shelf){openShelf(item,true);return;}
         renderSections();
       });
