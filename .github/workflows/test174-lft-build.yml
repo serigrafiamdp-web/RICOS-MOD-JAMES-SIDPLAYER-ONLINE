@@ -19,6 +19,10 @@ jobs:
       - name: Build patched libsidplayfp v3.1.2 for reSIDfp
         run: |
           cd /tmp/libsidplayfp-wasm
+          # GitHub Actions runner DNS may not reach Ubuntu mirrors via Docker bridge.
+          # Use host networking only inside this isolated CI build.
+          sed -i 's/docker build -f /docker build --network host -f /' scripts/build.sh
+          sed -i 's/^docker run \\$/docker run --network host \\/' scripts/build.sh
           LIBSIDPLAYFP_REF=v3.1.2 LIBSIDPLAYFP_WASM_ENGINE=residfp bash scripts/build.sh
       - name: Update pinned patched output and provenance
         run: |
