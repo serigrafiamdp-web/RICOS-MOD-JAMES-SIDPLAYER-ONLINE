@@ -1,6 +1,6 @@
 # TEST173 — LFT MODE: compatibility experiment, branch only
 
-Date: 2026-11-11. Branch: `test173-lft-mode-isolated`. **Status: static/mock checks PASS; real browser + real audio not yet tested. Not deployed to main.**
+Date: 2026-11-11. Branch: `test173-lft-mode-isolated`. **Status: real WASM PCM 66/66 PASS; actual Chromium adapter smoke PASS; user live-site PASS pending. NOT DEPLOYED TO MAIN.**
 
 ## Scope
 
@@ -70,7 +70,8 @@ Two RSID tunes may require user-supplied copyrighted C64 system ROMs.
 - Deactivating destroys the mock WASM context and restores every overridden native
   SID method pointer.
 - No Cloudflare Worker/D1 change, no SID binary or playlist rewrite.
-- A Chromium integration test was added on this branch to exercise real local WASM through the unchanged SpotySid AudioContext/ScriptProcessor. Its PASS remains separate from the Node PCM sweep.
+- **Actual Chromium integration PASS:** [GitHub Actions run 43058131484](https://github.com/serigrafiamdp-web/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/actions/runs/43058131484) verified `ready:true`, `playing:true`, nonzero rendered PCM peak `0.1788330078125`, native TinySID methods restored on deactivation, and LFT mode inactive afterward. This is a real browser and actual WASM test of the integration, not a simulated renderer; it is not a live-site user PASS.
+- The first browser CI run failed only because Playwright 1.55.1 was incompatible with the Ubuntu 26.04 runner. CI now pins Ubuntu 24.04 and installs Chromium only; this corrected workflow PASSed.
 
 ## Critical release blocker
 
@@ -94,3 +95,11 @@ Before deploying:
 
 [Current stable live SpotySid](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/) (unchanged)
 · [Vendor source bundle](https://github.com/chrisgleissner/libsidplayfp-wasm/releases/download/v1.1.1/libsidplayfp-wasm-1.1.1-complete-source.tar.gz)
+
+## Final TEST173 branch checkpoint, 2026-11-11
+
+- Isolated branch: `test173-lft-mode-isolated`.
+- Test 66/66: [PASS](https://github.com/serigrafiamdp-web/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/actions/runs/43056729062).
+- Real Chromium integration: [PASS](https://github.com/serigrafiamdp-web/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/actions/runs/43058131484) (Nine playback and TinySID restoration).
+- **SECURITY HOLD:** do not deploy bundled libsidplayfp 3.1.1 to main until a patched WASM binary built from libsidplayfp 3.1.2+ is available and reviewed. The test suite validated known-good ZIP content only.
+- Keep existing main branch and all user-published playlists unchanged. No D1 write or Cloudflare Worker deployment was performed.
