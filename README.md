@@ -22,7 +22,7 @@ SpotySid preserves and extends the original James / Jojati SID Player. RICO main
 
 **Today:** TEST165 NO HVSC Worker endpoints deployed and returning the expected capabilities; TEST166 provenance schema committed; TEST167 NO HVSC import **PASS reported by the user**; TEST169 Cloudflare Web Analytics installed and initial activity visible in its dashboard.
 
-**Still pending:** TEST168 — add an archived SID to UCTUMI with **+**, check **EDIT SONGS**, **REPUBLISH** to the same public ID and confirm persistence after reload. Do not mark the full mixed-playlist operation PASS yet. Visits before installation of Web Analytics are not recoverable as website visit statistics.
+**Later user feedback:** the NO HVSC → UCTUMI flow was reported as working. A formal API readback / same-ID persistence log was not captured. **TEST170:** NO HVSC artist subgroups are implemented in the current frontend with the existing DEMOS heading design, and code checks passed; **live browser PASS is still pending**. See [TEST170 implementation and test plan](docs/TEST170_NO_HVSC_ARTIST_GROUPS.md). Web Analytics cannot recover visits from before installation.
 
 See [checkpoint 2026-11-10](docs/CHECKPOINT_2026-11-10_SPOTYSID.md) for the verification record and exact next steps.
 
