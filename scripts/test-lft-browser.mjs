@@ -106,8 +106,12 @@ try{
   await page.route('https://ricos-sid-community.serigrafiamdp.workers.dev/playlists/'+remoteId,route=>
     route.fulfill({status:200,headers:{'access-control-allow-origin':'*'},
       contentType:'application/json',body:JSON.stringify(published)}));
-  await page.goto('http://127.0.0.1:'+port+'/lft-test/index.html',{waitUntil:'domcontentloaded'});
-  await page.waitForFunction(()=>window.__ricoLftTestOpened===true);
+  await page.goto('http://127.0.0.1:'+port+'/index.html',{waitUntil:'domcontentloaded'});
+  // The experimental branch loads only its original app; select the public LFT row
+  // using the very same PLAY button used on the isolated preview.
+  await page.locator('.rico-community-catalog-row')
+    .filter({hasText:'LFT — Playlist by RICO'})
+    .getByRole('button',{name:'PLAY',exact:true}).click({timeout:30000});
   const started=await page.waitForFunction(()=>window.RicoLftMode?.active()&&
     window.sidPlayer?.isPlaying&&window.sidPlayer?.sidList?.length===66,null,{timeout:60000});
   assert.ok(started);
