@@ -12,7 +12,7 @@ on:
 jobs:
   test-lft-sids:
     name: LFT reference PCM via isolated WASM
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
     timeout-minutes: 10
