@@ -1,0 +1,26 @@
+name: TEST178 LFT three-voice scope
+on:
+  push:
+    branches: [test178-lft-3voice-scope]
+    paths:
+      - 'lft-test/**'
+      - 'scripts/test-lft-per-track.mjs'
+      - '.github/workflows/test178-lft.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright@1.55.1
+          npx playwright install chromium
+      - name: Test LFT song routing in real SpotySid page
+        run: node scripts/test-lft-per-track.mjs
