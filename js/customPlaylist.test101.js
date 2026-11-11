@@ -380,6 +380,14 @@
   var activePublicCollection = null;
   // TEST170: NO HVSC-only visual subgroups; preserve original SID order.
   var NO_HVSC_COLLECTION_ID='00000000-0000-4000-8000-000000000001';
+  // TEST170 FIX1: verified by the curator as one artist. The three
+  // SID binaries were archived together on 2026-11-10. Preserve their
+  // original header credits; this overrides artist GROUPING only.
+  var NO_HVSC_ARTIST_OVERRIDES={
+    '72036d4c4426f9284b9e8052c5db916b7a5fb8ea842e0e1b824addb326466899':'Uctumi',
+    '0d1bab81f0371a13fab1fbff83adf56485f0a985914a313791f61a5041b982ae':'Uctumi',
+    'a6d5e428666d2fab00ad408d02facc9b938c1bab5f148d79653d168f39519860':'Uctumi'
+  };
   // TEST95: ranked TOP 100 sources retain their published order and entries.
   var loadedRankedPlaylist=false;
   // TEST132: render ranked releases in the standard floating playlist.
@@ -1756,7 +1764,7 @@
     var groups=new Map(),authors=activePublicCollection.artistBySidId||{};
     list.forEach(function(item,index){
       var ref=activeReferenceTracks[index];
-      var artist=ref&&ref.sidId?authors[ref.sidId]:'';
+      var artist=ref&&ref.sidId?(NO_HVSC_ARTIST_OVERRIDES[ref.sidId]||authors[ref.sidId]):'';
       var label=noHvscArtistLabel(artist||(item&&item.author));
       var key=label.toLocaleLowerCase();
       if(!groups.has(key))groups.set(key,{label:label,indices:[]});
