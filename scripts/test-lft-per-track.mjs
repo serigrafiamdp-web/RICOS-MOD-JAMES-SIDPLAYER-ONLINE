@@ -10,7 +10,7 @@ import assert from 'node:assert/strict';
 
 const root=resolve(fileURLToPath(new URL('../',import.meta.url)));
 const pack=await readFile(resolve(root,'library/packs/musicians/L/Lft.zip'));
-function nineBytes(){
+function sidBytes(filename){
   let end=-1;
   for(let i=pack.length-22;i>=Math.max(0,pack.length-65558);i--)
     if(pack.readUInt32LE(i)===0x06054b50){end=i;break;}
@@ -19,14 +19,14 @@ function nineBytes(){
   while(n--){
     const len=pack.readUInt16LE(p+28),extra=pack.readUInt16LE(p+30),comment=pack.readUInt16LE(p+32);
     const name=pack.subarray(p+46,p+46+len).toString();
-    if(name==='Nine.sid'){
+    if(name===filename){
       const at=pack.readUInt32LE(p+42);
       const start=at+30+pack.readUInt16LE(at+26)+pack.readUInt16LE(at+28);
       return [...inflateRawSync(pack.subarray(start,start+pack.readUInt32LE(p+20)))];
     }
     p+=46+len+extra+comment;
   }
-  throw new Error('Nine not found');
+  throw new Error(filename+' not found');
 }
 const server=createServer(async(req,res)=>{
   try{
@@ -184,6 +184,30 @@ try{
     await page.evaluate(()=>window.RicoLftMode.scopeRegisters())));
   console.log('TEST178 Rodents three traces '+JSON.stringify(
     rodentTraces.at(-1).traces.map(({buffer,peak,nonzero})=>({buffer,peak,nonzero}))));
+
+  // Test genuine polyphonic LFT compositions as well; Nine/Rodents might
+  // happen to use only one SID voice at the sampled time.
+  const polyTunes=['A_Mind_Is_Born.sid','Scene_Spirit.sid',
+    'A_Chipful_of_Love_for_You.sid','Cherry_Waffle.sid','Fargo.sid'];
+  const polyResults=[];
+  for(const file of polyTunes){
+    const bytes=sidBytes(file);
+    const ref={pack:lft.pack,file};
+    await page.evaluate(({bytes,ref})=>{
+      window.RicoLftMode.approveTrustedReference(ref);
+      window.sidPlayer.loadSIDData(new Uint8Array(bytes));
+    },{bytes,ref});
+    await page.waitForFunction(()=>window.RicoLftMode.playingApproved(),null,{timeout:15000});
+    await page.waitForTimeout(800);
+    const snapshot=await sampleScope();
+    const info={file,regs:await page.evaluate(()=>window.RicoLftMode.scopeRegisters()),
+      traces:snapshot.traces.map(t=>({peak:t.peak,nonzero:t.nonzero}))};
+    polyResults.push(info);
+  }
+  console.log('TEST178 polyphony matrix '+JSON.stringify(polyResults));
+  assert.ok(polyResults.some(t=>t.traces.filter(v=>v.nonzero>20).length>=2),
+    'No additional LFT song yields two concurrent SID voices');
+
 
   console.log('TEST177 '+JSON.stringify({startup:auto,first,addStatus,normalState,last,errors}));
   assert.equal(errors.filter(x=>/lft|wasm|reSID|TypeError/i.test(x)).length,0,
