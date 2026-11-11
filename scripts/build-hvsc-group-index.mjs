@@ -22,26 +22,27 @@ for(const item of ranking.items){
 }
 const shelves=[...manifest.categories.musicians.shelves,
   ...manifest.categories.demos.shelves];
-let inspected=0,matched=0;
+let inspected=0,matched=0,skipped=0;
 for(const shelf of shelves){
   const data=await read(shelf.file);
   assert.ok(Array.isArray(data.sections));
   for(const section of data.sections){
-    assert.ok(section.pack&&Array.isArray(section.tracks));
+    if(!Array.isArray(section.tracks)||!section.tracks.length)continue;
     for(const tune of section.tracks){
       inspected++;
       // PSID/RSID "released" is a credit, not a CSDb release ID.
       // A group is associated *only* when the credit exactly matches
       // a group already known and named in CSDb's ranking.
       const credit=String(tune.released||'')
-        .replace(/^\s*(?:\d{4}|\d{2}[\d?]{2})\s+/,'').trim();
+        .replace(/^\s*\d{2}[\d?]{2}(?:-\d{2,4})?\s+/,'').trim();
       const group=groups.get(norm(credit));
       if(!group)continue;
-      assert.ok(tune.file&&section.pack);
-      const key=section.pack+'::'+tune.file;
+      const pack=tune.pack||section.pack;
+      if(!pack||!tune.file){skipped++;continue;}
+      const key=pack+'::'+tune.file;
       if(group.tracks.has(key))continue;
       group.tracks.set(key,{
-        pack:section.pack,file:tune.file,title:tune.title||tune.file,
+        pack:pack,file:tune.file,title:tune.title||tune.file,
         author:tune.author||'',released:tune.released||'',bytes:tune.bytes||0
       });
       matched++;
@@ -82,7 +83,7 @@ const index={format:'ricos-hvsc-groups',version:1,
    shelves:shelfIndex}};
 await writeFile(path.join(dir,'index.json'),JSON.stringify(index,null,2)+'\n');
 assert.ok(matched>0,'No CSDb/HVSC group matches found');
-console.log(JSON.stringify({status:'TEST179 generated',inspected,matched,
+console.log(JSON.stringify({status:'TEST179 generated',inspected,matched,skipped,
  groups:attributedGroups,buckets:shelfIndex.length,
  examples:[...groups.values()].filter(x=>x.tracks.size)
   .sort((a,b)=>b.tracks.size-a.tracks.size)
