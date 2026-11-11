@@ -150,5 +150,6 @@ and testing patched 3.1.2-or-later binaries.
 - https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2026-111148
 
 **TEST175 status:** source fix + automated Chromium end-to-end PASS;
-GitHub Pages /lft-test/ deployment pending verification; user listening PASS
+GitHub Pages /lft-test/ preview deploy PASS (run 43063448820, commit
+1e27d7640fb4993163d8362ac799ff8544b295d7); user listening PASS
 pending. Production root player remains unchanged.
