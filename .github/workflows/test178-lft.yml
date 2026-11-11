@@ -5,6 +5,7 @@ on:
     paths:
       - 'lft-test/**'
       - 'scripts/test-lft-per-track.mjs'
+      - 'scripts/test-lft-wave-pcm.mjs'
       - '.github/workflows/test178-lft.yml'
   workflow_dispatch:
 permissions:
@@ -18,6 +19,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Test bit-exact PCM with 1024-sample waveform snapshots
+        run: node scripts/test-lft-wave-pcm.mjs
       - name: Install Chromium
         run: |
           npm install --no-save playwright@1.55.1
