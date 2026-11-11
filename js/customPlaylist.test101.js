@@ -4566,7 +4566,7 @@
         try{
           var data=shelfCache[item.file];
           if(!data){
-            var res=await fetch(item.file);
+            var res=await fetch(item.file, category==='groups'?{cache:'no-store'}:undefined);
             if(!res.ok)throw Error('Shelf unavailable ('+res.status+').');
             data=await res.json();shelfCache[item.file]=data;
           }
