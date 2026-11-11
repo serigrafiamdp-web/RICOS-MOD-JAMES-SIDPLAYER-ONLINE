@@ -1,0 +1,44 @@
+{
+  "format": "spotysid-group-migration",
+  "version": 1,
+  "group": "The Codeblasters",
+  "source": "CSDb group 11132 + HVSC #85 published SpotySid packs",
+  "additions": [
+    {
+      "pack": "library/packs/musicians/U/Uctumi.zip",
+      "file": "Arte_Poetica_Testicular.sid",
+      "title": "Arte Poetica Testicular",
+      "artist": "Esteban Palladino (Uctumi)"
+    },
+    {
+      "pack": "library/packs/musicians/U/Uctumi.zip",
+      "file": "Broken_and_Fixed.sid",
+      "title": "Broken and Fixed",
+      "artist": "Esteban Palladino (Uctumi)"
+    },
+    {
+      "pack": "library/packs/musicians/U/Uctumi.zip",
+      "file": "Ideas_del_Culo.sid",
+      "title": "Ideas del Culo",
+      "artist": "Esteban Palladino (Uctumi)"
+    },
+    {
+      "pack": "library/packs/musicians/D/DJ_Space.zip",
+      "file": "Ultimate_Weapon.sid",
+      "title": "Ultimate Weapon",
+      "artist": "Thanos B. (DJ Space)"
+    },
+    {
+      "pack": "library/packs/musicians/D/DJ_Space.zip",
+      "file": "Conformer.sid",
+      "title": "Conformer",
+      "artist": "Thanos B. (DJ Space)"
+    },
+    {
+      "pack": "library/packs/demos/M-R.zip",
+      "file": "Mojo_Loop.sid",
+      "title": "Mojo Loop",
+      "artist": "Muzzarania"
+    }
+  ]
+}
