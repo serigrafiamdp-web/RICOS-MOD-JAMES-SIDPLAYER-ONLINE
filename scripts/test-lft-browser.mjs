@@ -83,6 +83,54 @@ try{
   assert.ok(!errors.some(x=>/LFT|WASM|sidplayfp/i.test(x)),
     'LFT-specific browser page errors: '+errors.join('; '));
   console.log('TEST173 Chromium PASS: LFT-only reSIDfp PCM & native restoration');
+
+  // TEST175 regression: run the real 66-SID published playlist through
+  // SpotySid's actual loadStoredPlaylist -> loadCustomIndex path.
+  // Previous test directly approved a source and therefore missed a loss of
+  // _hvscRef in the non-progressive (66-track) playlist loader.
+  const catalogFile=JSON.parse(await readFile(resolve(root,'library/data/musicians-L.json')));
+  const lftGroup=catalogFile.sections.find(x=>x.name==='Lft');
+  assert.equal(lftGroup.tracks.length,66);
+  const published={
+    format:'ricos-sid-playlist',version:2,name:'LFT',createdBy:'RICO',
+    tracks:lftGroup.tracks.map(t=>({
+      pack:lftGroup.pack,file:t.file,title:t.title,artist:t.author
+    }))
+  };
+  await page.route('https://ricos-sid-community.serigrafiamdp.workers.dev/playlists',route=>
+    route.fulfill({status:200,headers:{'access-control-allow-origin':'*'},
+      contentType:'application/json',body:JSON.stringify({
+        format:'ricos-community-catalog',version:1,
+        playlists:[{id:remoteId,title:'LFT',createdBy:'RICO',tracks:66}]
+      })}));
+  await page.route('https://ricos-sid-community.serigrafiamdp.workers.dev/playlists/'+remoteId,route=>
+    route.fulfill({status:200,headers:{'access-control-allow-origin':'*'},
+      contentType:'application/json',body:JSON.stringify(published)}));
+  await page.goto('http://127.0.0.1:'+port+'/lft-test/index.html',{waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>window.__ricoLftTestOpened===true);
+  const started=await page.waitForFunction(()=>window.RicoLftMode?.active()&&
+    window.sidPlayer?.isPlaying&&window.sidPlayer?.sidList?.length===66,null,{timeout:60000});
+  assert.ok(started);
+  const actual=await page.evaluate(async()=>{
+    for(let i=0;i<30;i++){
+      const buffer=window.SID.getResampleBuffer();
+      if(buffer instanceof Float32Array&&buffer.some(v=>Math.abs(v)>0.001))
+        break;
+      await new Promise(resolve=>setTimeout(resolve,100));
+    }
+    const buffer=window.SID.getResampleBuffer();
+    let peak=0;for(const v of buffer)peak=Math.max(peak,Math.abs(v));
+    return {active:window.RicoLftMode.active(),playing:window.sidPlayer.isPlaying,
+      songCount:window.sidPlayer.sidList.length,
+      index:window.sidPlayer.sidListIndex,peak};
+  });
+  console.log('TEST175 actual published LFT playlist '+JSON.stringify(actual));
+  assert.equal(actual.active,true,'LFT backend switched itself off during playlist import');
+  assert.equal(actual.playing,true,'LFT playback never started');
+  assert.equal(actual.songCount,66,'Unexpected list size');
+  assert.ok(actual.peak>0.001,'No experimental LFT PCM after 66-track load');
+  console.log('TEST175 PASS: real 66-track SpotySid playlist uses reSIDfp, not TinySID.');
+
 }finally{
   if(browser)await browser.close();
   await new Promise(resolve=>server.close(resolve));
