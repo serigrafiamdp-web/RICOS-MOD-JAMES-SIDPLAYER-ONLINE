@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS submissions (ip_hash TEXT NOT NULL, created_ms INTEGE
 CREATE INDEX IF NOT EXISTS submissions_ip_time ON submissions(ip_hash,created_ms);
 
 -- TEST83: independent user-contributed SID collection, NOT an HVSC entry.
--- Store immutable SID bytes in Cloudflare R2; D1 holds hashes + collection references.
+-- SID bytes reside in the configured asset provider (GitHub or R2); D1 stores hashes, provenance and references.
 CREATE TABLE IF NOT EXISTS sid_assets (
   id TEXT PRIMARY KEY,
   size INTEGER NOT NULL,
