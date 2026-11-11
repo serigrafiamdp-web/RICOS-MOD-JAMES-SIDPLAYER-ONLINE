@@ -6,6 +6,9 @@
   'use strict';
   if(!window.sidPlayer||!window.SID||window.RicoLftMode)return;
   var player=window.sidPlayer, sid=window.SID;
+  // Resolve WASM from this script's URL, independent of the HTML page/base URL.
+  var engineScriptUrl=document.currentScript&&document.currentScript.src;
+  var engineModuleUrl=new URL('./lft-wasm/index.js',engineScriptUrl||document.baseURI).href;
   var PACK='library/packs/musicians/L/Lft.zip';
   // TEST177: immutable 66-file approval list taken from HVSC #85 musician index.
   // This is a reference allowlist, not a filename/author guess.
@@ -284,7 +287,7 @@
       var instance=null;
       try{
         player.initWebAudio();
-        var lib=await import('./lft-wasm/index.js');
+        var lib=await import(engineModuleUrl);
         instance=new lib.SidAudioEngine({
           engine:'residfp',sampleRate:player.sampleRate||44100,stereo:false,cacheSecondsLimit:2
         });
