@@ -4,7 +4,7 @@
   "source": "HVSC #85 (explicit PSID release credit) + CSDb TOP 100 GROUPS",
   "scope": "Only exact release-credit matches to known CSDb group names. Not a complete CSDb or HVSC group affiliation catalog.",
   "groups": {
-    "count": 10379,
+    "count": 10385,
     "totalGroups": 84,
     "rankedGroups": 100,
     "shelves": [
@@ -107,7 +107,7 @@
       {
         "name": "T",
         "file": "library/groups/groups-T.json",
-        "count": 871,
+        "count": 877,
         "groups": 6
       },
       {
