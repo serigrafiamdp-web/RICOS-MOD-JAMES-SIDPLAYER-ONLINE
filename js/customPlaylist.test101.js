@@ -2217,6 +2217,8 @@
       : 'Original 22 SID playlist. Your local files remain available in CUSTOM.');
   }
   function activate(mode) {
+    // TEST173: leaving custom playback restores native TinySID immediately.
+    if(mode!=='custom'&&window.RicoLftMode)window.RicoLftMode.deactivate();
     resetCsdbRankDisplay();
     resetSoftTransition(true);
     var wantCustom = mode === 'custom';
@@ -2343,6 +2345,8 @@
   // Browser file handles are kept in memory. Upload is never sent to GitHub.
   async function importFiles(inputFiles) {
     if (importing) return;
+    // A new manual import is never the published LFT list.
+    if(window.RicoLftMode)window.RicoLftMode.deactivate();
     var files = Array.from(inputFiles || []).filter(function (file) {
       return file && file.size >= 118; // Validate actual PSID/RSID header, not extension.
     });
@@ -2638,6 +2642,8 @@
       return entries;
     }
     function loadPlaylist(data,startIndex,localImport,ranked) {
+      // Legacy/local source: preserve unchanged TinySID behavior.
+      if(window.RicoLftMode)window.RicoLftMode.deactivate();
       resetCsdbRankDisplay();
       resetSoftTransition(true);
       if(activeReferenceStream){activeReferenceStream.cancel();activeReferenceStream=null;}
@@ -2809,7 +2815,11 @@
     }
     // TEST61: reference-only playlists resolve SID files from one immutable HVSC base.
     // Existing v1 playlists with embedded SID remain fully supported.
-    async function loadStoredPlaylist(data,localImport) {
+    async function loadStoredPlaylist(data,localImport,sourceRemoteId) {
+      // Only the published LFT collection with verified Lft.zip references
+      // can enable the separate reSIDfp WASM experiment. Every other
+      // playlist restores native TinySID before its first SID is loaded.
+      if(window.RicoLftMode)await window.RicoLftMode.prepare(data,sourceRemoteId||null);
       resetCsdbRankDisplay();
       resetSoftTransition(true);
       if(activeReferenceStream){activeReferenceStream.cancel();activeReferenceStream=null;}
@@ -4145,7 +4155,7 @@
               // Ignore a late auto-load if the visitor picked a different source.
               if(isStartup && !startupPlaylistPending) return;
               if(isStartup) cancelStartupPlaylist();
-              await loadStoredPlaylist(chosen); // SID order and original public record remain untouched.
+              await loadStoredPlaylist(chosen,false,item.remoteId||null); // Only published LFT may use TEST173.
               activeCuratedCatalogId=!item.remoteId&&item.id==='old-sid-collection-rico'
                 ? item.id:null;
               activeRemixDraftId=pending?pending.id:null;
