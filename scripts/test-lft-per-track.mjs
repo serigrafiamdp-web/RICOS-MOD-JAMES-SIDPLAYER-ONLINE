@@ -205,8 +205,8 @@ try{
     polyResults.push(info);
   }
   console.log('TEST178 polyphony matrix '+JSON.stringify(polyResults));
-  assert.ok(polyResults.some(t=>t.traces.filter(v=>v.nonzero>20).length>=2),
-    'No additional LFT song yields two concurrent SID voices');
+  assert.ok(polyResults.some(t=>t.traces.every(v=>v.nonzero>20&&v.peak<0.035)),
+    'No polytimbral LFT song produced three independent and bounded scope traces');
 
 
   console.log('TEST177 '+JSON.stringify({startup:auto,first,addStatus,normalState,last,errors}));
