@@ -6,6 +6,38 @@
       "name": "The Codeblasters",
       "tracks": [
         {
+          "pack": "library/packs/musicians/U/Uctumi.zip",
+          "file": "Arte_Poetica_Testicular.sid",
+          "title": "Arte Poetica Testicular",
+          "author": "Esteban Palladino (Uctumi)",
+          "released": "2023 Codeblasters",
+          "bytes": 2501
+        },
+        {
+          "pack": "library/packs/musicians/U/Uctumi.zip",
+          "file": "Broken_and_Fixed.sid",
+          "title": "Broken and Fixed",
+          "author": "Esteban Palladino (Uctumi)",
+          "released": "2021 Codeblasters",
+          "bytes": 2113
+        },
+        {
+          "pack": "library/packs/musicians/D/DJ_Space.zip",
+          "file": "Conformer.sid",
+          "title": "Conformer",
+          "author": "Thanos B. (DJ Space)",
+          "released": "2025 DGS Game Studio & DJ Space (Conformer OST by The Codeblasters)",
+          "bytes": 16765
+        },
+        {
+          "file": "Fear_Not.sid",
+          "title": "Fear Not",
+          "author": "Thanos B. (DJ Space)",
+          "released": "2025 The Codeblasters",
+          "bytes": 4776,
+          "pack": "library/packs/musicians/D/DJ_Space.zip"
+        },
+        {
           "file": "Free_Hasel.sid",
           "title": "Free Hasél",
           "author": "Esteban Palladino (Uctumi)",
@@ -22,12 +54,28 @@
           "pack": "library/packs/musicians/U/Uctumi.zip"
         },
         {
-          "file": "Fear_Not.sid",
-          "title": "Fear Not",
+          "pack": "library/packs/musicians/U/Uctumi.zip",
+          "file": "Ideas_del_Culo.sid",
+          "title": "Ideas del Culo",
+          "author": "Esteban Palladino (Uctumi)",
+          "released": "2021 The Codeblasters",
+          "bytes": 2994
+        },
+        {
+          "pack": "library/packs/demos/M-R.zip",
+          "file": "Mojo_Loop.sid",
+          "title": "Mojo Loop",
+          "author": "Muzzarania",
+          "released": "2021 The Codeblasters",
+          "bytes": 3512
+        },
+        {
+          "pack": "library/packs/musicians/D/DJ_Space.zip",
+          "file": "Ultimate_Weapon.sid",
+          "title": "Ultimate Weapon",
           "author": "Thanos B. (DJ Space)",
-          "released": "2025 The Codeblasters",
-          "bytes": 4776,
-          "pack": "library/packs/musicians/D/DJ_Space.zip"
+          "released": "2024 The Codeblasters",
+          "bytes": 4170
         }
       ]
     },
