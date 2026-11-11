@@ -10,6 +10,10 @@
   var engineScriptUrl=document.currentScript&&document.currentScript.src;
   var engineModuleUrl=new URL('./lft-wasm/index.js',engineScriptUrl||document.baseURI).href;
   var PACK='library/packs/musicians/L/Lft.zip';
+  // TEST188: exact known HVSC source for the Uctumi 8580 filter regression.
+  // No general Uctumi or filename-based routing.
+  var UCTUMI_PACK='library/packs/musicians/U/Uctumi.zip';
+  var UCTUMI_8580=new Map([['Loco_un_Poco.sid',6641]]);
   // TEST177: immutable 66-file approval list taken from HVSC #85 musician index.
   // This is a reference allowlist, not a filename/author guess.
   var APPROVED=new Map([["A_Chipful_of_Love_for_You.sid",5294],["A_Computer_in_My_Backpack.sid",4990],["A_Mind_Is_Born.sid",380],["Air_on_a_Rasterline.sid",2978],["Allt_under_himmelens_faeste.sid",6619],["Allt_under_himmelens_faeste_v2.sid",6569],["Arrow_of_Time.sid",6270],["Cherry_Waffle.sid",5758],["Computational_Soup_2KB.sid",614],["Crank_Crank_Airwolf.sid",2686],["Crank_Crank_Revolution.sid",3710],["Dishwasher_Groove.sid",4990],["Dithered_Island.sid",6270],["Elvendance.sid",4734],["Euclid_Was_Here.sid",6270],["Fargo.sid",4222],["Fjaellevator_Music.sid",5502],["Foerklaedd_Gud_alpha.sid",4740],["Foerklaedd_Gud_beta.sid",4162],["Foerklaedd_Gud_delta.sid",4235],["Foerklaedd_Gud_epsilon.sid",3173],["Foerklaedd_Gud_eta.sid",3532],["Foerklaedd_Gud_gamma.sid",3280],["Foerklaedd_Gud_zeta.sid",3574],["Fratres_Arvo_Paert_2SID.sid",7435],["Fugue_on_a_Theme_by_D_M_Hanlon.sid",3198],["Glyptodont.sid",6270],["Hachi_Bitto_Whirlwind.sid",6526],["Hardsync.sid",4943],["In_Darkness_Hope.sid",6270],["Into_the_Unknown.sid",5502],["King_Fisher_0x28.sid",5463],["Lunatico_End.sid",1022],["Lunatico_Note.sid",6270],["Lunatico_Side_1.sid",5502],["Lunatico_Side_2.sid",5502],["Machine_Yearning_2SID.sid",6313],["Maple_Leaf_Rag.sid",3966],["Nine.sid",4478],["Nymphaea.sid",4754],["Perfectly_Well-Adjusted.sid",5758],["Perpetual_Fragility.sid",435],["Platform_Hopping.sid",12925],["Quintessence.sid",5758],["Quondam_Tunneling.sid",4734],["Racing_the_Beam.sid",6782],["Reminiscence.sid",5502],["Revolutions_Delivered.sid",5246],["Rodents_in_the_Attic.sid",5246],["Scene_Spirit.sid",8176],["Scene_Spirit_v2.sid",7038],["Shards_of_Fancy.sid",4950],["Sideways.sid",8956],["Slaepwerigne.sid",6795],["Sommargubbe.sid",6782],["Specular_Highlight.sid",9813],["Spin_Crazy_World.sid",6014],["Summer_Cloud.sid",6205],["Summer_Cloud_v2.sid",5502],["Thus_Spoke_the_PC_Speaker.sid",6270],["To_Die_For.sid",4734],["To_Die_For_II.sid",3966],["Toy_Rocket.sid",5758],["Trinket.sid",3454],["Withering_Bytes.sid",5246],["Your_Heptacular_Eyes.sid",6526]]);
@@ -82,7 +86,7 @@
     }
   }
   var fillTask=null, lastBytes=null, currentSong=0, songReady=false;
-  var approvedNext=null, initTask=null, requestSerial=0;
+  var approvedNext=null, initTask=null, requestSerial=0, active8580=false;
   var MODE_OFF=/(?:^|[?&])lftmode=off(?:&|$)/i.test(String(window.location&&window.location.search||''));
 
   function eligible(data,remoteId){
@@ -96,14 +100,15 @@
       });
   }
   function eligibleRef(ref){
-    return !MODE_OFF && !!ref && !ref.sidId && ref.pack===PACK &&
-      typeof ref.file==='string' && APPROVED.has(ref.file);
+    return !MODE_OFF && !!ref && !ref.sidId && typeof ref.file==='string' &&
+      ((ref.pack===PACK && APPROVED.has(ref.file)) ||
+       (ref.pack===UCTUMI_PACK && UCTUMI_8580.has(ref.file)));
   }
   function syncModeLabel(){
     var title=document.getElementById('ricoLivePlaylistTitle');
     if(!title)return;
     var base=title.textContent.replace(/ · LFT MODE ON$/,'');
-    title.textContent=base+((active&&songReady&&player.isPlaying)?' · LFT MODE ON':'');
+    title.textContent=base+((!active8580&&active&&songReady&&player.isPlaying)?' · LFT MODE ON':'');
   }
   function sidHeaderOK(bytes){
     if(!(bytes instanceof Uint8Array)||bytes.length<0x7c||bytes.length>256*1024)return false;
@@ -128,8 +133,8 @@
   function songMeta(bytes){
     var songs=Math.max(1,be16(bytes,14)),start=Math.max(0,Math.min(songs-1,be16(bytes,16)-1));
     return {loadAddr:be16(bytes,8),playSpeed:0,maxSubsong:songs-1,
-      actualSubsong:start,songName:credit(bytes,22)||'LFT SID',
-      songAuthor:credit(bytes,54)||'Linus Åkesson (lft)',
+      actualSubsong:start,songName:credit(bytes,22)||'SID',
+      songAuthor:credit(bytes,54)||'Unknown',
       songReleased:credit(bytes,86)||''};
   }
   function errorText(error){return error&&error.message?error.message:String(error);}
@@ -198,7 +203,7 @@
   }
   function deactivate(){
     epoch++;trackEpoch++;requestSerial++;
-    active=false;songReady=false;lastBytes=null;approvedNext=null;initTask=null;
+    active=false;songReady=false;lastBytes=null;approvedNext=null;initTask=null;active8580=false;
     queue=[];frame=quiet;
     resetVoiceState();
     syncModeLabel();
@@ -249,6 +254,12 @@
       song=Math.max(0,Math.min(meta.maxSubsong,song));
       await local.loadSidBuffer(bytes,song);
       if(!active||sequence!==trackEpoch||engine!==local)return;
+      // TEST188: explicitly select MOS8580 for Loco un Poco only.
+      // ReSIDfp applies the model and reloads this SID from its start.
+      if(active8580){
+        await local.setEmulationConfig({sidModel:'MOS8580',forceSidModel:true});
+        if(!active||sequence!==trackEpoch||engine!==local)return;
+      }
       // The original TinySID loader normally resets this flag. LFT's bridge
       // must do it too, or a stale fourth-voice lane survives a playlist switch.
       player.sidHasSamples=false;
@@ -323,13 +334,18 @@
     }
     // Prevent arbitrary imported SIDs from entering the older test-only
     // WebAssembly binary, even if called with a forged source reference.
-    if(!sidHeaderOK(bytes)||bytes.length!==APPROVED.get(ref.file)){
+    var route8580=ref.pack===UCTUMI_PACK && UCTUMI_8580.has(ref.file);
+    var expectedSize=route8580?UCTUMI_8580.get(ref.file):APPROVED.get(ref.file);
+    if(!sidHeaderOK(bytes)||bytes.length!==expectedSize){
       if(active||initTask||engine)deactivate();
       return nativeLoad.apply(this,arguments);
     }
+    // Do not carry a forced 8580 model over into Linus or other tracks.
+    if(active8580&&!route8580)deactivate();
     var serial=++requestSerial,sidBytes=new Uint8Array(bytes);
     void (async function(){
       if(!await ensureEngine()||serial!==requestSerial)return;
+      active8580=route8580;
       await startSong(sidBytes,null,true);
     })().catch(function(error){
       if(serial!==requestSerial)return;
@@ -349,7 +365,7 @@
   }
   window.RicoLftMode={prepare:prepare,deactivate:deactivate,eligible:eligible,
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
-    active:function(){return active;},playingApproved:function(){return active&&songReady&&player.isPlaying;},
+    active:function(){return active;},playingApproved:function(){return !active8580&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
-    version:'TEST178-three-voices'};
+    version:'TEST188-uctumi-8580'};
 })();
