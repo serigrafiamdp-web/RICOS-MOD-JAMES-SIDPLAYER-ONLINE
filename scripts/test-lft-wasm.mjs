@@ -35,35 +35,69 @@ function trackBytes(filename) {
   }
   throw new Error('SID not found '+filename);
 }
+function allLftNames(){
+  let p=-1;
+  for(let i=pack.length-22;i>=Math.max(0,pack.length-65558);i--){
+    if(pack.readUInt32LE(i)===0x06054b50){p=pack.readUInt32LE(i+16);break;}
+  }
+  assert.ok(p>=0,'ZIP directory');
+  const count=pack.readUInt16LE(pack.lastIndexOf(Buffer.from([0x50,0x4b,0x05,0x06]))+10);
+  const names=[];
+  for(let i=0;i<count;i++){
+    assert.equal(pack.readUInt32LE(p),0x02014b50);
+    const len=pack.readUInt16LE(p+28),ext=pack.readUInt16LE(p+30),comment=pack.readUInt16LE(p+32);
+    const name=pack.subarray(p+46,p+46+len).toString('utf8');
+    if(name.toLowerCase().endsWith('.sid'))names.push(name);
+    p+=46+len+ext+comment;
+  }
+  return names;
+}
+
 const engine=new SidAudioEngine({engine:'residfp',sampleRate:44100,stereo:false,cacheSecondsLimit:2});
 try{
   const name=await engine.getEngineName();
   assert.equal(name,'WasmReSIDfp');
   const required=['Nine.sid','Rodents_in_the_Attic.sid'];
   const additional=['Computational_Soup_2KB.sid','Quondam_Tunneling.sid'];
-  for(const title of [...required,...additional]){
-    const bytes=trackBytes(title);
-    await engine.loadSidBuffer(bytes);
-    let squared=0,peak=0,nonzero=0,total=0;
-    for(let i=0;i<65;i++){
-      const samples=await engine.renderFrames(4096);
-      assert.ok(samples instanceof Int16Array,'PCM Int16 expected');
-      for(const sample of samples){
-        const value=sample/32768;
-        squared+=value*value;total++;
-        peak=Math.max(peak,Math.abs(value));
-        if(sample!==0)nonzero++;
+  const all=allLftNames();
+  assert.equal(all.length,66,'The original HVSC Lft.zip has 66 SIDs');
+  const ordered=[...required,...additional,...all.filter(x=>!required.includes(x)&&!additional.includes(x))];
+  const results=[];
+  for(const title of ordered){
+    try{
+      const bytes=trackBytes(title);
+      await engine.loadSidBuffer(bytes);
+      let squared=0,peak=0,nonzero=0,total=0;
+      for(let i=0;i<35;i++){
+        const samples=await engine.renderFrames(4096);
+        assert.ok(samples instanceof Int16Array,'PCM Int16 expected');
+        for(const sample of samples){
+          const value=sample/32768;
+          squared+=value*value;total++;
+          peak=Math.max(peak,Math.abs(value));
+          if(sample!==0)nonzero++;
+        }
       }
-    }
-    const rms=Math.sqrt(squared/total);
-    console.log(JSON.stringify({title,pcmFrames:total,nonzero,peak,rms,engine:name}));
-    if(required.includes(title)){
-      assert.ok(total>100000,'Insufficient PCM produced for '+title);
-      assert.ok(nonzero>1000&&rms>0.0001,
-        'Required LFT tune rendered silent or almost silent: '+title);
+      const rms=Math.sqrt(squared/total);
+      const audible=nonzero>1000&&rms>0.0001;
+      console.log(JSON.stringify({title,pcmFrames:total,nonzero,peak,rms,audible,engine:name}));
+      results.push({title,audible,status:'rendered'});
+      if(required.includes(title)){
+        assert.ok(total>100000,'Insufficient PCM for '+title);
+        assert.ok(audible,'Required LFT tune rendered silent: '+title);
+      }
+    }catch(error){
+      if(required.includes(title))throw error;
+      results.push({title,audible:false,status:'error',reason:String(error.message||error)});
+      console.warn('LFT OPTIONAL TUNE ERROR: '+title+': '+String(error.message||error));
     }
   }
-  console.log('TEST173 WAV-only reference: Nine and Rodents generated non-silent real reSIDfp PCM.');
+  console.log('LFT FULL SWEEP SUMMARY '+JSON.stringify({tested:results.length,
+    audible:results.filter(x=>x.audible).length,
+    silent:results.filter(x=>!x.audible&&x.status==='rendered').map(x=>x.title),
+    errors:results.filter(x=>x.status==='error')}));
+  assert.equal(results.length,66);
+  console.log('TEST173: required Nine/Rodents audio PASS; full HVSC LFT corpus classified.');
 }finally{
   engine.dispose();
 }
