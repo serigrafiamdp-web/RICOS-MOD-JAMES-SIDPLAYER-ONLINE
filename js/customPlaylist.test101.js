@@ -378,6 +378,8 @@
   var activePublicPlaylist = null;
   // TEST94: loaded published contributed SID collection; reorder only its references.
   var activePublicCollection = null;
+  // TEST170: NO HVSC-only visual subgroups; preserve original SID order.
+  var NO_HVSC_COLLECTION_ID='00000000-0000-4000-8000-000000000001';
   // TEST95: ranked TOP 100 sources retain their published order and entries.
   var loadedRankedPlaylist=false;
   // TEST132: render ranked releases in the standard floating playlist.
@@ -684,7 +686,9 @@
     queuedLiveIndex=relocateCursor(queuedLiveIndex,index,destination);
     renderLivePlaylist();
     var scroller=document.getElementById('ricoLivePlaylistItems');
-    var movedRow=scroller&&scroller.children[destination];
+    var movedRow=scroller&&(activePublicCollection&&activePublicCollection.id===NO_HVSC_COLLECTION_ID
+      ?scroller.querySelector('.rico-live-edit-row[data-sid-index="'+destination+'"]')
+      :scroller.children[destination]);
     if(movedRow){
       var moved=movedRow.getBoundingClientRect(),visible=scroller.getBoundingClientRect();
       if(moved.top<visible.top)scroller.scrollTop-=visible.top-moved.top+4;
@@ -1691,14 +1695,16 @@
     if(!painted||!scroller||!activeReferenceStream||list.length<1000||
        painted.stream!==activeReferenceStream||painted.list!==list||
        painted.revision!==largePlaylistStructureRevision||
-       painted.count!==list.length||scroller.children.length!==list.length)return false;
+       painted.count!==list.length||
+       (painted.rowsByIndex?painted.rowsByIndex.length!==list.length:
+         scroller.children.length!==list.length))return false;
     var active=typeof player.sidListIndex==='number'?player.sidListIndex:-1;
     var selected=typeof selectedLiveIndex==='number'?selectedLiveIndex:-1;
     var queued=typeof queuedLiveIndex==='number'?queuedLiveIndex:-1;
     var changed=new Set([painted.active,painted.selected,painted.queued,active,selected,queued]);
     changed.forEach(function(index){
       if(index<0||index>=list.length)return;
-      var wrapper=scroller.children[index];
+      var wrapper=painted.rowsByIndex?painted.rowsByIndex[index]:scroller.children[index];
       var row=wrapper&&(wrapper.matches('.rico-live-row')?wrapper:wrapper.querySelector('.rico-live-row'));
       if(!row)return;
       var nowActive=index===active,nowSelected=index===selected,nowQueued=index===queued;
@@ -1727,7 +1733,8 @@
     painted.active=active;painted.selected=selected;painted.queued=queued;
     if(followPlayingRowOnce&&liveVisible&&active>=0){
       followPlayingRowOnce=false;
-      var node=scroller.children[active],view=node&&node.getBoundingClientRect(),
+      var node=painted.rowsByIndex?painted.rowsByIndex[active]:scroller.children[active],
+        view=node&&node.getBoundingClientRect(),
         box=scroller.getBoundingClientRect();
       if(view){
         if(view.top<box.top)scroller.scrollTop-=box.top-view.top+4;
@@ -1737,6 +1744,30 @@
     return true;
   }
 
+  function noHvscArtistLabel(value){
+    var label=formatArtistCredit(String(value||'').trim());
+    if(!label||/^(?:unknown(?: artist)?|<\?>|\?+|n\/?a|unidentified|loading.*|unavailable.*)$/i.test(label))
+      return 'Unknown';
+    return label;
+  }
+  function buildNoHvscArtistGroups(list){
+    if(!activePublicCollection||activePublicCollection.id!==NO_HVSC_COLLECTION_ID||
+       !activeReferenceTracks||activeReferenceTracks.length!==list.length)return null;
+    var groups=new Map(),authors=activePublicCollection.artistBySidId||{};
+    list.forEach(function(item,index){
+      var ref=activeReferenceTracks[index];
+      var artist=ref&&ref.sidId?authors[ref.sidId]:'';
+      var label=noHvscArtistLabel(artist||(item&&item.author));
+      var key=label.toLocaleLowerCase();
+      if(!groups.has(key))groups.set(key,{label:label,indices:[]});
+      groups.get(key).indices.push(index);
+    });
+    return Array.from(groups.values()).sort(function(a,b){
+      if(a.label==='Unknown')return 1;
+      if(b.label==='Unknown')return -1;
+      return a.label.localeCompare(b.label,undefined,{sensitivity:'base'});
+    });
+  }
   function renderLivePlaylist() {
     // Ordinary short lists retain the original complete render behavior.
     if(!activeCsdbRankDisplay&&paintLargePlaylistMarkers())return;
@@ -1820,8 +1851,33 @@
       }
       return;
     }
+    // TEST170: reuse TEST134 DEMOS headings only for NO HVSC.
+    // Grouping is a view; underlying track and playback indices do not move.
+    var artistGroups=buildNoHvscArtistGroups(list);
+    var artistPositions=artistGroups?new Array(list.length):null;
+    var visualRows=artistGroups?[]:list.map(function(item,index){
+      return {item:item,index:index};
+    });
+    var groupedRowsByIndex=artistGroups?new Array(list.length):null;
+    if(artistGroups)artistGroups.forEach(function(group,position){
+      visualRows.push({heading:group,groupPosition:position});
+      group.indices.forEach(function(index,ordinal){
+        artistPositions[index]={indices:group.indices,position:ordinal};
+        visualRows.push({item:list[index],index:index});
+      });
+    });
     var nextCsdbRank=0;
-    list.forEach(function (item, index) {
+    visualRows.forEach(function (entry) {
+      if(entry.heading){
+        var heading=$('<div>').addClass('rico-csdb-live-heading');
+        $('<strong>').text('#'+(entry.groupPosition+1)+' '+entry.heading.label).appendTo(heading);
+        $('<span>').addClass('rico-csdb-live-status')
+          .text(entry.heading.indices.length+' SID').appendTo(heading);
+        heading.appendTo(holder);
+        return;
+      }
+      var item=entry.item,index=entry.index;
+
       if(activeCsdbRankDisplay){
         var rank=activeCsdbRankDisplay.trackRanks[index];
         while(nextCsdbRank<=rank&&nextCsdbRank<activeCsdbRankDisplay.items.length){
@@ -1831,6 +1887,7 @@
         }
       }
       var row = $('<button type="button">').addClass('rico-live-row');
+      if(artistGroups)row.attr('data-sid-index',index);
       var active = index === player.sidListIndex;
       if (active) row.addClass('rico-live-active').attr('aria-current', 'true');
       if(index===selectedLiveIndex)row.addClass('rico-live-selected');
@@ -1866,6 +1923,7 @@
       });
       if(!landingPlaylists){
         var wrap=$('<div>').addClass('rico-live-edit-row');
+        if(artistGroups){wrap.attr('data-sid-index',index);groupedRowsByIndex[index]=wrap[0];}
         row.appendTo(wrap);
         bindThemedPlaylistHint($('<button type="button">').addClass('rico-live-add').text('+')
           .attr('aria-label','Add '+songTitle+' to selected remix'),
@@ -1873,13 +1931,24 @@
           .on('click',function(event){event.stopPropagation();hideReorderHint();addRemixTrack(index);})
           .appendTo(wrap);
         if(customActive){
+        var artistPosition=artistPositions&&artistPositions[index];
+        var canMoveUp=artistPosition?artistPosition.position>0:index>0;
+        var canMoveDown=artistPosition
+          ?artistPosition.position<artistPosition.indices.length-1:index<list.length-1;
+        function moveWithinVisibleGroup(step){
+          if(!artistPosition){moveLiveSong(index,step);return;}
+          var next=Math.max(0,Math.min(artistPosition.indices.length-1,
+            artistPosition.position+step));
+          var destination=artistPosition.indices[next];
+          if(destination!==index)moveLiveSong(index,destination-index);
+        }
         bindReorderArrows($('<button type="button">').addClass('rico-live-move')
           .toggleClass('rico-ranked-disabled',loadedRankedPlaylist).text('↑')
-          .prop('disabled',loadedRankedPlaylist||savingCommunityEdits||index===0),-1,function(step){moveLiveSong(index,step);})
+          .prop('disabled',loadedRankedPlaylist||savingCommunityEdits||!canMoveUp),-1,moveWithinVisibleGroup)
           .appendTo(wrap);
         bindReorderArrows($('<button type="button">').addClass('rico-live-move')
           .toggleClass('rico-ranked-disabled',loadedRankedPlaylist).text('↓')
-          .prop('disabled',loadedRankedPlaylist||savingCommunityEdits||index===list.length-1),1,function(step){moveLiveSong(index,step);})
+          .prop('disabled',loadedRankedPlaylist||savingCommunityEdits||!canMoveDown),1,moveWithinVisibleGroup)
           .appendTo(wrap);
         if(!activePublicCollection){
         bindThemedPlaylistHint($('<button type="button">').addClass('rico-live-remove')
@@ -1892,7 +1961,10 @@
         }
         }
         wrap.appendTo(holder);
-      }else row.appendTo(holder);
+      }else{
+        if(artistGroups)groupedRowsByIndex[index]=row[0];
+        row.appendTo(holder);
+      }
     });
     if(activeCsdbRankDisplay){
       while(nextCsdbRank<activeCsdbRankDisplay.items.length){
@@ -1917,6 +1989,7 @@
     if(activeReferenceStream&&list.length>=1000){
       largePlaylistPainted={stream:activeReferenceStream,list:list,
         revision:largePlaylistStructureRevision,count:list.length,
+        rowsByIndex:groupedRowsByIndex,
         active:typeof player.sidListIndex==='number'?player.sidListIndex:-1,
         selected:typeof selectedLiveIndex==='number'?selectedLiveIndex:-1,
         queued:typeof queuedLiveIndex==='number'?queuedLiveIndex:-1};
@@ -4220,20 +4293,37 @@
                 if(!response.ok)throw Error('Published collection unavailable.');
                 var manifest=await response.json();
                 if(!Array.isArray(manifest.tracks)||!manifest.tracks.length||
-                   manifest.tracks.length>(c.id==='00000000-0000-4000-8000-000000000001'?2000:40))
+                   manifest.tracks.length>(c.id===NO_HVSC_COLLECTION_ID?2000:40))
                   throw Error('Invalid published collection.');
-                if(c.id==='00000000-0000-4000-8000-000000000001'){
+                if(c.id===NO_HVSC_COLLECTION_ID){
                   // TEST165: NO HVSC is a persistent asset archive, not a
                   // temporary v1 memory playlist. The v2 reference player
                   // also allows each archived SID to be sent to REMIX via +.
+                  // Read persisted SID header credit before progressive playback.
+                  // Metadata never changes the immutable asset or D1 ordering.
+                  var artistBySidId=Object.create(null),metaBySidId=new Map();
+                  try{
+                    var metaResponse=await fetch(communityWriteApi+'/no-hvsc',{cache:'no-store'});
+                    if(metaResponse.ok){
+                      var metaCatalog=await metaResponse.json();
+                      if(Array.isArray(metaCatalog.tracks))metaCatalog.tracks.forEach(function(t){
+                        if(t&&/^[a-f0-9]{64}$/.test(t.sidId))metaBySidId.set(t.sidId,t);
+                      });
+                    }
+                  }catch(metaError){console.warn('NO HVSC artist metadata unavailable',metaError);}
                   var refs=manifest.tracks.map(function(t){
                     if(!/^[0-9a-f]{64}$/.test(t.sidId)||!t.file)
                       throw Error('Invalid NO HVSC asset reference.');
-                    return {sidId:t.sidId,file:t.file};
+                    var metadata=metaBySidId.get(t.sidId);
+                    if(metadata&&metadata.author)artistBySidId[t.sidId]=metadata.author;
+                    return {sidId:t.sidId,file:t.file,
+                      title:(metadata&&metadata.title)||t.file,
+                      author:(metadata&&metadata.author)||'Unknown'};
                   });
                   await loadStoredPlaylist({format:'ricos-sid-playlist',version:2,
                     name:c.name,createdBy:c.creator,tracks:refs},false);
                   activePublicCollection={id:c.id,name:c.name,creator:c.creator,
+                    artistBySidId:artistBySidId,
                     originalTracks:refs.map(remixCanonicalRef),
                     tracks:refs.map(function(t,i){
                       return {sidId:t.sidId,file:t.file,originalIndex:i};
