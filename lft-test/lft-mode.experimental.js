@@ -17,7 +17,7 @@
   // TEST178: 3 visually independent voice traces. The PCM audio remains the
   // unaltered reSIDfp mixed signal; the traces estimate raw SID oscillators
   // from the *real emulated chip registers*, not from the mono audio mix.
-  var voiceFrames=[quiet,quiet,quiet], VOICE_SEGMENT=1024;
+  var voiceFrames=[quiet,quiet,quiet];
   var osc=[], latestRegs=null, C64_PAL_CLOCK=985248, SID_PHASE_RANGE=16777216;
   var ATTACK=[.002,.008,.016,.024,.038,.056,.068,.080,.100,.250,.500,.800,1.0,3.0,5.0,8.0];
   var DECAY=[.006,.024,.048,.072,.114,.168,.204,.240,.300,.750,1.50,2.40,3.0,9.0,15.0,24.0];
@@ -210,26 +210,24 @@
     var source=engine;
     fillTask=(async function(){
       while(active&&source===engine&&expected===trackEpoch&&queue.length<needed){
+        // Preserve the SAME 4096-frame render call used by TEST177. The
+        // visualizer only reads registers *after* the mixed PCM is finished:
+        // no additional emulation or change to the audible sample stream.
+        var pcm=await source.renderFrames(FRAME);
+        if(!active||source!==engine||expected!==trackEpoch)return;
+        if(!(pcm instanceof Int16Array))throw Error('Unexpected PCM frame format');
         var next=new Float32Array(FRAME);
+        for(var i=0;i<Math.min(FRAME,pcm.length);i++)next[i]=pcm[i]/32768;
         var voices=[new Float32Array(FRAME),new Float32Array(FRAME),new Float32Array(FRAME)];
-        for(var pos=0;pos<FRAME;pos+=VOICE_SEGMENT){
-          // 1024 samples = ~23ms PAL response to each SID voice's real
-          // registers. Rendering is still outside WebAudio's callback.
-          var pcm=await source.renderFrames(VOICE_SEGMENT);
-          if(!active||source!==engine||expected!==trackEpoch)return;
-          if(!(pcm instanceof Int16Array))throw Error('Unexpected PCM frame format');
-          for(var i=0;i<Math.min(VOICE_SEGMENT,pcm.length);i++)
-            next[pos+i]=pcm[i]/32768;
-          var regs=null;
-          try{regs=source.getSidStatus(0);}catch(visualError){
-            // Scope extraction must never interrupt audible music.
-            if(!source._ricoScopeWarning){
-              console.warn('LFT scope registers unavailable:',visualError);
-              source._ricoScopeWarning=true;
-            }
+        var regs=null;
+        try{regs=source.getSidStatus(0);}catch(visualError){
+          // Scope extraction must never interrupt audible music.
+          if(!source._ricoScopeWarning){
+            console.warn('LFT scope registers unavailable:',visualError);
+            source._ricoScopeWarning=true;
           }
-          renderVoiceSegment(voices,pos,VOICE_SEGMENT,regs);
         }
+        renderVoiceSegment(voices,0,FRAME,regs);
         queue.push({audio:next,voices:voices});
       }
     })();
