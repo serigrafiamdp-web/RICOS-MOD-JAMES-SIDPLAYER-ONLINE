@@ -36,3 +36,13 @@ After deployment, confirm:
 - The public archive requires appropriate redistribution permission for the uploaded music.
 - The uploader may change the display name later; the SHA-256 still identifies the original bytes.
 - Cloudflare access and live browser playback must be confirmed after deployment; repository tests do not constitute a live PASS.
+
+## Estado confirmado al 2026-11-10
+
+- **TEST165 Worker deploy / endpoints — PASS:** `GET /capabilities` incluye `noHvscArchive:true`, `sidUploadsEnabled:true`, `sidUploadProvider:'github'`, `sidUploadLimit:15`; `GET /no-hvsc` devolvió `format:'ricos-no-hvsc'` y `tracks:[]` antes de las nuevas importaciones.
+- **TEST166 — esquema documentado:** `sid_provenance` se incorporó al archivo `community/api/schema.sql` sin alterar el contenido de D1.
+- **TEST167 — PASS reportado por el usuario:** se completó la prueba de importación/archivo propio. El inventario exacto de IDs e integridad de cada archivo no quedó registrado aquí.
+- **TEST168 — PENDIENTE:** agregar un SID archivado a UCTUMI con `+`, verificarlo en EDIT SONGS y completar REPUBLISH conservando ID, canciones existentes y orden tras releer la lista.
+- El despliegue de Cloudflare se hizo por separado del commit de GitHub; para futuras modificaciones de Worker, respaldar primero el Worker activo y D1.
+
+**Cierre del día:** [Checkpoint 2026-11-10](CHECKPOINT_2026-11-10_SPOTYSID.md).
