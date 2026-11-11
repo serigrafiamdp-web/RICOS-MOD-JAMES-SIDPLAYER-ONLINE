@@ -1132,7 +1132,8 @@
     if(existing){
       var addedExisting=await stagePatMoritasAdditions(existing);
       var addedCodeblasters=await stageCodeblastersAdditions(existing);
-      remixTarget=existing.id;preserveRemixes();renderRemixes();
+      remixTarget=existing.id;remixOpen=true;rememberRemixDestination('published:'+id);
+      preserveRemixes();renderRemixes();
       remixNotice(addedExisting?
         'LOS PAT MORITAS: '+addedExisting+' missing SID added to your private draft. Use REPUBLISH to save the same public list.':
         addedCodeblasters?'THE CODEBLASTERS: '+addedCodeblasters+' missing SID prepared in this draft. Use REPUBLISH to save this same public list.':
@@ -1156,7 +1157,8 @@
       tracks:tracks};
     var addedSids=await stagePatMoritasAdditions(draft);
     var addedCodeblasters=await stageCodeblastersAdditions(draft);
-    remixDrafts.push(draft);remixTarget=draft.id;
+    remixDrafts.push(draft);remixTarget=draft.id;remixOpen=true;
+    rememberRemixDestination('published:'+id);
     preserveRemixes();renderRemixes();
     remixNotice(addedSids?
       'LOS PAT MORITAS: '+addedSids+' missing SID prepared ('+draft.tracks.length+' total). Press REPUBLISH and enter the beta key to update the existing public list.':
