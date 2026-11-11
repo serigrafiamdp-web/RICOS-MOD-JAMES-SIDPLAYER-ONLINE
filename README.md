@@ -2,7 +2,7 @@
 
 **Commodore 64 SID music · Play · Discover · Curate · Share**
 
-[Open SpotySid](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/) · [User guide](docs/HELP_USER_GUIDE.md) · [Architecture](docs/ARCHITECTURE.md)
+[Open SpotySid](https://serigrafiamdp-web.github.io/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/) · [User guide](docs/HELP_USER_GUIDE.md) · [Architecture](docs/ARCHITECTURE.md) · [Checkpoint 2026-11-10](docs/CHECKPOINT_2026-11-10_SPOTYSID.md)
 
 SpotySid preserves and extends the original James / Jojati SID Player. RICO maintains the project and develops the community, playlist and browsing tools. The project does not modify the underlying SID compositions.
 
@@ -13,14 +13,18 @@ SpotySid preserves and extends the original James / Jojati SID Player. RICO main
 - Playlist creation, ordering, playback, sharing and beta-authorized community publishing.
 - **ADD + TO** selects the destination for **+** additions. Only playlist names are shown in the selector; the selection persists across playback changes and reloads. Selecting a list does not open an editor.
 - Published list edits are stored as local drafts before **REPUBLISH** updates the same public playlist ID.
-- Public v2 playlists reference existing HVSC ZIP packs; no copies of the original SID binaries are stored in D1.
+- Public v2 playlists combine existing HVSC ZIP references (`{pack,file}`) and archived NO HVSC references (`{sidId,file}`). D1 stores references and metadata, not SID binaries.
 - Progressive first-track loading for selected large playlists; legacy embedded-SID lists remain supported.
 
-## Verified status — November 2026
+## Current status — 2026-11-10
 
-**User-confirmed:** TEST148 fast initial playback for RICO'S BEST OF MUS; TEST150 persistent ADD + TO destination.
+**Earlier user-confirmed:** TEST148 fast initial playback for RICO'S BEST OF MUS; TEST150 persistent ADD + TO destination.
 
-**Requires end-to-end verification:** REPUBLISH from both its main-playlist and COMMUNITY locations, including Cloudflare persistence after browser reload. TEST151 simplifies selector labels; browser verification pending. Do not confuse a published GitHub commit or server capability flag with a verified successful edit.
+**Today:** TEST165 NO HVSC Worker endpoints deployed and returning the expected capabilities; TEST166 provenance schema committed; TEST167 NO HVSC import **PASS reported by the user**; TEST169 Cloudflare Web Analytics installed and initial activity visible in its dashboard.
+
+**Still pending:** TEST168 — add an archived SID to UCTUMI with **+**, check **EDIT SONGS**, **REPUBLISH** to the same public ID and confirm persistence after reload. Do not mark the full mixed-playlist operation PASS yet. Visits before installation of Web Analytics are not recoverable as website visit statistics.
+
+See [checkpoint 2026-11-10](docs/CHECKPOINT_2026-11-10_SPOTYSID.md) for the verification record and exact next steps.
 
 ## Repository map
 
@@ -37,7 +41,7 @@ SpotySid preserves and extends the original James / Jojati SID Player. RICO main
 
 ## Hosting and maintenance
 
-**GitHub Pages** serves the website and HVSC reference library. **Cloudflare Worker + D1** hosts shared playlist records and handles authorized writes. Updating the repository does **not** automatically deploy the Worker or back up D1. Before a Worker deployment, preserve its production settings, secrets and bindings, and back up the live Worker and D1.
+**GitHub Pages** serves the website and HVSC reference library. **Cloudflare Worker + D1** hosts shared playlist records, NO HVSC provenance and authorized writes. The separate [ricos-sid-uploads](https://github.com/serigrafiamdp-web/ricos-sid-uploads) repository holds contributed SID binaries through the configured GitHub provider. **Cloudflare Web Analytics** measures website activity from the installed beacon onward. Updating the repository does **not** automatically deploy the Worker or back up D1. Before a Worker deployment, preserve its production settings, secrets and bindings, and back up the live Worker and D1.
 
 [Architecture and maintenance map](docs/ARCHITECTURE.md) · [API capabilities](https://ricos-sid-community.serigrafiamdp.workers.dev/capabilities)
 
