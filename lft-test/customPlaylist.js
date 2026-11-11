@@ -1809,9 +1809,10 @@
         : isOldSidCurated()
           ? 'Register this HVSC reference playlist as editable in Cloudflare (beta key required)'
           : 'Save current song order locally; publication requires beta key');
-    // TEST176: show the experimental engine state only in the LFT playlist title.
-    var lftModeTitle=!landingPlaylists&&customActive&&loadedPlaylistTitle==='LFT'&&
-      window.RicoLftMode&&window.RicoLftMode.active();
+    // TEST177: show active LFT MODE on any playlist while an approved
+    // LFT track actually plays; never label an entire mixed playlist as LFT.
+    var lftModeTitle=!landingPlaylists&&customActive&&
+      window.RicoLftMode&&window.RicoLftMode.playingApproved();
     $('#ricoLivePlaylistTitle').text((landingPlaylists ? "COMMUNITY PLAYLISTS" :
       (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'))+
       (lftModeTitle?' · LFT MODE ON':''));
@@ -2274,7 +2275,9 @@
     player.autoLoading = true;
     try {
       // Only the verified LFT.zip progressive slot may enter the experimental WASM.
-      if(window.RicoLftMode&&window.RicoLftMode.active())
+      // TEST177: every song, in any v2/REMIX playlist, carries its own
+      // approved HVSC reference. Switch engines by track, never by list title.
+      if(window.RicoLftMode)
         window.RicoLftMode.approveTrustedReference(item._hvscRef||
           (activeReferenceTracks&&activeReferenceTracks[index])||null);
       var loaded = player.loadSIDData(item.localBytes);
@@ -2825,10 +2828,8 @@
     // TEST61: reference-only playlists resolve SID files from one immutable HVSC base.
     // Existing v1 playlists with embedded SID remain fully supported.
     async function loadStoredPlaylist(data,localImport,sourceRemoteId) {
-      // Only the published LFT collection with verified Lft.zip references
-      // can enable the separate reSIDfp WASM experiment. Every other
-      // playlist restores native TinySID before its first SID is loaded.
-      if(window.RicoLftMode)await window.RicoLftMode.prepare(data,sourceRemoteId||null);
+      // TEST177: do not activate an engine by list name, owner or publication.
+      // The selected track's verified HVSC reference decides its engine.
       resetCsdbRankDisplay();
       resetSoftTransition(true);
       if(activeReferenceStream){activeReferenceStream.cancel();activeReferenceStream=null;}
@@ -4233,13 +4234,6 @@
             event.stopPropagation();
             openPlaylist(false);
           });
-          // TEST174 test page only: automatically select the published LFT list.
-          if(window.location.pathname.indexOf('/lft-test/')!==-1&&
-             item.remoteId&&item.title.trim().toUpperCase()==='LFT'&&
-             !window.__ricoLftTestOpened){
-            window.__ricoLftTestOpened=true;
-            setTimeout(function(){openPlaylist(false);},250);
-          }
           // Only published COMMUNITY playlists with playable SID tracks participate.
           // Nothing is shuffled or moved in the visible playlist or its track list.
           if(Number(item.tracks)>0)
