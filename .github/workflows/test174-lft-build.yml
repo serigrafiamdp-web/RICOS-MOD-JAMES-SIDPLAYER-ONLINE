@@ -1,0 +1,36 @@
+name: TEST174 build patched reSIDfp for LFT preview
+on:
+  push:
+    branches: [test173-lft-mode-isolated]
+    paths: ['.github/workflows/test174-lft-build.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build-patched:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Fetch upstream libsidplayfp-wasm build scripts
+        run: git clone --depth 1 https://github.com/chrisgleissner/libsidplayfp-wasm.git /tmp/libsidplayfp-wasm
+      - name: Build patched libsidplayfp v3.1.2 for reSIDfp
+        run: |
+          cd /tmp/libsidplayfp-wasm
+          LIBSIDPLAYFP_REF=v3.1.2 LIBSIDPLAYFP_WASM_ENGINE=residfp bash scripts/build.sh
+      - name: Update pinned patched output and provenance
+        run: |
+          cp /tmp/libsidplayfp-wasm/dist/libsidplayfp.wasm js/lft-wasm/libsidplayfp.wasm
+          cp /tmp/libsidplayfp-wasm/dist/libsidplayfp.js js/lft-wasm/libsidplayfp.js
+          git -C /tmp/libsidplayfp-wasm/.cache/upstream/repo rev-parse HEAD > js/lft-wasm/patch-upstream-commit.txt
+          sed -i 's/3\.1\.1/3.1.2/g' js/lft-wasm/upstream-versions.js
+          node scripts/test-lft-wasm.mjs
+      - name: Publish patched artifacts to isolated branch
+        run: |
+          git config user.name "SpotySid Test174"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add js/lft-wasm/libsidplayfp.wasm js/lft-wasm/libsidplayfp.js js/lft-wasm/patch-upstream-commit.txt js/lft-wasm/upstream-versions.js
+          git commit -m "TEST174 branch: reSIDfp WASM rebuilt against patched libsidplayfp 3.1.2"
+          git push origin HEAD:test173-lft-mode-isolated
