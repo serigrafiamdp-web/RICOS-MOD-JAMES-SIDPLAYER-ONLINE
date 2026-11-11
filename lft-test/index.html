@@ -1,0 +1,757 @@
+<!DOCTYPE HTML>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb">
+  <head>
+    <base href="../">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/style.css?v=test137hearts">
+    <title>SpotySid — LFT MODE TEST174</title>
+
+    <link rel="shortcut icon" type="image/png" href="images/icon16.png"/>
+    <meta property="og:image" content="http://level4.jojati.com/sidplayer/images/preview.png" />    
+    <meta name="description" content="SpotySid — Rico + James SID Player with Oscilloscope View. Play, Create, Remix, Discover and Share C64 SID playlists while exploring HVSC and the Commodore 64 scene."/>
+  </head>
+
+  <body>
+
+    <div id="Stats-output"></div>
+
+    <form id="openSIDForm" style="position: absolute; top: -400px">
+      <input type="file" name="sidfile" size="10" id="sidfile" accept=".sid" multiple/>
+      <input type="file" id="ricoFolderPicker" accept=".sid" webkitdirectory directory multiple/>
+    </form>
+
+    <canvas id="sidDisplay" style="background-color: #000000;"></canvas>
+
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 20px; background-color: #666666; display: none" id="voiceInfo">
+    </div>
+
+
+    <div id="dialogBackground" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: black; z-index: 300; opacity: 0.4;">
+    </div>
+
+
+    <div id="chooseSidDialog" class="dialog rico-view-community" style="width: 680px; height: 570px">
+      <div class="title">SpotySid — Rico + James SID Player</div>
+      <div class="content">
+
+        <div id="chooseSidInfo" style="position:absolute;top:10px;height:305px;left:10px;right:10px;background:#eee;color:#333;padding:7px;font-size:12px;border:1px solid #555;">
+          <h2 style="margin:0 0 5px 0;display:flex;justify-content:center;align-items:center;width:100%;box-sizing:border-box;text-align:center;">PLAY · CREATE · REMIX · DISCOVER · SHARE</h2>
+          <div id="ricoListTabs">
+            <button type="button" id="ricoCommunityTab" class="rico-selected-tab">COMMUNITY PLAYLISTS</button>
+            <button type="button" id="ricoDefaultTab">GAMES (22)</button>
+            <button type="button" id="ricoHvscTab">TOP 100 HVSC GAMES</button>
+            <button type="button" id="ricoDemosTab">TOP 100 CSDb DEMOS</button>
+            <button type="button" id="ricoOnefileTab">TOP 100 CSDb ONEFILE DEMOS</button>
+            <button type="button" id="ricoGroupsTab">TOP 100 CSDb GROUPS</button>
+            <button type="button" id="ricoMusiciansTab">TOP MUSICIANS</button>
+            <button type="button" id="ricoLibraryTab">HVSC LIBRARY</button>
+            <button type="button" id="ricoOurCollectionTab">OUR COLLECTION</button>
+            <button type="button" id="ricoCustomTab" hidden style="display:none;" aria-hidden="true" tabindex="-1">USER LOCAL <span id="ricoCustomCount">0 SID</span></button>
+          </div>
+        </div>
+        <div id="sidListHolder" style="display:none;position:absolute;top:327px;bottom:10px;left:10px;right:10px;overflow:auto;border:1px solid #555;">
+          <div id="sidList"></div>
+        </div>
+        <div id="ricoCommunityPanel" style="display:block;position:absolute;top:327px;bottom:10px;left:10px;right:10px;overflow:auto;border:1px solid #555;background:#eee;color:#222;padding:9px;">
+          <div class="rico-community-toolbar">
+            <strong>COMMUNITY PLAYLISTS</strong>
+            <span id="ricoCommunityOrderStatus" role="status" aria-live="polite"></span>
+            <button type="button" id="ricoCommunityOrderSave" aria-label="Save community playlist order in this browser">SAVE</button>
+          </div>
+          <div style="margin:5px 0 10px;font-size:11px;">Public playlists created by the community. Every playlist references songs in the fixed HVSC library.</div>
+          <div id="ricoCommunityItems" role="list">No public playlists published yet.</div>
+        </div>
+        <div id="ricoHvscPanel" style="display:none;position:absolute;top:101px;bottom:10px;left:10px;right:10px;overflow:auto;border:1px solid #555;padding:9px;">
+          <strong id="ricoHvscHeading">TOP 100 HVSC GAMES · COMMUNITY POLL (2000)</strong>
+          <div id="ricoHvscIntro" class="rico-hvsc-intro">Original HVSC community ranking from 2000. Ranked SID titles and their original composers.</div>
+          <div class="rico-hvsc-head">
+            <span id="ricoHvscListTitle">TOP 100 HVSC GAMES (2000) — Playlist by HVSC Community · 100 SID</span>
+            <span class="rico-community-stars" aria-label="Ratings coming soon" title="Ratings coming soon">☆☆☆☆☆</span>
+            <button type="button" id="ricoHvscLoad">PLAY</button>
+          </div>
+          <div id="ricoHvscStatus" role="status"></div>
+          <div id="ricoHvscItems" role="list">Select TOP 100 HVSC GAMES to load the ranking.</div>
+        </div>
+
+        <section id="ricoOurCollectionPanel" aria-label="Nuestra colección SID" style="display:none;position:absolute;top:101px;bottom:10px;left:10px;right:10px;overflow:auto;padding:9px;">
+          <strong>OUR COLLECTION</strong>
+          <p>Browse collections separately from HVSC. PLAY opens the complete collection in the same floating playlist player used by COMMUNITY PLAYLISTS. Local collections remain private until published.</p>
+          <div class="rico-our-controls">
+            <input id="ricoOurSearch" type="search" placeholder="Buscar SID, autor o archivo" aria-label="Buscar en nuestra colección" />
+            <button type="button" id="ricoOurRefresh">REFRESH</button>
+            <span id="ricoOurCount">0 SID</span>
+          </div>
+          <div id="ricoOurStatus" role="status"></div>
+          <div id="ricoOurItems" role="list"></div>
+        </section>
+        <div id="ricoLibraryPanel" style="display:none;position:absolute;top:101px;bottom:10px;left:10px;right:10px;overflow:auto;border:1px solid #555;padding:9px;">
+          <strong>HVSC LIBRARY</strong>
+          <div id="ricoLibraryIntro" style="margin:6px 0 9px;">Browse MUSICIANS and DEMOS · read-only original collection</div>
+          <div class="rico-library-controls">
+            <button id="ricoLibraryMusicians" type="button">MUSICIANS</button>
+            <button id="ricoLibraryDemos" type="button">DEMOS</button>
+            <input id="ricoLibrarySearch" type="search" placeholder="Find musician or SID" aria-label="Search library" />
+          </div>
+          <div id="ricoLibraryShelves" class="rico-library-shelves"></div>
+          <div class="rico-library-columns">
+            <div id="ricoLibrarySections" class="rico-library-sections"></div>
+            <div id="ricoLibrarySongs" class="rico-library-songs"></div>
+          </div>
+          <div id="ricoLibraryBuilder" class="rico-library-builder">
+            <div class="rico-library-builder-head">
+              <strong>MY PLAYLIST <span id="ricoDraftCount">(0 SID)</span></strong>
+              <button type="button" id="ricoLibraryAddAll">ADD ALL FROM ARTIST</button>
+              <button type="button" id="ricoLibraryNewList">NEW LIST</button>
+            </div>
+            <div class="rico-library-builder-save">
+              <input id="ricoLibraryListName" type="text" maxlength="100" value="My SID Playlist" aria-label="Personal playlist name" placeholder="Playlist name"/>
+              <input id="ricoLibraryCreator" type="text" maxlength="60" aria-label="Playlist creator nickname" placeholder="Playlist by (your nickname)" autocomplete="nickname"/>
+              <button type="button" id="ricoLibrarySaveList">PUBLISH PLAYLIST</button>
+            </div>
+            <div id="ricoLibraryDraftItems" class="rico-library-draft-items" role="list"></div>
+          </div>
+          <div id="ricoLibraryStatus" role="status">Select a category.</div>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button id="chooseSidClose">Close</button>
+      </div>
+
+    </div>
+
+
+
+    <!-- TEST109: general user help, bilingual. Registered with the existing dialog manager. -->
+    <div id="ricoHelpDialog" class="dialog" style="width: 580px; height: 540px"
+         role="dialog" aria-modal="true" aria-label="SpotySid Help">
+      <div class="title">HELP — SpotySid</div>
+      <div class="content">
+        <div id="ricoHelpContent">
+          <div class="rico-help-language-buttons" role="group" aria-label="Help language">
+            <button type="button" id="ricoHelpEnglishButton" aria-pressed="true">ENGLISH</button>
+            <button type="button" id="ricoHelpSpanishButton" aria-pressed="false">ESPAÑOL</button>
+          </div>
+
+          <section id="ricoHelpEnglish" lang="en">
+            <h3>1. PLAY SID MUSIC</h3>
+            <p>Select <strong>CHOOSE A SID</strong> to browse <strong>COMMUNITY PLAYLISTS</strong>,
+            <strong>OUR COLLECTION</strong>, <strong>GAMES</strong> or the <strong>HVSC LIBRARY</strong>.
+            Click PLAY on a playlist or choose a SID. <strong>PLAYLIST</strong> opens the floating list.
+            Use PLAY, STOP and NEXT SID to control playback.</p>
+
+            <h3>2. CREATE A REMIX PLAYLIST</h3>
+            <ol>
+              <li>Open <strong>REMIX PLAYLIST</strong> to enter a new playlist name and creator.</li>
+              <li>Enter a playlist name and the <strong>Playlist by</strong> creator credit.</li>
+              <li>Click <strong>CREAR</strong>, browse songs, then click <strong>+</strong> next to each SID to add it to your selected REMIX.</li>
+              <li>Open the creator again to edit its order, or select <strong>PLAY REMIX</strong> to hear a preview.</li>
+              <li>The unpublished REMIX is a browser-local draft. Choose <strong>PUBLISH REMIX</strong> and enter your beta key to share it publicly.</li>
+            </ol>
+
+            <h3>3. REORDER AND SAVE</h3>
+            <p>Use <strong>↑</strong> and <strong>↓</strong> in an editable playlist:
+            <strong>single click = 1 position</strong>, <strong>double-click = 10 positions</strong>.
+            Hover over an arrow to see its hint. Reordering does not restart the SID playing.</p>
+            <p>After changing the order, press <strong>SAVE</strong>.
+            For <strong>unpublished REMIX or local playlists</strong>, SAVE keeps it in this browser
+            (no beta key). For an <strong>already published playlist or collection</strong>, SAVE
+            asks for the beta key and only shows <strong>SAVE verified</strong> when the server
+            confirms the new order. Reload after that confirmation.</p>
+            <p><strong>TOP 100 ranked lists are protected:</strong> they cannot be reordered or saved.
+            You can still add their songs to your own REMIX using + when a supported reference is available.</p>
+
+            <h3>4. IMPORT SID / LOCAL LISTS</h3>
+            <p><strong>IMPORT SID</strong> opens tools for importing SID files from your computer
+            and saving a local list in this browser; you can export a list as JSON.
+            Local saves are not visible to other visitors. Publishing is a separate action
+            and requires the beta key.</p>
+
+            <h3>5. AUTO PLAY & TIMER</h3>
+            <p>Enable <strong>AUTO</strong> to move to the next SID.
+            The playlist <strong>TIMER (MM:SS)</strong> sets the maximum playback time per tune.
+            The player can also advance sooner if sustained audio silence is detected.
+            Songs with several subtunes have separate &lt; and &gt; controls.</p>
+
+            <h3>6. NOTES</h3>
+            <p>The floating playlist can be moved and resized. A saved public order is shared
+            with everyone; local REMIX drafts and local imported lists stay in your browser.
+            For project credits and technical history, see <strong>ABOUT</strong>.</p>
+          </section>
+
+          <section id="ricoHelpSpanish" lang="es" hidden>
+            <h3>1. ESCUCHAR MÚSICA SID</h3>
+            <p>Abrí <strong>CHOOSE A SID</strong> para explorar <strong>COMMUNITY PLAYLISTS</strong>,
+            <strong>OUR COLLECTION</strong>, <strong>GAMES</strong> o <strong>HVSC LIBRARY</strong>.
+            Elegí PLAY en una lista o seleccioná un SID. <strong>PLAYLIST</strong> abre la lista flotante.
+            PLAY, STOP y NEXT SID controlan la reproducción.</p>
+
+            <h3>2. CREAR UNA PLAYLIST REMIX</h3>
+            <ol>
+              <li>Abrí <strong>REMIX PLAYLIST</strong> y escribí el nombre de la lista y el creador.</li>
+              <li>Escribí el nombre de la lista y el autor en <strong>Playlist by</strong>.</li>
+              <li>Pulsá <strong>CREAR</strong>; buscá música y usá <strong>+</strong> para agregar cada SID a tu REMIX.</li>
+              <li>Volvé al editor para ordenar las canciones o elegí <strong>PLAY REMIX</strong> para escuchar la lista.</li>
+              <li>El REMIX sin publicar es un borrador local del navegador. Usá <strong>PUBLISH REMIX</strong> y la clave beta para publicarlo.</li>
+            </ol>
+
+            <h3>3. ORDENAR Y GUARDAR</h3>
+            <p>Usá las flechas <strong>↑</strong> y <strong>↓</strong>:
+            <strong>un clic mueve 1 lugar</strong> y <strong>doble clic mueve 10 lugares</strong>.
+            Al pasar el mouse aparece una ayuda. Ordenar no interrumpe el SID que está sonando.</p>
+            <p>Después de ordenar, pulsá <strong>SAVE</strong>.
+            En un <strong>REMIX sin publicar o lista local</strong>, guarda en este navegador
+            sin clave. Si la <strong>playlist o colección ya está publicada</strong>, SAVE pide la
+            clave beta y confirma <strong>SAVE verified</strong> cuando el servidor guarda
+            el nuevo orden. Recién entonces conviene recargar.</p>
+            <p><strong>Las listas TOP 100 rankeadas están protegidas:</strong>
+            no se pueden reordenar ni guardar. Podés agregar sus canciones a un REMIX
+            cuando exista una referencia SID compatible.</p>
+
+            <h3>4. IMPORTAR SID Y LISTAS LOCALES</h3>
+            <p><strong>IMPORT SID</strong> permite agregar archivos SID de tu computadora,
+            guardar listas en el navegador y exportarlas como JSON.
+            Las listas locales no son públicas; para publicar se necesita la clave beta.</p>
+
+            <h3>5. AUTO Y TIMER</h3>
+            <p>Activá <strong>AUTO</strong> para avanzar automáticamente.
+            <strong>TIMER (MM:SS)</strong> indica la duración máxima por canción.
+            El reproductor también puede avanzar antes si detecta silencio sostenido.
+            Los SID con varios subtunes tienen controles &lt; y &gt;.</p>
+
+            <h3>6. INFORMACIÓN</h3>
+            <p>La playlist flotante se puede mover y redimensionar.
+            Los cambios públicos son visibles para otros usuarios;
+            los borradores y listas locales permanecen en este navegador.
+            Encontrás créditos e historia del proyecto en <strong>ABOUT</strong>.</p>
+          </section>
+        </div>
+      </div>
+      <div class="buttons">
+        <button type="button" id="ricoHelpClose">CLOSE</button>
+      </div>
+    </div>
+
+    <div id="ricoDonateDialog" class="dialog" style="width: 540px; height: 470px"
+      role="dialog" aria-modal="true" aria-labelledby="ricoDonateHeading">
+      <div class="title">DONATE — SpotySid</div>
+      <div class="content">
+        <div id="ricoDonateContent">
+          <h2 id="ricoDonateHeading">HELP KEEP SPOTYSID ALIVE</h2>
+          <p>
+            SpotySid is an independent Commodore 64 SID music preservation and
+            continued-development project, based on the original James / Jojati SID Player
+            and carried forward by Rico / RicoSerigrafia.
+          </p>
+          <p>
+            Your voluntary support helps keep the project available, maintain the player,
+            preserve its credits and C64 music history, and continue improving tools for
+            discovering, playing, creating and sharing SID playlists.
+          </p>
+          <p class="rico-donate-motto">Play the classics. Discover hidden SID treasures.
+            Respect the artists. Keep the scene alive.</p>
+          <div class="rico-donate-action">
+            <a id="ricoDonatePayPal" class="rico-donate-paypal" target="_blank"
+              rel="noopener noreferrer" aria-disabled="true" tabindex="-1">SUPPORT WITH PAYPAL</a>
+            <div id="ricoDonateStatus" role="status">PAYPAL LINK NOT CONNECTED YET</div>
+            <p class="rico-donate-note" id="ricoDonateRecipientNotice">Contributions are received through a personal PayPal account. The recipient’s details will be shown on PayPal before you confirm your payment.</p>
+          </div>
+          <p class="rico-donate-note">
+            SpotySid remains free for everyone. Contributions are optional and do not
+            purchase or transfer rights to SID music.
+          </p>
+          <section class="rico-donate-credits" aria-labelledby="ricoDonateFriendsTitle">
+            <h3 id="ricoDonateFriendsTitle">DONORS &amp; TESTERS</h3>
+            <p>Our thanks to everyone helping SpotySid through donations, testing,
+              feedback and encouragement. Every heart is a sign of appreciation.</p>
+            <ul id="ricoDonateSupporters" aria-label="Supporters">
+              <li class="rico-donate-empty">Names will appear here when approved.</li>
+            </ul>
+            <p class="rico-donate-note">Names are added only with each supporter's permission.</p>
+          </section>
+        </div>
+      </div>
+      <div class="buttons">
+        <button type="button" id="ricoDonateClose">CLOSE</button>
+      </div>
+    </div>
+
+    <div id="aboutSIDDialog" class="dialog" style="width: 560px; height: 520px">
+      <div class="title">About</div>
+      <div class="content">
+        <div id="aboutSIDHolder" style="position: absolute; top: 10px; bottom: 10px; left: 10px; right: 10px; overflow: auto; border: 1px solid #555555; background-color: #eeeeee">
+          <div id="aboutSID">
+
+            <div id="aboutSIDContent">
+              <p>
+                The Following text contains extracts from the <a target="_blank" href="https://en.wikipedia.org/wiki/MOS_Technology_SID">MOS Technology SID</a> Wikipedia page
+              </p>
+
+              <h2>Overview</h2>
+              <p>
+                <img src="images/Commodore64.jpg" width="120" style="float: left; margin: 0 4px 4px 0"/>
+                The MOS Technology 6581/8580 SID (Sound Interface Device) is the built-in Programmable Sound Generator chip of Commodore's CBM-II, Commodore 64, Commodore 128 and Commodore MAX Machine home computers. It was one of the first sound chips of its kind to be included in a home computer prior to the digital sound revolution.              
+              </p>
+              <p>
+                The SID is a mixed-signal integrated circuit, featuring both digital and analog circuitry. All control ports are digital, while the output ports are analog. 
+              </p>
+              <h2>Design</h2>
+              <p>
+                <img src="images/sidblockdiagram.png" width="120" style="float: left; margin: 0 4px 4px 0"/>
+                The SID was devised by engineer Robert "Bob" Yannes, who later co-founded the Ensoniq digital synthesizer company. Yannes headed a team that included himself, two technicians and a CAD operator, who designed and completed the chip in five months, in the latter half of 1981. Yannes was inspired by previous work in the synthesizer industry and was not impressed by the current state of computer sound chips. Instead, he wanted a high-quality instrument chip, which is the reason why the SID has features like the envelope generator, previously not found in home computer sound chips.                
+              </p>
+              <h2>Waveforms</h2>
+              <p>
+                <img src="images/waveforms.png" width="120" style="float: left; margin: 0 4px 4px 0"/>
+
+                The SID features three-voice synthesis, where each voice may use one of at least five different waveforms: pulse wave (with variable duty cycle), triangle wave, sawtooth wave, pseudorandom noise (called white noise in documentation), and certain complex/combined waveforms when multiple waveforms are selected simultaneously. A voice playing Triangle waveform may be ring-modulated with one of the other voices, where the triangle waveform's bits are inverted when the modulating voice's msb is set, producing a discontinuity and change of direction with the Triangle's ramp.                
+              </p>
+              <p>
+                The original manual for the SID mentions that if several waveforms are enabled at the same time, the result will be a binary AND between them. What happens in reality is that the input to the waveform DAC pins receive several waveforms at once.
+              </p>
+              <h2>Filter</h2>                 
+              <p>
+                <img src="images/filter.png" width="120" style="float: left; margin: 0 4px 4px 0"/>
+
+                Each voice may be routed into a common, digitally controlled analog 12 dB/octave multimode filter, which is constructed with aid of external capacitors to the chip. The filter has lowpass, bandpass and highpass outputs, which can be individually selected for final output amplification via master volume register. Using a combined state of lowpass and highpass results in a notch (or inverted bandpass) output.[8] The programmer may vary the filter's cut-off frequency and resonance                
+              </p>
+              <h2>Sample Playback</h2>
+              <p>
+                Due to imperfect manufacturing technologies of the time and poor separation between the analog and digital parts of the chip, the 6581's output (before the amplifier stage) was always slightly biased from the zero level. Each time the volume register was altered, an audible click was produced. By quickly adjusting the amplifier's gain through the main 4-bit volume register, this bias could be modulated as PCM, resulting in a "virtual" fourth channel allowing 4-bit digital sample playback.                
+              </p>
+              <p>
+                Over time, other techniques have been created for sample playback.
+              </p>
+              <h2>Differences between 6581 and 8580</h2>
+              <p>
+                <img src="images/MOS_Technologies_6581.jpg" width="120" style="float: left; margin: 0 4px 4px 0"/>
+
+                The specifications for the chip were not used as a blueprint. Rather, they were written as the development work progressed, and not all planned features made it into the final product. Yannes claims he had a feature-list of which three quarters made it into the final design. This is the reason why some of the specifications for the first version (6581) were accidentally incorrect. The later revision (8580) was revised to match the specification. The 8580 expanded on the ability to perform a binary AND between two waveforms. The filter is also very different between the two models, with the 6581 cutoff range being a relatively straight line on a log scale, while the cutoff range on the 8580 is a straight line on a linear scale. The better manufacturing technology in the 8580 used in the later revisions of Commodore 64C and the Commodore 128DCR caused the bias to almost entirely disappear, causing the digitized sound samples to become very quiet.                 
+              </p>
+
+
+            <h2>Example Waveforms</h2>
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/triangle.png"/>
+              <div>Triangle</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/sawtooth.png"/>
+              <div>Sawtooth</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/pulse.png"/>
+              <div>Pulse</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/noise.png"/>
+              <div>Noise</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/trianglepulse.png"/>
+              <div>Triangle + Pulse</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/ringmod.png"/>
+              <div>Triangle + Ring Modulation</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/sample.png"/>
+              <div>Sample</div>
+            </div>
+
+            <div class="sidWaveform">              
+              <img width="160" src="waveforms/sawtoothlowbandpass.png"/>
+              <div>Sawtooth + Lowpass + Bandpass</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/pulselowpass.png"/>
+              <div>Pulse + Lowpass filter</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/pulselowpass2.png"/>
+              <div>Pulse + Lowpass filter</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/pulselowbandpass.png"/>
+              <div>Pulse + Lowpass + Bandpass filter</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/pulselowhighpass.png"/>
+              <div>Pulse + Lowpass + Highpass filter</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/noiselowpass.png"/>
+              <div>Noise + Lowpass filter</div>
+            </div>
+
+            <div class="sidWaveform">
+              <img width="160" src="waveforms/ringmodlowpass.png"/>
+              <div>Triangle + Ring Mod + Lowpass</div>
+            </div>
+
+            <div class="sidWaveform">
+             <img width="160" src="waveforms/ringmodlowbandpass.png"/>
+             <div>Tri + Ring Mod + Low + Band</div>
+            </div>
+
+            </div>
+
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="buttons">
+        <button id="aboutSIDClose" type="button">Close</button>
+      </div>
+
+    </div>    
+
+
+
+    <div id="aboutDialog" class="dialog" style="width: 560px; height: 520px">
+      <div class="title">ABOUT — SpotySid</div>
+      <div class="content">
+        <div id="aboutHolder" style="position: absolute; top: 10px; bottom: 10px; left: 10px; right: 10px; overflow: auto; border: 1px solid #555555; background-color: #eeeeee">
+          <div id="about" style="padding: 4px">
+
+            <h2>SpotySid — Rico + James SID Player</h2>
+            <p>
+              <strong>A Commodore 64 SID Player with Oscilloscope View.</strong>
+              Created from James / Jojati's original web SID player and carried forward by
+              Rico / RicoSerigrafia. SpotySid keeps the original music, engineering and credits
+              at its heart while making the C64 scene easy to explore.
+            </p>
+
+            <h2>PLAY · CREATE · REMIX · DISCOVER · SHARE</h2>
+            <p>
+              Play C64 SID music with a three-voice oscilloscope view. Create your own
+              playlists. Remix track selections and order without altering the original
+              compositions. Discover hidden SID treasures, forgotten tunes, composers and
+              demos throughout HVSC and the C64 scene. Share curated playlists through
+              the authorized publication tools.
+            </p>
+            <p>
+              <strong>REMIX PLAYLIST</strong> means remixing the selection and order of SID tracks:
+              making a new curated playlist, not modifying the original SID music or claiming
+              authorship of the compositions. The original composers, groups and releases
+              retain their credits. Playlist creators are credited separately as curators.
+            </p>
+
+            <h2>Discover HVSC and the C64 Scene</h2>
+            <ul>
+              <li><strong>HVSC LIBRARY:</strong> browse the indexed High Voltage SID Collection
+                #85, with 59,626 SID files across MUSICIANS and DEMOS; navigate categories,
+                composer shelves and search within a selected shelf.</li>
+              <li><strong>Historical selections:</strong> explore curated game, musician and
+                scene-related playlists, including the historical TOP 100 HVSC GAMES.
+                Historical rankings are identified as such, not presented as live charts.</li>
+              <li><strong>Music credits:</strong> preserve available SID title, composer,
+                release and PSID/RSID metadata while distinguishing the original artist
+                from the person who created a playlist.</li>
+              <li><strong>Independent browsing:</strong> explore available catalogs without
+                interrupting the playlist currently playing.</li>
+            </ul>
+
+            <h2>Create Your Own Playlists and Remixes</h2>
+            <ul>
+              <li><strong>REMIX PLAYLIST CREATOR:</strong> assemble personal playlists from
+                available catalog tracks, add tracks using the + controls and manage multiple
+                in-progress remix selections.</li>
+              <li><strong>MY PLAYLISTS / OUR COLLECTION:</strong> import individual SID files
+                or folders, organize named local collections, and reload or remove saved
+                collections without changing the original catalogs.</li>
+              <li><strong>Portable lists:</strong> save local playlists in the browser and
+                export or import supported playlist JSON backups.</li>
+              <li><strong>COMMUNITY PLAYLISTS:</strong> discover shared curated lists and
+                use the player to listen to their selections. Authorized publication and
+                editing are kept separate from ordinary browsing.</li>
+              <li><strong>Publishing contributed SID files:</strong> a limited beta-key
+                workflow using a separate GitHub storage repository is being prepared
+                and tested. Public SID-file uploads are not yet enabled.</li>
+            </ul>
+
+            <h2>Oscilloscope View, Playback and Interface</h2>
+            <ul>
+              <li>Original SID emulation and independent three-voice oscilloscope display,
+                with line or filled waveform visualization.</li>
+              <li>Selectable retro color palettes, including phosphor-inspired and
+                Commodore 64-inspired looks, applied consistently to the interface.</li>
+              <li>Automatic progression between SID files with AUTO on/off and a
+                configurable fallback duration for tracks without known timing;
+                subtune selection remains available independently.</li>
+              <li>Compact, movable and resizable playlist window with active-track
+                indication, direct song selection, and separate playlist and composer credits.</li>
+              <li>Folder import, drag-and-drop SID loading, and readable dialogs
+                that follow the active player palette.</li>
+            </ul>
+
+            <h2>In Memory of James (@uniquename654)</h2>
+            <p>
+              Dedicated to James, the original creator and previous maintainer of this
+              web SID player. His interface, oscilloscope and passion for Commodore 64 music
+              are the foundation of this continuation. We preserve the original experience,
+              source materials and historical notes with respect and gratitude.
+              Original Twitter: <a href="https://twitter.com/uniquename654" target="_blank" rel="noopener noreferrer">@uniquename654</a>.
+            </p>
+
+            <h2>Maintenance &amp; Development Credits</h2>
+            <p><strong>SID engine:</strong> Juergen Wothke &mdash;
+              <a href="https://github.com/wothke/websid" target="_blank" rel="noopener noreferrer">WebSid / Tiny'R'Sid</a>.</p>
+            <p><strong>Original web SID player, oscilloscope, interface and SID collection:</strong>
+              James / Jojati.</p>
+            <p><strong>Preservation, maintenance, playlist / remix tools and enhancements (2026):</strong>
+              Rico / RicoSerigrafia.
+              Project repository:
+              <a href="https://github.com/serigrafiamdp-web/RICOS-MOD-JAMES-SIDPLAYER-ONLINE"
+                target="_blank" rel="noopener noreferrer">SpotySid source on GitHub</a>.</p>
+            <p>
+              The original SID files and compositions belong to their respective authors
+              and rights holders. Community playlist authorship describes curation, not
+              ownership of the music. Only redistribute SID files when you have permission.
+            </p>
+            <p>
+              <strong>Play the classics. Discover hidden SID treasures.
+              Create, remix and share playlists. Respect the artists. Keep the scene alive.</strong>
+            </p>
+
+            <h2>Original About (preserved)</h2>
+            <h2>About</h2>
+            <p>
+              This website is a player for SID Files.
+            </p>
+            <p>
+              You can follow this <a href="https://twitter.com/uniquename654">Twitter</a> for updates, etc
+            </p>
+            <p>
+              and go <a href="http://level4.jojati.com">here</a> for more stuff.
+            </p>
+
+
+            <h2>SID Files</h2>
+            <p>
+              SID files are part machine code, part data. At a minimum SID players emulate the Commodore 64 CPU and SID chip, executing the machine code, which sets values for the registers of the SID chip. The SID chip reads the registers and produces sound. 
+            </p>
+            <p>
+              SID Files can be found at the <a href="http://www.hvsc.c64.org/
+  ">High Voltage SID Collection<a>
+            </p>
+            <p>
+              SID Files from Commodore 64 Games can also be found by searching for the game on the 
+              <a href="http://www.lemon64.com/" target="_blank">Lemon 64</a> and <a href="http://www.c64.com/" target="_blank">C64.com</a> Websites
+            </p>
+
+
+            <h2>Source Code + Licence</h2>
+            <p>
+              This SID player uses code from 
+              <a href="https://github.com/wothke/websid" target="_blank">WebSid (Web version of Tiny'R'Sid)</a> by Juergen Wothke
+              which falls under a <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> licence. The author of WebSid has a live demo of his player <a href="http://www.wothke.ch/websid/" target="_blank">here</a>
+            </p>
+
+
+            <p>
+              The following modifications were made:
+              <ul>
+                <li>Allow extraction of individual voice data</li>
+                <li>Allow the filter to be disabled</li>
+                <li>Changes to the behaviour of the filter</li>
+              </ul>
+            </p>
+
+            <p>The modifications were hacks to the original code so I wouldn't recommend using the code with the modifications, but if you really want it, it can be downloaded <a href="src/sidplayersrc.zip">here</a>. Under the terms of the CC BY-NC-SA licence, the modified code also comes under the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> licence</p>
+
+            <p>
+              This is my second attempt at an oscillocope style SID player. The first can be found <a href="old/index.html">here</a>. The older version will give more information about the state of the SID's registers and will allow the songs to be slowed down.
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="buttons">
+        <button id="aboutClose" type="button">Close</button>
+      </div>
+
+    </div>    
+
+
+
+    <div id="songInfo"></div>
+
+    <aside id="ricoLivePlaylist" aria-label="Active SID playlist" style="display:flex;">
+      <div id="ricoLivePlaylistHeader">
+        <span class="rico-live-heading"><span id="ricoLivePlaylistTitle" title="Current playlist">PLAYLIST</span><span id="ricoLiveCount"></span></span>
+        <div id="ricoLivePlaylistCredits" aria-label="Playlist curator and future ratings">
+          <span id="ricoLivePlaylistCreator">Select a playlist</span>
+          <span id="ricoLivePlaylistStars" title="Ratings coming soon" aria-label="Ratings coming soon">
+            <span aria-hidden="true">☆☆☆☆☆</span>
+            <span class="rico-rating-note">Ratings coming soon</span>
+          </span>
+        </div>
+        <span class="rico-live-head-actions"><button type="button" id="ricoLiveSave" title="Save new public song order or removals (beta key required)" style="display:none;">SAVE</button><button type="button" id="ricoLiveClose" aria-label="Hide playlist">×</button></span>
+      </div>
+      <div id="ricoRemixBar" class="rico-remix-bar">
+        <button type="button" id="ricoRemixToggle" aria-expanded="false">REMIX PLAYLIST</button>
+        <label for="ricoRemixTarget">ADD + TO</label>
+        <select id="ricoRemixTarget" aria-label="REMIX or published playlist destination"><option value="">SELECT DESTINATION</option></select>
+        <span id="ricoRemixCount">0 SID</span>
+        <div id="ricoLiveTimerBar" class="rico-live-timer-bar">
+          <label for="ricoLiveTimer">TIMER</label>
+          <input id="ricoLiveTimer" type="text" value="03:00" maxlength="5" inputmode="numeric"
+            autocomplete="off" aria-label="Maximum time per SID in minutes and seconds"
+            title="AUTO TIMER · MM:SS"/>
+        </div>
+      </div>
+      <div id="ricoLiveStatus" role="status" style="padding:3px 8px;color:#ffb6a9;font-size:11px;"></div>
+      <div id="ricoLivePlaylistItems"></div>
+      <div id="ricoLiveWidthGrip" title="Drag horizontally to change playlist width" aria-label="Resize playlist width" role="separator" aria-orientation="vertical" tabindex="0"></div>
+      <div id="ricoLiveResizeGrip" title="Drag to change playlist height" aria-label="Resize playlist height"></div>
+    </aside>
+
+    <aside id="ricoRemixEditor" class="rico-remix-editor" style="display:none;" role="dialog" aria-label="Create playlist" aria-modal="false">
+      <div id="ricoRemixFloatHeader"><strong>CREATE PLAYLIST</strong><div style="display:flex;gap:6px;align-items:center;"><button type="button" id="ricoRemixCancel" aria-label="Cancelar creación" title="Cancelar (Esc)">×</button><button type="button" id="ricoRemixClose" aria-label="Create playlist">CREAR</button></div></div>
+      <div class="rico-remix-fields">
+        <input id="ricoRemixName" type="text" name="spotysid-new-playlist-title" autocomplete="off" maxlength="100" placeholder="Playlist name" aria-label="Playlist name" />
+        <input id="ricoRemixCreator" type="text" name="spotysid-new-playlist-creator" autocomplete="off" maxlength="60" placeholder="Playlist by" aria-label="Playlist creator" />
+      </div>
+      <div id="ricoRemixStatus" role="status" style="display:none;"></div>
+    </aside>
+
+    <aside id="ricoImportSidWindow" role="dialog" aria-label="Import SID - local playlists" aria-modal="false" style="display:none;">
+      <div id="ricoImportSidHeader">
+        <strong>IMPORT SID</strong>
+        <button type="button" id="ricoImportSidClose" aria-label="Close Import SID window">×</button>
+      </div>
+      <p class="rico-import-note">LOCAL ONLY · Saved in this browser. Not uploaded to HVSC, CSDb or the community database.</p>
+      <div id="ricoImportSidContent">
+          <div id="ricoDropZone">
+            <div class="rico-drop-row">
+              <span class="rico-drop-label">Drop SID files or folder here</span>
+              <button type="button" id="ricoAddFiles">ADD SID FILES</button>
+              <button type="button" id="ricoAddFolder">ADD FOLDER</button>
+              <button type="button" id="ricoClearList">CLEAR CUSTOM</button>
+            </div>
+          </div>
+          <div id="ricoPlaylistOptions">
+            <label for="ricoFallback">Unknown duration / AUTO:</label>
+            <span class="rico-time-control">
+              <button type="button" id="ricoFallbackMinus" aria-label="Subtract 10 seconds">−</button>
+              <input id="ricoFallback" type="text" inputmode="numeric" value="03:00" maxlength="5" aria-label="Minutes and seconds" title="MM:SS — e.g. 03:25"/>
+              <button type="button" id="ricoFallbackPlus" aria-label="Add 10 seconds">+</button>
+            </span>
+            <span>min:sec</span>
+            <a href="javascript:void(0)" id="sidFileOpen" style="display:none;">Open a Local SID File</a>
+          </div>
+          <div id="ricoPlaylistStatus" role="status">Original 22 SID playlist.</div>
+          <div id="ricoSavedPlaylistControls" style="border-top:1px solid #aab5bc;margin-top:7px;padding-top:7px;">
+            <div style="font-weight:bold;font-size:12px;margin-bottom:5px;">MY PLAYLISTS</div>
+            <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
+              <label for="ricoSavedName" style="font-weight:bold;">Playlist name:</label>
+              <input id="ricoSavedName" type="text" maxlength="100" value="My SID Playlist" autocomplete="off" aria-label="Playlist name" placeholder="Type your playlist name here" style="flex:1;min-width:180px;height:27px;box-sizing:border-box;padding:3px 7px;border:2px solid #326a85;background:white;color:#111;font-size:13px;cursor:text;" />
+              <button type="button" id="ricoSaveList">SAVE LIST</button>
+              <button type="button" id="ricoDownloadList">DOWNLOAD JSON</button>
+              <button type="button" id="ricoImportList">IMPORT JSON</button>
+              <input type="file" id="ricoJsonImport" accept=".json,application/json" style="display:none;" />
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:7px;">
+              <strong style="font-size:11px;">SAVED PLAYLISTS</strong>
+              <select id="ricoSavedSelect" aria-label="Saved playlists" style="display:none;"><option value="">Saved playlists</option></select>
+              <button type="button" id="ricoLoadList" style="display:none;">PLAY</button>
+            </div>
+            <div id="ricoSavedLibrary" role="list" style="height:67px;overflow-y:auto;border:1px solid #adb7c0;background:white;padding:3px;color:#222;font-size:11px;">No saved playlists yet.</div>
+            <div id="ricoSavedStatus" role="status" style="font-size:11px;min-height:14px;margin-top:4px;color:#333;">Enter a name, SAVE LIST, then select a saved playlist to load it.</div>
+          </div>
+
+        <div id="ricoImportTrackSection">
+          <strong>IMPORTED SID FILES</strong>
+          <span id="ricoImportTrackCount">0 SID</span>
+          <div id="ricoImportTrackList">No imported SID yet. Use ADD SID FILES or ADD FOLDER.</div>
+        </div>
+      </div>
+      <div id="ricoImportSidFooter">Stored locally in this browser (IndexedDB). For backup use DOWNLOAD JSON.</div>
+    </aside>
+
+    <div id="sidInfo" style="position: absolute; bottom: 21px; top: 20px; left: 0; width: 220px; background-color: #eeeeee; color: #222222; font-size: 10px; padding: 4px; border: 1px solid #444444; display: none">
+      <div id="" style="position: absolute; top: 0; left: 0; right: 0; height: 22px; background-color: #111111">
+        <div id="sidInfoTitle" style="position: absolute; top: 2px; left: 2px; width: 150px">
+        SID Info
+        </div>
+          <button style="position: absolute; right: 2px; top: 2px; " id="closeSidInfo">Close</button>
+      </div>
+      <div id="sidInfoContent" style="position: absolute; top: 22px; left: 0; right: 0; bottom: 0; overflow: auto; padding: 4px">
+      </div>
+    </div>
+
+
+    <div id="sidControls">
+      <button type="button" id="chooseSid">Choose A SID...</button>
+      <button type="button" id="ricoRemixToolbar" aria-label="Open Remix Playlist Creator">REMIX PLAYLIST</button>
+      <button type="button" id="ricoImportSidButton" title="Import and save SID files in this browser only">IMPORT SID</button>
+      <button type="button" id="nextSid">Next SID &gt;</button>
+      <button type="button" id="ricoPlaylistToggle" aria-pressed="true" title="Show or hide active playlist">PLAYLIST</button>
+      <button type="button" id="autoAdvanceButton" aria-pressed="true" title="Advance to the next SID file when its playback duration ends">AUTO: ON</button>
+
+      <button type="button" id="stopButton">Stop</button>
+      <button type="button" id="playButton">Play</button>
+      <span id="oscilloscopeVisualButtons">
+        <button type="button" id="oscilloscopeModeButton" aria-pressed="true" title="Switch between line and filled waveform">Wave: Filled</button>
+        <button type="button" id="oscilloscopeColorButton" aria-label="Change color palette">COLOR 1</button>
+      </span>
+
+
+      <span id="subsongControls">
+        <button type="button" id="prevButton">&lt;</button>
+        <span id="subsongInfo"></span>
+        <button type="button" id="nextButton">&gt;</button>
+      </span>
+
+      <span>&nbsp;|&nbsp;</span>
+      <label><input checked="checked" id="voice1" class="voiceCheckbox" type="checkbox"> Voice 1</label>
+      <label><input checked="checked" id="voice2" class="voiceCheckbox"  type="checkbox"> Voice 2</label>
+      <label><input checked="checked" id="voice3" class="voiceCheckbox"  type="checkbox"> Voice 3</label>
+
+      <span id="voice4Control" style="display: none">
+        <label><input checked="checked" id="voice4" class="voiceCheckbox"  type="checkbox"> Voice 4</label>
+      </span>
+
+      <span>&nbsp;|&nbsp;</span>
+      <label><input checked="checked" id="filterEnabled" class="voiceCheckbox"  type="checkbox"> Filter Enabled</label>
+
+
+
+      <div class="rico-bottom-about">
+        <button type="button" id="ricoDonateButton" title="Support the maintenance and continued development of SpotySid" aria-haspopup="dialog" aria-controls="ricoDonateDialog">DONATE</button>
+        <button type="button" id="aboutSIDButton" title="Learn about the SID chip">ABOUT SID CHIP</button>
+        <button type="button" id="aboutButton" title="Project information and credits">ABOUT</button>
+        <button type="button" id="ricoHelpButton" title="Player instructions and playlist guide" aria-haspopup="dialog" aria-controls="ricoHelpDialog">HELP</button>
+      </div>
+    </div>
+<!-- TEST136: retry native Pages publication after previous deploy timeout/cancellation; UI unchanged. -->
+        <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/stats.min.js"></script>
+    <script type="text/javascript" src="js/backend_tinysid.js"></script>
+    <script type="text/javascript" src="js/dialogManager.js"></script>
+    <script type="text/javascript" src="js/sidPlayer.js?v=test119numericcolors"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" src="lft-test/customPlaylist.js?v=test174"></script>
+    <script type="text/javascript" src="lft-test/lft-mode.experimental.js?v=test174"></script>
+    <script type="text/javascript" src="js/help.test109.js?v=test109help"></script>
+    <script type="text/javascript" src="js/donate.test135.js?v=test137hearts"></script>
+    <!-- Separate LFT test preview. Do not count analytics test traffic. -->
+</body>
+</html>
