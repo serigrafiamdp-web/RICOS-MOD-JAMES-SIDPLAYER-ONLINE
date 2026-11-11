@@ -22,7 +22,7 @@ Parsed ZIP central directory and decompressed all 66 `.sid` members of the verif
 | Property | Count |
 | --- | ---: |
 | 66 SID, all PAL | 66 |
-| PSID (64 v2, including 2 version-3 PSID) | 64 |
+| PSID: 62 v2 and 2 v3 | 64 |
 | RSID | 2 |
 | MOS8580 model flags | 42 |
 | MOS6581 model flags | 18 |
@@ -60,15 +60,17 @@ Two RSID tunes may require user-supplied copyrighted C64 system ROMs.
 - A failed import/engine load falls back to the original native TinySID routines.
   The documented `?lftmode=off` query acts as a reversible switch without added controls.
 
-## Mock tests executed
+## Checks executed
 
 - Code syntax check PASS.
+- **Actual native Node 22 WASM test PASS:** 66/66 original HVSC LFT SIDs returned non-silent PCM using reSIDfp with no load errors. Run [43056729062](https://github.com/serigrafiamdp-web/RICOS-MOD-JAMES-SIDPLAYER-ONLINE/actions/runs/43056729062). The audio was measured, not independently listened to or verified against VICE.
 - Eligibility excludes all non-LFT titles, non-HVSC references and local lists.
 - Original TinySID handles non-LFT files unchanged.
 - LFT sample path selects reSIDfp; mock `renderFrames(4096)` yields expected normalized PCM.
 - Deactivating destroys the mock WASM context and restores every overridden native
   SID method pointer.
 - No Cloudflare Worker/D1 change, no SID binary or playlist rewrite.
+- A Chromium integration test was added on this branch to exercise real local WASM through the unchanged SpotySid AudioContext/ScriptProcessor. Its PASS remains separate from the Node PCM sweep.
 
 ## Critical release blocker
 
@@ -82,8 +84,8 @@ Before deploying:
 1. Obtain a verified WebAssembly distribution built from patched libsidplayfp
    3.1.2 or later, with corresponding source/licensing.
 2. Run real `Nine` and `Rodents` playback tests against that WASM binary in a browser.
-3. Check the 66 SID for audible output, STOP/PLAY, fading, TIMER/AUTO, two-SID support,
-   and RSID behavior with legally supplied ROMs.
+3. Node PCM rendering of 66 SID has passed, but verify STOP/PLAY, fading, TIMER/AUTO, two-SID fidelity,
+   and RSID behavior with legally supplied ROMs in a real browser.
 4. Verify switching from LFT to every other playlist instantly restores TinySID.
 5. If all checks PASS, promote the isolated branch to main; do not alter
    the community-published playlist ID or D1 data.
