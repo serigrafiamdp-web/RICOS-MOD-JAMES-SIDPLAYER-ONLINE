@@ -1106,7 +1106,7 @@
   // TEST186: stage new Codeblasters HVSC references in the EXISTING public
   // playlist's private EDIT draft. Never change D1 without REPUBLISH + beta key.
   async function stageCodeblastersAdditions(draft){
-    if(!draft||!draft.remoteEditId||!/(?:^|\\b)code[\\s_-]*blasters(?:\\b|$)/i.test(String(draft.name||'')))
+    if(!draft||!draft.remoteEditId||!/(?:^|\b)code[\s_-]*blasters(?:\b|$)/i.test(String(draft.name||'')))
       return 0;
     var response=await fetch('community/migrations/the-codeblasters-2026.json',{cache:'no-store'});
     if(!response.ok)throw Error('The Codeblasters additions unavailable ('+response.status+').');
