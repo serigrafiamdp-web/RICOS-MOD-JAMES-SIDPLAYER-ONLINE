@@ -2268,6 +2268,9 @@
     player.setPath('');
     player.autoLoading = true;
     try {
+      // Only the verified LFT.zip progressive slot may enter the experimental WASM.
+      if(window.RicoLftMode&&window.RicoLftMode.active())
+        window.RicoLftMode.approveTrustedReference(item._hvscRef||null);
       var loaded = player.loadSIDData(item.localBytes);
       if (loaded === false) {
         player.initFileSelection();
