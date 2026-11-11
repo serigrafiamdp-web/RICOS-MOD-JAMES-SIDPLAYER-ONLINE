@@ -104,6 +104,9 @@ try{
   assert.equal(first.index,0);
   assert.ok(first.title.includes('LFT MODE ON'),'No LFT MODE ON marker for mixed list');
   // A currently playing LFT track can be added to a different published list.
+  // The CHOOSE A SID dialog overlays the floating playlist until dismissed.
+  if(await page.locator('#chooseSidDialog').isVisible())
+    await page.locator('#chooseSidClose').click();
   await page.locator('#ricoRemixTarget').selectOption('published:'+target);
   await page.waitForFunction(()=>document.getElementById('ricoLiveStatus')?.textContent.includes('MY TEST LIST'),null,{timeout:30000});
   await page.locator('.rico-live-edit-row .rico-live-add').first().click();
