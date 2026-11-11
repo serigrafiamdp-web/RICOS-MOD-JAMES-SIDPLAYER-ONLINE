@@ -1,0 +1,133 @@
+{
+  "format": "ricos-hvsc-groups",
+  "version": 1,
+  "source": "HVSC #85 (explicit PSID release credit) + CSDb TOP 100 GROUPS",
+  "scope": "Only exact release-credit matches to known CSDb group names. Not a complete CSDb or HVSC group affiliation catalog.",
+  "groups": {
+    "count": 10376,
+    "totalGroups": 83,
+    "rankedGroups": 100,
+    "shelves": [
+      {
+        "name": "0-9",
+        "file": "library/groups/groups-0-9.json",
+        "count": 142,
+        "groups": 4
+      },
+      {
+        "name": "A",
+        "file": "library/groups/groups-A.json",
+        "count": 837,
+        "groups": 5
+      },
+      {
+        "name": "B",
+        "file": "library/groups/groups-B.json",
+        "count": 500,
+        "groups": 5
+      },
+      {
+        "name": "C",
+        "file": "library/groups/groups-C.json",
+        "count": 740,
+        "groups": 9
+      },
+      {
+        "name": "E",
+        "file": "library/groups/groups-E.json",
+        "count": 399,
+        "groups": 3
+      },
+      {
+        "name": "F",
+        "file": "library/groups/groups-F.json",
+        "count": 1089,
+        "groups": 8
+      },
+      {
+        "name": "G",
+        "file": "library/groups/groups-G.json",
+        "count": 519,
+        "groups": 1
+      },
+      {
+        "name": "H",
+        "file": "library/groups/groups-H.json",
+        "count": 766,
+        "groups": 5
+      },
+      {
+        "name": "I",
+        "file": "library/groups/groups-I.json",
+        "count": 19,
+        "groups": 3
+      },
+      {
+        "name": "L",
+        "file": "library/groups/groups-L.json",
+        "count": 176,
+        "groups": 3
+      },
+      {
+        "name": "M",
+        "file": "library/groups/groups-M.json",
+        "count": 848,
+        "groups": 4
+      },
+      {
+        "name": "N",
+        "file": "library/groups/groups-N.json",
+        "count": 52,
+        "groups": 2
+      },
+      {
+        "name": "O",
+        "file": "library/groups/groups-O.json",
+        "count": 833,
+        "groups": 4
+      },
+      {
+        "name": "P",
+        "file": "library/groups/groups-P.json",
+        "count": 483,
+        "groups": 8
+      },
+      {
+        "name": "R",
+        "file": "library/groups/groups-R.json",
+        "count": 150,
+        "groups": 2
+      },
+      {
+        "name": "S",
+        "file": "library/groups/groups-S.json",
+        "count": 682,
+        "groups": 7
+      },
+      {
+        "name": "T",
+        "file": "library/groups/groups-T.json",
+        "count": 868,
+        "groups": 5
+      },
+      {
+        "name": "U",
+        "file": "library/groups/groups-U.json",
+        "count": 8,
+        "groups": 1
+      },
+      {
+        "name": "V",
+        "file": "library/groups/groups-V.json",
+        "count": 1214,
+        "groups": 2
+      },
+      {
+        "name": "X",
+        "file": "library/groups/groups-X.json",
+        "count": 51,
+        "groups": 2
+      }
+    ]
+  }
+}

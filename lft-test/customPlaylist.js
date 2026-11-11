@@ -4544,6 +4544,19 @@
         if(json.format!=='ricos-hvsc-library'||!json.categories)throw Error('Invalid library index.');
         manifest=json;return json;
       }
+      // TEST179: independent read-only GROUPS index. Load only after
+      // the user chooses GROUPS; don't change the original HVSC manifest.
+      async function getGroupManifest(){
+        var lib=await getManifest();
+        if(lib.categories.groups)return lib;
+        var response=await fetch('library/groups/index.json',{cache:'no-store'});
+        if(!response.ok)throw Error('GROUPS index unavailable ('+response.status+').');
+        var data=await response.json();
+        if(data.format!=='ricos-hvsc-groups'||!data.groups||
+           !Array.isArray(data.groups.shelves))throw Error('Invalid GROUPS index.');
+        lib.categories.groups=data.groups;
+        return lib;
+      }
       function makeButton(label,onClick,cls){
         var b=document.createElement('button');b.type='button';b.textContent=label;
         if(cls)b.className=cls;
@@ -4552,9 +4565,13 @@
       function renderShelves(){
         shelvesEl.textContent='';
         var info=manifest.categories[category];
-        document.getElementById('ricoLibraryIntro').textContent=category.toUpperCase()+' · '+info.count.toLocaleString()+' SID · HVSC '+(manifest.source||'');
+        document.getElementById('ricoLibraryIntro').textContent=category==='groups'
+          ?'GROUPS · '+info.totalGroups.toLocaleString()+' groups · '+info.count.toLocaleString()+' SID · HVSC + CSDb'
+          :category.toUpperCase()+' · '+info.count.toLocaleString()+' SID · HVSC '+(manifest.source||'');
         document.getElementById('ricoLibraryMusicians').classList.toggle('rico-selected-tab',category==='musicians');
         document.getElementById('ricoLibraryDemos').classList.toggle('rico-selected-tab',category==='demos');
+        document.getElementById('ricoLibraryGroups').classList.toggle('rico-selected-tab',category==='groups');
+        addAllButton.textContent=category==='groups'?'ADD ALL FROM GROUP':'ADD ALL FROM ARTIST';
         info.shelves.forEach(function(item){
           var b=makeButton(item.name,()=>openShelf(item),'rico-library-shelf');
           if(shelf===item.name)b.classList.add('rico-selected-tab');
@@ -4593,12 +4610,12 @@
           var b=makeButton(section.name+' ('+section.tracks.length+')',function(){
             selected=section;renderSections();
           },'rico-library-section');
-          if(selected&&selected.pack===section.pack)b.classList.add('rico-selected-tab');
+          if(selected===section)b.classList.add('rico-selected-tab');
           sectionsEl.appendChild(b);
         });
         sectionsEl.scrollTop=previousScroll;
         renderSongs();
-        status(matches.length+' sections available · '+selected.tracks.length+' SID in '+selected.name+'.');
+        status(matches.length+(category==='groups'?' groups':' sections')+' available · '+selected.tracks.length+' SID in '+selected.name+'.');
       }
       function filteredTracks(){
         if(!selected)return [];
@@ -4750,7 +4767,9 @@
         if(hvscPanel)hvscPanel.style.display='none';
         panel.style.display='block';refreshTabs();
         try {
-          await getManifest();renderShelves();
+          if(category==='groups')await getGroupManifest();
+          else await getManifest();
+          renderShelves();
           var list=manifest.categories[category].shelves;
           var next=list.find(x=>x.name===shelf)||list[0];
           if(next)await openShelf(next);
@@ -4758,6 +4777,7 @@
       }
       document.getElementById('ricoLibraryMusicians').addEventListener('click',function(){category='musicians';shelf='';openLibrary();});
       document.getElementById('ricoLibraryDemos').addEventListener('click',function(){category='demos';shelf='';openLibrary();});
+      document.getElementById('ricoLibraryGroups').addEventListener('click',function(){category='groups';shelf='';openLibrary();});
       searchEl.addEventListener('input',renderSections);
       tab.addEventListener('click',openLibrary);
     })();
