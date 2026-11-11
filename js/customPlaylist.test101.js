@@ -4558,7 +4558,7 @@
           shelvesEl.appendChild(b);
         });
       }
-      async function openShelf(item){
+      async function openShelf(item, preserveSearch){
         var request=++token;
         shelf=item.name;selected=null;shelfData=null;
         sectionsEl.textContent='';songsEl.textContent='';
@@ -4571,7 +4571,7 @@
             data=await res.json();shelfCache[item.file]=data;
           }
           if(request!==token)return;
-          shelfData=data;searchEl.value='';
+          shelfData=data;if(!preserveSearch)searchEl.value='';
           renderSections();
         }catch(e){if(request===token)status(e.message);}
       }
@@ -4758,7 +4758,18 @@
       document.getElementById('ricoLibraryMusicians').addEventListener('click',function(){category='musicians';shelf='';openLibrary();});
       document.getElementById('ricoLibraryDemos').addEventListener('click',function(){category='demos';shelf='';openLibrary();});
       document.getElementById('ricoLibraryGroups').addEventListener('click',function(){category='groups';shelf='';openLibrary();});
-      searchEl.addEventListener('input',renderSections);
+      // TEST180: GROUPS keyboard search navigates to the appropriate letter automatically.
+      // Keep the typed query when loading a shelf; manual letter clicks still reset it.
+      searchEl.addEventListener('input',function(){
+        if(category!=='groups'){renderSections();return;}
+        var q=searchEl.value.trim().toLocaleLowerCase();
+        if(!q){renderSections();return;}
+        var initial=q.charAt(0).toUpperCase();
+        var expected=/[A-Z]/.test(initial)?initial:'0-9';
+        var item=manifest&&manifest.categories.groups&&manifest.categories.groups.shelves.find(function(entry){return entry.name===expected;});
+        if(item&&item.name!==shelf){openShelf(item,true);return;}
+        renderSections();
+      });
       tab.addEventListener('click',openLibrary);
     })();
 
