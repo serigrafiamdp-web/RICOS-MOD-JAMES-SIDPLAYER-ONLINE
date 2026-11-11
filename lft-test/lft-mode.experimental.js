@@ -248,6 +248,11 @@
       song=Math.max(0,Math.min(meta.maxSubsong,song));
       await local.loadSidBuffer(bytes,song);
       if(!active||sequence!==trackEpoch||engine!==local)return;
+      // The original TinySID loader normally resets this flag. LFT's bridge
+      // must do it too, or a stale fourth-voice lane survives a playlist switch.
+      player.sidHasSamples=false;
+      var fourth=document.getElementById('voice4Control');
+      if(fourth)fourth.style.display='none';
       resetVoiceState();
       currentSong=song;lastBytes=bytes;
       await refill(sequence,PRIMING);
