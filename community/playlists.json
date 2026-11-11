@@ -1,16 +1,8 @@
 {
   "format": "ricos-community-catalog",
   "version": 1,
-  "updatedAt": "2026-11-09",
+  "updatedAt": "2026-11-11",
   "playlists": [
-    {
-      "id": "rico",
-      "title": "RICO",
-      "author": "RICO",
-      "createdBy": "RICO",
-      "tracks": 13,
-      "file": "community/playlists/rico.json"
-    },
     {
       "id": "old-sid-collection-rico",
       "title": "OLD SID COLLECTION RICO",
