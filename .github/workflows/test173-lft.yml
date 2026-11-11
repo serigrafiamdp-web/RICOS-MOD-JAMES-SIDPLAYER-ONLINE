@@ -6,6 +6,7 @@ on:
       - 'js/lft-wasm/**'
       - 'js/lft-mode.experimental.js'
       - 'scripts/test-lft-wasm.mjs'
+      - 'scripts/test-lft-browser.mjs'
       - '.github/workflows/test173-lft.yml'
   workflow_dispatch:
 jobs:
@@ -14,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,3 +23,9 @@ jobs:
           node-version: '22'
       - name: Check WebAssembly engine
         run: node scripts/test-lft-wasm.mjs
+      - name: Install Chromium for isolated smoke
+        run: |
+          npm install --no-save playwright@1.55.1
+          npx playwright install --with-deps chromium
+      - name: Check isolated browser audio and TinySID restoration
+        run: node scripts/test-lft-browser.mjs
