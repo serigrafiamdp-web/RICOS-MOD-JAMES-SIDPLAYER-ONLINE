@@ -1103,14 +1103,39 @@
     });
     return added;
   }
+  // TEST186: stage new Codeblasters HVSC references in the EXISTING public
+  // playlist's private EDIT draft. Never change D1 without REPUBLISH + beta key.
+  async function stageCodeblastersAdditions(draft){
+    if(!draft||!draft.remoteEditId||!/(?:^|\\b)code[\\s_-]*blasters(?:\\b|$)/i.test(String(draft.name||'')))
+      return 0;
+    var response=await fetch('community/migrations/the-codeblasters-2026.json',{cache:'no-store'});
+    if(!response.ok)throw Error('The Codeblasters additions unavailable ('+response.status+').');
+    var manifest=await response.json();
+    if(!manifest||manifest.format!=='spotysid-group-migration'||manifest.version!==1||
+      manifest.group!=='The Codeblasters'||!Array.isArray(manifest.additions)||
+      manifest.additions.length!==6)throw Error('Invalid The Codeblasters migration data.');
+    var known=new Set(draft.tracks.map(remixRefKey)),added=0;
+    manifest.additions.forEach(function(ref){
+      if(!validRemixRef(ref)||typeof ref.title!=='string'||!ref.title.trim())
+        throw Error('Invalid Codeblasters SID reference.');
+      var key=remixRefKey(ref);
+      if(known.has(key))return;
+      known.add(key);
+      draft.tracks.push({pack:ref.pack,file:ref.file,title:ref.title,artist:ref.artist||''});
+      added++;
+    });
+    return added;
+  }
   async function beginPublishedEdit(id){
     if(!/^[a-z0-9-]{12,48}$/i.test(id))throw Error('Invalid published playlist ID.');
     var existing=remixDrafts.find(function(d){return d.remoteEditId===id;});
     if(existing){
       var addedExisting=await stagePatMoritasAdditions(existing);
+      var addedCodeblasters=await stageCodeblastersAdditions(existing);
       remixTarget=existing.id;preserveRemixes();renderRemixes();
       remixNotice(addedExisting?
         'LOS PAT MORITAS: '+addedExisting+' missing SID added to your private draft. Use REPUBLISH to save the same public list.':
+        addedCodeblasters?'THE CODEBLASTERS: '+addedCodeblasters+' missing SID prepared in this draft. Use REPUBLISH to save this same public list.':
         'Continuing unpublished changes for '+existing.name+'. ADD + TO is ready.');
       return;
     }
@@ -1130,10 +1155,12 @@
       baseTracks:tracks.map(remixCanonicalRef),
       tracks:tracks};
     var addedSids=await stagePatMoritasAdditions(draft);
+    var addedCodeblasters=await stageCodeblastersAdditions(draft);
     remixDrafts.push(draft);remixTarget=draft.id;
     preserveRemixes();renderRemixes();
     remixNotice(addedSids?
       'LOS PAT MORITAS: '+addedSids+' missing SID prepared ('+draft.tracks.length+' total). Press REPUBLISH and enter the beta key to update the existing public list.':
+      addedCodeblasters?'THE CODEBLASTERS: '+addedCodeblasters+' missing SID prepared ('+draft.tracks.length+' total). Use REPUBLISH + beta key to update this same public playlist.':
       'Editing '+draft.name+' privately. Play any other list and press + to add its songs. PUBLISH CHANGES keeps the same public ID.');
   }
   async function selectRemixDestination(value){
