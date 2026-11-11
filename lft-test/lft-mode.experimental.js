@@ -18,7 +18,7 @@
   // unaltered reSIDfp mixed signal; the traces estimate raw SID oscillators
   // from the *real emulated chip registers*, not from the mono audio mix.
   var voiceFrames=[quiet,quiet,quiet], VOICE_SEGMENT=1024;
-  var osc=[], C64_PAL_CLOCK=985248, SID_PHASE_RANGE=16777216;
+  var osc=[], latestRegs=null, C64_PAL_CLOCK=985248, SID_PHASE_RANGE=16777216;
   var ATTACK=[.002,.008,.016,.024,.038,.056,.068,.080,.100,.250,.500,.800,1.0,3.0,5.0,8.0];
   var DECAY=[.006,.024,.048,.072,.114,.168,.204,.240,.300,.750,1.50,2.40,3.0,9.0,15.0,24.0];
   function resetVoiceState(){
@@ -26,11 +26,12 @@
       phase:0,level:0,stage:0,gate:false,
       noise:(0x654321^(i*0x15a75d))&0x7fffff
     };});
-    voiceFrames=[quiet,quiet,quiet];
+    voiceFrames=[quiet,quiet,quiet];latestRegs=null;
   }
   resetVoiceState();
   function renderVoiceSegment(traces,offset,length,regs){
     if(!regs||regs.length<25)return;
+    latestRegs=Array.from(regs);
     var sampleRate=player.sampleRate||44100;
     var volume=(regs[24]&15)/15;
     for(var voice=0;voice<3;voice++){
@@ -343,5 +344,6 @@
   window.RicoLftMode={prepare:prepare,deactivate:deactivate,eligible:eligible,
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
     active:function(){return active;},playingApproved:function(){return active&&songReady&&player.isPlaying;},
+    scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
     version:'TEST178-three-voices'};
 })();
