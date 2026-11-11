@@ -1809,7 +1809,12 @@
         : isOldSidCurated()
           ? 'Register this HVSC reference playlist as editable in Cloudflare (beta key required)'
           : 'Save current song order locally; publication requires beta key');
-    $('#ricoLivePlaylistTitle').text(landingPlaylists ? "COMMUNITY PLAYLISTS" : (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'));
+    // TEST176: show the experimental engine state only in the LFT playlist title.
+    var lftModeTitle=!landingPlaylists&&customActive&&loadedPlaylistTitle==='LFT'&&
+      window.RicoLftMode&&window.RicoLftMode.active();
+    $('#ricoLivePlaylistTitle').text((landingPlaylists ? "COMMUNITY PLAYLISTS" :
+      (customActive ? (loadedPlaylistTitle || 'CUSTOM PLAYLIST') : 'GAMES'))+
+      (lftModeTitle?' · LFT MODE ON':''));
     // TEST34: keep the creator/ratings strip visible while a playlist is loaded.
     // Never confuse the playlist creator with each SID's composer.
     var hasLoadedPlaylist = !!loadedPlaylistTitle && customActive;
