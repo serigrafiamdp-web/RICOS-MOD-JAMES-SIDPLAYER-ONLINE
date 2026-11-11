@@ -61,9 +61,10 @@
     if(!active)return;
     var next=queue.length?queue.shift():quiet;
     frame=next;
-    if(queue.length<4)void refill(trackEpoch,HIGH_WATER).catch(function(error){
-      if(active)sayFailure(error);
-    });
+    // Never start WASM rendering inside Web Audio's real-time callback.
+    if(queue.length<4)Promise.resolve().then(function(){
+      return refill(trackEpoch,HIGH_WATER);
+    }).catch(function(error){if(active)sayFailure(error);});
   }
   function patchSid(){
     if(hooked)return;
