@@ -11,7 +11,7 @@
   var nativeLoad=player.loadSIDData, nativeStop=player.stop;
   var originalSid={}, hooked=false, active=false, engine=null, epoch=0, trackEpoch=0;
   var queue=[], frame=new Float32Array(FRAME), quiet=new Float32Array(FRAME);
-  var fillTask=null, lastBytes=null, currentSong=0, songReady=false;
+  var fillTask=null, lastBytes=null, currentSong=0, songReady=false, trustedNextLoad=false;
   var MODE_OFF=/(?:^|[?&])lftmode=off(?:&|$)/i.test(String(window.location&&window.location.search||''));
 
   function eligible(data,remoteId){
@@ -111,7 +111,7 @@
   }
   function deactivate(){
     epoch++;trackEpoch++;
-    active=false;songReady=false;lastBytes=null;
+    active=false;songReady=false;lastBytes=null;trustedNextLoad=false;
     queue=[];frame=quiet;
     restoreSid();
     var old=engine;engine=null;
@@ -198,6 +198,9 @@
   }
   player.loadSIDData=function(bytes){
     if(!active)return nativeLoad.apply(this,arguments);
+    // Fail closed for manual uploads or third-party playback while LFT is active.
+    if(!trustedNextLoad){deactivate();return nativeLoad.apply(this,arguments);}
+    trustedNextLoad=false;
     if(!sidHeaderOK(bytes)){
       sayFailure(new Error('Invalid SID header or data offset'));
       deactivate();
@@ -211,6 +214,12 @@
     if(active&&lastBytes)void startSong(lastBytes,currentSong,false);
     return result;
   };
+  function approveTrustedReference(ref){
+    trustedNextLoad=!!(active&&ref&&!ref.sidId&&ref.pack===PACK&&
+      typeof ref.file==='string'&&/^[^\\/]+\.sid$/i.test(ref.file));
+    return trustedNextLoad;
+  }
   window.RicoLftMode={prepare:prepare,deactivate:deactivate,eligible:eligible,
+    approveTrustedReference:approveTrustedReference,
     active:function(){return active;},version:'TEST173-prototype'};
 })();
