@@ -59,6 +59,7 @@ try{
       tracks:[{pack:'library/packs/musicians/L/Lft.zip',file:'Nine.sid'}]};
     const ready=await window.RicoLftMode.prepare(list,remoteId);
     if(!ready)return {ready:false,error:document.getElementById('ricoLiveStatus')?.textContent};
+    window.RicoLftMode.approveTrustedReference(list.tracks[0]);
     p.loadSIDData(new Uint8Array(bytes));
     for(let i=0;i<100&&!p.isPlaying;i++)await new Promise(resolve=>setTimeout(resolve,25));
     let peak=0,pcmFrames=0;
