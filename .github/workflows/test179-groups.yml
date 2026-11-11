@@ -1,0 +1,50 @@
+name: TEST179 HVSC group release-credit index
+on:
+  push:
+    branches: [test179-hvsc-groups-alphabetical]
+    paths:
+      - 'scripts/build-hvsc-group-index.mjs'
+      - '.github/workflows/test179-groups.yml'
+      - 'community/curation/csdb-groups-ranking-2026-11.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  index:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build group shelves using published HVSC and CSDb credits
+        run: node scripts/build-hvsc-group-index.mjs
+      - name: Validate group JSON and immutable SID pack references
+        run: |
+          node --input-type=module - <<'NODE'
+          import {readFileSync,existsSync} from 'node:fs';
+          const idx=JSON.parse(readFileSync('library/groups/index.json'));
+          if(idx.format!=='ricos-hvsc-groups'||!idx.groups.count)throw Error('Empty group index');
+          for(const shelf of idx.groups.shelves){
+            const data=JSON.parse(readFileSync(shelf.file));
+            for(const g of data.sections){
+              if(!g.tracks.length)throw Error('Empty group');
+              for(const t of g.tracks){
+                if(!existsSync(t.pack))throw Error('Missing HVSC ZIP '+t.pack);
+                if(!t.file||!t.title)throw Error('Invalid track reference');
+              }
+            }
+          }
+          console.log('PASS: '+idx.groups.totalGroups+' groups, '+idx.groups.count+' tracks with intact ZIP refs.');
+          NODE
+      - name: Save generated data on isolated branch
+        run: |
+          git config user.name "SpotySid Group Index"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add library/groups/
+          git diff --cached --quiet && exit 0
+          git commit -m "TEST179: generated HVSC alphabetical group index from verified CSDb credits"
+          git push origin HEAD:test179-hvsc-groups-alphabetical
