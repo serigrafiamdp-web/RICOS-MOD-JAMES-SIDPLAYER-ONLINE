@@ -14,6 +14,70 @@
   var nativeLoad=player.loadSIDData, nativeStop=player.stop;
   var originalSid={}, hooked=false, active=false, engine=null, epoch=0, trackEpoch=0;
   var queue=[], frame=new Float32Array(FRAME), quiet=new Float32Array(FRAME);
+  // TEST178: 3 visually independent voice traces. The PCM audio remains the
+  // unaltered reSIDfp mixed signal; the traces estimate raw SID oscillators
+  // from the *real emulated chip registers*, not from the mono audio mix.
+  var voiceFrames=[quiet,quiet,quiet];
+  var osc=[], latestRegs=null, C64_PAL_CLOCK=985248, SID_PHASE_RANGE=16777216;
+  var ATTACK=[.002,.008,.016,.024,.038,.056,.068,.080,.100,.250,.500,.800,1.0,3.0,5.0,8.0];
+  var DECAY=[.006,.024,.048,.072,.114,.168,.204,.240,.300,.750,1.50,2.40,3.0,9.0,15.0,24.0];
+  function resetVoiceState(){
+    osc=[0,1,2].map(function(i){return {
+      phase:0,level:0,stage:0,gate:false,
+      noise:(0x654321^(i*0x15a75d))&0x7fffff
+    };});
+    voiceFrames=[quiet,quiet,quiet];latestRegs=null;
+  }
+  resetVoiceState();
+  function renderVoiceSegment(traces,offset,length,regs){
+    if(!regs||regs.length<25)return;
+    latestRegs=Array.from(regs);
+    var sampleRate=player.sampleRate||44100;
+    var volume=(regs[24]&15)/15;
+    for(var voice=0;voice<3;voice++){
+      var base=voice*7,control=regs[base+4];
+      var frequency=regs[base]|(regs[base+1]<<8);
+      var increment=frequency*C64_PAL_CLOCK/(SID_PHASE_RANGE*sampleRate);
+      var pulse=((regs[base+2]|((regs[base+3]&15)<<8))/4096);
+      var ad=regs[base+5],sr=regs[base+6];
+      var attack=Math.max(1,ATTACK[ad>>4]*sampleRate);
+      var decay=Math.max(1,DECAY[ad&15]*sampleRate);
+      var release=Math.max(1,DECAY[sr&15]*sampleRate);
+      var sustain=((sr>>4)&15)/15,gate=!!(control&1);
+      var state=osc[voice],output=traces[voice];
+      if(gate!==state.gate){state.stage=gate?1:3;state.gate=gate;}
+      var activeWave=control&0xf0;
+      var testBit=control&8;
+      for(var i=offset,end=offset+length;i<end;i++){
+        if(state.stage===1){
+          state.level+=1/attack;
+          if(state.level>=1){state.level=1;state.stage=2;}
+        }else if(state.stage===2){
+          state.level=Math.max(sustain,state.level-(1-sustain)/decay);
+        }else if(state.stage===3){
+          state.level=Math.max(0,state.level-1/release);
+          if(state.level===0)state.stage=0;
+        }
+        if(!activeWave||!frequency||testBit){output[i]=0;continue;}
+        var phase=state.phase,shape=0,count=0;
+        // These oscillator shapes follow actual reSIDfp frequency, pulse
+        // width, control and ADSR registers; analogue combined waveforms,
+        // filters and ring modulation remain a visual approximation.
+        if(control&16){shape+=1-4*Math.abs(phase-.5);count++;}
+        if(control&32){shape+=2*phase-1;count++;}
+        if(control&64){shape+=phase<pulse?1:-1;count++;}
+        if(control&128){shape+=((state.noise&255)/127.5)-1;count++;}
+        output[i]=(shape/Math.max(1,count))*state.level*volume*.027;
+        phase+=increment;
+        if(phase>=1){
+          phase-=Math.floor(phase);
+          var tap=((state.noise>>22)^(state.noise>>17))&1;
+          state.noise=((state.noise<<1)|tap)&0x7fffff;
+        }
+        state.phase=phase;
+      }
+    }
+  }
   var fillTask=null, lastBytes=null, currentSong=0, songReady=false;
   var approvedNext=null, initTask=null, requestSerial=0;
   var MODE_OFF=/(?:^|[?&])lftmode=off(?:&|$)/i.test(String(window.location&&window.location.search||''));
@@ -73,8 +137,9 @@
   }
   function changeRender(){
     if(!active)return;
-    var next=queue.length?queue.shift():quiet;
-    frame=next;
+    var next=queue.length?queue.shift():null;
+    frame=next?next.audio:quiet;
+    voiceFrames=next?next.voices:[quiet,quiet,quiet];
     // Never start WASM rendering inside Web Audio's real-time callback.
     if(queue.length<4)Promise.resolve().then(function(){
       return refill(trackEpoch,HIGH_WATER);
@@ -100,11 +165,16 @@
       return 0;
     };
     sid.getChannelBuffer=function(channel){
-      return active?(channel===1?-1:0):originalSid.getChannelBuffer.apply(sid,arguments);
+      // SIDPlayer's existing OSC draws voices 1..3 and probes voice 4.
+      // Dedicated negative handles are visual only; no change to audio PCM.
+      return active?(channel>=1&&channel<=3?-100-channel:0):
+        originalSid.getChannelBuffer.apply(sid,arguments);
     };
     sid.readFloatSample=function(buffer,index){
-      return active?(buffer===-1?(frame[index%FRAME]||0):0):
-        originalSid.readFloatSample.apply(sid,arguments);
+      if(!active)return originalSid.readFloatSample.apply(sid,arguments);
+      var channel=-101-buffer;
+      return (channel>=0&&channel<3&&index>=0&&index<FRAME)
+        ?(voiceFrames[channel][index]||0):0;
     };
     sid.enableVoices=function(mask){
       if(!active)return originalSid.enableVoices.apply(sid,arguments);
@@ -127,6 +197,7 @@
     epoch++;trackEpoch++;requestSerial++;
     active=false;songReady=false;lastBytes=null;approvedNext=null;initTask=null;
     queue=[];frame=quiet;
+    resetVoiceState();
     syncModeLabel();
     restoreSid();
     var old=engine;engine=null;
@@ -139,12 +210,25 @@
     var source=engine;
     fillTask=(async function(){
       while(active&&source===engine&&expected===trackEpoch&&queue.length<needed){
+        // Preserve the SAME 4096-frame render call used by TEST177. The
+        // visualizer only reads registers *after* the mixed PCM is finished:
+        // no additional emulation or change to the audible sample stream.
         var pcm=await source.renderFrames(FRAME);
         if(!active||source!==engine||expected!==trackEpoch)return;
         if(!(pcm instanceof Int16Array))throw Error('Unexpected PCM frame format');
         var next=new Float32Array(FRAME);
         for(var i=0;i<Math.min(FRAME,pcm.length);i++)next[i]=pcm[i]/32768;
-        queue.push(next);
+        var voices=[new Float32Array(FRAME),new Float32Array(FRAME),new Float32Array(FRAME)];
+        var regs=null;
+        try{regs=source.getSidStatus(0);}catch(visualError){
+          // Scope extraction must never interrupt audible music.
+          if(!source._ricoScopeWarning){
+            console.warn('LFT scope registers unavailable:',visualError);
+            source._ricoScopeWarning=true;
+          }
+        }
+        renderVoiceSegment(voices,0,FRAME,regs);
+        queue.push({audio:next,voices:voices});
       }
     })();
     try{await fillTask;}finally{fillTask=null;}
@@ -162,6 +246,12 @@
       song=Math.max(0,Math.min(meta.maxSubsong,song));
       await local.loadSidBuffer(bytes,song);
       if(!active||sequence!==trackEpoch||engine!==local)return;
+      // The original TinySID loader normally resets this flag. LFT's bridge
+      // must do it too, or a stale fourth-voice lane survives a playlist switch.
+      player.sidHasSamples=false;
+      var fourth=document.getElementById('voice4Control');
+      if(fourth)fourth.style.display='none';
+      resetVoiceState();
       currentSong=song;lastBytes=bytes;
       await refill(sequence,PRIMING);
       if(!active||sequence!==trackEpoch||engine!==local)return;
@@ -257,5 +347,6 @@
   window.RicoLftMode={prepare:prepare,deactivate:deactivate,eligible:eligible,
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
     active:function(){return active;},playingApproved:function(){return active&&songReady&&player.isPlaying;},
-    version:'TEST177-per-track'};
+    scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
+    version:'TEST178-three-voices'};
 })();
