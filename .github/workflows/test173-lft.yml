@@ -1,0 +1,24 @@
+name: TEST173 isolated LFT WASM smoke
+on:
+  push:
+    branches: [test173-lft-mode-isolated]
+    paths:
+      - 'js/lft-wasm/**'
+      - 'js/lft-mode.experimental.js'
+      - 'scripts/test-lft-wasm.mjs'
+      - '.github/workflows/test173-lft.yml'
+  workflow_dispatch:
+jobs:
+  test-lft-sids:
+    name: LFT reference PCM via isolated WASM
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check WebAssembly engine
+        run: node scripts/test-lft-wasm.mjs
