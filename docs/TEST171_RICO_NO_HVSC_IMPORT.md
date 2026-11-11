@@ -1,6 +1,6 @@
 # TEST171 — Archive RICO SID into NO HVSC, then free CUSTOM
 
-**Status:** source SID binaries checked and migration package prepared; **Cloudflare D1 registration NOT YET CONFIRMED**. The beta key is required to publish. Do not remove or repurpose CUSTOM or the existing RICO playlist until the user verifies this migration.
+**Status (2026-11-11): user-confirmed PASS.** The user reported that the new RICO group works and the 13 SID appear in NO HVSC. The old **static RICO 13 SID Community catalog entry** was removed from `community/playlists.json` after that confirmation. The original `community/playlists/rico.json` is intentionally retained as a read-only rollback source. No browser-local CUSTOM records were deleted remotely.
 
 ## Source
 
@@ -42,3 +42,12 @@
 - This checkpoint does **not** claim that the D1 migration was executed. GitHub cannot bypass beta authorization, and storing files in `ricos-sid-uploads` does not automatically add D1 catalog rows.
 - Do not add interface controls, change the music engine, edit published community playlists, alter the Worker, or rename/delete the existing RICO source during migration.
 - No public playlist IDs or SID bytes were modified by preparing this migration.
+
+## Closure — 2026-11-11
+
+- **PASS (user):** RICO archive is visible and playable in NO HVSC.
+- **Catalog cleanup:** removed static `id: "rico"` (13 SID) from `community/playlists.json`; retained `OLD SID COLLECTION RICO` (298 SID) and `UNKNOWN CSDB` (1,376 SID). These are unrelated sources.
+- **Rollback safety:** the 13-SID source `community/playlists/rico.json` remains in GitHub history and as a source file, but is no longer listed in Community. SID assets in `ricos-sid-uploads` and D1 archive were not modified.
+- **Browser-local entries:** if RICO also appears in a separately saved CUSTOM/LOCAL list on the user's device, its IndexedDB copy must be deleted by user choice in the UI; deleting a server-side catalog entry does not remotely erase local browser data.
+- **Verification:** confirm the obsolete *static* RICO row no longer appears in COMMUNITY after Ctrl+F5 and that NO HVSC still shows 13 RICO SID, Uctumi remains intact, and OLD SID COLLECTION RICO still exists.
+- **No new UI actions or restrictions**, no Cloudflare Worker deployment, no changes to JS or audio.
