@@ -7,11 +7,15 @@
   if(!window.sidPlayer||!window.SID||window.RicoLftMode)return;
   var player=window.sidPlayer, sid=window.SID;
   var PACK='library/packs/musicians/L/Lft.zip';
+  // TEST177: immutable 66-file approval list taken from HVSC #85 musician index.
+  // This is a reference allowlist, not a filename/author guess.
+  var APPROVED=new Map([["A_Chipful_of_Love_for_You.sid",5294],["A_Computer_in_My_Backpack.sid",4990],["A_Mind_Is_Born.sid",380],["Air_on_a_Rasterline.sid",2978],["Allt_under_himmelens_faeste.sid",6619],["Allt_under_himmelens_faeste_v2.sid",6569],["Arrow_of_Time.sid",6270],["Cherry_Waffle.sid",5758],["Computational_Soup_2KB.sid",614],["Crank_Crank_Airwolf.sid",2686],["Crank_Crank_Revolution.sid",3710],["Dishwasher_Groove.sid",4990],["Dithered_Island.sid",6270],["Elvendance.sid",4734],["Euclid_Was_Here.sid",6270],["Fargo.sid",4222],["Fjaellevator_Music.sid",5502],["Foerklaedd_Gud_alpha.sid",4740],["Foerklaedd_Gud_beta.sid",4162],["Foerklaedd_Gud_delta.sid",4235],["Foerklaedd_Gud_epsilon.sid",3173],["Foerklaedd_Gud_eta.sid",3532],["Foerklaedd_Gud_gamma.sid",3280],["Foerklaedd_Gud_zeta.sid",3574],["Fratres_Arvo_Paert_2SID.sid",7435],["Fugue_on_a_Theme_by_D_M_Hanlon.sid",3198],["Glyptodont.sid",6270],["Hachi_Bitto_Whirlwind.sid",6526],["Hardsync.sid",4943],["In_Darkness_Hope.sid",6270],["Into_the_Unknown.sid",5502],["King_Fisher_0x28.sid",5463],["Lunatico_End.sid",1022],["Lunatico_Note.sid",6270],["Lunatico_Side_1.sid",5502],["Lunatico_Side_2.sid",5502],["Machine_Yearning_2SID.sid",6313],["Maple_Leaf_Rag.sid",3966],["Nine.sid",4478],["Nymphaea.sid",4754],["Perfectly_Well-Adjusted.sid",5758],["Perpetual_Fragility.sid",435],["Platform_Hopping.sid",12925],["Quintessence.sid",5758],["Quondam_Tunneling.sid",4734],["Racing_the_Beam.sid",6782],["Reminiscence.sid",5502],["Revolutions_Delivered.sid",5246],["Rodents_in_the_Attic.sid",5246],["Scene_Spirit.sid",8176],["Scene_Spirit_v2.sid",7038],["Shards_of_Fancy.sid",4950],["Sideways.sid",8956],["Slaepwerigne.sid",6795],["Sommargubbe.sid",6782],["Specular_Highlight.sid",9813],["Spin_Crazy_World.sid",6014],["Summer_Cloud.sid",6205],["Summer_Cloud_v2.sid",5502],["Thus_Spoke_the_PC_Speaker.sid",6270],["To_Die_For.sid",4734],["To_Die_For_II.sid",3966],["Toy_Rocket.sid",5758],["Trinket.sid",3454],["Withering_Bytes.sid",5246],["Your_Heptacular_Eyes.sid",6526]]);
   var FRAME=4096, HIGH_WATER=8, PRIMING=4;
   var nativeLoad=player.loadSIDData, nativeStop=player.stop;
   var originalSid={}, hooked=false, active=false, engine=null, epoch=0, trackEpoch=0;
   var queue=[], frame=new Float32Array(FRAME), quiet=new Float32Array(FRAME);
-  var fillTask=null, lastBytes=null, currentSong=0, songReady=false, trustedNextLoad=false;
+  var fillTask=null, lastBytes=null, currentSong=0, songReady=false;
+  var approvedNext=null, initTask=null, requestSerial=0;
   var MODE_OFF=/(?:^|[?&])lftmode=off(?:&|$)/i.test(String(window.location&&window.location.search||''));
 
   function eligible(data,remoteId){
@@ -23,6 +27,16 @@
         return t && !t.sidId && t.pack===PACK &&
           typeof t.file==='string' && /^[^\/\\]+\.sid$/i.test(t.file);
       });
+  }
+  function eligibleRef(ref){
+    return !MODE_OFF && !!ref && !ref.sidId && ref.pack===PACK &&
+      typeof ref.file==='string' && APPROVED.has(ref.file);
+  }
+  function syncModeLabel(){
+    var title=document.getElementById('ricoLivePlaylistTitle');
+    if(!title)return;
+    var base=title.textContent.replace(/ · LFT MODE ON$/,'');
+    title.textContent=base+((active&&songReady&&player.isPlaying)?' · LFT MODE ON':'');
   }
   function sidHeaderOK(bytes){
     if(!(bytes instanceof Uint8Array)||bytes.length<0x7c||bytes.length>256*1024)return false;
@@ -110,9 +124,10 @@
     hooked=false;
   }
   function deactivate(){
-    epoch++;trackEpoch++;
-    active=false;songReady=false;lastBytes=null;trustedNextLoad=false;
+    epoch++;trackEpoch++;requestSerial++;
+    active=false;songReady=false;lastBytes=null;approvedNext=null;initTask=null;
     queue=[];frame=quiet;
+    syncModeLabel();
     restoreSid();
     var old=engine;engine=null;
     if(old)try{old.dispose();}catch(error){console.warn('LFT MODE release:',error);}
@@ -154,6 +169,7 @@
       if(autoplay){
         player.playSong(song); // existing SpotySid transition and timer remain in control
         player.setSongInfo(meta);
+        syncModeLabel();
       }else{
         player.setSongInfo(meta);
         player.autoLoading=false;
@@ -170,43 +186,63 @@
       if(autoplay)nativeLoad.call(player,bytes);
     }
   }
+  async function ensureEngine(){
+    if(active&&engine)return true;
+    if(initTask)return initTask;
+    var generation=epoch;
+    var work=(async function(){
+      var instance=null;
+      try{
+        player.initWebAudio();
+        var lib=await import('./lft-wasm/index.js');
+        instance=new lib.SidAudioEngine({
+          engine:'residfp',sampleRate:player.sampleRate||44100,stereo:false,cacheSecondsLimit:2
+        });
+        var name=await instance.getEngineName();
+        if(name!=='WasmReSIDfp')throw Error('Expected reSIDfp engine, received '+name);
+        if(generation!==epoch){instance.dispose();return false;}
+        engine=instance;active=true;queue=[];frame=quiet;
+        patchSid();
+        return true;
+      }catch(error){
+        if(instance&&instance!==engine)try{instance.dispose();}catch(ignore){}
+        if(generation===epoch){sayFailure(error);deactivate();}
+        return false;
+      }
+    })();
+    initTask=work;
+    try{return await work;}
+    finally{if(initTask===work)initTask=null;}
+  }
+  // Retained for existing standalone diagnostics. Production routing
+  // uses one verified HVSC reference at a time, never playlist name alone.
   async function prepare(data,remoteId){
     deactivate();
     if(!eligible(data,remoteId))return false;
-    var current=++epoch, instance=null;
-    try{
-      player.initWebAudio();
-      // Local, lazy-loaded files; no global TinySID engine replacement.
-      var lib=await import('./lft-wasm/index.js');
-      instance=new lib.SidAudioEngine({
-        engine:'residfp',sampleRate:player.sampleRate||44100,stereo:false,cacheSecondsLimit:2
-      });
-      var name=await instance.getEngineName();
-      if(name!=='WasmReSIDfp')throw Error('Expected reSIDfp engine, received '+name);
-      if(current!==epoch){instance.dispose();return false;}
-      engine=instance;
-      // Respect each PSID header's 6581/8580 and PAL flags; do not force
-      // MOS8580 for the whole collection, because LFT includes both chips.
-      active=true;queue=[];frame=quiet;
-      patchSid();
-      return true;
-    }catch(error){
-      if(instance&&instance!==engine)try{instance.dispose();}catch(ignore){}
-      if(current===epoch){sayFailure(error);deactivate();}
-      return false;
-    }
+    return ensureEngine();
   }
   player.loadSIDData=function(bytes){
-    if(!active)return nativeLoad.apply(this,arguments);
-    // Fail closed for manual uploads or third-party playback while LFT is active.
-    if(!trustedNextLoad){deactivate();return nativeLoad.apply(this,arguments);}
-    trustedNextLoad=false;
-    if(!sidHeaderOK(bytes)){
-      sayFailure(new Error('Invalid SID header or data offset'));
-      deactivate();
+    var ref=approvedNext;
+    approvedNext=null;
+    if(!ref){
+      if(active||initTask||engine)deactivate();
       return nativeLoad.apply(this,arguments);
     }
-    void startSong(new Uint8Array(bytes),null,true);
+    // Prevent arbitrary imported SIDs from entering the older test-only
+    // WebAssembly binary, even if called with a forged source reference.
+    if(!sidHeaderOK(bytes)||bytes.length!==APPROVED.get(ref.file)){
+      if(active||initTask||engine)deactivate();
+      return nativeLoad.apply(this,arguments);
+    }
+    var serial=++requestSerial,sidBytes=new Uint8Array(bytes);
+    void (async function(){
+      if(!await ensureEngine()||serial!==requestSerial)return;
+      await startSong(sidBytes,null,true);
+    })().catch(function(error){
+      if(serial!==requestSerial)return;
+      sayFailure(error);deactivate();
+      nativeLoad.call(player,sidBytes);
+    });
     return true;
   };
   player.stop=function(){
@@ -215,11 +251,11 @@
     return result;
   };
   function approveTrustedReference(ref){
-    trustedNextLoad=!!(active&&ref&&!ref.sidId&&ref.pack===PACK&&
-      typeof ref.file==='string'&&/^[^\\/]+\.sid$/i.test(ref.file));
-    return trustedNextLoad;
+    approvedNext=eligibleRef(ref)?ref:null;
+    return !!approvedNext;
   }
   window.RicoLftMode={prepare:prepare,deactivate:deactivate,eligible:eligible,
-    approveTrustedReference:approveTrustedReference,
-    active:function(){return active;},version:'TEST173-prototype'};
+    approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
+    active:function(){return active;},playingApproved:function(){return active&&songReady&&player.isPlaying;},
+    version:'TEST177-per-track'};
 })();
