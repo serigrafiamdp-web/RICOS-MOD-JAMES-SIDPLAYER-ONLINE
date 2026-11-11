@@ -4580,11 +4580,11 @@
         if(!shelfData)return;
         var q=searchEl.value.trim().toLocaleLowerCase();
         var matches=shelfData.sections.filter(function(g){
-          return !q||g.name.toLocaleLowerCase().includes(q)||g.tracks.some(x=>(x.title+' '+x.author+' '+x.file).toLocaleLowerCase().includes(q));
+          return category==='groups' ? (!q||g.name.toLocaleLowerCase().startsWith(q)) : (!q||g.name.toLocaleLowerCase().includes(q)||g.tracks.some(x=>(x.title+' '+x.author+' '+x.file).toLocaleLowerCase().includes(q)));
         });
         var previousScroll=sectionsEl.scrollTop;
         sectionsEl.textContent='';
-        if(!matches.length){selected=null;songsEl.textContent='No matches.';status('No matching musicians or tracks.');return;}
+        if(!matches.length){selected=null;songsEl.textContent='No matches.';status(category==='groups'?'No matching groups.':'No matching musicians or tracks.');return;}
         if(!selected||!matches.includes(selected)){selected=matches[0];}
         matches.forEach(function(section){
           var b=makeButton(section.name+' ('+section.tracks.length+')',function(){
