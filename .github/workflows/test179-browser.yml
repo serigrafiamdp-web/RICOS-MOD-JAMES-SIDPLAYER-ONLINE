@@ -1,0 +1,30 @@
+name: TEST179 GROUPS alphabetic HVSC library
+on:
+  push:
+    branches: [test179-hvsc-groups-alphabetical]
+    paths:
+      - 'js/customPlaylist.test101.js'
+      - 'lft-test/customPlaylist.js'
+      - 'index.html'
+      - 'lft-test/index.html'
+      - 'library/groups/**'
+      - 'scripts/test179-hvsc-groups.mjs'
+      - '.github/workflows/test179-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright@1.55.1
+          npx playwright install chromium
+      - name: Verify GROUPS A–Z browser, search and draft add all
+        run: node scripts/test179-hvsc-groups.mjs
