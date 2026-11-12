@@ -14,6 +14,9 @@
   // No general Uctumi or filename-based routing.
   var UCTUMI_PACK='library/packs/musicians/U/Uctumi.zip';
   var UCTUMI_8580=new Map([['Loco_un_Poco.sid',6641]]);
+  // TEST209: one additional exact HVSC #85 Uctumi tune for reSIDfp.
+  // It is NOT Loco: its output gain must remain unity (1x).
+  var UCTUMI_MUJER=new Map([['Mujer_Amante.sid',8003]]);
   // TEST177: immutable 66-file approval list taken from HVSC #85 musician index.
   // This is a reference allowlist, not a filename/author guess.
   var APPROVED=new Map([["A_Chipful_of_Love_for_You.sid",5294],["A_Computer_in_My_Backpack.sid",4990],["A_Mind_Is_Born.sid",380],["Air_on_a_Rasterline.sid",2978],["Allt_under_himmelens_faeste.sid",6619],["Allt_under_himmelens_faeste_v2.sid",6569],["Arrow_of_Time.sid",6270],["Cherry_Waffle.sid",5758],["Computational_Soup_2KB.sid",614],["Crank_Crank_Airwolf.sid",2686],["Crank_Crank_Revolution.sid",3710],["Dishwasher_Groove.sid",4990],["Dithered_Island.sid",6270],["Elvendance.sid",4734],["Euclid_Was_Here.sid",6270],["Fargo.sid",4222],["Fjaellevator_Music.sid",5502],["Foerklaedd_Gud_alpha.sid",4740],["Foerklaedd_Gud_beta.sid",4162],["Foerklaedd_Gud_delta.sid",4235],["Foerklaedd_Gud_epsilon.sid",3173],["Foerklaedd_Gud_eta.sid",3532],["Foerklaedd_Gud_gamma.sid",3280],["Foerklaedd_Gud_zeta.sid",3574],["Fratres_Arvo_Paert_2SID.sid",7435],["Fugue_on_a_Theme_by_D_M_Hanlon.sid",3198],["Glyptodont.sid",6270],["Hachi_Bitto_Whirlwind.sid",6526],["Hardsync.sid",4943],["In_Darkness_Hope.sid",6270],["Into_the_Unknown.sid",5502],["King_Fisher_0x28.sid",5463],["Lunatico_End.sid",1022],["Lunatico_Note.sid",6270],["Lunatico_Side_1.sid",5502],["Lunatico_Side_2.sid",5502],["Machine_Yearning_2SID.sid",6313],["Maple_Leaf_Rag.sid",3966],["Nine.sid",4478],["Nymphaea.sid",4754],["Perfectly_Well-Adjusted.sid",5758],["Perpetual_Fragility.sid",435],["Platform_Hopping.sid",12925],["Quintessence.sid",5758],["Quondam_Tunneling.sid",4734],["Racing_the_Beam.sid",6782],["Reminiscence.sid",5502],["Revolutions_Delivered.sid",5246],["Rodents_in_the_Attic.sid",5246],["Scene_Spirit.sid",8176],["Scene_Spirit_v2.sid",7038],["Shards_of_Fancy.sid",4950],["Sideways.sid",8956],["Slaepwerigne.sid",6795],["Sommargubbe.sid",6782],["Specular_Highlight.sid",9813],["Spin_Crazy_World.sid",6014],["Summer_Cloud.sid",6205],["Summer_Cloud_v2.sid",5502],["Thus_Spoke_the_PC_Speaker.sid",6270],["To_Die_For.sid",4734],["To_Die_For_II.sid",3966],["Toy_Rocket.sid",5758],["Trinket.sid",3454],["Withering_Bytes.sid",5246],["Your_Heptacular_Eyes.sid",6526]]);
@@ -119,7 +122,7 @@
     }
   }
   var fillTask=null, lastBytes=null, currentSong=0, songReady=false;
-  var approvedNext=null, initTask=null, requestSerial=0, active8580=false;
+  var approvedNext=null, initTask=null, requestSerial=0, active8580=false, activeMujer=false;
 
   // TEST203: independently prime the *next* approved SID during the outgoing
   // fade. Keep its exact 00:00 PCM frames queued; do not use sound detection,
@@ -145,13 +148,16 @@
       return Promise.resolve(false);
     }
     var route8580=ref.pack===UCTUMI_PACK&&UCTUMI_8580.has(ref.file);
-    var expectedSize=route8580?UCTUMI_8580.get(ref.file):APPROVED.get(ref.file);
+    var routeMujer=ref.pack===UCTUMI_PACK&&UCTUMI_MUJER.has(ref.file);
+    var expectedSize=route8580?UCTUMI_8580.get(ref.file):
+      routeMujer?UCTUMI_MUJER.get(ref.file):APPROVED.get(ref.file);
     if(sourceBytes.length!==expectedSize){releaseStaged();return Promise.resolve(false);}
     var key=stageKey(ref);
     if(stagedNext&&stagedNext.key===key)return stagedNext.promise;
     releaseStaged();
     var state={key:key,engine:null,ready:false,cancelled:false,
-      route8580:route8580,frames:null,meta:null,song:null,promise:null};
+      route8580:route8580,routeMujer:routeMujer,
+      frames:null,meta:null,song:null,promise:null};
     stagedNext=state;
     var safeBytes=new Uint8Array(sourceBytes);
     state.promise=(async function(){
@@ -165,7 +171,8 @@
         if(state.cancelled||stagedNext!==state){candidate.dispose();return false;}
         var meta=songMeta(safeBytes),song=meta.actualSubsong;
         await candidate.loadSidBuffer(safeBytes,song);
-        if(route8580)await candidate.setEmulationConfig({sidModel:'MOS8580',forceSidModel:true});
+        if(route8580||routeMujer)
+          await candidate.setEmulationConfig({sidModel:'MOS8580',forceSidModel:true});
         if(state.cancelled||stagedNext!==state){candidate.dispose();return false;}
         var frames=[];
         for(var i=0;i<PRIMING;i++){
@@ -214,7 +221,8 @@
   function eligibleRef(ref){
     return !MODE_OFF && !!ref && !ref.sidId && typeof ref.file==='string' &&
       ((ref.pack===PACK && APPROVED.has(ref.file)) ||
-       (ref.pack===UCTUMI_PACK && UCTUMI_8580.has(ref.file)));
+       (ref.pack===UCTUMI_PACK &&
+         (UCTUMI_8580.has(ref.file)||UCTUMI_MUJER.has(ref.file))));
   }
   function syncModeLabel(){
     var title=document.getElementById('ricoLivePlaylistTitle');
@@ -324,7 +332,7 @@
   function deactivate(){
     releaseStaged();
     epoch++;trackEpoch++;requestSerial++;
-    active=false;songReady=false;lastBytes=null;approvedNext=null;initTask=null;active8580=false;
+    active=false;songReady=false;lastBytes=null;approvedNext=null;initTask=null;active8580=false;activeMujer=false;
     queue=[];frame=quiet;
     if(typeof player.ricoSetTrackOutputGain==='function')player.ricoSetTrackOutputGain(1);
     resetVoiceState();
@@ -376,9 +384,9 @@
       song=Math.max(0,Math.min(meta.maxSubsong,song));
       await local.loadSidBuffer(bytes,song);
       if(!active||sequence!==trackEpoch||engine!==local)return;
-      // TEST188: explicitly select MOS8580 for Loco un Poco only.
-      // ReSIDfp applies the model and reloads this SID from its start.
-      if(active8580){
+      // TEST209: independently audited MOS8580 header for Mujer Amante.
+      // Loco's existing MOS8580 route and +8.3dB gain remain unchanged.
+      if(active8580||activeMujer){
         await local.setEmulationConfig({sidModel:'MOS8580',forceSidModel:true});
         if(!active||sequence!==trackEpoch||engine!==local)return;
       }
@@ -465,7 +473,9 @@
     // Prevent arbitrary imported SIDs from entering the older test-only
     // WebAssembly binary, even if called with a forged source reference.
     var route8580=ref.pack===UCTUMI_PACK && UCTUMI_8580.has(ref.file);
-    var expectedSize=route8580?UCTUMI_8580.get(ref.file):APPROVED.get(ref.file);
+    var routeMujer=ref.pack===UCTUMI_PACK && UCTUMI_MUJER.has(ref.file);
+    var expectedSize=route8580?UCTUMI_8580.get(ref.file):
+      routeMujer?UCTUMI_MUJER.get(ref.file):APPROVED.get(ref.file);
     if(!sidHeaderOK(bytes)||bytes.length!==expectedSize){
       if(active||initTask||engine)deactivate();
       applyLocoGainForBytes(bytes);
@@ -477,7 +487,7 @@
     if(hot){
       try{
         if(active||initTask||engine)deactivate();
-        engine=hot.engine;active=true;active8580=route8580;
+        engine=hot.engine;active=true;active8580=route8580;activeMujer=routeMujer;
         trackEpoch++;requestSerial++;
         resetVoiceState();
         queue=hot.frames.map(function(f){
@@ -506,11 +516,12 @@
     // Original async path still handles uncached tracks and unavailable staging.
     if(stagedNext&&stagedNext.key!==stageKey(ref))releaseStaged();
     // Do not carry a forced 8580 model over into Linus or other tracks.
-    if(active8580&&!route8580)deactivate();
+    if((active8580&&!route8580)||(activeMujer&&!routeMujer))deactivate();
     var serial=++requestSerial,sidBytes=new Uint8Array(bytes);
     void (async function(){
       if(!await ensureEngine()||serial!==requestSerial)return;
       active8580=route8580;
+      activeMujer=routeMujer;
       await startSong(sidBytes,null,true);
     })().catch(function(error){
       if(serial!==requestSerial)return;
@@ -533,5 +544,5 @@
     stageNextReference:stageNextReference,cancelStagedNext:releaseStaged,
     active:function(){return active;},playingApproved:function(){return !active8580&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
-    version:'TEST198-loco-any-source-gain'};
+    version:'TEST209-mujer-residfp-loco-preserved'};
 })();
