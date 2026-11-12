@@ -1,6 +1,6 @@
 # SpotySid — Architecture and operational map
 
-Updated: 2026-11-10. This is the **current** map; the former TEST62 architecture report remains a historical snapshot.
+Updated: 2026-11-11 (Argentina). This is the **current** map; the former TEST62 architecture report remains a historical snapshot.
 
 ## Components
 
@@ -21,7 +21,11 @@ flowchart TD
 - `index.html` loads `css/style.css`, `js/customPlaylist.test101.js`, `js/sidPlayer.js`, `js/backend_tinysid.js`, JSZip, HELP and DONATE.
 - The `test101` filename is historical; it is currently loaded by `index.html`. Do not rename or replace without checking all references.
 - The SID engine is separate from the community and playlist code. Avoid changing playback when working on catalog or UI.
+- **Selective reSIDfp:** `lft-test/lft-mode.experimental.js` bridges the existing TinySID interface to `lft-test/lft-wasm/` for an explicit allowlist of LFT HVSC sources plus the **single** `Loco_un_Poco.sid` Uctumi source. The bridge from TEST188 was restored **byte-for-byte** in TEST193 and is the active bridge. The original `js/backend_tinysid.js` remains the default engine.
+- **Audio status:** `Loco_un_Poco.sid` has a MOS8580-specific route, but the intro-to-rhythm/filter/volume behaviour remains unresolved. Do **not** label it PASS or extend this route to all Uctumi songs without isolated verification. Historical TEST189–192 changes are not active.
+- **Uctumi audit only:** `library/uctumi-chip-profiles.json` documents the original 99 Uctumi PSID headers (97 PAL/8580; 2 PAL/6581, including two 2SID tunes); it is not a runtime switch for 99 songs.
 - `library/index.json`, `library/data/` and `library/packs/` supply HVSC metadata and ZIP files. The documented HVSC #85 index contains 59,626 SID (56,568 MUSICIANS and 3,058 DEMOS).
+- `library/groups/index.json` and `library/groups/groups-*.json` provide a **derived** CSDb/HVSC release-credit GROUPS browser (currently **84 group headings / 10,385 references**). The Codeblasters have **9 GROUPS references**; those indexes are separate from D1 published user playlists.
 - `community/playlists.json` and `community/playlists/` contain curated static lists. Public user playlists are separate D1 records.
 - `index.html` includes one Cloudflare Web Analytics beacon (TEST169); it has no impact on SID synthesis or community editing.
 - Progressive first-track loading is used for selected large playlists, including RICO'S BEST OF MUS (user verified, TEST148).
@@ -74,4 +78,4 @@ Public v2 playlists can also contain `{sidId, file}` references to immutable con
 
 ## Source and historical records
 
-[README](../README.md) · [Checkpoint 2026-11-10](CHECKPOINT_2026-11-10_SPOTYSID.md) · [NO HVSC TEST165](NO_HVSC_ARCHIVE_TEST165.md) · [User guide](HELP_USER_GUIDE.md) · [Historical TEST62 architecture](ARCHITECTURE_COMMUNITY_HVSC_D1_TEST62.md) · [TEST118 Worker/content-edit design](TEST118_EDIT_PUBLISHED_PLAYLIST_CONTENT.md)
+[README](../README.md) · **[Features](FEATURES.md)** · **[Checkpoint 2026-11-11](CHECKPOINT_2026-11-11_SPOTYSID.md)** · [Checkpoint 2026-11-10](CHECKPOINT_2026-11-10_SPOTYSID.md) · [NO HVSC TEST165](NO_HVSC_ARCHIVE_TEST165.md) · [User guide](HELP_USER_GUIDE.md) · [Historical TEST62 architecture](ARCHITECTURE_COMMUNITY_HVSC_D1_TEST62.md) · [TEST118 Worker/content-edit design](TEST118_EDIT_PUBLISHED_PLAYLIST_CONTENT.md)
