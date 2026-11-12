@@ -2595,7 +2595,7 @@ left: 1px;
 }
 
 
-/* TEST216: clickable speaker-right volume, following the current palette. */
+/* TEST217: symmetric, properly proportioned cone-shaped triangular volume. */
 #sidControls #ricoMasterVolumeControl {
   --rico-volume-level:50%;
   display:inline-flex;flex:0 0 auto;align-items:center;gap:6px;
@@ -2606,13 +2606,13 @@ left: 1px;
   flex:0 0 15px;width:15px;height:15px;pointer-events:none;
 }
 #sidControls #ricoMasterVolumeControl .rico-volume-triangle {
-  width:64px;height:18px;display:block;position:relative;
-  flex:0 0 64px;line-height:0;cursor:pointer;touch-action:none;
+  width:30px;height:24px;display:block;position:relative;
+  flex:0 0 30px;line-height:0;cursor:pointer;touch-action:none;
 }
 #sidControls #ricoMasterVolumeControl .rico-volume-triangle::before,
 #sidControls #ricoMasterVolumeControl .rico-volume-triangle::after {
   content:"";position:absolute;inset:0;pointer-events:none;
-  clip-path:polygon(0 100%,100% 0,100% 100%);
+  clip-path:polygon(0 50%,100% 0,100% 100%);
 }
 #sidControls #ricoMasterVolumeControl .rico-volume-triangle::before {
   background:var(--rico-theme-panel,#333);
