@@ -28,6 +28,32 @@
   // TEST197: all SID PCM remains the original reSIDfp output.
   // Loco-specific loudness is applied only by a separate Web Audio GainNode,
   // not by editing frames or by modifying the SID's master volume/filter.
+  // TEST198: detect the exact unmodified Loco un Poco HVSC PSID even when
+  // the listener opens it from a local/imported playlist (no HVSC source ref).
+  // Fingerprint is for output gain ONLY; NEVER grants access to reSIDfp/WASM.
+  function isLocoSourceBytes(bytes){
+    if(!(bytes instanceof Uint8Array)||bytes.length!==6641)return false;
+    if(bytes[0]!==80||bytes[1]!==83||bytes[2]!==73||bytes[3]!==68||
+       bytes[4]!==0||bytes[5]!==2||bytes[6]!==0||bytes[7]!==124)
+      return false;
+    var crc=-1;
+    for(var i=0;i<bytes.length;i++){
+      crc=(crc^bytes[i])>>>0;
+      for(var bit=0;bit<8;bit++)
+        crc=((crc&1)?(0xedb88320^(crc>>>1)):(crc>>>1))>>>0;
+    }
+    return ((crc^(-1))>>>0)===0xa9dabd30;
+  }
+  function applyLocoGainForBytes(bytes){
+    if(typeof player.ricoSetTrackOutputGain!=='function')return false;
+    // The audio output stage already exists on normal/custom file loading.
+    // If it doesn't yet, initialize it using the original existing chain.
+    player.initWebAudio();
+    var match=isLocoSourceBytes(bytes);
+    var applied=player.ricoSetTrackOutputGain(match?2.6:1);
+    if(match)console.info('TEST198: Loco source recognized; output gain',applied?'2.6x':'UNAVAILABLE');
+    return applied;
+  }
   function setLocoOutputGain(){
     if(typeof player.ricoSetTrackOutputGain!=='function')return false;
     return player.ricoSetTrackOutputGain(active8580?2.6:1);
@@ -343,6 +369,9 @@
     approvedNext=null;
     if(!ref){
       if(active||initTask||engine)deactivate();
+      // Applies to the exact HVSC SID bytes in ANY playlist or local import.
+      // Other songs always reset to normal 1x output.
+      applyLocoGainForBytes(bytes);
       return nativeLoad.apply(this,arguments);
     }
     // Prevent arbitrary imported SIDs from entering the older test-only
@@ -351,6 +380,7 @@
     var expectedSize=route8580?UCTUMI_8580.get(ref.file):APPROVED.get(ref.file);
     if(!sidHeaderOK(bytes)||bytes.length!==expectedSize){
       if(active||initTask||engine)deactivate();
+      applyLocoGainForBytes(bytes);
       return nativeLoad.apply(this,arguments);
     }
     // Do not carry a forced 8580 model over into Linus or other tracks.
@@ -380,5 +410,5 @@
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
     active:function(){return active;},playingApproved:function(){return !active8580&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
-    version:'TEST197-loco-output-gain'};
+    version:'TEST198-loco-any-source-gain'};
 })();
