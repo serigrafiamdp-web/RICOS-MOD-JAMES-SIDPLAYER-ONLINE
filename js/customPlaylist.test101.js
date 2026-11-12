@@ -56,6 +56,9 @@
     silenceAdvanceQueued=false;
   }
   function inspectSidOutput(event,wasPlaying){
+    // TEST201: silence detection intentionally disabled. AUTO now uses TIMER only.
+    // Keep the detector implementation dormant for a possible future opt-in.
+    return;
     if(!wasPlaying||transitionBusy||!player.autoAdvance||player.autoLoading||
        player.sidListIndex===false||!player.sidList||player.sidList.length<2){
       silentSamples=0;return;
