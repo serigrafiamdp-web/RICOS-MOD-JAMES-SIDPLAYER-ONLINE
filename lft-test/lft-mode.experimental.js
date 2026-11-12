@@ -25,34 +25,12 @@
   // unaltered reSIDfp mixed signal; the traces estimate raw SID oscillators
   // from the *real emulated chip registers*, not from the mono audio mix.
   var voiceFrames=[quiet,quiet,quiet];
-  // TEST194: source-specific, gentle loudness compensation. No SID register,
-  // FILTER, channel or LINUS modifications. Reset at each Loco song start.
-  // TEST196: a single fixed whole-mix gain for Loco un Poco ONLY.
-  // Starting BEFORE the quiet drum roll, keep it constant to the end.
-  // The source emits MONO PCM; this cannot change individual SID voices.
-  var locoLevel=null;
-  function liftLocoMix(pcm,mix){
-    if(!active8580||!locoLevel)return;
-    var st=locoLevel,n=Math.min(FRAME,pcm.length);
-    var sr=player.sampleRate||44100;
-    var first=st.samples;
-    st.samples+=n;
-    // TEST195 started 8.5s into the song, after the roll had begun.
-    // This test starts at 7s to include the drum roll itself.
-    var onset=Math.round(7*sr);
-    var clickGuard=Math.max(1,Math.round(0.004*sr));
-    var boost=2.6; // fixed +8.3 dB nominal gain to ALL mixed voices.
-    for(var i=0;i<n;i++){
-      var pos=first+i-onset;
-      if(pos<0)continue;
-      // Only a 4ms anti-click at a single fixed start time.
-      // No slow fade, level detector, compressor or moving gain.
-      var gain=1+(boost-1)*Math.min(1,pos/clickGuard);
-      var y=mix[i]*gain;
-      var abs=Math.abs(y);
-      // Fixed peak-protection curve for values near full scale.
-      mix[i]=abs>0.92?Math.sign(y)*(0.92+0.08*Math.tanh((abs-0.92)/0.08)):y;
-    }
+  // TEST197: all SID PCM remains the original reSIDfp output.
+  // Loco-specific loudness is applied only by a separate Web Audio GainNode,
+  // not by editing frames or by modifying the SID's master volume/filter.
+  function setLocoOutputGain(){
+    if(typeof player.ricoSetTrackOutputGain!=='function')return false;
+    return player.ricoSetTrackOutputGain(active8580?2.6:1);
   }
   var osc=[], latestRegs=null, C64_PAL_CLOCK=985248, SID_PHASE_RANGE=16777216;
   var ATTACK=[.002,.008,.016,.024,.038,.056,.068,.080,.100,.250,.500,.800,1.0,3.0,5.0,8.0];
@@ -233,7 +211,8 @@
   function deactivate(){
     epoch++;trackEpoch++;requestSerial++;
     active=false;songReady=false;lastBytes=null;approvedNext=null;initTask=null;active8580=false;
-    queue=[];frame=quiet;locoLevel=null;
+    queue=[];frame=quiet;
+    if(typeof player.ricoSetTrackOutputGain==='function')player.ricoSetTrackOutputGain(1);
     resetVoiceState();
     syncModeLabel();
     restoreSid();
@@ -255,7 +234,6 @@
         if(!(pcm instanceof Int16Array))throw Error('Unexpected PCM frame format');
         var next=new Float32Array(FRAME);
         for(var i=0;i<Math.min(FRAME,pcm.length);i++)next[i]=pcm[i]/32768;
-        liftLocoMix(pcm,next);
         var voices=[new Float32Array(FRAME),new Float32Array(FRAME),new Float32Array(FRAME)];
         var regs=null;
         try{regs=source.getSidStatus(0);}catch(visualError){
@@ -276,7 +254,6 @@
     var sequence=++trackEpoch,local=engine;
     player.autoLoading=true;player._numberOfSamplesToRender=0;
     songReady=false;queue=[];frame=quiet;
-    locoLevel=active8580?{samples:0}:null;
     try{
       // Drain previous rendering before replacing the WASM engine's tune.
       if(fillTask)await fillTask.catch(function(){});
@@ -290,6 +267,11 @@
       if(active8580){
         await local.setEmulationConfig({sidModel:'MOS8580',forceSidModel:true});
         if(!active||sequence!==trackEpoch||engine!==local)return;
+      }
+      // TEST197: fixed whole-track +8.3dB gain before any playback for
+      // Loco un Poco only. No time detection, fades or EQ; other SIDs unity.
+      if(!setLocoOutputGain()){
+        console.warn('TEST197: separate output gain is unavailable; source PCM remains unmodified.');
       }
       // The original TinySID loader normally resets this flag. LFT's bridge
       // must do it too, or a stale fourth-voice lane survives a playlist switch.
@@ -398,5 +380,5 @@
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
     active:function(){return active;},playingApproved:function(){return !active8580&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
-    version:'TEST196-loco-fixed-max-gain'};
+    version:'TEST197-loco-output-gain'};
 })();
