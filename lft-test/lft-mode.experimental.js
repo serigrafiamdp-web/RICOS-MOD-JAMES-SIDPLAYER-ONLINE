@@ -17,6 +17,10 @@
   // TEST209: one additional exact HVSC #85 Uctumi tune for reSIDfp.
   // It is NOT Loco: its output gain must remain unity (1x).
   var UCTUMI_MUJER=new Map([['Mujer_Amante.sid',8003]]);
+  // TEST211: optional A/B bypass applies ONLY to exact Mujer reference.
+  // Without the URL flag every track plays as in TEST210.
+  var MUJER_FILTER_OFF=/(?:^|[?&])mujerfilter=off(?:&|$)/i
+    .test(String(window.location&&window.location.search||''));
   // TEST177: immutable 66-file approval list taken from HVSC #85 musician index.
   // This is a reference allowlist, not a filename/author guess.
   var APPROVED=new Map([["A_Chipful_of_Love_for_You.sid",5294],["A_Computer_in_My_Backpack.sid",4990],["A_Mind_Is_Born.sid",380],["Air_on_a_Rasterline.sid",2978],["Allt_under_himmelens_faeste.sid",6619],["Allt_under_himmelens_faeste_v2.sid",6569],["Arrow_of_Time.sid",6270],["Cherry_Waffle.sid",5758],["Computational_Soup_2KB.sid",614],["Crank_Crank_Airwolf.sid",2686],["Crank_Crank_Revolution.sid",3710],["Dishwasher_Groove.sid",4990],["Dithered_Island.sid",6270],["Elvendance.sid",4734],["Euclid_Was_Here.sid",6270],["Fargo.sid",4222],["Fjaellevator_Music.sid",5502],["Foerklaedd_Gud_alpha.sid",4740],["Foerklaedd_Gud_beta.sid",4162],["Foerklaedd_Gud_delta.sid",4235],["Foerklaedd_Gud_epsilon.sid",3173],["Foerklaedd_Gud_eta.sid",3532],["Foerklaedd_Gud_gamma.sid",3280],["Foerklaedd_Gud_zeta.sid",3574],["Fratres_Arvo_Paert_2SID.sid",7435],["Fugue_on_a_Theme_by_D_M_Hanlon.sid",3198],["Glyptodont.sid",6270],["Hachi_Bitto_Whirlwind.sid",6526],["Hardsync.sid",4943],["In_Darkness_Hope.sid",6270],["Into_the_Unknown.sid",5502],["King_Fisher_0x28.sid",5463],["Lunatico_End.sid",1022],["Lunatico_Note.sid",6270],["Lunatico_Side_1.sid",5502],["Lunatico_Side_2.sid",5502],["Machine_Yearning_2SID.sid",6313],["Maple_Leaf_Rag.sid",3966],["Nine.sid",4478],["Nymphaea.sid",4754],["Perfectly_Well-Adjusted.sid",5758],["Perpetual_Fragility.sid",435],["Platform_Hopping.sid",12925],["Quintessence.sid",5758],["Quondam_Tunneling.sid",4734],["Racing_the_Beam.sid",6782],["Reminiscence.sid",5502],["Revolutions_Delivered.sid",5246],["Rodents_in_the_Attic.sid",5246],["Scene_Spirit.sid",8176],["Scene_Spirit_v2.sid",7038],["Shards_of_Fancy.sid",4950],["Sideways.sid",8956],["Slaepwerigne.sid",6795],["Sommargubbe.sid",6782],["Specular_Highlight.sid",9813],["Spin_Crazy_World.sid",6014],["Summer_Cloud.sid",6205],["Summer_Cloud_v2.sid",5502],["Thus_Spoke_the_PC_Speaker.sid",6270],["To_Die_For.sid",4734],["To_Die_For_II.sid",3966],["Toy_Rocket.sid",5758],["Trinket.sid",3454],["Withering_Bytes.sid",5246],["Your_Heptacular_Eyes.sid",6526]]);
@@ -125,6 +129,28 @@
   var approvedNext=null, initTask=null, requestSerial=0, active8580=false, activeMujer=false;
   // TEST210: console-only diagnostics. No UI or sound-path changes.
   var mujerAudit={last:'not selected',rendered:0,played:0,underruns:0};
+  var mujerTraceRows=[],mujerTraceNextMs=175000;
+  function resetMujerTrace(){
+    mujerTraceRows=[];mujerTraceNextMs=175000;
+  }
+  function sampleMujerRegisters(source,regs){
+    if(!activeMujer||!regs||regs.length<25||
+       !source||typeof source.getTimeMs!=='function')return;
+    // Once per emulated second across the 3:04–3:29 audible anomaly,
+    // including a buffer before/after. Read-only and console-safe.
+    var t=Number(source.getTimeMs());
+    if(!Number.isFinite(t)||t<175000||t>215000||t<mujerTraceNextMs)return;
+    mujerTraceNextMs=Math.floor(t/1000)*1000+1000;
+    var control=regs[4],route=regs[23],mode=regs[24];
+    mujerTraceRows.push({
+      second:Math.round(t/1000),voice1HzReg:regs[0]|(regs[1]<<8),
+      voice1Ctrl:control,gate:!!(control&1),test:!!(control&8),
+      voice1AD:regs[5],voice1SR:regs[6],
+      filterVoice1:!!(route&1),filterCutoff:((regs[22]<<3)|(regs[21]&7)),
+      filterResonance:route>>4,filterMode:mode&0x70,
+      masterVolume:mode&15,queueUnderruns:mujerAudit.underruns
+    });
+  }
   function reportMujer(stage){
     mujerAudit.last=stage;
     console.info('[TEST210 Mujer Amante]',stage,{
@@ -333,7 +359,11 @@
     };
     sid.setFilterEnabled=function(value){
       if(!active)return originalSid.setFilterEnabled.apply(sid,arguments);
-      if(engine&&typeof engine.setFilterEnabled==='function')engine.setFilterEnabled(0,!!value);
+      // TEST211: a controlled A/B for the 8580 filter, Mujer only.
+      // Loco and Linus continue to honor the existing checkbox as before.
+      var enabled=activeMujer&&MUJER_FILTER_OFF?false:!!value;
+      if(engine&&typeof engine.setFilterEnabled==='function')
+        engine.setFilterEnabled(0,enabled);
     };
     hooked=true;
   }
@@ -379,6 +409,7 @@
             source._ricoScopeWarning=true;
           }
         }
+        if(activeMujer)sampleMujerRegisters(source,regs);
         renderVoiceSegment(voices,0,FRAME,regs);
         queue.push({audio:next,voices:voices});
         if(activeMujer)mujerAudit.rendered++;
@@ -391,6 +422,7 @@
     var sequence=++trackEpoch,local=engine;
     player.autoLoading=true;player._numberOfSamplesToRender=0;
     songReady=false;queue=[];frame=quiet;
+    if(activeMujer)resetMujerTrace();
     try{
       // Drain previous rendering before replacing the WASM engine's tune.
       if(fillTask)await fillTask.catch(function(){});
@@ -503,7 +535,9 @@
     // No SID has advanced into the speakers while preparation was running.
     if(routeMujer){
       mujerAudit.rendered=0;mujerAudit.played=0;mujerAudit.underruns=0;
-      reportMujer('Mujer Amante exact HVSC reference and 8003-byte SID accepted');
+      resetMujerTrace();
+      reportMujer('Mujer Amante exact HVSC reference and 8003-byte SID accepted'+
+        (MUJER_FILTER_OFF?' · diagnostic filter OFF':' · original filter ON'));
     }
     var hot=claimStagedReference(ref);
     if(hot){
@@ -571,13 +605,16 @@
       var regs=latestRegs||[];
       return {last:mujerAudit.last,usingReSIDfp:!!(active&&activeMujer&&songReady),
         playing:!!player.isPlaying,chip:activeMujer?'MOS8580':null,
+        filterTest:activeMujer&&MUJER_FILTER_OFF?'OFF (TEST211)':'normal',
+        registerTraceRows:mujerTraceRows.length,
         activeRoute:activeMujer?'Mujer_Amante.sid':active8580?'Loco_un_Poco.sid':active?'LFT':'TinySID',
         queue:queue.length,renderedBlocks:mujerAudit.rendered,
         playedBlocks:mujerAudit.played,underruns:mujerAudit.underruns,
         voice1:regs.length>=7?{frequency:regs[0]|(regs[1]<<8),
           control:regs[4],attackDecay:regs[5],sustainRelease:regs[6]}:null};
     },
+    mujerTrace:function(){return mujerTraceRows.map(function(r){return Object.assign({},r);});},
     active:function(){return active;},playingApproved:function(){return !active8580&&!activeMujer&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
-    version:'TEST210-mujer-runtime-audit'};
+    version:'TEST211-mujer-filter-ab-trace'};
 })();
