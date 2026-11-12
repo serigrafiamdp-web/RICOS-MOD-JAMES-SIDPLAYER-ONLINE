@@ -1,0 +1,65 @@
+name: Update HVSC STIL
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-stil.yml'
+  schedule:
+    - cron: '0 8 1 * *'
+permissions:
+  contents: write
+jobs:
+  stil:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download and index official STIL
+        run: |
+          python3 - <<'PY'
+          import urllib.request, pathlib, re, json
+          url='https://www.hvsc.c64.org/download/C64Music/DOCUMENTS/STIL.txt'
+          req=urllib.request.Request(url,headers={'User-Agent':'SpotySid-STIL-Indexer/1.0'})
+          with urllib.request.urlopen(req,timeout=90) as resp:
+              raw=resp.read()
+          if len(raw)<1000000 or b'/MUSICIANS/' not in raw:
+              raise RuntimeError('STIL download is incomplete')
+          source=raw.decode('latin-1')
+          out=pathlib.Path('library/stil')
+          out.mkdir(parents=True,exist_ok=True)
+          for old in out.glob('*.json'): old.unlink()
+          entries={}
+          current=None
+          for line in source.splitlines():
+              if re.fullmatch(r'/(?:MUSICIANS|DEMOS|GAMES)/[^\s]*',line) and (line.endswith('/') or line.lower().endswith('.sid')):
+                  current=line
+                  entries[current]=[]
+              elif current is not None:
+                  if line.startswith('###'):
+                      current=None
+                  else:
+                      entries[current].append(line)
+          shards={}
+          for path,lines in entries.items():
+              parts=path.strip('/').split('/')
+              if len(parts)<2: continue
+              prefix=parts[0].lower()
+              letter=parts[1].upper() if prefix=='MUSICIANS' else 'all'
+              shard=prefix+'-'+letter
+              note='\n'.join(lines).strip()
+              if note: shards.setdefault(shard,{})[path]=note
+          for name,items in shards.items():
+              (out/(name+'.json')).write_text(json.dumps(items,ensure_ascii=False,separators=(',',':')),encoding='utf8')
+          (out/'meta.json').write_text(json.dumps({'source':url,'encoding':'latin-1','entries':sum(map(len,shards.values())),'shards':sorted(shards)},indent=2),encoding='utf8')
+          print('Indexed STIL:',sum(map(len,shards.values())),'entries in',len(shards),'shards')
+          PY
+      - name: Commit STIL data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add library/stil
+          if ! git diff --cached --quiet; then
+            git commit -m "Sync official HVSC STIL metadata [skip ci]"
+            git push
+          fi
