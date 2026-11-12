@@ -50,6 +50,12 @@
   // The previous SID remains protected by the regular fade GainNode.
   var openingGainNode=null;
   var audioOutputHookNode=null;
+  // TEST206: visible TIMER counts played audio samples down to 00:00.
+  // Never use autoElapsedSamples here: AUTO resets it before the 5s fade.
+  var countdownElapsedSamples=0;
+  var countdownShownSeconds=null;
+  var countdownEditing=false;
+  var countdownEditOriginal='',countdownEditSongTicket=0;
   // TEST101: detect genuine SID output silence before the fade GainNode.
   // Silence is never inferred from the deliberately reduced master volume.
   var silentSamples=0;
@@ -204,6 +210,12 @@
             }
           }else priorRenderer.call(this,event);
           inspectSidOutput(event,wasPlaying);
+          // Advance only when the SID audio callback actually runs.
+          // Pause freezes the display; output gain and PCM stay untouched.
+          if(wasPlaying&&!player.isPaused){
+            countdownElapsedSamples+=(event&&event.outputBuffer&&event.outputBuffer.length)||0;
+            renderCountdownTimer(false);
+          }
           if(!pendingNewSidUnmute)return;
           pendingNewSidUnmute=false;
           if(!fadeGainNode||!player.audioContext)return;
@@ -313,6 +325,9 @@
   }
   var originalPlaySong=player.playSong;
   player.playSong=function(){
+    // TEST206: a new subtune/track starts its own full countdown at 00:00.
+    countdownElapsedSamples=0;
+    countdownShownSeconds=null;
     // A new tune must never replay the previous tune's held opening.
     openingBufferReplay=null;
     resetSilenceDetector();
@@ -486,7 +501,11 @@
     },playing&&fadeGainNode?FADE_OUT_MS:20);
   }
   // Stop/pause must never leave a pending timer that starts a different track.
-  $('#stopButton').on('click',function(){resetSoftTransition(false);});
+  $('#stopButton').on('click',function(){
+    resetSoftTransition(false);
+    countdownElapsedSamples=0;
+    renderCountdownTimer(true);
+  });
   $('#playButton').on('click',function(){
     if(transitionBusy&&!player.isPlaying)resetSoftTransition(false);
   });
@@ -2363,6 +2382,26 @@
     return String(Math.floor(total / 60)).padStart(2, '0') + ':' +
       String(total % 60).padStart(2, '0');
   }
+  // TEST206: unlike an editable duration, remaining time is allowed to be 00:00.
+  function formatRemainingTime(seconds){
+    var total=Math.max(0,Math.min(3600,Math.ceil(seconds)));
+    return String(Math.floor(total/60)).padStart(2,'0')+':'+
+      String(total%60).padStart(2,'0');
+  }
+  function renderCountdownTimer(force){
+    if(countdownEditing)return;
+    var duration=player.autoFallbackSeconds;
+    // The player advances audio in 4096-sample buffers, not wall-clock timers.
+    // It keeps counting through the outgoing fade, even after AUTO resets its
+    // internal trigger counter. Pausing freezes playback and the countdown.
+    var playing=player.isPlaying||player.isPaused;
+    var remaining=playing?Math.max(0,duration-countdownElapsedSamples/
+      (player.sampleRate||44100)):duration;
+    var seconds=Math.max(0,Math.ceil(remaining));
+    if(!force&&seconds===countdownShownSeconds)return;
+    countdownShownSeconds=seconds;
+    $('#ricoLiveTimer').val(formatRemainingTime(seconds));
+  }
   function parseAutoTime(value) {
     var match = /^\s*(\d{1,2}):(\d{1,2})\s*$/.exec(String(value));
     if (!match) return null;
@@ -2373,9 +2412,8 @@
   }
   function updateAutoTime(seconds) {
     player.autoFallbackSeconds = Math.max(5, Math.min(3600, Math.round(seconds)));
-    var shown=formatAutoTime(player.autoFallbackSeconds);
-    $('#ricoFallback').val(shown);
-    $('#ricoLiveTimer').val(shown);
+    $('#ricoFallback').val(formatAutoTime(player.autoFallbackSeconds));
+    renderCountdownTimer(true);
   }
   // TEST199: known HVSC Songlengths as initial TIMER per playing SID/subtune.
   // Lazy alphabetical shards; unknown tunes retain the original 03:00.
@@ -2444,10 +2482,26 @@
   player.getAutoDurationSeconds=function(){
     return Math.max(0.1,player.autoFallbackSeconds-FADE_OUT_MS/1000);
   };
-  $('#ricoLiveTimer').on('change blur',function(){
-    var parsed=parseAutoTime(this.value);
-    updateAutoTime(parsed===null?player.autoFallbackSeconds:parsed);
-    if(parsed!==null)rememberManualSongTimer();
+  $('#ricoLiveTimer').on('focus',function(){
+    // Editing always starts from the full duration, not the remaining time.
+    countdownEditing=true;
+    countdownEditOriginal=formatAutoTime(player.autoFallbackSeconds);
+    countdownEditSongTicket=songlengthTicket;
+    this.value=countdownEditOriginal;
+    this.select();
+  }).on('blur',function(){
+    var typed=String(this.value).trim();
+    var changed=typed!==countdownEditOriginal&&
+      countdownEditSongTicket===songlengthTicket;
+    countdownEditing=false;
+    if(changed){
+      var parsed=parseAutoTime(typed);
+      if(parsed!==null){
+        updateAutoTime(parsed);
+        rememberManualSongTimer();
+      }
+    }
+    renderCountdownTimer(true);
   }).on('keydown keyup keypress mousedown mouseup click dblclick',function(e){
     e.stopPropagation();
     if(e.type==='keydown'&&e.key==='Enter'){e.preventDefault();this.blur();}
@@ -2466,8 +2520,7 @@
     $('#ricoOurCollectionTab').toggleClass('rico-selected-tab',browserTab==='ours');
     $('#ricoCustomCount').text(custom.length + ' SID');
     $('#ricoFallback').val(formatAutoTime(player.autoFallbackSeconds));
-    if(document.activeElement!==document.getElementById('ricoLiveTimer'))
-      $('#ricoLiveTimer').val(formatAutoTime(player.autoFallbackSeconds));
+    renderCountdownTimer(true);
     $('#ricoPlaylistStatus').text(customActive
       ? (custom.length ? custom.length + ' local SID files ready (session only).' : 'Select SID files or a folder to create your custom list.')
       : 'Original 22 SID playlist. Your local files remain available in CUSTOM.');
@@ -2489,6 +2542,8 @@
     player.isPlaying = false;
     player.isPaused = false;
     player.autoElapsedSamples = 0;
+    countdownElapsedSamples=0;
+    renderCountdownTimer(true);
     $('#playButton').text('Play');
     customActive = wantCustom;
     if (!wantCustom) { loadedPlaylistTitle = ''; loadedPlaylistCreator = ''; }
