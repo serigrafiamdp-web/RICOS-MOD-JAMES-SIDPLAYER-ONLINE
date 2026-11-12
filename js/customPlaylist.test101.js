@@ -1253,6 +1253,11 @@
       }
       var readUrl=communityWriteApi+'/playlists/'+encodeURIComponent(id);
       await verifyRemoteOrder(readUrl,desired,'playlist');
+      // This path can update an existing adopted playlist. Publishing the
+      // first new copy is creation, not a last-edit event.
+      if(matches.length&&response.ok&&result.updated===true&&
+         typeof window.ricoPromoteEditedCommunityPlaylist==='function')
+        await window.ricoPromoteEditedCommunityPlaylist(id,key);
       activePublicPlaylist={remoteId:id,name:payload.name,createdBy:payload.createdBy,
         tracks:desired.slice(),originalCount:desired.length,dirtyOrder:false};
       activeCuratedCatalogId=null;
@@ -1319,6 +1324,15 @@
         ? collection.tracks.map(function(t){return {sidId:t.sidId,file:t.file};})
         : playlist.tracks.map(remixCanonicalRef);
       await verifyRemoteOrder(readUrl,expectedRows,collection?'collection':'playlist');
+      // TEST219: Community playlists only. OUR COLLECTION SID track ordering
+      // is independent and does not affect Community playlist positions.
+      if(playlist&&response.ok&&receipt.updated===true&&
+         typeof window.ricoPromoteEditedCommunityPlaylist==='function'){
+        await window.ricoPromoteEditedCommunityPlaylist(playlist.remoteId,key);
+        if(typeof window.ricoRefreshCommunityCatalog==='function')
+          try{await window.ricoRefreshCommunityCatalog();}
+          catch(refreshError){console.warn('Updated playlist saved; Community refresh pending',refreshError);}
+      }
       if(collection){
         collection.originalTracks=collection.tracks.map(function(t){return {sidId:t.sidId,file:t.file};});
         collection.tracks.forEach(function(t,i){t.originalIndex=i;});
@@ -1815,6 +1829,10 @@
       if(!response.ok&&!(response.status===400&&receipt.error==='No playlist changes to save'))
         throw Error(receipt.error||'Could not publish playlist changes ('+response.status+').');
       await verifyRemoteOrder(endpoint,refs,'playlist');
+      // TEST219: only an actually accepted authorized PUT changes ranking.
+      if(response.ok&&receipt.updated===true&&
+         typeof window.ricoPromoteEditedCommunityPlaylist==='function')
+        await window.ricoPromoteEditedCommunityPlaylist(draft.remoteEditId,key);
       if(activeRemixDraftId===draft.id){
         activeRemixDraftId=null;
         activeLocalOrderDirty=false;
@@ -3521,6 +3539,72 @@
     var communityServerOrder=null;
     var communityServerRevision=null;
     var communityPublicOrderDirty=false;
+    // TEST219 — temporary Community rule until real ratings:
+    // The LAST SUCCESSFULLY beta-authorized EDIT/REPUBLISH goes first.
+    // Reuse the existing D1 /catalog-order endpoint and its revision guard.
+    // Never move a playlist for PLAY, local edits, bad keys or failed writes.
+    async function promoteAuthorizedCommunityEdit(remoteId,betaKey){
+      if(typeof remoteId!=='string'||!/^[a-z0-9-]{12,48}$/i.test(remoteId)||
+         typeof betaKey!=='string'||!betaKey)
+        throw Error('Missing approved community edit');
+      var moving='remote:'+remoteId;
+      for(var attempt=0;attempt<4;attempt++){
+        // Always read the latest global order, not the editor's old browser view.
+        var read=await fetch(communityWriteApi+'/catalog-order',{cache:'no-store'});
+        if(!read.ok)throw Error('Shared catalog order unavailable ('+read.status+')');
+        var state=await read.json();
+        if(!state||state.format!=='ricos-community-catalog-order'||state.version!==1||
+           !Array.isArray(state.order)||!Number.isSafeInteger(state.revision))
+          throw Error('Invalid shared catalog order');
+        var order=[moving].concat(state.order.filter(function(id){return id!==moving;}));
+        if(order.length>550)throw Error('Shared catalog order exceeds server limit');
+        // Already first after a successful edit: no need for a redundant write.
+        if(state.order[0]===moving){
+          communityServerOrder=order;
+          communityServerRevision=state.revision;
+          communityDraftOrder=null;
+          communityPublicOrderDirty=false;
+          return true;
+        }
+        var write=await fetch(communityWriteApi+'/catalog-order',{
+          method:'PUT',
+          headers:{'Content-Type':'application/json','X-Beta-Key':betaKey},
+          body:JSON.stringify({order:order,expectedRevision:state.revision})
+        });
+        // Another editor may have changed the global order while we worked.
+        // Retry against their newest revision; never overwrite it blindly.
+        if(write.status===409)continue;
+        var receipt=await write.json().catch(function(){return {};});
+        if(!write.ok||receipt.saved!==true||!Number.isSafeInteger(receipt.revision))
+          throw Error(receipt.error||'Shared catalog reorder not confirmed');
+        var verify=await fetch(communityWriteApi+'/catalog-order?verify='+Date.now(),
+          {cache:'no-store'});
+        if(!verify.ok)throw Error('Cannot verify shared catalog order');
+        var latest=await verify.json();
+        if(!latest||!Array.isArray(latest.order)||latest.order[0]!==moving||
+           !Number.isSafeInteger(latest.revision))
+          throw Error('Another edit changed the shared order during verification');
+        communityServerOrder=latest.order;
+        communityServerRevision=latest.revision;
+        communityDraftOrder=null;
+        communityPublicOrderDirty=false;
+        return true;
+      }
+      throw Error('Another editor changed the order repeatedly');
+    }
+    // Called only AFTER the Worker confirmed the authorized edit.
+    // Song-edit PUTs are also re-read before promotion; metadata PATCHes
+    // use the Worker's confirmed success. The beta key stays transient:
+    // never put it in storage, draft state, playlist data or a URL.
+    window.ricoPromoteEditedCommunityPlaylist=async function(remoteId,betaKey){
+      try{return await promoteAuthorizedCommunityEdit(remoteId,betaKey);}
+      catch(error){
+        console.warn('Playlist edit saved, but Community reorder is pending:',error);
+        if(communityOrderStatus)
+          communityOrderStatus.textContent='Edit saved · order pending';
+        return false;
+      }
+    };
     // TEST159: the shared catalog order lives in D1, not just this browser.
     async function readCommunityServerOrder(){
       try{
@@ -4529,6 +4613,10 @@
                 });
                 var result=await resp.json();
                 if(!resp.ok)throw Error(result.error||'Could not edit playlist.');
+                // TEST219: the same successfully accepted beta-key edit moves
+                // this published playlist to the top for all visitors.
+                if(result.updated===true&&typeof window.ricoPromoteEditedCommunityPlaylist==='function')
+                  await window.ricoPromoteEditedCommunityPlaylist(item.remoteId,auth.key);
                 if(activePublicPlaylist&&activePublicPlaylist.remoteId===item.remoteId){
                   activePublicPlaylist.name=result.title;activePublicPlaylist.createdBy=result.createdBy;
                   loadedPlaylistTitle=result.title;loadedPlaylistCreator=result.createdBy;renderLivePlaylist();
