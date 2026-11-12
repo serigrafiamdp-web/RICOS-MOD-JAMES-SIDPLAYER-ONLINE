@@ -270,6 +270,18 @@
         if(!profile)throw Error('Missing audited Uctumi chip metadata');
         await local.setEmulationConfig({sidModel:profile[1],forceSidModel:true});
         if(!active||sequence!==trackEpoch||engine!==local)return;
+        // TEST191: reproduce the user's successful manual FILTER OFF -> ON
+        // sequence once, only for Loco un Poco, before priming PCM.
+        if(activeUctumiFile==='Loco_un_Poco.sid'){
+          var filterCheckbox=document.getElementById('filterEnabled');
+          var wantedFilter=!filterCheckbox||filterCheckbox.checked;
+          try{
+            local.setFilterEnabled(0,false);
+            local.setFilterEnabled(0,!!wantedFilter);
+          }catch(filterError){
+            console.warn('TEST191 Loco un Poco filter reinitialization:',filterError);
+          }
+        }
       }
       // The original TinySID loader normally resets this flag. LFT's bridge
       // must do it too, or a stale fourth-voice lane survives a playlist switch.
@@ -351,8 +363,15 @@
       if(active||initTask||engine)deactivate();
       return nativeLoad.apply(this,arguments);
     }
-    // Restore the independent Linus engine configuration on leaving Uctumi.
-    if(activeUctumi&&!routeUctumi)deactivate();
+    // TEST191: TEST188 worked because Loco un Poco always got a fresh
+    // reSIDfp instance. Recreate it when switching from another Uctumi SID,
+    // instead of inheriting that song's filter/voice state.
+    if(routeUctumi&&ref.file==='Loco_un_Poco.sid'&&(active||engine||initTask)){
+      deactivate();
+    }else if(activeUctumi&&!routeUctumi){
+      // Restore the independent Linus engine configuration on leaving Uctumi.
+      deactivate();
+    }
     var serial=++requestSerial,sidBytes=new Uint8Array(bytes);
     void (async function(){
       if(!await ensureEngine()||serial!==requestSerial)return;
@@ -379,5 +398,5 @@
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
     active:function(){return active;},playingApproved:function(){return !activeUctumi&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
-    version:'TEST190-uctumi-pal-from-header'};
+    version:'TEST191-loco-filter-reset'};
 })();
