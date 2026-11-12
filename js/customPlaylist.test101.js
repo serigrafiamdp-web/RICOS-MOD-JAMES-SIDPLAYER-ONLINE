@@ -97,7 +97,13 @@
          player.sidListIndex===false||player.sidList[player.sidListIndex]!==currentTrack)return;
       silentSamples=0;
       $('#ricoLiveStatus').text(reason+' · AUTO NEXT');
-      player.nextSid();
+      // TEST200: once real output silence has already been confirmed, skip
+      // the otherwise inaudible five-second fade of the outgoing SID.
+      // A genuine song end was already immediate; ordinary NEXT/AUTO keeps its fade.
+      if(reason==='Audio silence detected'){
+        var next=(player.sidListIndex+1)%player.sidList.length;
+        requestSidSwitch(next,'silence');
+      }else player.nextSid();
     });
   }
   var transitionTimer=null;
@@ -248,7 +254,7 @@
       if(fadeGainNode&&audioOutputHookNode===player.scriptNode)
         pendingNewSidUnmute=true;
       else restoreFullVolume();
-      if(transitionSource==='next')followPlayingRowOnce=true;
+      if(transitionSource==='next'||transitionSource==='silence')followPlayingRowOnce=true;
       transitionSource=null;
       renderLivePlaylist();
     }
@@ -298,7 +304,9 @@
     }
     player.initWebAudio();
     // If playback was paused or stopped, switch immediately and fade in.
-    var playing=!!player.isPlaying&&!player.isPaused;
+    // TEST200: confirmed silence needs no additional fade; the incoming SID
+    // still unmutes on its first rendered audio buffer (TEST100 protection).
+    var playing=!!player.isPlaying&&!player.isPaused&&source!=='silence';
     resetSilenceDetector();
     transitionBusy=true;transitionSource=source;queuedLiveIndex=index;
     var generation=++transitionGeneration;
