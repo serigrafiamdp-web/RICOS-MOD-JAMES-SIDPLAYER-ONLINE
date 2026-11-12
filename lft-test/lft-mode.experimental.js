@@ -120,6 +120,85 @@
   }
   var fillTask=null, lastBytes=null, currentSong=0, songReady=false;
   var approvedNext=null, initTask=null, requestSerial=0, active8580=false;
+
+  // TEST203: independently prime the *next* approved SID during the outgoing
+  // fade. Keep its exact 00:00 PCM frames queued; do not use sound detection,
+  // seek, thresholding, or skip any opening samples.
+  var stagedNext=null;
+  function stageKey(ref){
+    return String(ref&&ref.pack||'')+'|'+String(ref&&ref.file||'');
+  }
+  function releaseStaged(){
+    var old=stagedNext;
+    stagedNext=null;
+    if(!old)return;
+    old.cancelled=true;
+    if(old.ready&&old.engine){
+      try{old.engine.dispose();}catch(error){console.warn('Staged SID cleanup:',error);}
+    }
+  }
+  function stageNextReference(ref,sourceBytes){
+    // Only trust exactly the already-approved HVSC reference routes.
+    if(!eligibleRef(ref)||!(sourceBytes instanceof Uint8Array)||
+       !sidHeaderOK(sourceBytes)){
+      releaseStaged();
+      return Promise.resolve(false);
+    }
+    var route8580=ref.pack===UCTUMI_PACK&&UCTUMI_8580.has(ref.file);
+    var expectedSize=route8580?UCTUMI_8580.get(ref.file):APPROVED.get(ref.file);
+    if(sourceBytes.length!==expectedSize){releaseStaged();return Promise.resolve(false);}
+    var key=stageKey(ref);
+    if(stagedNext&&stagedNext.key===key)return stagedNext.promise;
+    releaseStaged();
+    var state={key:key,engine:null,ready:false,cancelled:false,
+      route8580:route8580,frames:null,meta:null,song:null,promise:null};
+    stagedNext=state;
+    var safeBytes=new Uint8Array(sourceBytes);
+    state.promise=(async function(){
+      var candidate=null;
+      try{
+        var lib=await import(engineModuleUrl);
+        candidate=new lib.SidAudioEngine({engine:'residfp',
+          sampleRate:player.sampleRate||44100,stereo:false,cacheSecondsLimit:2});
+        if(await candidate.getEngineName()!=='WasmReSIDfp')
+          throw Error('Expected reSIDfp for staged song');
+        if(state.cancelled||stagedNext!==state){candidate.dispose();return false;}
+        var meta=songMeta(safeBytes),song=meta.actualSubsong;
+        await candidate.loadSidBuffer(safeBytes,song);
+        if(route8580)await candidate.setEmulationConfig({sidModel:'MOS8580',forceSidModel:true});
+        if(state.cancelled||stagedNext!==state){candidate.dispose();return false;}
+        var frames=[];
+        for(var i=0;i<PRIMING;i++){
+          var pcm=await candidate.renderFrames(FRAME);
+          if(!(pcm instanceof Int16Array))throw Error('Unexpected staged SID PCM');
+          var audio=new Float32Array(FRAME);
+          for(var j=0;j<Math.min(FRAME,pcm.length);j++)audio[j]=pcm[j]/32768;
+          var regs=null;
+          try{regs=candidate.getSidStatus(0);}catch(scopeError){}
+          frames.push({audio:audio,regs:regs?Array.from(regs):null});
+          if(state.cancelled||stagedNext!==state){candidate.dispose();return false;}
+        }
+        state.engine=candidate;
+        state.meta=meta;
+        state.song=song;
+        state.frames=frames;
+        state.ready=true;
+        return true;
+      }catch(error){
+        if(candidate)try{candidate.dispose();}catch(disposalError){}
+        if(stagedNext===state)stagedNext=null;
+        console.warn('TEST203: next SID staging failed, using standard startup:',error);
+        return false;
+      }
+    })();
+    return state.promise;
+  }
+  function claimStagedReference(ref){
+    var stage=stagedNext;
+    if(!stage||!stage.ready||stage.key!==stageKey(ref))return null;
+    stagedNext=null;
+    return stage;
+  }
   var MODE_OFF=/(?:^|[?&])lftmode=off(?:&|$)/i.test(String(window.location&&window.location.search||''));
 
   function eligible(data,remoteId){
@@ -243,6 +322,7 @@
     hooked=false;
   }
   function deactivate(){
+    releaseStaged();
     epoch++;trackEpoch++;requestSerial++;
     active=false;songReady=false;lastBytes=null;approvedNext=null;initTask=null;active8580=false;
     queue=[];frame=quiet;
@@ -391,6 +471,40 @@
       applyLocoGainForBytes(bytes);
       return nativeLoad.apply(this,arguments);
     }
+    // TEST203: hand off an independently primed zero-position PCM queue.
+    // No SID has advanced into the speakers while preparation was running.
+    var hot=claimStagedReference(ref);
+    if(hot){
+      try{
+        if(active||initTask||engine)deactivate();
+        engine=hot.engine;active=true;active8580=route8580;
+        trackEpoch++;requestSerial++;
+        resetVoiceState();
+        queue=hot.frames.map(function(f){
+          var voices=[new Float32Array(FRAME),new Float32Array(FRAME),new Float32Array(FRAME)];
+          if(f.regs)renderVoiceSegment(voices,0,FRAME,f.regs);
+          return {audio:f.audio,voices:voices};
+        });
+        frame=quiet;songReady=true;
+        lastBytes=new Uint8Array(bytes);currentSong=hot.song;
+        player.sidHasSamples=false;
+        var fourth=document.getElementById('voice4Control');
+        if(fourth)fourth.style.display='none';
+        patchSid();
+        setLocoOutputGain();
+        player.playSong(hot.song);
+        player.setSongInfo(hot.meta);
+        syncModeLabel();
+        return true;
+      }catch(error){
+        console.warn('TEST203 staged start failed; fallback to native SID:',error);
+        deactivate();
+        nativeLoad.call(player,bytes);
+        return true;
+      }
+    }
+    // Original async path still handles uncached tracks and unavailable staging.
+    if(stagedNext&&stagedNext.key!==stageKey(ref))releaseStaged();
     // Do not carry a forced 8580 model over into Linus or other tracks.
     if(active8580&&!route8580)deactivate();
     var serial=++requestSerial,sidBytes=new Uint8Array(bytes);
@@ -416,6 +530,7 @@
   }
   window.RicoLftMode={prepare:prepare,deactivate:deactivate,eligible:eligible,
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
+    stageNextReference:stageNextReference,cancelStagedNext:releaseStaged,
     active:function(){return active;},playingApproved:function(){return !active8580&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
     version:'TEST198-loco-any-source-gain'};
