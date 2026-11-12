@@ -10,6 +10,7 @@ This is the **current public-facing feature list** as of **11 November 2026 (Arg
 
 - Play Commodore 64 SID tracks from the HVSC library, curated playlists, and supported local imports.
 - **AUTO**, adjustable **MM:SS timer**, silence detection and fade-out transitions.
+- **HVSC Songlengths (TEST199):** tentative timer values for each playing SID/subtune when a matching HVSC source path has a recorded duration; unknown tunes keep the default 03:00. Manual changes are session-only, **not** REPUBLISH metadata. No new controls. [Reference & limits](TEST199_HVSC_SONGLENGTHS.md).
 - Real-time oscilloscope, voice controls, **FILTER** checkbox and selectable visual palette / fill display.
 - **TinySID** is the normal playback path. **reSIDfp (WebAssembly)** is selectively used for individually approved **LINUS / LFT** tracks; the original playlist is **not** forced to start automatically.
 - **LFT MODE ON** is shown while an approved LFT track plays. The same approved track can be placed in other playlists and still use LFT mode.
