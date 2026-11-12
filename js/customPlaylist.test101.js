@@ -69,8 +69,7 @@
   // It shares the existing trackGainNode so Loco un Poco's 2.6x still applies.
   // The previous SID remains protected by the regular fade GainNode.
   var openingGainNode=null;
-  // TEST215: SpotySid master volume AFTER the normal and protected
-  // first-buffer output paths. Independent of SID data and song gain.
+  // TEST216: master gain AFTER both audio paths. 50% = unity, 100% = 2x.
   var masterGainNode=null,masterVolume=1;
   var audioOutputHookNode=null;
   // TEST206: visible TIMER counts played audio samples down to 00:00.
@@ -318,23 +317,59 @@
     }
     return response;
   };
-  // TEST215: volume UI has no visible text: speaker + triangular slider.
+  // TEST216: the actual triangular surface handles mouse/touch dragging.
+  // Level is painted with a clipped linear gradient (not an invalid var/calc
+  // polygon), and is therefore visibly emptied as the volume goes down.
   (function setupMasterVolume(){
     var range=document.getElementById('ricoMasterVolume');
     var wrap=document.getElementById('ricoMasterVolumeControl');
-    if(!range||!wrap)return;
+    var triangle=wrap&&wrap.querySelector('.rico-volume-triangle');
+    if(!range||!wrap||!triangle)return;
+    var dragging=false;
     function applyVolume(value){
-      var percent=Math.max(0,Math.min(100,Number(value)||0));
-      masterVolume=percent/100;
+      var percent=Math.round(Math.max(0,Math.min(100,Number(value)||0)));
+      range.value=String(percent);
+      // 50% is standard original output; 100% gives up to +6dB boost.
+      // Independent of track-specific gain, SID registers and fade-out.
+      masterVolume=2*percent/100;
       wrap.style.setProperty('--rico-volume-level',percent+'%');
       range.setAttribute('aria-valuetext',percent+'%');
+      // Do not create an AudioContext on page load. A real PLAY or user
+      // gesture sets it up; reconnect only if a ScriptProcessor already exists.
+      if(!masterGainNode&&player.scriptNode&&typeof player.initWebAudio==='function')
+        player.initWebAudio();
       if(masterGainNode&&player.audioContext){
         var param=masterGainNode.gain,now=player.audioContext.currentTime;
+        var previous=Number(param.value);
+        if(!Number.isFinite(previous))previous=masterVolume;
         param.cancelScheduledValues(now);
-        // Short de-click ramp, separate from the 5-second SID fade.
-        param.setTargetAtTime(masterVolume,now,0.015);
+        param.setValueAtTime(previous,now);
+        param.linearRampToValueAtTime(masterVolume,now+0.012);
       }
     }
+    function applyPointer(event){
+      var rect=triangle.getBoundingClientRect();
+      if(!rect.width)return;
+      applyVolume(100*(event.clientX-rect.left)/rect.width);
+    }
+    triangle.addEventListener('pointerdown',function(event){
+      if(event.button!==undefined&&event.button!==0)return;
+      dragging=true;
+      event.preventDefault();
+      if(triangle.setPointerCapture)triangle.setPointerCapture(event.pointerId);
+      applyPointer(event);
+    });
+    triangle.addEventListener('pointermove',function(event){
+      if(dragging)applyPointer(event);
+    });
+    function endPointer(event){
+      if(!dragging)return;
+      dragging=false;
+      if(triangle.hasPointerCapture&&triangle.hasPointerCapture(event.pointerId))
+        triangle.releasePointerCapture(event.pointerId);
+    }
+    triangle.addEventListener('pointerup',endPointer);
+    triangle.addEventListener('pointercancel',endPointer);
     range.addEventListener('input',function(){applyVolume(range.value);});
     applyVolume(range.value);
   })();
