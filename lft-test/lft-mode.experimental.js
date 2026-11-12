@@ -178,6 +178,14 @@
   }
   function changeRender(){
     if(!active)return;
+    // TEST202: the previous SID can still be flagged as playing while the
+    // incoming reSIDfp tune is being prepared. Never consume primed opening
+    // frames before startSong explicitly calls player.playSong(0/subtune).
+    if(!songReady){
+      frame=quiet;
+      voiceFrames=[quiet,quiet,quiet];
+      return;
+    }
     var next=queue.length?queue.shift():null;
     frame=next?next.audio:quiet;
     voiceFrames=next?next.voices:[quiet,quiet,quiet];
