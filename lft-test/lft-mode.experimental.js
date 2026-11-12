@@ -261,16 +261,14 @@
       song=Math.max(0,Math.min(meta.maxSubsong,song));
       await local.loadSidBuffer(bytes,song);
       if(!active||sequence!==trackEpoch||engine!==local)return;
-      // TEST189: native PAL-B (50Hz) timing and chip specified by each Uctumi SID.
-      // The selected model is forced for this trusted file only, then the tune
-      // is reloaded inside reSIDfp. No gain or filter curve is artificially altered.
+      // TEST190: all 99 Uctumi PSID headers already declare PAL. Let libsidplayfp
+      // honor the native PAL clock in the header. TEST189's extra forceC64Model
+      // caused a regression in Loco un Poco; retain the TEST188 model-only call.
+      // Model itself remains pinned to the audited 8580/6581 profile.
       if(activeUctumi){
         var profile=UCTUMI_SIDS.get(activeUctumiFile);
         if(!profile)throw Error('Missing audited Uctumi chip metadata');
-        await local.setEmulationConfig({
-          c64Model:'PAL',forceC64Model:true,
-          sidModel:profile[1],forceSidModel:true
-        });
+        await local.setEmulationConfig({sidModel:profile[1],forceSidModel:true});
         if(!active||sequence!==trackEpoch||engine!==local)return;
       }
       // The original TinySID loader normally resets this flag. LFT's bridge
@@ -381,5 +379,5 @@
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
     active:function(){return active;},playingApproved:function(){return !activeUctumi&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
-    version:'TEST189-uctumi-pal-chips'};
+    version:'TEST190-uctumi-pal-from-header'};
 })();
