@@ -2593,3 +2593,39 @@ left: 1px;
   margin-left:0;
   padding:6px 5px;
 }
+
+
+/* TEST215: palette-aware triangular SpotySid master volume — no visible text. */
+#sidControls #ricoMasterVolumeControl {
+  --rico-volume-level:100%;
+  display:inline-flex;flex:0 0 auto;align-items:center;gap:4px;
+  height:23px;margin-left:2px;color:var(--rico-theme-fg,#fff);line-height:0;
+}
+#sidControls #ricoMasterVolumeControl > svg {
+  flex:0 0 15px;width:15px;height:15px;pointer-events:none;
+}
+#sidControls #ricoMasterVolumeControl .rico-volume-triangle {
+  width:63px;height:17px;display:block;position:relative;
+  flex:0 0 63px;line-height:0;cursor:pointer;
+}
+#sidControls #ricoMasterVolumeControl .rico-volume-triangle::before,
+#sidControls #ricoMasterVolumeControl .rico-volume-triangle::after {
+  content:"";position:absolute;inset:0;pointer-events:none;
+}
+#sidControls #ricoMasterVolumeControl .rico-volume-triangle::before {
+  background:var(--rico-theme-panel,#333);
+  clip-path:polygon(0 100%,100% 0,100% 100%);
+}
+#sidControls #ricoMasterVolumeControl .rico-volume-triangle::after {
+  background:var(--rico-theme-fg,#fff);
+  clip-path:polygon(0 100%,
+    var(--rico-volume-level) calc(100% - var(--rico-volume-level)),
+    var(--rico-volume-level) 100%);
+}
+#sidControls #ricoMasterVolume {
+  position:absolute;inset:0;width:100%;height:100%;
+  margin:0;padding:0;opacity:0;cursor:pointer;z-index:1;touch-action:none;
+}
+#sidControls #ricoMasterVolumeControl .rico-volume-triangle:focus-within {
+  outline:1px dotted var(--rico-theme-fg,#fff);outline-offset:2px;
+}

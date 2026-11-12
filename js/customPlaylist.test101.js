@@ -69,6 +69,9 @@
   // It shares the existing trackGainNode so Loco un Poco's 2.6x still applies.
   // The previous SID remains protected by the regular fade GainNode.
   var openingGainNode=null;
+  // TEST215: SpotySid master volume AFTER the normal and protected
+  // first-buffer output paths. Independent of SID data and song gain.
+  var masterGainNode=null,masterVolume=1;
   var audioOutputHookNode=null;
   // TEST206: visible TIMER counts played audio samples down to 00:00.
   // Never use autoElapsedSamples here: AUTO resets it before the 5s fade.
@@ -210,6 +213,31 @@
         openingGainNode=null;
       }
     }
+    // TEST215: combine both existing output paths before the destination.
+    // Preserve TEST208 opening attack and the independent Loco output gain.
+    if(fadeGainNode&&!masterGainNode&&this.audioContext&&this.scriptNode&&
+       typeof this.audioContext.createGain==='function'){
+      var master=null;
+      try{
+        master=this.audioContext.createGain();
+        master.gain.value=masterVolume;
+        fadeGainNode.disconnect();
+        fadeGainNode.connect(master);
+        if(openingGainNode){
+          openingGainNode.disconnect();
+          openingGainNode.connect(master);
+        }
+        master.connect(this.audioContext.destination);
+        masterGainNode=master;
+      }catch(error){
+        console.warn('SpotySid master volume unavailable:',error);
+        // Restore the existing path if master setup fails.
+        try{fadeGainNode.disconnect();fadeGainNode.connect(this.audioContext.destination);}catch(ignore){}
+        if(openingGainNode)
+          try{openingGainNode.disconnect();openingGainNode.connect(this.audioContext.destination);}catch(ignore){}
+        if(master)try{master.disconnect();}catch(ignore){}
+      }
+    }
     // ScriptProcessor queues output ahead of the audible playhead. Hook its
     // existing renderer without changing any SID samples or synthesis logic.
     if(this.scriptNode&&this.scriptNode!==audioOutputHookNode){
@@ -290,6 +318,26 @@
     }
     return response;
   };
+  // TEST215: volume UI has no visible text: speaker + triangular slider.
+  (function setupMasterVolume(){
+    var range=document.getElementById('ricoMasterVolume');
+    var wrap=document.getElementById('ricoMasterVolumeControl');
+    if(!range||!wrap)return;
+    function applyVolume(value){
+      var percent=Math.max(0,Math.min(100,Number(value)||0));
+      masterVolume=percent/100;
+      wrap.style.setProperty('--rico-volume-level',percent+'%');
+      range.setAttribute('aria-valuetext',percent+'%');
+      if(masterGainNode&&player.audioContext){
+        var param=masterGainNode.gain,now=player.audioContext.currentTime;
+        param.cancelScheduledValues(now);
+        // Short de-click ramp, separate from the 5-second SID fade.
+        param.setTargetAtTime(masterVolume,now,0.015);
+      }
+    }
+    range.addEventListener('input',function(){applyVolume(range.value);});
+    applyVolume(range.value);
+  })();
   // Only the narrowly approved SID bridge uses this; all other tracks run
   // at unity gain. This function never changes the transition-fade node.
   player.ricoSetTrackOutputGain=function(value){
