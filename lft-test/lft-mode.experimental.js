@@ -25,6 +25,36 @@
   // unaltered reSIDfp mixed signal; the traces estimate raw SID oscillators
   // from the *real emulated chip registers*, not from the mono audio mix.
   var voiceFrames=[quiet,quiet,quiet];
+  // TEST194: source-specific, gentle loudness compensation. No SID register,
+  // FILTER, channel or LINUS modifications. Reset at each Loco song start.
+  var locoLevel=null;
+  function liftLocoMix(pcm,mix){
+    if(!active8580||!locoLevel)return;
+    var st=locoLevel,n=Math.min(FRAME,pcm.length),sum=0;
+    for(var j=0;j<n;j++){var v=pcm[j]/32768;sum+=v*v;}
+    var rms=n?Math.sqrt(sum/n):0;
+    var dt=n/(player.sampleRate||44100);
+    st.seconds+=dt;
+    var alpha=1-Math.exp(-dt/0.9);
+    st.average=st.average===0?rms:st.average+(rms-st.average)*alpha;
+    // Learn the initial audible level; hold it when the rhythm drops.
+    if(!st.boost&&rms>0.012&&st.seconds<24)
+      st.intro=Math.max(st.intro,st.average);
+    if(st.seconds>2&&st.intro>0.02&&st.average>0.009&&
+       st.average<st.intro*0.73)st.lowFor+=dt;
+    else st.lowFor=Math.max(0,st.lowFor-dt*2);
+    if(st.lowFor>=0.85)st.boost=true;
+    var target=st.boost?1.48:1; // maximum +3.4 dB, never changes master volume
+    var smooth=1-Math.exp(-dt/(target>st.gain?1.1:1.8));
+    var start=st.gain;
+    st.gain+=smooth*(target-st.gain);
+    // Per-sample smooth ramp; soft limit only samples nearing full scale.
+    for(var k=0;k<n;k++){
+      var a=mix[k]*(start+(st.gain-start)*(k/n));
+      var abs=Math.abs(a);
+      mix[k]=abs>0.92?Math.sign(a)*(0.92+0.08*Math.tanh((abs-0.92)/0.08)):a;
+    }
+  }
   var osc=[], latestRegs=null, C64_PAL_CLOCK=985248, SID_PHASE_RANGE=16777216;
   var ATTACK=[.002,.008,.016,.024,.038,.056,.068,.080,.100,.250,.500,.800,1.0,3.0,5.0,8.0];
   var DECAY=[.006,.024,.048,.072,.114,.168,.204,.240,.300,.750,1.50,2.40,3.0,9.0,15.0,24.0];
@@ -204,7 +234,7 @@
   function deactivate(){
     epoch++;trackEpoch++;requestSerial++;
     active=false;songReady=false;lastBytes=null;approvedNext=null;initTask=null;active8580=false;
-    queue=[];frame=quiet;
+    queue=[];frame=quiet;locoLevel=null;
     resetVoiceState();
     syncModeLabel();
     restoreSid();
@@ -226,6 +256,7 @@
         if(!(pcm instanceof Int16Array))throw Error('Unexpected PCM frame format');
         var next=new Float32Array(FRAME);
         for(var i=0;i<Math.min(FRAME,pcm.length);i++)next[i]=pcm[i]/32768;
+        liftLocoMix(pcm,next);
         var voices=[new Float32Array(FRAME),new Float32Array(FRAME),new Float32Array(FRAME)];
         var regs=null;
         try{regs=source.getSidStatus(0);}catch(visualError){
@@ -246,6 +277,7 @@
     var sequence=++trackEpoch,local=engine;
     player.autoLoading=true;player._numberOfSamplesToRender=0;
     songReady=false;queue=[];frame=quiet;
+    locoLevel=active8580?{seconds:0,average:0,intro:0,lowFor:0,boost:false,gain:1}:null;
     try{
       // Drain previous rendering before replacing the WASM engine's tune.
       if(fillTask)await fillTask.catch(function(){});
@@ -367,5 +399,5 @@
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
     active:function(){return active;},playingApproved:function(){return !active8580&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
-    version:'TEST188-uctumi-8580'};
+    version:'TEST194-loco-leveler'};
 })();
