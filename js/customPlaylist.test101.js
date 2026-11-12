@@ -42,6 +42,9 @@
   // TEST100: restore gain only when the FIRST newly rendered SID buffer plays.
   // Doing it inside playSong exposes previously queued ScriptProcessor audio.
   var pendingNewSidUnmute=false;
+  // TEST202: if AudioProcessingEvent.playbackTime is unusable, preserve the
+  // complete first buffer instead of silently losing its first ~93 ms.
+  var openingBufferReplay=null;
   var audioOutputHookNode=null;
   // TEST101: detect genuine SID output silence before the fade GainNode.
   // Silence is never inferred from the deliberately reduced master volume.
@@ -163,7 +166,18 @@
       if(typeof priorRenderer==='function'){
         this.scriptNode.onaudioprocess=function(event){
           var wasPlaying=!!player.isPlaying;
-          priorRenderer.call(this,event);
+          if(openingBufferReplay){
+            // Replay the held 0:00 frame at the next safe output boundary.
+            // Do not advance the SID renderer until this opening plays.
+            var output=event&&event.outputBuffer&&event.outputBuffer.getChannelData(0);
+            if(output&&output.length===openingBufferReplay.length){
+              output.set(openingBufferReplay);
+              openingBufferReplay=null;
+            }else{
+              openingBufferReplay=null;
+              priorRenderer.call(this,event);
+            }
+          }else priorRenderer.call(this,event);
           inspectSidOutput(event,wasPlaying);
           if(!pendingNewSidUnmute)return;
           pendingNewSidUnmute=false;
@@ -174,8 +188,15 @@
           var now=context.currentTime;
           var start=Number(event&&event.playbackTime);
           if(!Number.isFinite(start)||start<=now){
-            // Conservative fallback for a browser without valid playbackTime.
+            // Keep TEST100's conservative one-buffer fallback to avoid
+            // reviving old buffered audio at full level. Unlike TEST100,
+            // preserve and replay the complete FIRST incoming buffer at 1x.
+            var buffer=event&&event.outputBuffer&&event.outputBuffer.getChannelData(0);
             var bufferSize=event&&event.outputBuffer&&event.outputBuffer.length||4096;
+            if(buffer&&buffer.length){
+              openingBufferReplay=new Float32Array(buffer);
+              buffer.fill(0);
+            }
             start=now+bufferSize/(player.sampleRate||44100);
           }
           var gain=fadeGainNode.gain;
@@ -236,6 +257,7 @@
     if(transitionBusy&&!transitionAwaitingStart)player.autoLoading=false;
     transitionBusy=false;transitionAwaitingStart=false;
     pendingNewSidUnmute=false;
+    openingBufferReplay=null;
     queuedLiveIndex=null;transitionSource=null;
     if(resetSelection){
       selectedLiveIndex=null;followPlayingRowOnce=false;
@@ -245,6 +267,8 @@
   }
   var originalPlaySong=player.playSong;
   player.playSong=function(){
+    // A new tune must never replay the previous tune's held opening.
+    openingBufferReplay=null;
     resetSilenceDetector();
     var result=originalPlaySong.apply(this,arguments);
     // TEST199: the active SID/subtune chooses its initial TIMER value.
