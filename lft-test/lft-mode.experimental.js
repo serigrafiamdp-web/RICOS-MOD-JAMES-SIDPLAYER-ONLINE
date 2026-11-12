@@ -123,6 +123,15 @@
   }
   var fillTask=null, lastBytes=null, currentSong=0, songReady=false;
   var approvedNext=null, initTask=null, requestSerial=0, active8580=false, activeMujer=false;
+  // TEST210: console-only diagnostics. No UI or sound-path changes.
+  var mujerAudit={last:'not selected',rendered:0,played:0,underruns:0};
+  function reportMujer(stage){
+    mujerAudit.last=stage;
+    console.info('[TEST210 Mujer Amante]',stage,{
+      backend:activeMujer&&active?'reSIDfp MOS8580':'TinySID or not playing',
+      ready:songReady,queue:queue.length,underruns:mujerAudit.underruns
+    });
+  }
 
   // TEST203: independently prime the *next* approved SID during the outgoing
   // fade. Keep its exact 00:00 PCM frames queued; do not use sound detection,
@@ -274,6 +283,10 @@
       return;
     }
     var next=queue.length?queue.shift():null;
+    if(activeMujer){
+      if(next)mujerAudit.played++;
+      else mujerAudit.underruns++;
+    }
     frame=next?next.audio:quiet;
     voiceFrames=next?next.voices:[quiet,quiet,quiet];
     // Never start WASM rendering inside Web Audio's real-time callback.
@@ -332,6 +345,7 @@
   function deactivate(){
     releaseStaged();
     epoch++;trackEpoch++;requestSerial++;
+    if(activeMujer)reportMujer('reSIDfp deactivated');
     active=false;songReady=false;lastBytes=null;approvedNext=null;initTask=null;active8580=false;activeMujer=false;
     queue=[];frame=quiet;
     if(typeof player.ricoSetTrackOutputGain==='function')player.ricoSetTrackOutputGain(1);
@@ -367,6 +381,7 @@
         }
         renderVoiceSegment(voices,0,FRAME,regs);
         queue.push({audio:next,voices:voices});
+        if(activeMujer)mujerAudit.rendered++;
       }
     })();
     try{await fillTask;}finally{fillTask=null;}
@@ -464,6 +479,8 @@
     var ref=approvedNext;
     approvedNext=null;
     if(!ref){
+      if(sidHeaderOK(bytes)&&/mujer[ _.-]*amante/i.test(credit(bytes,22)))
+        reportMujer('SID title Mujer Amante arrived without approved HVSC ref: using TinySID');
       if(active||initTask||engine)deactivate();
       // Applies to the exact HVSC SID bytes in ANY playlist or local import.
       // Other songs always reset to normal 1x output.
@@ -477,12 +494,17 @@
     var expectedSize=route8580?UCTUMI_8580.get(ref.file):
       routeMujer?UCTUMI_MUJER.get(ref.file):APPROVED.get(ref.file);
     if(!sidHeaderOK(bytes)||bytes.length!==expectedSize){
+      if(routeMujer)reportMujer('Mujer Amante rejected: unexpected SID header/byte length '+(bytes&&bytes.length));
       if(active||initTask||engine)deactivate();
       applyLocoGainForBytes(bytes);
       return nativeLoad.apply(this,arguments);
     }
     // TEST203: hand off an independently primed zero-position PCM queue.
     // No SID has advanced into the speakers while preparation was running.
+    if(routeMujer){
+      mujerAudit.rendered=0;mujerAudit.played=0;mujerAudit.underruns=0;
+      reportMujer('Mujer Amante exact HVSC reference and 8003-byte SID accepted');
+    }
     var hot=claimStagedReference(ref);
     if(hot){
       try{
@@ -505,6 +527,7 @@
         player.playSong(hot.song);
         player.setSongInfo(hot.meta);
         syncModeLabel();
+        if(routeMujer)reportMujer('PLAYING via staged reSIDfp MOS8580');
         return true;
       }catch(error){
         console.warn('TEST203 staged start failed; fallback to native SID:',error);
@@ -523,6 +546,8 @@
       active8580=route8580;
       activeMujer=routeMujer;
       await startSong(sidBytes,null,true);
+      if(routeMujer&&activeMujer&&songReady)
+        reportMujer('PLAYING via reSIDfp MOS8580');
     })().catch(function(error){
       if(serial!==requestSerial)return;
       sayFailure(error);deactivate();
@@ -542,7 +567,17 @@
   window.RicoLftMode={prepare:prepare,deactivate:deactivate,eligible:eligible,
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
     stageNextReference:stageNextReference,cancelStagedNext:releaseStaged,
+    mujerStatus:function(){
+      var regs=latestRegs||[];
+      return {last:mujerAudit.last,usingReSIDfp:!!(active&&activeMujer&&songReady),
+        playing:!!player.isPlaying,chip:activeMujer?'MOS8580':null,
+        activeRoute:activeMujer?'Mujer_Amante.sid':active8580?'Loco_un_Poco.sid':active?'LFT':'TinySID',
+        queue:queue.length,renderedBlocks:mujerAudit.rendered,
+        playedBlocks:mujerAudit.played,underruns:mujerAudit.underruns,
+        voice1:regs.length>=7?{frequency:regs[0]|(regs[1]<<8),
+          control:regs[4],attackDecay:regs[5],sustainRelease:regs[6]}:null};
+    },
     active:function(){return active;},playingApproved:function(){return !active8580&&!activeMujer&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
-    version:'TEST209-mujer-residfp-loco-preserved'};
+    version:'TEST210-mujer-runtime-audit'};
 })();
