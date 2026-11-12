@@ -123,7 +123,6 @@
     });
   }
   var transitionTimer=null;
-  var transitionDiagnosticDelayTimer=null;
   var transitionRecovery=null;
   var transitionAwaitingStart=false;
   var transitionBusy=false;
@@ -309,7 +308,6 @@
     resetSilenceDetector();
     transitionGeneration++;
     if(transitionTimer!==null){clearTimeout(transitionTimer);transitionTimer=null;}
-    if(transitionDiagnosticDelayTimer!==null){clearTimeout(transitionDiagnosticDelayTimer);transitionDiagnosticDelayTimer=null;}
     if(transitionRecovery!==null){clearTimeout(transitionRecovery);transitionRecovery=null;}
     if(transitionBusy&&!transitionAwaitingStart)player.autoLoading=false;
     transitionBusy=false;transitionAwaitingStart=false;
@@ -477,27 +475,10 @@
         $('#ricoLiveStatus').text('SID loading took too long; volume restored.');
         renderLivePlaylist();
       },6000);
-      // TEST207: diagnostic ONLY for Mujer Amante as incoming SID.
-      // Leave one second of wall-clock silence AFTER the finished fade.
-      // Crucially, do not load/play/render/seek the new SID during this gap.
-      // Other tunes switch immediately as in approved TEST205.
-      var target=list[next]||null;
-      var targetName=[target&&target.name,target&&target.file,
-        target&&target._hvscRef&&target._hvscRef.file].filter(Boolean).join(' ');
-      var diagnosticHold=playing&&/mujer[\s_.-]*amante/i.test(targetName);
-      var handoffReleaseAt=performance.now()+(diagnosticHold?1000:0);
+      // TEST205: no post-fade hold. The new SID still begins at PCM 00:00,
+      // and the opening gate makes its first complete buffer audible.
       function switchWhenReady(){
         if(generation!==transitionGeneration||!transitionAwaitingStart)return;
-        var remaining=handoffReleaseAt-performance.now();
-        if(remaining>0){
-          if(transitionDiagnosticDelayTimer!==null)
-            clearTimeout(transitionDiagnosticDelayTimer);
-          transitionDiagnosticDelayTimer=setTimeout(function(){
-            transitionDiagnosticDelayTimer=null;
-            switchWhenReady();
-          },Math.ceil(remaining));
-          return;
-        }
         try{performSidSwitch(next);}
         catch(error){
           resetSoftTransition(false);
