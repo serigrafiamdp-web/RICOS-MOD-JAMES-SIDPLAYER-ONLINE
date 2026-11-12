@@ -30,29 +30,35 @@
   var locoLevel=null;
   function liftLocoMix(pcm,mix){
     if(!active8580||!locoLevel)return;
-    var st=locoLevel,n=Math.min(FRAME,pcm.length),sum=0;
-    for(var j=0;j<n;j++){var v=pcm[j]/32768;sum+=v*v;}
-    var rms=n?Math.sqrt(sum/n):0;
-    var dt=n/(player.sampleRate||44100);
-    st.seconds+=dt;
-    var alpha=1-Math.exp(-dt/0.9);
-    st.average=st.average===0?rms:st.average+(rms-st.average)*alpha;
-    // Learn the initial audible level; hold it when the rhythm drops.
-    if(!st.boost&&rms>0.012&&st.seconds<24)
-      st.intro=Math.max(st.intro,st.average);
-    if(st.seconds>2&&st.intro>0.02&&st.average>0.009&&
-       st.average<st.intro*0.73)st.lowFor+=dt;
-    else st.lowFor=Math.max(0,st.lowFor-dt*2);
-    if(st.lowFor>=0.85)st.boost=true;
-    var target=st.boost?1.48:1; // maximum +3.4 dB, never changes master volume
-    var smooth=1-Math.exp(-dt/(target>st.gain?1.1:1.8));
-    var start=st.gain;
-    st.gain+=smooth*(target-st.gain);
-    // Per-sample smooth ramp; soft limit only samples nearing full scale.
+    var st=locoLevel,n=Math.min(FRAME,pcm.length);
+    var sampleRate=player.sampleRate||44100;
+    var begin=st.samples;
+    st.samples+=n;
+    // TEST195: the submitted 22.4s OBS capture shows the original mix
+    // falling at ~12s video time, ~9.5s after audio begins.
+    // Start the one-time lift at 8.5s of SID audio, during the fill.
+    // No slow loudness detector/fade; keep the new balance for the song.
+    var liftSample=Math.round(8.5*sampleRate);
+    var transitionSamples=Math.max(1,Math.round(0.012*sampleRate));
+    var aLow=1-Math.exp(-2*Math.PI*190/sampleRate);
+    var aMid=1-Math.exp(-2*Math.PI*2500/sampleRate);
     for(var k=0;k<n;k++){
-      var a=mix[k]*(start+(st.gain-start)*(k/n));
-      var abs=Math.abs(a);
-      mix[k]=abs>0.92?Math.sign(a)*(0.92+0.08*Math.tanh((abs-0.92)/0.08)):a;
+      var x=mix[k];
+      // The reSIDfp output is a MONO mix: this is a modest bass/mid balance
+      // adjustment, not an isolated voice-2 gain and not a SID-filter edit.
+      st.low+=aLow*(x-st.low);
+      st.wide+=aMid*(x-st.wide);
+      var low=st.low,mid=st.wide-low,high=x-st.wide;
+      var where=begin+k-liftSample;
+      if(where<0)continue;
+      var applied=Math.min(1,where/transitionSamples);
+      // Low bass/bass drum: +0.8 dB. Midrange (melodies): +4.6 dB.
+      // Highs: +3.2 dB. Preserve the balance from the drum fill onward.
+      var adjusted=low*1.10+mid*1.70+high*1.45;
+      var out=x+(adjusted-x)*applied;
+      // Safety ceiling: only tame overs approaching digital full scale.
+      var abs=Math.abs(out);
+      mix[k]=abs>0.92?Math.sign(out)*(0.92+0.08*Math.tanh((abs-0.92)/0.08)):out;
     }
   }
   var osc=[], latestRegs=null, C64_PAL_CLOCK=985248, SID_PHASE_RANGE=16777216;
@@ -277,7 +283,7 @@
     var sequence=++trackEpoch,local=engine;
     player.autoLoading=true;player._numberOfSamplesToRender=0;
     songReady=false;queue=[];frame=quiet;
-    locoLevel=active8580?{seconds:0,average:0,intro:0,lowFor:0,boost:false,gain:1}:null;
+    locoLevel=active8580?{samples:0,low:0,wide:0}:null;
     try{
       // Drain previous rendering before replacing the WASM engine's tune.
       if(fillTask)await fillTask.catch(function(){});
@@ -399,5 +405,5 @@
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
     active:function(){return active;},playingApproved:function(){return !active8580&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
-    version:'TEST194-loco-leveler'};
+    version:'TEST195-loco-fill-balance'};
 })();
