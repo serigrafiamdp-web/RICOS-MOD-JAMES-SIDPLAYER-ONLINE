@@ -27,38 +27,31 @@
   var voiceFrames=[quiet,quiet,quiet];
   // TEST194: source-specific, gentle loudness compensation. No SID register,
   // FILTER, channel or LINUS modifications. Reset at each Loco song start.
+  // TEST196: a single fixed whole-mix gain for Loco un Poco ONLY.
+  // Starting BEFORE the quiet drum roll, keep it constant to the end.
+  // The source emits MONO PCM; this cannot change individual SID voices.
   var locoLevel=null;
   function liftLocoMix(pcm,mix){
     if(!active8580||!locoLevel)return;
     var st=locoLevel,n=Math.min(FRAME,pcm.length);
-    var sampleRate=player.sampleRate||44100;
-    var begin=st.samples;
+    var sr=player.sampleRate||44100;
+    var first=st.samples;
     st.samples+=n;
-    // TEST195: the submitted 22.4s OBS capture shows the original mix
-    // falling at ~12s video time, ~9.5s after audio begins.
-    // Start the one-time lift at 8.5s of SID audio, during the fill.
-    // No slow loudness detector/fade; keep the new balance for the song.
-    var liftSample=Math.round(8.5*sampleRate);
-    var transitionSamples=Math.max(1,Math.round(0.012*sampleRate));
-    var aLow=1-Math.exp(-2*Math.PI*190/sampleRate);
-    var aMid=1-Math.exp(-2*Math.PI*2500/sampleRate);
-    for(var k=0;k<n;k++){
-      var x=mix[k];
-      // The reSIDfp output is a MONO mix: this is a modest bass/mid balance
-      // adjustment, not an isolated voice-2 gain and not a SID-filter edit.
-      st.low+=aLow*(x-st.low);
-      st.wide+=aMid*(x-st.wide);
-      var low=st.low,mid=st.wide-low,high=x-st.wide;
-      var where=begin+k-liftSample;
-      if(where<0)continue;
-      var applied=Math.min(1,where/transitionSamples);
-      // Low bass/bass drum: +0.8 dB. Midrange (melodies): +4.6 dB.
-      // Highs: +3.2 dB. Preserve the balance from the drum fill onward.
-      var adjusted=low*1.10+mid*1.70+high*1.45;
-      var out=x+(adjusted-x)*applied;
-      // Safety ceiling: only tame overs approaching digital full scale.
-      var abs=Math.abs(out);
-      mix[k]=abs>0.92?Math.sign(out)*(0.92+0.08*Math.tanh((abs-0.92)/0.08)):out;
+    // TEST195 started 8.5s into the song, after the roll had begun.
+    // This test starts at 7s to include the drum roll itself.
+    var onset=Math.round(7*sr);
+    var clickGuard=Math.max(1,Math.round(0.004*sr));
+    var boost=2.6; // fixed +8.3 dB nominal gain to ALL mixed voices.
+    for(var i=0;i<n;i++){
+      var pos=first+i-onset;
+      if(pos<0)continue;
+      // Only a 4ms anti-click at a single fixed start time.
+      // No slow fade, level detector, compressor or moving gain.
+      var gain=1+(boost-1)*Math.min(1,pos/clickGuard);
+      var y=mix[i]*gain;
+      var abs=Math.abs(y);
+      // Fixed peak-protection curve for values near full scale.
+      mix[i]=abs>0.92?Math.sign(y)*(0.92+0.08*Math.tanh((abs-0.92)/0.08)):y;
     }
   }
   var osc=[], latestRegs=null, C64_PAL_CLOCK=985248, SID_PHASE_RANGE=16777216;
@@ -283,7 +276,7 @@
     var sequence=++trackEpoch,local=engine;
     player.autoLoading=true;player._numberOfSamplesToRender=0;
     songReady=false;queue=[];frame=quiet;
-    locoLevel=active8580?{samples:0,low:0,wide:0}:null;
+    locoLevel=active8580?{samples:0}:null;
     try{
       // Drain previous rendering before replacing the WASM engine's tune.
       if(fillTask)await fillTask.catch(function(){});
@@ -405,5 +398,5 @@
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
     active:function(){return active;},playingApproved:function(){return !active8580&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
-    version:'TEST195-loco-fill-balance'};
+    version:'TEST196-loco-fixed-max-gain'};
 })();
