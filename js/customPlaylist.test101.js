@@ -3441,6 +3441,9 @@
         var entry=parseSID(bytes,{name:track.file,size:bytes.length});
         if(!entry)throw Error('Invalid SID: '+track.file);
         normalizeUctumiListDisplay(entry,track);
+        // TEST224: preserve canonical HVSC identity for the SHOW / STIL panel.
+        // No changes to SID bytes, playlist persistence, or playback.
+        entry._hvscRef=remixCanonicalRef(track);
         output.push(entry);
       }
       // Do not change playback until every reference has been resolved and validated.
