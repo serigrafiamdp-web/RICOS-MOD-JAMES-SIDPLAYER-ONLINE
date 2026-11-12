@@ -88,6 +88,7 @@
   }
   var fillTask=null, lastBytes=null, currentSong=0, songReady=false;
   var approvedNext=null, initTask=null, requestSerial=0, activeUctumi=false, activeUctumiFile=null;
+  var locoPreviousFilter=null;
   var MODE_OFF=/(?:^|[?&])lftmode=off(?:&|$)/i.test(String(window.location&&window.location.search||''));
 
   function eligible(data,remoteId){
@@ -208,7 +209,16 @@
     Object.keys(originalSid).forEach(function(name){sid[name]=originalSid[name];});
     hooked=false;
   }
+  // TEST192: keep Loco un Poco's filter bypassed throughout playback.
+  // Restore the listener's previous checkbox preference when changing tracks.
+  function restoreLocoFilter(){
+    if(locoPreviousFilter===null)return;
+    var control=document.getElementById('filterEnabled');
+    if(control)control.checked=locoPreviousFilter;
+    locoPreviousFilter=null;
+  }
   function deactivate(){
+    restoreLocoFilter();
     epoch++;trackEpoch++;requestSerial++;
     active=false;songReady=false;lastBytes=null;approvedNext=null;initTask=null;activeUctumi=false;activeUctumiFile=null;
     queue=[];frame=quiet;
@@ -270,17 +280,15 @@
         if(!profile)throw Error('Missing audited Uctumi chip metadata');
         await local.setEmulationConfig({sidModel:profile[1],forceSidModel:true});
         if(!active||sequence!==trackEpoch||engine!==local)return;
-        // TEST191: reproduce the user's successful manual FILTER OFF -> ON
-        // sequence once, only for Loco un Poco, before priming PCM.
+        // TEST192: bypass the 8580 filter for the ENTIRE Loco un Poco tune.
+        // Do not toggle it back on; user can enable it manually for comparison.
         if(activeUctumiFile==='Loco_un_Poco.sid'){
           var filterCheckbox=document.getElementById('filterEnabled');
-          var wantedFilter=!filterCheckbox||filterCheckbox.checked;
-          try{
-            local.setFilterEnabled(0,false);
-            local.setFilterEnabled(0,!!wantedFilter);
-          }catch(filterError){
-            console.warn('TEST191 Loco un Poco filter reinitialization:',filterError);
+          if(filterCheckbox){
+            if(locoPreviousFilter===null)locoPreviousFilter=filterCheckbox.checked;
+            filterCheckbox.checked=false;
           }
+          local.setFilterEnabled(0,false);
         }
       }
       // The original TinySID loader normally resets this flag. LFT's bridge
@@ -363,6 +371,7 @@
       if(active||initTask||engine)deactivate();
       return nativeLoad.apply(this,arguments);
     }
+    if(!(routeUctumi&&ref.file==='Loco_un_Poco.sid'))restoreLocoFilter();
     // TEST191: TEST188 worked because Loco un Poco always got a fresh
     // reSIDfp instance. Recreate it when switching from another Uctumi SID,
     // instead of inheriting that song's filter/voice state.
@@ -398,5 +407,5 @@
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
     active:function(){return active;},playingApproved:function(){return !activeUctumi&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
-    version:'TEST191-loco-filter-reset'};
+    version:'TEST192-loco-filter-bypass'};
 })();
