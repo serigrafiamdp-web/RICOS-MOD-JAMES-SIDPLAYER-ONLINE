@@ -118,6 +118,8 @@
   var transitionBusy=false;
   var transitionSource=null;
   var transitionGeneration=0;
+  // TEST203: next SID file is fetched before the fade ends, never advanced.
+  var preparedDefaultSid=null;
   // TEST99: equal-power style cosine fade-out, full-volume start for the next SID.
   // Keep the five-second duration to isolate the curve change; no fade-in or gap.
   var FADE_OUT_MS=5000,FADE_OUT_FLOOR=0.005;
@@ -259,6 +261,9 @@
     pendingNewSidUnmute=false;
     openingBufferReplay=null;
     queuedLiveIndex=null;transitionSource=null;
+    preparedDefaultSid=null;
+    if(window.RicoLftMode&&typeof window.RicoLftMode.cancelStagedNext==='function')
+      window.RicoLftMode.cancelStagedNext();
     if(resetSelection){
       selectedLiveIndex=null;followPlayingRowOnce=false;
       $('#ricoLivePlaylistItems').scrollTop(0);
@@ -293,11 +298,58 @@
       var item=originalList[index];
       if(!item)return;
       player.sidListIndex=index;
-      player.loadSID('sids/'+item.file);
+      // TEST203: the native SID still starts at its own first PCM sample.
+      // Avoid a network request only AFTER the fade boundary.
+      var prepared=preparedDefaultSid;
+      preparedDefaultSid=null;
+      if(prepared&&prepared.index===index&&prepared.bytes)
+        player.loadSIDData(prepared.bytes);
+      else player.loadSID('sids/'+item.file);
       player.setPath(item.id);
       player.initFileSelection();
       renderLivePlaylist();
     }
+  }
+  function prepareSidDuringFade(index,entry,generation){
+    if(customActive&&entry&&entry._hvscRef){
+      var bridge=window.RicoLftMode;
+      preparedDefaultSid=null;
+      // Only the approved LFT and Loco routes can be pre-rendered.
+      if(!bridge||typeof bridge.stageNextReference!=='function')return;
+      function stage(){
+        if(generation!==transitionGeneration||!transitionBusy||
+           queuedLiveIndex!==index||!customActive||!entry.localBytes)return;
+        Promise.resolve(bridge.stageNextReference(entry._hvscRef,entry.localBytes))
+          .catch(function(error){console.warn('TEST203 SID stage unavailable:',error);});
+      }
+      if(entry.localBytes){stage();return;}
+      if(activeReferenceStream){
+        var stream=activeReferenceStream;
+        stream.loadSlot(entry).then(function(){
+          if(activeReferenceStream===stream)stage();
+        }).catch(function(error){
+          if(generation===transitionGeneration)
+            $('#ricoLiveStatus').text('Cannot prepare SID: '+error.message);
+        });
+      }
+      return;
+    }
+    if(window.RicoLftMode&&typeof window.RicoLftMode.cancelStagedNext==='function')
+      window.RicoLftMode.cancelStagedNext();
+    preparedDefaultSid=null;
+    if(customActive||!entry||!entry.file)return;
+    var state={index:index,bytes:null};
+    preparedDefaultSid=state;
+    fetch('sids/'+entry.file).then(function(response){
+      if(!response.ok)throw Error('SID fetch '+response.status);
+      return response.arrayBuffer();
+    }).then(function(buffer){
+      if(preparedDefaultSid!==state||generation!==transitionGeneration)return;
+      state.bytes=new Uint8Array(buffer);
+    }).catch(function(error){
+      if(preparedDefaultSid===state)
+        console.warn('TEST203: native SID prefetch unavailable; using original loader:',error);
+    });
   }
   function requestSidSwitch(index,source){
     var list=player.sidList||[];
@@ -321,6 +373,7 @@
       }else{
         queuedLiveIndex=index;
         transitionSource=source;
+        prepareSidDuringFade(index,entry,transitionGeneration);
         $('#ricoLiveStatus').text('NEXT: '+(list[index].name||list[index].file||'SID'));
       }
       renderLivePlaylist();
@@ -346,15 +399,9 @@
     $('#ricoLiveStatus').text('NEXT: '+(list[index].name||list[index].file||'SID')+
       (playing?' · fading out':' · starting'));
     renderLivePlaylist();
-    // Predecode once fade has been scheduled. The promise is shared with
-    // prefetch and with the switch at the fade boundary, never decoded twice.
-    if(customActive&&activeReferenceStream&&entry&&entry._hvscRef&&!entry.localBytes){
-      var prepareStream=activeReferenceStream;
-      prepareStream.loadSlot(entry).catch(function(error){
-        if(generation!==transitionGeneration||activeReferenceStream!==prepareStream)return;
-        $('#ricoLiveStatus').text('Cannot prepare SID: '+error.message);
-      });
-    }
+    // TEST203: asynchronously prepare *bytes and approved reSIDfp engine*
+    // while the original SID fades. No playback or seeking of the new SID.
+    prepareSidDuringFade(index,entry,generation);
     transitionTimer=setTimeout(function(){
       transitionTimer=null;
       if(generation!==transitionGeneration)return;
