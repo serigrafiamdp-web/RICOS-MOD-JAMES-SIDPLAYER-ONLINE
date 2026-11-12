@@ -2652,3 +2652,50 @@ left: 1px;
   background:var(--rico-theme-fg,#fff);
   transition:width .12s linear;
 }
+
+
+/* TEST222 — SHOW / SID INFO follows the active SpotySid palette.
+   Presentation only; preserves the existing left panel and controls. */
+#sidInfo {
+  box-sizing:border-box !important;
+  background:var(--rico-theme-bg,#111) !important;
+  color:var(--rico-theme-fg,#eee) !important;
+  border:1px solid var(--rico-theme-border,#888) !important;
+  padding:0 !important;
+  font-family:Tahoma,Arial,Verdana,sans-serif !important;
+  font-size:11px !important;
+}
+#sidInfo > div:first-child {
+  background:var(--rico-theme-panel,#222) !important;
+  color:var(--rico-theme-fg,#eee) !important;
+  border-bottom:1px solid var(--rico-theme-border,#888) !important;
+}
+#sidInfoTitle {
+  color:var(--rico-theme-fg,#eee) !important;
+  font:700 11px Tahoma,Arial,Verdana,sans-serif !important;
+}
+#sidInfoContent {
+  color:var(--rico-theme-fg,#eee) !important;
+  background:var(--rico-theme-bg,#111) !important;
+  font:11px/1.5 Tahoma,Arial,Verdana,sans-serif !important;
+  padding:8px !important;
+  overflow:auto !important;
+}
+#sidInfoContent *,#sidInfoContent p,#sidInfoContent strong,
+#sidInfoContent .sidInfoSection p {
+  color:inherit !important;
+  font-family:inherit !important;
+  font-size:inherit !important;
+  line-height:inherit !important;
+}
+#sidInfoContent .sidInfoSection {
+  border-bottom:1px solid var(--rico-theme-border,#888);
+  padding:0 0 7px;
+  margin:0 0 9px;
+}
+#sidInfoContent a,#sidInfoContent .subsongLink {
+  color:var(--rico-theme-fg,#eee) !important;
+}
+#sidInfoContent::-webkit-scrollbar {width:8px;}
+#sidInfoContent::-webkit-scrollbar-track {background:var(--rico-theme-bg,#111);}
+#sidInfoContent::-webkit-scrollbar-thumb {background:var(--rico-theme-border,#888);}
