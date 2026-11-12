@@ -113,6 +113,7 @@
     });
   }
   var transitionTimer=null;
+  var transitionHandoffTimer=null;
   var transitionRecovery=null;
   var transitionAwaitingStart=false;
   var transitionBusy=false;
@@ -123,6 +124,9 @@
   // TEST99: equal-power style cosine fade-out, full-volume start for the next SID.
   // Keep the five-second duration to isolate the curve change; no fade-in or gap.
   var FADE_OUT_MS=5000,FADE_OUT_FLOOR=0.005;
+  // TEST204: Uctumi-inspired small handoff offset. The incoming SID's own
+  // position remains exactly 00:00; this only waits 150ms after fade-out.
+  var HANDOFF_HOLD_MS=150;
   var nativeInitWebAudio=player.initWebAudio;
   player.initWebAudio=function(){
     var response=nativeInitWebAudio.apply(this,arguments);
@@ -255,6 +259,7 @@
     resetSilenceDetector();
     transitionGeneration++;
     if(transitionTimer!==null){clearTimeout(transitionTimer);transitionTimer=null;}
+    if(transitionHandoffTimer!==null){clearTimeout(transitionHandoffTimer);transitionHandoffTimer=null;}
     if(transitionRecovery!==null){clearTimeout(transitionRecovery);transitionRecovery=null;}
     if(transitionBusy&&!transitionAwaitingStart)player.autoLoading=false;
     transitionBusy=false;transitionAwaitingStart=false;
@@ -419,8 +424,21 @@
         $('#ricoLiveStatus').text('SID loading took too long; volume restored.');
         renderLivePlaylist();
       },6000);
+      // TEST204: 150ms *wall-clock* hold after the old fade, never 150ms
+      // of rendering/fast-forwarding the new SID. Network/engine staging
+      // can finish during this window. Intentional SID intro silence stays.
+      var releaseAt=performance.now()+HANDOFF_HOLD_MS;
       function switchWhenReady(){
         if(generation!==transitionGeneration||!transitionAwaitingStart)return;
+        var remaining=releaseAt-performance.now();
+        if(remaining>0){
+          if(transitionHandoffTimer!==null)clearTimeout(transitionHandoffTimer);
+          transitionHandoffTimer=setTimeout(function(){
+            transitionHandoffTimer=null;
+            switchWhenReady();
+          },Math.ceil(remaining));
+          return;
+        }
         try{performSidSwitch(next);}
         catch(error){
           resetSoftTransition(false);
