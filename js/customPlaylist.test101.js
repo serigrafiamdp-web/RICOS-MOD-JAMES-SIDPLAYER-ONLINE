@@ -45,6 +45,10 @@
   // TEST202: if AudioProcessingEvent.playbackTime is unusable, preserve the
   // complete first buffer instead of silently losing its first ~93 ms.
   var openingBufferReplay=null;
+  // TEST208: the first 00:00 buffer is held until its output gain has been
+  // scheduled at least one audio callback in advance (never truncate attacks).
+  var openingReplayTime=null;
+  var openingReplayFallbackBlocks=0;
   // TEST205: parallel first-buffer output path, silent at all other times.
   // It shares the existing trackGainNode so Loco un Poco's 2.6x still applies.
   // The previous SID remains protected by the regular fade GainNode.
@@ -197,55 +201,66 @@
       if(typeof priorRenderer==='function'){
         this.scriptNode.onaudioprocess=function(event){
           var wasPlaying=!!player.isPlaying;
+          var output=event&&event.outputBuffer&&event.outputBuffer.getChannelData(0);
+          var deliveredSongSamples=true;
           if(openingBufferReplay){
-            // Replay the held 0:00 frame at the next safe output boundary.
-            // Do not advance the SID renderer until this opening plays.
-            var output=event&&event.outputBuffer&&event.outputBuffer.getChannelData(0);
-            if(output&&output.length===openingBufferReplay.length){
+            // The 00:00 PCM block is always replayed in an output slot whose
+            // gain was armed during an EARLIER callback, not inside this one.
+            // If the main thread is late, hold it and render only silence.
+            var slot=Number(event&&event.playbackTime);
+            var tooEarly=openingReplayTime!==null&&Number.isFinite(slot)&&
+              slot>0&&slot+0.0005<openingReplayTime;
+            if(openingReplayFallbackBlocks>0||tooEarly){
+              if(openingReplayFallbackBlocks>0)openingReplayFallbackBlocks--;
+              if(output)output.fill(0);
+              deliveredSongSamples=false;
+            }else if(output&&output.length===openingBufferReplay.length){
               output.set(openingBufferReplay);
               openingBufferReplay=null;
+              openingReplayTime=null;
             }else{
               openingBufferReplay=null;
+              openingReplayTime=null;
               priorRenderer.call(this,event);
             }
           }else priorRenderer.call(this,event);
           inspectSidOutput(event,wasPlaying);
-          // Advance only when the SID audio callback actually runs.
-          // Pause freezes the display; output gain and PCM stay untouched.
-          if(wasPlaying&&!player.isPaused){
-            countdownElapsedSamples+=(event&&event.outputBuffer&&event.outputBuffer.length)||0;
-            renderCountdownTimer(false);
+          if(!pendingNewSidUnmute){
+            if(wasPlaying&&!player.isPaused&&deliveredSongSamples){
+              countdownElapsedSamples+=(event&&event.outputBuffer&&event.outputBuffer.length)||0;
+              renderCountdownTimer(false);
+            }
+            return;
           }
-          if(!pendingNewSidUnmute)return;
           pendingNewSidUnmute=false;
           if(!fadeGainNode||!player.audioContext)return;
-          // playbackTime is the start of THIS freshly rendered output buffer,
-          // not the time when playSong initialized the new SID.
-          var context=player.audioContext;
-          var now=context.currentTime;
-          var start=Number(event&&event.playbackTime);
-          if(!Number.isFinite(start)||start<=now){
-            // Keep TEST100's conservative one-buffer fallback to avoid
-            // reviving old buffered audio at full level. Unlike TEST100,
-            // preserve and replay the complete FIRST incoming buffer at 1x.
-            var buffer=event&&event.outputBuffer&&event.outputBuffer.getChannelData(0);
-            var bufferSize=event&&event.outputBuffer&&event.outputBuffer.length||4096;
-            if(buffer&&buffer.length){
-              openingBufferReplay=new Float32Array(buffer);
-              buffer.fill(0);
-            }
-            start=now+bufferSize/(player.sampleRate||44100);
+          // TEST208: capture the ENTIRE incoming buffer first, output silence
+          // in this slot, and schedule full output gain for a FUTURE slot.
+          // This prevents a late ScriptProcessor callback from hiding the
+          // first kick before setValueAtTime() can take effect.
+          var context=player.audioContext,now=context.currentTime;
+          var length=event&&event.outputBuffer&&event.outputBuffer.length||4096;
+          var sampleRate=player.sampleRate||context.sampleRate||44100;
+          var duration=length/sampleRate;
+          if(!output||!output.length){
+            restoreFullVolume();
+            return;
           }
-          var gain=fadeGainNode.gain;
+          openingBufferReplay=new Float32Array(output);
+          output.fill(0);
+          var firstEventTime=Number(event&&event.playbackTime);
+          var hasClock=Number.isFinite(firstEventTime)&&firstEventTime>0;
+          var start=hasClock?firstEventTime+duration:now+2*duration;
+          // At least two Web Audio render quanta of scheduling headroom.
+          var safeAt=now+Math.max(0.012,256/sampleRate);
+          if(hasClock&&start<=safeAt)
+            start+=Math.max(1,Math.ceil((safeAt-start)/duration))*duration;
+          openingReplayTime=hasClock?start:null;
+          openingReplayFallbackBlocks=hasClock?0:1;
+          var gain=fadeGainNode.gain,end=start+duration;
           gain.cancelScheduledValues(now);
           gain.setValueAtTime(FADE_OUT_FLOOR,now);
           if(openingGainNode){
-            // The *entire* first new PCM block plays at full volume on a
-            // separate gate; the outgoing fade remains safely near zero.
-            // Switch paths at the exact buffer boundary so no kick is hidden.
-            var length=event&&event.outputBuffer&&event.outputBuffer.length||4096;
-            var sampleRate=player.sampleRate||context.sampleRate||44100;
-            var end=start+length/sampleRate;
             var first=openingGainNode.gain;
             first.cancelScheduledValues(now);
             first.setValueAtTime(0,now);
@@ -313,6 +328,8 @@
     transitionBusy=false;transitionAwaitingStart=false;
     pendingNewSidUnmute=false;
     openingBufferReplay=null;
+    openingReplayTime=null;
+    openingReplayFallbackBlocks=0;
     queuedLiveIndex=null;transitionSource=null;
     preparedDefaultSid=null;
     if(window.RicoLftMode&&typeof window.RicoLftMode.cancelStagedNext==='function')
@@ -330,6 +347,8 @@
     countdownShownSeconds=null;
     // A new tune must never replay the previous tune's held opening.
     openingBufferReplay=null;
+    openingReplayTime=null;
+    openingReplayFallbackBlocks=0;
     resetSilenceDetector();
     var result=originalPlaySong.apply(this,arguments);
     // TEST199: the active SID/subtune chooses its initial TIMER value.
