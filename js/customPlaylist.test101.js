@@ -1355,13 +1355,18 @@
   // TEST118: Published lists can be selected as destinations while another
   // playlist is playing. Only D1 reference lists can be updated in place.
   var publishedRemixChoices=[];
-  // TEST150: the ADD + TO choice belongs to the listener, not playback.
-  // Keep it independent from the current editing draft.
+  // TEST220: ADD + TO destination is a deliberate, per-open selection.
+  // Never restore a previous choice after reopening or selecting a playlist.
+  // Keep REMIX drafts and the editing target independent and persistent.
   var preferredRemixDestination='';
-  try{preferredRemixDestination=localStorage.getItem('rico-add-to-destination')||'';}catch(e){}
+  try{localStorage.removeItem('rico-add-to-destination');}catch(e){}
   function rememberRemixDestination(value){
     preferredRemixDestination=value;
-    try{localStorage.setItem('rico-add-to-destination',value);}catch(e){}
+  }
+  function resetAddToDestination(){
+    rememberRemixDestination('');
+    var selector=document.getElementById('ricoRemixTarget');
+    if(selector)selector.value='';
   }
   // TEST165: immutable SID assets from NO HVSC and original HVSC ZIP references.
   function remixRefKey(ref){return (ref.sidId?'sid:'+ref.sidId:'pack:'+ref.pack)+'::'+ref.file;}
@@ -3117,6 +3122,9 @@
       referenceSwitchSerial++;
       // Validate everything before changing the currently loaded playlist.
       var entries=validatedEntries(data);
+      // TEST220: opening any successfully validated list requires a fresh
+      // ADD + TO destination. Do not touch existing REMIX drafts.
+      resetAddToDestination();
       loadedRankedPlaylist=ranked===true;
       if(localImport){importedSidEntries=entries.slice();renderImportedSidList();}
       // TEST47: preserve playlist-level scene group credits in the floating playlist.
@@ -3263,6 +3271,8 @@
         if(activeReferenceStream===stream){stream.cancel();activeReferenceStream=null;}
         throw error;
       }
+      // TEST220: reset after the first SID has loaded successfully.
+      resetAddToDestination();
       activePublicPlaylist=null;activePublicCollection=null;
       activeRemixDraftId=null;
       activeReferenceTracks=data.tracks.map(remixCanonicalRef);
@@ -3343,6 +3353,8 @@
         output.push(entry);
       }
       // Do not change playback until every reference has been resolved and validated.
+      // TEST220: never inherit ADD + TO from another loaded playlist.
+      resetAddToDestination();
       activePublicPlaylist=null;activePublicCollection=null;
       activeRemixDraftId=null;
       activeReferenceTracks=data.tracks.map(remixCanonicalRef);
