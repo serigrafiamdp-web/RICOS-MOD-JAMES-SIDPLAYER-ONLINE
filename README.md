@@ -15,6 +15,7 @@ These capabilities are now visible in **[the full feature list](docs/FEATURES.md
 - **LINUS / LFT MODE:** special reSIDfp playback for exact approved SID references even when they are in other playlists; the LFT list does not open by itself. Three independent *visual* oscilloscope traces.
 - **Community editing:** ADD + TO destination persists, **+** stages tracks, and **REPUBLISH** is designed to update an existing public playlist ID with beta-key authorisation.
 - **NO HVSC:** imported SID archiving and reference-based published playlists, alongside existing HVSC ZIP references; complete cross-collection REPUBLISH still requires live verification.
+- **HVSC Songlengths TIMER (TEST199):** each SID/subtune receives its recorded duration when available. Unknown times retain 03:00. Manual changes are temporary; **REPUBLISH does not save duration overrides**. [Details](docs/TEST199_HVSC_SONGLENGTHS.md).
 - **Cloudflare Web Analytics (TEST169):** site traffic measurement is active. An early 24-hour screenshot reported **106 visits / 133 page views** under the displayed hostname filter, not confirmed unique SpotySid listeners.
 
 ## Existing core features
