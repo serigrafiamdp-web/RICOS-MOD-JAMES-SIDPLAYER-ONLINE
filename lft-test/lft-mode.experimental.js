@@ -21,6 +21,41 @@
   // Without the URL flag every track plays as in TEST210.
   var MUJER_FILTER_OFF=/(?:^|[?&])mujerfilter=off(?:&|$)/i
     .test(String(window.location&&window.location.search||''));
+  // TEST212: only with an explicit URL opt-in, use the alternate ORIGINAL
+  // Argentine Songbook Vol.1 SID-Wizard BARE export for the exact HVSC entry.
+  // Normal playback continues to use the 8003-byte HVSC SID, unmodified.
+  var MUJER_COMPILED_TEST=/(?:^|[?&])mujersource=compiled(?:&|$)/i
+    .test(String(window.location&&window.location.search||''));
+  var MUJER_COMPILED_BYTES=7667,compiledMujerCache=null;
+  function getCompiledMujerBytes(){
+    if(!MUJER_COMPILED_TEST)return null;
+    if(compiledMujerCache)return compiledMujerCache;
+    var encoded=window.RicoMujerCompiledB64;
+    if(typeof encoded!=='string'||!encoded.length){
+      console.warn('TEST212: compiled Uctumi test SID unavailable; original HVSC is retained');
+      return null;
+    }
+    try{
+      var raw=atob(encoded),bytes=new Uint8Array(raw.length);
+      if(bytes.length!==MUJER_COMPILED_BYTES)throw Error('Unexpected byte length');
+      var crc=-1;
+      for(var i=0;i<raw.length;i++){
+        bytes[i]=raw.charCodeAt(i);
+        crc=(crc^bytes[i])>>>0;
+        for(var j=0;j<8;j++)
+          crc=((crc&1)?(0xedb88320^(crc>>>1)):(crc>>>1))>>>0;
+      }
+      crc=((crc^-1)>>>0);
+      if(crc!==0x493eb09a||!sidHeaderOK(bytes)||
+         credit(bytes,22)!=='MUJER AMANTE COVER')
+        throw Error('Unexpected compiled SID fingerprint');
+      compiledMujerCache=bytes;
+      return compiledMujerCache;
+    }catch(error){
+      console.warn('TEST212: compiled SID validation failed; original HVSC retained:',error);
+      return null;
+    }
+  }
   // TEST177: immutable 66-file approval list taken from HVSC #85 musician index.
   // This is a reference allowlist, not a filename/author guess.
   var APPROVED=new Map([["A_Chipful_of_Love_for_You.sid",5294],["A_Computer_in_My_Backpack.sid",4990],["A_Mind_Is_Born.sid",380],["Air_on_a_Rasterline.sid",2978],["Allt_under_himmelens_faeste.sid",6619],["Allt_under_himmelens_faeste_v2.sid",6569],["Arrow_of_Time.sid",6270],["Cherry_Waffle.sid",5758],["Computational_Soup_2KB.sid",614],["Crank_Crank_Airwolf.sid",2686],["Crank_Crank_Revolution.sid",3710],["Dishwasher_Groove.sid",4990],["Dithered_Island.sid",6270],["Elvendance.sid",4734],["Euclid_Was_Here.sid",6270],["Fargo.sid",4222],["Fjaellevator_Music.sid",5502],["Foerklaedd_Gud_alpha.sid",4740],["Foerklaedd_Gud_beta.sid",4162],["Foerklaedd_Gud_delta.sid",4235],["Foerklaedd_Gud_epsilon.sid",3173],["Foerklaedd_Gud_eta.sid",3532],["Foerklaedd_Gud_gamma.sid",3280],["Foerklaedd_Gud_zeta.sid",3574],["Fratres_Arvo_Paert_2SID.sid",7435],["Fugue_on_a_Theme_by_D_M_Hanlon.sid",3198],["Glyptodont.sid",6270],["Hachi_Bitto_Whirlwind.sid",6526],["Hardsync.sid",4943],["In_Darkness_Hope.sid",6270],["Into_the_Unknown.sid",5502],["King_Fisher_0x28.sid",5463],["Lunatico_End.sid",1022],["Lunatico_Note.sid",6270],["Lunatico_Side_1.sid",5502],["Lunatico_Side_2.sid",5502],["Machine_Yearning_2SID.sid",6313],["Maple_Leaf_Rag.sid",3966],["Nine.sid",4478],["Nymphaea.sid",4754],["Perfectly_Well-Adjusted.sid",5758],["Perpetual_Fragility.sid",435],["Platform_Hopping.sid",12925],["Quintessence.sid",5758],["Quondam_Tunneling.sid",4734],["Racing_the_Beam.sid",6782],["Reminiscence.sid",5502],["Revolutions_Delivered.sid",5246],["Rodents_in_the_Attic.sid",5246],["Scene_Spirit.sid",8176],["Scene_Spirit_v2.sid",7038],["Shards_of_Fancy.sid",4950],["Sideways.sid",8956],["Slaepwerigne.sid",6795],["Sommargubbe.sid",6782],["Specular_Highlight.sid",9813],["Spin_Crazy_World.sid",6014],["Summer_Cloud.sid",6205],["Summer_Cloud_v2.sid",5502],["Thus_Spoke_the_PC_Speaker.sid",6270],["To_Die_For.sid",4734],["To_Die_For_II.sid",3966],["Toy_Rocket.sid",5758],["Trinket.sid",3454],["Withering_Bytes.sid",5246],["Your_Heptacular_Eyes.sid",6526]]);
@@ -184,8 +219,13 @@
     }
     var route8580=ref.pack===UCTUMI_PACK&&UCTUMI_8580.has(ref.file);
     var routeMujer=ref.pack===UCTUMI_PACK&&UCTUMI_MUJER.has(ref.file);
+    // TEST212: stage bytes from the same compiled test source that will play,
+    // rather than staging 8003-byte HVSC then switching to 7667 bytes.
+    var alternative=routeMujer&&sourceBytes.length===UCTUMI_MUJER.get(ref.file)
+      ?getCompiledMujerBytes():null;
+    if(alternative)sourceBytes=alternative;
     var expectedSize=route8580?UCTUMI_8580.get(ref.file):
-      routeMujer?UCTUMI_MUJER.get(ref.file):APPROVED.get(ref.file);
+      routeMujer?(alternative?MUJER_COMPILED_BYTES:UCTUMI_MUJER.get(ref.file)):APPROVED.get(ref.file);
     if(sourceBytes.length!==expectedSize){releaseStaged();return Promise.resolve(false);}
     var key=stageKey(ref);
     if(stagedNext&&stagedNext.key===key)return stagedNext.promise;
@@ -523,8 +563,13 @@
     // WebAssembly binary, even if called with a forged source reference.
     var route8580=ref.pack===UCTUMI_PACK && UCTUMI_8580.has(ref.file);
     var routeMujer=ref.pack===UCTUMI_PACK && UCTUMI_MUJER.has(ref.file);
+    // Validate the original source first. Only then may the alternate export
+    // replace its bytes for this one opt-in test. No other SID is affected.
+    var alternative=routeMujer&&sidHeaderOK(bytes)&&
+      bytes.length===UCTUMI_MUJER.get(ref.file)?getCompiledMujerBytes():null;
+    if(alternative)bytes=new Uint8Array(alternative);
     var expectedSize=route8580?UCTUMI_8580.get(ref.file):
-      routeMujer?UCTUMI_MUJER.get(ref.file):APPROVED.get(ref.file);
+      routeMujer?(alternative?MUJER_COMPILED_BYTES:UCTUMI_MUJER.get(ref.file)):APPROVED.get(ref.file);
     if(!sidHeaderOK(bytes)||bytes.length!==expectedSize){
       if(routeMujer)reportMujer('Mujer Amante rejected: unexpected SID header/byte length '+(bytes&&bytes.length));
       if(active||initTask||engine)deactivate();
@@ -536,7 +581,9 @@
     if(routeMujer){
       mujerAudit.rendered=0;mujerAudit.played=0;mujerAudit.underruns=0;
       resetMujerTrace();
-      reportMujer('Mujer Amante exact HVSC reference and 8003-byte SID accepted'+
+      reportMujer('Mujer Amante exact HVSC reference — '+
+        (alternative?'TEST212 ORIGINAL CHIPDISK SOURCE 7667 bytes':
+          'HVSC source 8003 bytes')+
         (MUJER_FILTER_OFF?' · diagnostic filter OFF':' · original filter ON'));
     }
     var hot=claimStagedReference(ref);
@@ -606,6 +653,9 @@
       return {last:mujerAudit.last,usingReSIDfp:!!(active&&activeMujer&&songReady),
         playing:!!player.isPlaying,chip:activeMujer?'MOS8580':null,
         filterTest:activeMujer&&MUJER_FILTER_OFF?'OFF (TEST211)':'normal',
+        sourceTest:MUJER_COMPILED_TEST?(compiledMujerCache?
+          'Chipdisk Vol.1 ORIGINAL 7667 bytes':'Chipdisk requested, source unavailable'):
+          'HVSC 8003 bytes',
         registerTraceRows:mujerTraceRows.length,
         activeRoute:activeMujer?'Mujer_Amante.sid':active8580?'Loco_un_Poco.sid':active?'LFT':'TinySID',
         queue:queue.length,renderedBlocks:mujerAudit.rendered,
@@ -616,5 +666,5 @@
     mujerTrace:function(){return mujerTraceRows.map(function(r){return Object.assign({},r);});},
     active:function(){return active;},playingApproved:function(){return !active8580&&!activeMujer&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
-    version:'TEST211-mujer-filter-ab-trace'};
+    version:'TEST212-mujer-original-chipdisk-AB'};
 })();
