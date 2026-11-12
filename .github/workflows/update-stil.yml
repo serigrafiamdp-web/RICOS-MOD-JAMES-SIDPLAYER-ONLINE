@@ -45,7 +45,7 @@ jobs:
               parts=path.strip('/').split('/')
               if len(parts)<2: continue
               prefix=parts[0].lower()
-              letter=parts[1].upper() if prefix=='MUSICIANS' else 'all'
+              letter=parts[1].upper() if prefix=='musicians' else 'all'
               shard=prefix+'-'+letter
               note='\n'.join(lines).strip()
               if note: shards.setdefault(shard,{})[path]=note
