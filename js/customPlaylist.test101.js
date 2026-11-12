@@ -17,6 +17,17 @@
     var v=String(value||'').trim(),m=v.match(/^([^()]+?)\s*\(([^()]+)\)$/);
     return m&&m[1].trim()&&m[2].trim()?m[2].trim()+' ('+m[1].trim()+')':v;
   }
+  // TEST214: only normalize VISUAL labels from the existing Uctumi catalog.
+  // No changes to SID bytes, SID header metadata, playlist references or audio.
+  var UCTUMI_DISPLAY_TITLES={"4Kindness.sid":"4Kindness","A_Dog_in_My_Doorstep_short_version.sid":"A Dog in My Doorstep (shortver.)","A_Felicidade.sid":"A Felicidade","A_Simple_Day.sid":"A Simple Day","Amigo.sid":"Amigo","Amor_clasificado.sid":"Amor clasificado","Angels_and_Beans.sid":"Angels and Beans","Another_World_Intro.sid":"Another World Intro","Anxious.sid":"Anxious","Arte_Poetica_Testicular.sid":"Arte Poetica Testicular","Astronomia_Remix.sid":"Astronomia Remix","Balloon_Country_Bursts.sid":"Balloon Country Bursts","Barcoded_People.sid":"Barcoded People","Beautiful_Cruel_World.sid":"Beautiful Cruel World","Broken_and_Fixed.sid":"Broken and Fixed","Bye_bye.sid":"Bye bye","Capybaras_Are_Born.sid":"Capybaras Are Born","Carito.sid":"Carito","Certas_Coisas.sid":"Certas Coisas","Ciiiiid.sid":"Ciiiiid","Cocktail_Blues.sid":"Cocktail Blues","Costumbres_argentinas.sid":"Costumbres argentinas","Courier.sid":"The Courier","Courier_remix.sid":"The Courier (remix)","Crazy_Printer_Intro_Music.sid":"Crazy Printer Intro Music","Cuarentenauta.sid":"Cuarentenauta","Dance_with_the_Ugliest_One.sid":"Dance with the Ugliest One","Dancing_Queen.sid":"Dancing Queen","Der_Computer_Nr_64.sid":"Der Computer Nr. 64","Digger.sid":"Digger","Dinosaurios.sid":"Dinosaurios","Dune_Buggy.sid":"Dune buggy","Elige_tu_propio_Gauchoide_part_1.sid":"Elige tu propio Gauchoide (p. 1)","En_septiembre_fuiste_mia.sid":"En septiembre fuiste mia","Everywhere_I_Go.sid":"Everywhere I Go","Everywhere_I_Go_final.sid":"Everywhere I Go (final)","F600.sid":"F600","Fico_Assim_Sem_Voce.sid":"Fico Assim Sem Você","Fluffy_Resistance.sid":"Fluffy Resistance","Free_Falling.sid":"Free Falling","Free_Hasel.sid":"Free Hasél","Frenetstipated.sid":"Frenetstipated","Full_Contact_Intro.sid":"Full Contact Intro","Generador_Avanzado_de_Placas_Rojas.sid":"Generador Avanzado/Placa Rojas","Get_Witchy.sid":"Get Witchy","Glacial_Heart.sid":"Glacial Heart","Guilty_Retro_Pleasure.sid":"Guilty Retro Pleasure","Hacelo_por_mi.sid":"Hacelo por mi","Helicoid.sid":"Helicoid","Himno_ar.sid":"Himno.ar","Hindrance.sid":"Hindrance","Ideas_del_Culo.sid":"Ideas del Culo","Illusions_are_Lost.sid":"Illusions are Lost","Im_Borg_Unit_6581.sid":"I'm Borg Unit 6581","Intro_Evita.sid":"Intro Evita","Jijiji.sid":"Jijiji","Juana_Azurduy_Reggae_Mix.sid":"Juana Azurduy Reggae Mix","La_Morocha.sid":"La Morocha","Lamento_Boliviano.sid":"Lamento Boliviano","Libertongo.sid":"Libertongo","Loco_un_Poco.sid":"Loco un Poco","Long_Piano.sid":"Long Piano","Love_Profusion_C64_gone_wild.sid":"Love Profusion (C64 gone wild)","Low_Serotonin.sid":"Low Serotonin","Marcha_Imperial_Peronista.sid":"Marcha Imperial Peronista","Mechaboy.sid":"Mechaboy","Menina_Veneno.sid":"Menina Veneno","Miracle_Room.sid":"Miracle Room","Mission_Prostol.sid":"Mission Prostol","Mujer_Amante.sid":"Mujer Amante","Nada_Punk.sid":"Nada Punk","Nothing_Is_Free.sid":"Nothing Is Free","O_Tempo_Nao_Para.sid":"O Tempo Não Para","Paesaggio.sid":"Paesaggio","Pair_of_Lies.sid":"Pair of Lies","Pop_Goes_the_World.sid":"Pop Goes the World","Por_una_cabeza.sid":"Por una cabeza","Power_of_Two_2SID.sid":"Power of Two","Profugos.sid":"Profugos","Pronta_Entrega.sid":"Pronta Entrega","Que_hago_en_Manila.sid":"Que hago en Manila?","Que_tendra_el_petiso.sid":"Qué tendrá el petiso","Radioactive_Tenderness.sid":"Radioactive Tenderness","Robots_Rumble.sid":"Robots Rumble","Rue_de_l_abricot.sid":"Rue de l'abricot","Ryuuju_no_Dengon.sid":"Ryuuju no Dengon","Se_Voce_Jurar.sid":"Se Voce Jurar","Seguir_Viviendo_Sin_Tu_Amor.sid":"Seguir Viviendo Sin Tu Amor","Seminare.sid":"Seminare","Sola_en_los_bares.sid":"Sola en los bares","Souls_Lost_to_Poseidon_2SID.sid":"Souls Lost to Poseidon","Supergeek_to_the_Rescue.sid":"Supergeek to the Rescue","Tocando_fondo.sid":"Tocando fondo","Todos_Juntos_Remix.sid":"Todos Juntos Remix","Un_estate_italiana.sid":"Un'estate italiana","Whistleblower.sid":"Whistleblower","Yasashisa_ni_Tsutsumareta_nara.sid":"Yasashisa ni Tsutsumareta nara","Yo_te_amo.sid":"Yo te amo","Zombie_Calavera_Prologue.sid":"Zombie Calavera Prologue"};
+  function normalizeUctumiListDisplay(entry,ref){
+    if(!entry||!ref||ref.sidId||
+       ref.pack!=='library/packs/musicians/U/Uctumi.zip'||
+       !Object.prototype.hasOwnProperty.call(UCTUMI_DISPLAY_TITLES,ref.file))return entry;
+    entry.name=UCTUMI_DISPLAY_TITLES[ref.file];
+    entry.author='Esteban Palladino (Uctumi)';
+    return entry;
+  }
   // TEST25: unlock Web Audio at the earliest user gesture, even before the
   // 30-second automatic playlist selection. Never synthesize a fake click.
   function unlockAudioFromGesture() {
@@ -3042,11 +3053,11 @@
     function createProgressiveReferenceStream(refs,unknownAuthors){
       var controller=new AbortController(),archives=new Map(),cancelled=false;
       var slots=refs.map(function(ref,i){
-        return {id:'hvsc-slot-'+i,
+        return normalizeUctumiListDisplay({id:'hvsc-slot-'+i,
           name:ref.title||ref.file.split('/').pop().replace(/\.sid$/i,'').replace(/_/g,' '),
           author:ref.author||(unknownAuthors?'<?>':'Loading from HVSC…'),released:'',file:ref.file,size:0,
           numSubtunes:1,startSubtune:1,sidFormat:'PSID',localBytes:null,
-          _hvscRef:remixCanonicalRef(ref),_hvscPromise:null};
+          _hvscRef:remixCanonicalRef(ref),_hvscPromise:null},ref);
       });
       function archiveFor(pack){
         if(!archives.has(pack)){
@@ -3081,6 +3092,7 @@
           if(!parsed)throw Error('Invalid PSID/RSID: '+slot._hvscRef.file);
           // Preserve slot identity: arrows may move entries while fetching.
           Object.assign(slot,parsed,{id:slot.id});
+          normalizeUctumiListDisplay(slot,slot._hvscRef);
           return slot;
         })().catch(function(error){slot._hvscPromise=null;throw error;});
         return slot._hvscPromise;
@@ -3226,6 +3238,7 @@
         if(bytesTotal>64*1024*1024) throw Error('Playlist exceeds 64 MB.');
         var entry=parseSID(bytes,{name:track.file,size:bytes.length});
         if(!entry)throw Error('Invalid SID: '+track.file);
+        normalizeUctumiListDisplay(entry,track);
         output.push(entry);
       }
       // Do not change playback until every reference has been resolved and validated.
@@ -5018,6 +5031,7 @@
         if(draftBytes+bytes.length>64*1024*1024)throw Error('Playlist limit: 64 MB.');
         var entry=parseSID(bytes,{name:track.file,size:bytes.length});
         if(!entry)throw Error('Invalid SID: '+track.file);
+        normalizeUctumiListDisplay(entry,{pack:track.pack||section.pack,file:track.file});
         draft.push({key:key,entry:entry,pack:track.pack||section.pack,file:track.file});
         draftBytes+=bytes.length;
         return true;
