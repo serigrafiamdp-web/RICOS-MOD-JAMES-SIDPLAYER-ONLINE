@@ -36,6 +36,9 @@
   var largePlaylistStructureRevision=0;
   var largePlaylistPainted=null;
   var fadeGainNode=null;
+  // TEST197: separate song-output gain for Loco un Poco. This lives before
+  // the unchanged transition-fade node; no SID samples are modified.
+  var trackGainNode=null;
   // TEST100: restore gain only when the FIRST newly rendered SID buffer plays.
   // Doing it inside playSong exposes previously queued ScriptProcessor audio.
   var pendingNewSidUnmute=false;
@@ -125,6 +128,25 @@
         try{this.scriptNode.disconnect();this.scriptNode.connect(this.audioContext.destination);}catch(inner){}
       }
     }
+    // TEST197: add an independent fixed-gain stage between the ScriptProcessor
+    // and the existing transition GainNode. Do not alter fade scheduling.
+    if(fadeGainNode&&!trackGainNode&&this.audioContext&&this.scriptNode&&
+       typeof this.audioContext.createGain==='function'){
+      try{
+        var outputGain=this.audioContext.createGain();
+        outputGain.gain.value=1;
+        this.scriptNode.disconnect();
+        this.scriptNode.connect(outputGain);
+        outputGain.connect(fadeGainNode);
+        trackGainNode=outputGain;
+      }catch(error){
+        console.warn('Separate SID output gain unavailable:',error);
+        try{
+          this.scriptNode.disconnect();
+          this.scriptNode.connect(fadeGainNode);
+        }catch(inner){}
+      }
+    }
     // ScriptProcessor queues output ahead of the audible playhead. Hook its
     // existing renderer without changing any SID samples or synthesis logic.
     if(this.scriptNode&&this.scriptNode!==audioOutputHookNode){
@@ -156,6 +178,16 @@
       }
     }
     return response;
+  };
+  // Only the narrowly approved SID bridge uses this; all other tracks run
+  // at unity gain. This function never changes the transition-fade node.
+  player.ricoSetTrackOutputGain=function(value){
+    var gain=Number(value);
+    if(!Number.isFinite(gain)||gain<0||!trackGainNode||!player.audioContext)return false;
+    var param=trackGainNode.gain,now=player.audioContext.currentTime;
+    param.cancelScheduledValues(now);
+    param.setValueAtTime(gain,now);
+    return true;
   };
   function rampVolume(target,milliseconds){
     if(!fadeGainNode||!player.audioContext)return;
