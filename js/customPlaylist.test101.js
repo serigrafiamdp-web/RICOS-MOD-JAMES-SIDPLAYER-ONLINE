@@ -2601,9 +2601,20 @@
       // Only the verified LFT.zip progressive slot may enter the experimental WASM.
       // TEST177: every song, in any v2/REMIX playlist, carries its own
       // approved HVSC reference. Switch engines by track, never by list title.
-      if(window.RicoLftMode)
-        window.RicoLftMode.approveTrustedReference(item._hvscRef||
-          (activeReferenceTracks&&activeReferenceTracks[index])||null);
+      var selectedRef=item._hvscRef||
+        (activeReferenceTracks&&activeReferenceTracks[index])||null;
+      var experimentalApproved=window.RicoLftMode
+        ?window.RicoLftMode.approveTrustedReference(selectedRef):false;
+      // TEST210: console-only audit of the exact route the listener selected.
+      // This does not modify playback, playlist data, or any SID volume.
+      if(/mujer[ _.-]*amante/i.test([item.name,item.file].join(' ')))
+        console.info('[TEST210 Mujer Amante] selected SID',{
+          name:item.name,pack:selectedRef&&selectedRef.pack,
+          file:selectedRef&&selectedRef.file,
+          sidId:!!(selectedRef&&selectedRef.sidId),
+          bytes:item.localBytes&&item.localBytes.length,
+          reSIDfpApproved:experimentalApproved
+        });
       var loaded = player.loadSIDData(item.localBytes);
       if (loaded === false) {
         player.initFileSelection();
