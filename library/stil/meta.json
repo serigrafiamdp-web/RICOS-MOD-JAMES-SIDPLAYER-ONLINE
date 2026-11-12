@@ -1,0 +1,10 @@
+{
+  "source": "https://www.hvsc.c64.org/download/C64Music/DOCUMENTS/STIL.txt",
+  "encoding": "latin-1",
+  "entries": 18898,
+  "shards": [
+    "demos-all",
+    "games-all",
+    "musicians-all"
+  ]
+}
