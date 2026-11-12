@@ -238,6 +238,8 @@
   player.playSong=function(){
     resetSilenceDetector();
     var result=originalPlaySong.apply(this,arguments);
+    // TEST199: the active SID/subtune chooses its initial TIMER value.
+    selectTentativeSidTimer();
     if(transitionAwaitingStart){
       transitionAwaitingStart=false;transitionBusy=false;queuedLiveIndex=null;
       if(transitionRecovery!==null){clearTimeout(transitionRecovery);transitionRecovery=null;}
@@ -2250,6 +2252,66 @@
     $('#ricoFallback').val(shown);
     $('#ricoLiveTimer').val(shown);
   }
+  // TEST199: known HVSC Songlengths as initial TIMER per playing SID/subtune.
+  // Lazy alphabetical shards; unknown tunes retain the original 03:00.
+  // Manual changes override the selected tune for the current session only.
+  var songlengthShards=new Map(),manualSongTimers=new Map();
+  var songlengthTicket=0,playingTimerKey=null,localTimerIds=new WeakMap();
+  var nextLocalTimerId=0;
+  function songTimerSource(){
+    var index=player.sidListIndex,list=player.sidList||[];
+    var entry=typeof index==='number'&&index>=0?list[index]:null;
+    var sub=Math.max(0,Number(player.currentSubsong)||0);
+    if(!entry)return null;
+    var ref=customActive?(entry._hvscRef||
+      (activeReferenceTracks&&activeReferenceTracks[index])):null;
+    if(ref&&!ref.sidId&&typeof ref.file==='string'&&typeof ref.pack==='string'){
+      var match=/^library\/packs\/(musicians|demos)\/([A-Za-z0-9_-]+)\/([A-Za-z0-9_-]+)\.zip$/.exec(ref.pack);
+      if(match&&/^[^/\\]+\.sid$/i.test(ref.file)){
+        var relative=match[1]==='musicians'?match[3]+'/'+ref.file:ref.file;
+        return {key:ref.pack+'|'+ref.file+'|'+sub,
+          shard:'library/songlengths/'+match[1]+'-'+match[2]+'.json',
+          relative:relative,sub:sub};
+      }
+    }
+    if(!localTimerIds.has(entry))localTimerIds.set(entry,++nextLocalTimerId);
+    return {key:'local:'+localTimerIds.get(entry)+'|'+sub,shard:null,sub:sub};
+  }
+  function loadSonglengthShard(path){
+    if(!songlengthShards.has(path)){
+      songlengthShards.set(path,fetch(path).then(function(response){
+        if(!response.ok)throw Error('Songlength section unavailable ('+response.status+')');
+        return response.json();
+      }).then(function(data){
+        return data&&data.format==='spotysid-songlengths'&&data.version===1&&
+          data.durations&&typeof data.durations==='object'?data.durations:null;
+      }).catch(function(error){
+        console.warn('HVSC songlength information not available:',error);
+        return null;
+      }));
+    }
+    return songlengthShards.get(path);
+  }
+  function selectTentativeSidTimer(){
+    var ticket=++songlengthTicket,source=songTimerSource();
+    playingTimerKey=source?source.key:null;
+    var override=source?manualSongTimers.get(source.key):null;
+    updateAutoTime(override===undefined||override===null?180:override);
+    if(!source||!source.shard||(override!==undefined&&override!==null))return;
+    loadSonglengthShard(source.shard).then(function(durations){
+      if(ticket!==songlengthTicket||playingTimerKey!==source.key||
+         manualSongTimers.has(source.key)||!durations)return;
+      var options=durations[source.relative];
+      var seconds=Array.isArray(options)?options[source.sub]:null;
+      if(!Number.isInteger(seconds)||seconds<5||seconds>3600)return;
+      if(document.activeElement===document.getElementById('ricoLiveTimer')||
+         document.activeElement===document.getElementById('ricoFallback'))return;
+      updateAutoTime(seconds);
+    });
+  }
+  function rememberManualSongTimer(){
+    if(playingTimerKey)manualSongTimers.set(playingTimerKey,player.autoFallbackSeconds);
+  }
   // A Playlist's AUTO TIMER is a maximum track duration, not only the fallback
   // for files without song-length metadata. Begin a five-second fade before
   // the limit, so the *next* SID starts near the displayed timer value.
@@ -2259,6 +2321,7 @@
   $('#ricoLiveTimer').on('change blur',function(){
     var parsed=parseAutoTime(this.value);
     updateAutoTime(parsed===null?player.autoFallbackSeconds:parsed);
+    if(parsed!==null)rememberManualSongTimer();
   }).on('keydown keyup keypress mousedown mouseup click dblclick',function(e){
     e.stopPropagation();
     if(e.type==='keydown'&&e.key==='Enter'){e.preventDefault();this.blur();}
@@ -2530,6 +2593,7 @@
   $('#ricoFallback').on('change blur', function () {
     var entered = parseAutoTime(this.value);
     updateAutoTime(entered === null ? player.autoFallbackSeconds : entered);
+    if(entered!==null)rememberManualSongTimer();
   });
   $('#ricoFallback').on('keydown', function (event) {
     if (event.key === 'Enter') { this.blur(); event.preventDefault(); event.stopPropagation(); }
@@ -2537,10 +2601,12 @@
   $('#ricoFallbackMinus').on('click', function () {
     var entered = parseAutoTime($('#ricoFallback').val());
     updateAutoTime((entered === null ? player.autoFallbackSeconds : entered) - 10);
+    rememberManualSongTimer();
   });
   $('#ricoFallbackPlus').on('click', function () {
     var entered = parseAutoTime($('#ricoFallback').val());
     updateAutoTime((entered === null ? player.autoFallbackSeconds : entered) + 10);
+    rememberManualSongTimer();
   });
   $('#ricoDropZone').off('drop').on('drop.ricoPlaylist', async function (event) {
     event.preventDefault();
