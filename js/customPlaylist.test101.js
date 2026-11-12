@@ -1096,10 +1096,13 @@
   }
   function noHvscFileName(item){
     var name=String(item.file||item.name||'sid').split(/[\/\\]/).pop()
-      .replace(/[<>:*?|]/g,'_').slice(0,195);
-    return /\.sid$/i.test(name)?name:name.replace(/\.[^.]*$/,'')+'.sid';
+      .replace(/[<>:*?|]/g,'_').slice(0,188);
+    name=/\.sid$/i.test(name)?name:name.replace(/\.[^.]*$/,'')+'.sid';
+    // TEST221: label only a verified alternate FIX, never change its bytes.
+    return item._noHvscFix&&!/_FIX\.sid$/i.test(name)
+      ?name.replace(/\.sid$/i,'_FIX.sid'):name;
   }
-  async function archiveImportedSidFiles(items,required){
+  async function archiveImportedSidFiles(items,required,onProgress){
     var entries=items.filter(function(item){
       return item&&item.localBytes instanceof Uint8Array&&
         !item._noHvscAssetId;
@@ -1119,16 +1122,26 @@
     var catalog=await archived.json();
     if(!Array.isArray(catalog.tracks))throw Error('Invalid NO HVSC catalog.');
     var known=new Map(catalog.tracks.map(function(t){return [t.sidId,t];}));
-    var pending=[];
+    var pendingById=new Map();
     for(var entry of entries){
-      var id=await binarySidHash(entry.localBytes);
+      // Exact duplicate checks include previously imported copies in this batch.
+      var id=entry._ricoSha256||await binarySidHash(entry.localBytes);
       var stored=known.get(id);
       if(stored){
         entry._noHvscAssetId=id;
         entry._noHvscFile=stored.file;
-      }else pending.push({entry:entry,id:id,file:noHvscFileName(entry)});
+      }else{
+        var task=pendingById.get(id);
+        if(!task){
+          task={id:id,file:noHvscFileName(entry),entries:[]};
+          pendingById.set(id,task);
+        }
+        task.entries.push(entry);
+      }
     }
+    var pending=Array.from(pendingById.values());
     if(!pending.length)return 0;
+    if(typeof onProgress==='function')onProgress('ARCHIVING',0,pending.length);
     var key=await askBetaKeyDialog('ARCHIVE');
     if(!key){
       if(required)throw Error('NO HVSC archive cancelled; SID remains local.');
@@ -1138,12 +1151,12 @@
     // Reuse the existing GitHub/R2 upload batch size.
     for(var start=0;start<pending.length;start+=maxBatch){
       var batch=pending.slice(start,start+maxBatch);
-      $('#ricoPlaylistStatus').text('Archiving '+(start+1)+'–'+Math.min(start+batch.length,pending.length)+' of '+pending.length+' SID in NO HVSC...');
+      if(typeof onProgress==='function')onProgress('ARCHIVING',start,pending.length);
       var result=await fetch(communityWriteApi+'/no-hvsc',{
         method:'POST',headers:{'Content-Type':'application/json','X-Beta-Key':key},
         body:JSON.stringify({format:'ricos-no-hvsc-upload',version:1,
           tracks:batch.map(function(row){return {file:row.file,
-            sidBase64:toNoHvscBase64(row.entry.localBytes)};})})
+            sidBase64:toNoHvscBase64(row.entries[0].localBytes)};})})
       });
       var receipt=await result.json().catch(function(){return {};});
       if(!result.ok)throw Error(receipt.error||'NO HVSC archive failed (HTTP '+result.status+')');
@@ -1165,16 +1178,20 @@
         var storedBytes=new Uint8Array(await checkAsset.arrayBuffer());
         if((await binarySidHash(storedBytes))!==row.id)
           throw Error('NO HVSC binary integrity verification failed: '+row.file+'.');
-        row.entry._noHvscAssetId=row.id;
-        row.entry._noHvscFile=confirmed.file||row.file;
+        row.entries.forEach(function(entry){
+          entry._noHvscAssetId=row.id;
+          entry._noHvscFile=confirmed.file||row.file;
+        });
         saved++;
+        if(typeof onProgress==='function')
+          onProgress('ARCHIVING',start+i+1,pending.length);
       }
     }
     $('#ricoPlaylistStatus').text(saved+' new SID archived in NO HVSC and available for REMIX.');
     return saved;
   }
-  function startNoHvscArchive(entries,required){
-    var running=archiveImportedSidFiles(entries,required);
+  function startNoHvscArchive(entries,required,onProgress){
+    var running=archiveImportedSidFiles(entries,required,onProgress);
     entries.forEach(function(entry){entry._noHvscPending=running;});
     var clean=function(){entries.forEach(function(entry){
       if(entry._noHvscPending===running)entry._noHvscPending=null;
@@ -1694,6 +1711,11 @@
       }else if(candidate&&candidate.pack&&candidate.file){
         reference={pack:candidate.pack,file:candidate.file,
           title:sidEntry.name||candidate.file,artist:sidEntry.author||''};
+      }else if(sidEntry._hvscRef&&validRemixRef(sidEntry._hvscRef)){
+        // TEST221: exact SHA-256 match against the real published HVSC bytes.
+        // Never upload a duplicate asset merely because it came from a PC.
+        reference={pack:sidEntry._hvscRef.pack,file:sidEntry._hvscRef.file,
+          title:sidEntry.name||sidEntry.file,artist:sidEntry.author||''};
       }else{
         // Prefer a known, verifiable HVSC path over a contributed upload.
         // IMPORT SID with no HVSC match may be archived in NO HVSC.
@@ -2811,7 +2833,22 @@
     refreshTabs();
   };
 
-  // Browser file handles are kept in memory. Upload is never sent to GitHub.
+  // TEST221: one small progress bar for an entire imported batch. Always
+  // describe real work; never show archived until D1 and bytes are verified.
+  function reportSidImport(stage,done,total){
+    var root=document.getElementById('ricoImportProgress');
+    if(!root)return;
+    var label=document.getElementById('ricoImportProgressLabel');
+    var count=document.getElementById('ricoImportProgressCount');
+    var fill=document.getElementById('ricoImportProgressFill');
+    var n=Math.max(0,Number(done)||0),size=Math.max(0,Number(total)||0);
+    root.hidden=false;
+    if(label)label.textContent=stage;
+    if(count)count.textContent=size?Math.floor(Math.min(size,n))+' / '+size:'';
+    if(fill)fill.style.width=(size?Math.min(100,100*n/size):0)+'%';
+  }
+  // Browser file handles are kept in memory. Only beta-key-approved,
+  // confirmed, distinct NO HVSC bytes may reach our community storage.
   async function importFiles(inputFiles) {
     if (importing) return;
     // A new manual import is never the published LFT list.
@@ -2823,42 +2860,76 @@
       $('#ricoPlaylistStatus').text('No SID files found.');
       return;
     }
-    importing = true;
-    $('#ricoPlaylistStatus').text('Reading ' + files.length + ' files...');
-    var accepted = 0, rejected = 0, newlyImported=[];
-    for (var i = 0; i < files.length; i++) {
-      try {
-        var buf = new Uint8Array(await files[i].arrayBuffer());
-        var parsed = parseSID(buf, files[i]);
-        if (!parsed) { rejected++; console.warn('Not a supported PSID/RSID header:', files[i].name); continue; }
-        parsed.id = 'local-' + (importedSidEntries.length + accepted);
-        importedSidEntries.push(parsed);
-        custom.push(parsed);
-        newlyImported.push(parsed);
-        accepted++;
-      } catch (error) {
-        rejected++;
-        console.warn('SID import failed', files[i].name, error);
+    importing=true;
+    var accepted=0,rejected=0,newlyImported=[];
+    try{
+      reportSidImport('ANALYZING',0,files.length);
+      for(var i=0;i<files.length;i++){
+        try{
+          var buf=new Uint8Array(await files[i].arrayBuffer());
+          var parsed=parseSID(buf,files[i]);
+          if(!parsed){
+            rejected++;
+            console.warn('Not a PSID/RSID header:',files[i].name);
+          }else{
+            parsed.id='local-'+(importedSidEntries.length+accepted);
+            importedSidEntries.push(parsed);
+            custom.push(parsed);
+            newlyImported.push(parsed);
+            accepted++;
+          }
+        }catch(error){
+          rejected++;
+          console.warn('SID read failed:',files[i].name,error);
+        }
+        reportSidImport('ANALYZING',i+1,files.length);
       }
-    }
-    importing = false;
-    renderImportedSidList();
-    if (accepted) {
-      loadedPlaylistTitle = '';
-      loadedPlaylistCreator = '';
-      if (!customActive) activate('custom');
-      else player.initFileSelection();
-      if (player.sidListIndex === false) loadCustomIndex(0);
+      renderImportedSidList();
+      if(accepted){
+        loadedPlaylistTitle='';
+        loadedPlaylistCreator='';
+        if(!customActive)activate('custom');
+        else player.initFileSelection();
+        if(player.sidListIndex===false)loadCustomIndex(0);
+        renderLivePlaylist();
+        showLivePlaylist(true);
+      }
+      if(!newlyImported.length){
+        reportSidImport('DONE',files.length,files.length);
+        $('#ricoPlaylistStatus').text('0 SID · '+rejected+' skipped');
+        return;
+      }
+      if(!window.RicoSidImport||typeof window.RicoSidImport.analyze!=='function')
+        throw Error('SID comparison module unavailable');
+      var audit=await window.RicoSidImport.analyze(newlyImported,{
+        apiBase:communityWriteApi,progress:reportSidImport
+      });
+      var pending=newlyImported.filter(function(e){
+        return !e._hvscRef&&!e._noHvscAssetId;
+      });
+      // Archiving is optional and always requests the existing beta key.
+      // No automatic upload is permitted before all HVSC comparisons succeed.
+      if(pending.length)await startNoHvscArchive(pending,false,reportSidImport);
+      var hvsc=newlyImported.filter(function(e){return !!e._hvscRef;}).length;
+      var archived=newlyImported.filter(function(e){return !!e._noHvscAssetId;}).length;
+      var local=newlyImported.length-hvsc-archived;
+      reportSidImport('DONE',1,1);
+      var stats='HVSC '+hvsc+' · NO HVSC '+archived;
+      if(audit.repeated)stats+=' · DUP '+audit.repeated;
+      if(local)stats+=' · LOCAL '+local;
+      if(rejected)stats+=' · SKIPPED '+rejected;
+      $('#ricoPlaylistStatus').text(stats+' · SAVE LIST to keep your playlist');
+      renderImportedSidList();
       renderLivePlaylist();
-      showLivePlaylist(true);
+    }catch(error){
+      // Failure of a network/hash check never mislabels an SID as "not HVSC".
+      // Keep ALL original bytes in the browser; no archive PUT on uncertainty.
+      reportSidImport('CHECK FAILED',0,0);
+      $('#ricoPlaylistStatus').text('LOCAL ONLY · '+error.message);
+      console.warn('SID import check not completed; originals remain local:',error);
+    }finally{
+      importing=false;
     }
-    $('#ricoPlaylistStatus').text(accepted + ' SID imported' + (rejected ? ' · ' + rejected + ' skipped' : '') + '. Use SAVE LIST for persistent local storage.');
-    // Import is always usable locally. Public archiving is optional and
-    // explicitly authorized via the existing beta-key dialog, not automatic.
-    if(newlyImported.length)startNoHvscArchive(newlyImported,false).catch(function(error){
-      $('#ricoPlaylistStatus').text('Import succeeded locally; NO HVSC not archived: '+error.message);
-      console.warn('NO HVSC upload was not confirmed; local SID data is intact',error);
-    });
   }
 
   function getEntryFiles(entry) {
@@ -3086,11 +3157,31 @@
       var name = nameEl.value.trim();
       if (!name) throw Error('Enter a playlist name.');
       if (!importedSidEntries.length) throw Error('IMPORT SID has no files. Add SID files or select a saved local playlist.');
+      // TEST221: when every imported SID has a verified HVSC or NO HVSC
+      // reference, SAVE LIST stores lightweight mixed references instead of
+      // duplicating SID bytes. Otherwise the original local bytes remain.
+      var refs=importedSidEntries.map(function(item){
+        if(item._hvscRef)return remixCanonicalRef(item._hvscRef);
+        if(item._noHvscAssetId)return {sidId:item._noHvscAssetId,
+          file:item._noHvscFile||noHvscFileName(item)};
+        return null;
+      });
+      var allMatched=refs.every(function(ref){return !!ref;});
+      // Cloudflare requires unique references. Keep duplicates in the local
+      // import preview, but save each identical asset only once in V2 lists.
+      var seen=new Set();
+      var uniqueRefs=refs.filter(function(ref){
+        if(!ref)return false;
+        var key=remixRefKey(ref);
+        if(seen.has(key))return false;
+        seen.add(key);return true;
+      });
       return {
-        format:'ricos-sid-playlist', version:1, name:name,
-        createdBy: loadedPlaylistCreator || undefined,
-        createdAt:new Date().toISOString(), tracks:importedSidEntries.map(function(item) {
-          return {file:item.file || 'track.sid', sidBase64:encode(item.localBytes)};
+        format:'ricos-sid-playlist',version:allMatched?2:1,name:name,
+        createdBy:loadedPlaylistCreator||undefined,
+        createdAt:new Date().toISOString(),
+        tracks:allMatched?uniqueRefs:importedSidEntries.map(function(item){
+          return {file:item.file||'track.sid',sidBase64:encode(item.localBytes)};
         })
       };
     }
@@ -4265,8 +4356,8 @@
         function(node){node.remove();}
       );
       var fragment=document.createDocumentFragment();
-      rows.filter(function(d){return d&&d.format==='ricos-sid-playlist'&&d.version===1&&
-        Array.isArray(d.tracks);}).sort(function(a,b){
+      rows.filter(function(d){return d&&d.format==='ricos-sid-playlist'&&
+        (d.version===1||d.version===2)&&Array.isArray(d.tracks);}).sort(function(a,b){
           return String(b.updatedAt||b.createdAt||'').localeCompare(String(a.updatedAt||a.createdAt||''));
         }).forEach(function(item){
         var row=document.createElement('div');
@@ -4318,40 +4409,66 @@
           if(publish.disabled)return;
           publish.disabled=true;
           try{
-            var capResponse=await fetch(communityWriteApi+'/capabilities',{cache:'no-store'});
-            if(!capResponse.ok)throw Error('Publishing service unavailable.');
-            var cap=await capResponse.json();
-            if(!cap.sidUploadsEnabled)
-              throw Error('SID file publishing is not active on Cloudflare yet. Local copy is safe.');
             var stored=await dbCall('readonly',function(store){return store.get(item.id);});
             if(!stored||!Array.isArray(stored.tracks)||!stored.tracks.length)
-              throw Error('Local collection missing.');
-            var maxSid=Number(cap.sidUploadLimit)||15;
-            if(stored.tracks.length>maxSid)throw Error('Max '+maxSid+' SID per publication with the current storage provider.');
+              throw Error('Local playlist missing.');
             var creator=String(stored.createdBy||'').trim();
             if(!creator||creator==='Unknown'){
-              creator=window.prompt('Collection creator / uploader:', '')||'';
+              creator=window.prompt('Playlist by:', '')||'';
               if(!creator.trim())return;
             }
-            if(!window.confirm('Publish '+stored.name+' ('+stored.tracks.length+
-              ' SID) to OUR COLLECTION for all users? Only publish files you have permission to share.'))return;
             var key=await askBetaKeyDialog('PUBLISH');
             if(!key)return;
-            var response=await fetch(communityWriteApi+'/collections',{
-              method:'POST',headers:{'Content-Type':'application/json','X-Beta-Key':key},
-              body:JSON.stringify({format:'ricos-sid-upload',version:1,
-                name:stored.name,createdBy:creator.trim(),tracks:stored.tracks.map(function(t){
-                  return {file:t.file,sidBase64:t.sidBase64};
-                })})
-            });
-            var outcome=await response.json();
-            if(!response.ok)throw Error(outcome.error||'Collection upload failed');
-            say('Published '+stored.name+' · '+outcome.tracks+' SID to OUR COLLECTION.');
-            window.alert('Published '+stored.name+' to OUR COLLECTION. Your local copy is preserved.');
-          }catch(error){say('PUBLISH: '+error.message);window.alert(error.message);}
+            if(stored.version===2){
+              // TEST221: all files have confirmed HVSC/NO HVSC references.
+              // Publish metadata-only; NEVER upload existing SID bytes again.
+              if(!stored.tracks.every(validRemixRef))
+                throw Error('Missing SID reference. Local playlist preserved.');
+              var refs=stored.tracks.map(remixCanonicalRef);
+              var id=stored.pendingPublicId||'';
+              if(!id){
+                var response=await fetch(communityWriteApi+'/playlists',{
+                  method:'POST',headers:{'Content-Type':'application/json','X-Beta-Key':key},
+                  body:JSON.stringify({format:'ricos-sid-playlist',version:2,
+                    name:stored.name,createdBy:creator.trim(),tracks:refs})
+                });
+                var receipt=await response.json();
+                if(!response.ok||!receipt.id)
+                  throw Error(receipt.error||'Playlist publish failed');
+                id=receipt.id;
+                // Keep the ID on the local record before verification so a
+                // network error cannot generate duplicate published lists.
+                stored.pendingPublicId=id;
+                await dbCall('readwrite',function(store){return store.put(stored);});
+              }
+              await verifyRemoteOrder(communityWriteApi+'/playlists/'+encodeURIComponent(id),
+                refs,'playlist');
+              say('PUBLISHED · '+stored.name+' · '+refs.length+' SID');
+              await loadCommunityCatalog();
+            }else{
+              // Original V1 imported-collection publishing remains unchanged.
+              var capResponse=await fetch(communityWriteApi+'/capabilities',{cache:'no-store'});
+              if(!capResponse.ok)throw Error('Publishing service unavailable.');
+              var cap=await capResponse.json();
+              if(!cap.sidUploadsEnabled)throw Error('SID storage unavailable.');
+              var maxSid=Number(cap.sidUploadLimit)||15;
+              if(stored.tracks.length>maxSid)
+                throw Error('Max '+maxSid+' SID per collection with this storage provider.');
+              var upload=await fetch(communityWriteApi+'/collections',{
+                method:'POST',headers:{'Content-Type':'application/json','X-Beta-Key':key},
+                body:JSON.stringify({format:'ricos-sid-upload',version:1,
+                  name:stored.name,createdBy:creator.trim(),tracks:stored.tracks.map(function(t){
+                    return {file:t.file,sidBase64:t.sidBase64};
+                  })})
+              });
+              var outcome=await upload.json();
+              if(!upload.ok)throw Error(outcome.error||'Collection upload failed');
+              say('PUBLISHED · '+stored.name+' · '+outcome.tracks+' SID');
+            }
+          }catch(error){say('PUBLISH: '+error.message);}
           finally{publish.disabled=false;}
         },false);
-        publish.title='Publish imported SID collection with beta key once Cloudflare SID storage is enabled.';
+        publish.title=item.version===2?'Publish this mixed HVSC / NO HVSC playlist by reference.':'Publish imported SID collection with beta key.';
         fragment.appendChild(row);
       });
       // Newly saved local imports are shown above published catalogs.
@@ -4883,8 +5000,12 @@
                       throw Error('Invalid NO HVSC asset reference.');
                     var metadata=metaBySidId.get(t.sidId);
                     if(metadata&&metadata.author)artistBySidId[t.sidId]=metadata.author;
-                    return {sidId:t.sidId,file:t.file,
-                      title:(metadata&&metadata.title)||t.file,
+                    var name=(metadata&&metadata.title)||t.file;
+                    // The raw PSID/RSID header remains immutable; the FIX tag
+                    // is preserved in the archived filename and visible label.
+                    if(metadata&&/_FIX\.sid$/i.test(metadata.file||''))
+                      name+=' · FIX';
+                    return {sidId:t.sidId,file:t.file,title:name,
                       author:(metadata&&metadata.author)||'Unknown'};
                   });
                   await loadStoredPlaylist({format:'ricos-sid-playlist',version:2,

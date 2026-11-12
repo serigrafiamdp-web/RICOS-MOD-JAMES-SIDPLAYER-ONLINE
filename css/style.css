@@ -2631,3 +2631,24 @@ left: 1px;
 #sidControls #ricoMasterVolumeControl .rico-volume-triangle:focus-within {
   outline:1px dotted var(--rico-theme-fg,#fff);outline-offset:2px;
 }
+
+/* TEST221: compact import analysis progress, palette-aware. */
+#ricoImportSidWindow #ricoImportProgress{
+  margin:7px 0 5px;padding:0;color:var(--rico-theme-fg,#fff);
+  font:10px Tahoma,Arial,sans-serif;
+}
+#ricoImportSidWindow #ricoImportProgress[hidden]{display:none!important}
+#ricoImportSidWindow .rico-import-progress-line{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  margin-bottom:4px;letter-spacing:.4px;
+}
+#ricoImportSidWindow .rico-import-progress-rail{
+  width:100%;height:4px;box-sizing:border-box;overflow:hidden;
+  background:var(--rico-theme-panel,#333);
+  border:1px solid var(--rico-theme-border,#777);
+}
+#ricoImportSidWindow #ricoImportProgressFill{
+  display:block;height:100%;width:0;
+  background:var(--rico-theme-fg,#fff);
+  transition:width .12s linear;
+}

@@ -2,7 +2,7 @@
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css?v=test218cone">
+    <link rel="stylesheet" href="css/style.css?v=test221import">
     <title>SpotySid — Rico + James SID Player | Oscilloscope View</title>
 
     <link rel="shortcut icon" type="image/png" href="images/icon16.png"/>
@@ -637,7 +637,7 @@
         <strong>IMPORT SID</strong>
         <button type="button" id="ricoImportSidClose" aria-label="Close Import SID window">×</button>
       </div>
-      <p class="rico-import-note">LOCAL ONLY · Saved in this browser. Not uploaded to HVSC, CSDb or the community database.</p>
+      <p class="rico-import-note">LOCAL FIRST · NO HVSC archive requires beta key</p>
       <div id="ricoImportSidContent">
           <div id="ricoDropZone">
             <div class="rico-drop-row">
@@ -657,7 +657,14 @@
             <span>min:sec</span>
             <a href="javascript:void(0)" id="sidFileOpen" style="display:none;">Open a Local SID File</a>
           </div>
-          <div id="ricoPlaylistStatus" role="status">Original 22 SID playlist.</div>
+          <div id="ricoImportProgress" hidden>
+            <div class="rico-import-progress-line">
+              <span id="ricoImportProgressLabel" aria-live="polite">ANALYZING</span>
+              <span id="ricoImportProgressCount">0 / 0</span>
+            </div>
+            <div class="rico-import-progress-rail"><span id="ricoImportProgressFill"></span></div>
+          </div>
+          <div id="ricoPlaylistStatus" role="status">READY</div>
           <div id="ricoSavedPlaylistControls" style="border-top:1px solid #aab5bc;margin-top:7px;padding-top:7px;">
             <div style="font-weight:bold;font-size:12px;margin-bottom:5px;">MY PLAYLISTS</div>
             <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
@@ -683,7 +690,7 @@
           <div id="ricoImportTrackList">No imported SID yet. Use ADD SID FILES or ADD FOLDER.</div>
         </div>
       </div>
-      <div id="ricoImportSidFooter">Stored locally in this browser (IndexedDB). For backup use DOWNLOAD JSON.</div>
+      <div id="ricoImportSidFooter">LOCAL SAVES · DOWNLOAD JSON FOR BACKUP</div>
     </aside>
 
     <div id="sidInfo" style="position: absolute; bottom: 21px; top: 20px; left: 0; width: 220px; background-color: #eeeeee; color: #222222; font-size: 10px; padding: 4px; border: 1px solid #444444; display: none">
@@ -752,7 +759,8 @@
     <script type="text/javascript" src="js/dialogManager.js"></script>
     <script type="text/javascript" src="js/sidPlayer.js?v=test119numericcolors"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script type="text/javascript" src="js/customPlaylist.test101.js?v=test220destination"></script>
+    <script type="text/javascript" src="js/sidImport.test221.js?v=test221import"></script>
+    <script type="text/javascript" src="js/customPlaylist.test101.js?v=test221import"></script>
     <script type="text/javascript" src="lft-test/lft-mode.experimental.js?v=test213mujerfix"></script>
     <script type="text/javascript" src="js/help.test109.js?v=test109help"></script>
     <script type="text/javascript" src="js/donate.test135.js?v=test137hearts"></script>
