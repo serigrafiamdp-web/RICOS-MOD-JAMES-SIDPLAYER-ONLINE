@@ -2699,3 +2699,14 @@ left: 1px;
 #sidInfoContent::-webkit-scrollbar {width:8px;}
 #sidInfoContent::-webkit-scrollbar-track {background:var(--rico-theme-bg,#111);}
 #sidInfoContent::-webkit-scrollbar-thumb {background:var(--rico-theme-border,#888);}
+
+/* TEST223: STIL metadata inherits the approved SHOW design. */
+#sidInfoContent .rico-stil-wrap {margin-top:10px;}
+#sidInfoContent .rico-stil-section {margin-bottom:9px;}
+#sidInfoContent .rico-stil-text {
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  color:var(--rico-theme-fg,#eee) !important;
+  font:inherit !important;
+  line-height:1.5 !important;
+}
