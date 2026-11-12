@@ -2266,11 +2266,12 @@
     var ref=customActive?(entry._hvscRef||
       (activeReferenceTracks&&activeReferenceTracks[index])):null;
     if(ref&&!ref.sidId&&typeof ref.file==='string'&&typeof ref.pack==='string'){
-      var match=/^library\/packs\/(musicians|demos)\/([A-Za-z0-9_-]+)\/([A-Za-z0-9_-]+)\.zip$/.exec(ref.pack);
-      if(match&&/^[^/\\]+\.sid$/i.test(ref.file)){
-        var relative=match[1]==='musicians'?match[3]+'/'+ref.file:ref.file;
+      var musician=/^library\/packs\/musicians\/([A-Za-z0-9_-]+)\/([A-Za-z0-9_-]+)\.zip$/.exec(ref.pack);
+      var demo=/^library\/packs\/demos\/([A-Za-z0-9_-]+)\.zip$/.exec(ref.pack);
+      if((musician||demo)&&/^[^/\\]+\.sid$/i.test(ref.file)){
+        var relative=musician?musician[2]+'/'+ref.file:ref.file;
         return {key:ref.pack+'|'+ref.file+'|'+sub,
-          shard:'library/songlengths/'+match[1]+'-'+match[2]+'.json',
+          shard:'library/songlengths/'+(musician?'musicians-'+musician[1]:'demos-'+demo[1])+'.json',
           relative:relative,sub:sub};
       }
     }
