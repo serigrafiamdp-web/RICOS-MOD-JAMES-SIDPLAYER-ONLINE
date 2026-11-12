@@ -5,6 +5,32 @@
   "shards": [
     "demos-all",
     "games-all",
-    "musicians-all"
+    "musicians-0-9",
+    "musicians-A",
+    "musicians-B",
+    "musicians-C",
+    "musicians-D",
+    "musicians-E",
+    "musicians-F",
+    "musicians-G",
+    "musicians-H",
+    "musicians-I",
+    "musicians-J",
+    "musicians-K",
+    "musicians-L",
+    "musicians-M",
+    "musicians-N",
+    "musicians-O",
+    "musicians-P",
+    "musicians-Q",
+    "musicians-R",
+    "musicians-S",
+    "musicians-T",
+    "musicians-U",
+    "musicians-V",
+    "musicians-W",
+    "musicians-X",
+    "musicians-Y",
+    "musicians-Z"
   ]
 }
