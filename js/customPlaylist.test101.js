@@ -45,6 +45,10 @@
   // TEST202: if AudioProcessingEvent.playbackTime is unusable, preserve the
   // complete first buffer instead of silently losing its first ~93 ms.
   var openingBufferReplay=null;
+  // TEST205: parallel first-buffer output path, silent at all other times.
+  // It shares the existing trackGainNode so Loco un Poco's 2.6x still applies.
+  // The previous SID remains protected by the regular fade GainNode.
+  var openingGainNode=null;
   var audioOutputHookNode=null;
   // TEST101: detect genuine SID output silence before the fade GainNode.
   // Silence is never inferred from the deliberately reduced master volume.
@@ -113,7 +117,6 @@
     });
   }
   var transitionTimer=null;
-  var transitionHandoffTimer=null;
   var transitionRecovery=null;
   var transitionAwaitingStart=false;
   var transitionBusy=false;
@@ -124,9 +127,6 @@
   // TEST99: equal-power style cosine fade-out, full-volume start for the next SID.
   // Keep the five-second duration to isolate the curve change; no fade-in or gap.
   var FADE_OUT_MS=5000,FADE_OUT_FLOOR=0.005;
-  // TEST204: Uctumi-inspired small handoff offset. The incoming SID's own
-  // position remains exactly 00:00; this only waits 150ms after fade-out.
-  var HANDOFF_HOLD_MS=150;
   var nativeInitWebAudio=player.initWebAudio;
   player.initWebAudio=function(){
     var response=nativeInitWebAudio.apply(this,arguments);
@@ -163,6 +163,25 @@
           this.scriptNode.disconnect();
           this.scriptNode.connect(fadeGainNode);
         }catch(inner){}
+      }
+    }
+    // TEST205: parallel gain only for the first new 4096-sample buffer.
+    // It is connected AFTER the per-track output gain and BYPASSES the
+    // old song's fade node. All other buffers use the ordinary fade path.
+    if(fadeGainNode&&!openingGainNode&&this.audioContext&&this.scriptNode&&
+       typeof this.audioContext.createGain==='function'){
+      try{
+        openingGainNode=this.audioContext.createGain();
+        openingGainNode.gain.value=0;
+        if(trackGainNode)trackGainNode.connect(openingGainNode);
+        else this.scriptNode.connect(openingGainNode);
+        openingGainNode.connect(this.audioContext.destination);
+      }catch(error){
+        console.warn('TEST205: first-buffer protection unavailable:',error);
+        if(openingGainNode){
+          try{openingGainNode.disconnect();}catch(ignore){}
+        }
+        openingGainNode=null;
       }
     }
     // ScriptProcessor queues output ahead of the audible playhead. Hook its
@@ -208,7 +227,20 @@
           var gain=fadeGainNode.gain;
           gain.cancelScheduledValues(now);
           gain.setValueAtTime(FADE_OUT_FLOOR,now);
-          gain.setValueAtTime(1,start);
+          if(openingGainNode){
+            // The *entire* first new PCM block plays at full volume on a
+            // separate gate; the outgoing fade remains safely near zero.
+            // Switch paths at the exact buffer boundary so no kick is hidden.
+            var length=event&&event.outputBuffer&&event.outputBuffer.length||4096;
+            var sampleRate=player.sampleRate||context.sampleRate||44100;
+            var end=start+length/sampleRate;
+            var first=openingGainNode.gain;
+            first.cancelScheduledValues(now);
+            first.setValueAtTime(0,now);
+            first.setValueAtTime(1-FADE_OUT_FLOOR,start);
+            first.setValueAtTime(0,end);
+            gain.setValueAtTime(1,end);
+          }else gain.setValueAtTime(1,start);
         };
         audioOutputHookNode=this.scriptNode;
       }
@@ -250,8 +282,13 @@
     }
   }
   function restoreFullVolume(){
-    if(!fadeGainNode||!player.audioContext)return;
+    if(!player.audioContext)return;
     var now=player.audioContext.currentTime;
+    if(openingGainNode){
+      openingGainNode.gain.cancelScheduledValues(now);
+      openingGainNode.gain.setValueAtTime(0,now);
+    }
+    if(!fadeGainNode)return;
     fadeGainNode.gain.cancelScheduledValues(now);
     fadeGainNode.gain.setValueAtTime(1,now);
   }
@@ -259,7 +296,6 @@
     resetSilenceDetector();
     transitionGeneration++;
     if(transitionTimer!==null){clearTimeout(transitionTimer);transitionTimer=null;}
-    if(transitionHandoffTimer!==null){clearTimeout(transitionHandoffTimer);transitionHandoffTimer=null;}
     if(transitionRecovery!==null){clearTimeout(transitionRecovery);transitionRecovery=null;}
     if(transitionBusy&&!transitionAwaitingStart)player.autoLoading=false;
     transitionBusy=false;transitionAwaitingStart=false;
@@ -424,21 +460,10 @@
         $('#ricoLiveStatus').text('SID loading took too long; volume restored.');
         renderLivePlaylist();
       },6000);
-      // TEST204: 150ms *wall-clock* hold after the old fade, never 150ms
-      // of rendering/fast-forwarding the new SID. Network/engine staging
-      // can finish during this window. Intentional SID intro silence stays.
-      var releaseAt=performance.now()+HANDOFF_HOLD_MS;
+      // TEST205: no post-fade hold. The new SID still begins at PCM 00:00,
+      // and the opening gate makes its first complete buffer audible.
       function switchWhenReady(){
         if(generation!==transitionGeneration||!transitionAwaitingStart)return;
-        var remaining=releaseAt-performance.now();
-        if(remaining>0){
-          if(transitionHandoffTimer!==null)clearTimeout(transitionHandoffTimer);
-          transitionHandoffTimer=setTimeout(function(){
-            transitionHandoffTimer=null;
-            switchWhenReady();
-          },Math.ceil(remaining));
-          return;
-        }
         try{performSidSwitch(next);}
         catch(error){
           resetSoftTransition(false);
