@@ -228,7 +228,7 @@
     var title=document.getElementById('ricoLivePlaylistTitle');
     if(!title)return;
     var base=title.textContent.replace(/ · LFT MODE ON$/,'');
-    title.textContent=base+((!active8580&&active&&songReady&&player.isPlaying)?' · LFT MODE ON':'');
+    title.textContent=base+((!active8580&&!activeMujer&&active&&songReady&&player.isPlaying)?' · LFT MODE ON':'');
   }
   function sidHeaderOK(bytes){
     if(!(bytes instanceof Uint8Array)||bytes.length<0x7c||bytes.length>256*1024)return false;
@@ -542,7 +542,7 @@
   window.RicoLftMode={prepare:prepare,deactivate:deactivate,eligible:eligible,
     approveTrustedReference:approveTrustedReference,eligibleRef:eligibleRef,
     stageNextReference:stageNextReference,cancelStagedNext:releaseStaged,
-    active:function(){return active;},playingApproved:function(){return !active8580&&active&&songReady&&player.isPlaying;},
+    active:function(){return active;},playingApproved:function(){return !active8580&&!activeMujer&&active&&songReady&&player.isPlaying;},
     scopeRegisters:function(){return latestRegs?latestRegs.slice():null;},
     version:'TEST209-mujer-residfp-loco-preserved'};
 })();
