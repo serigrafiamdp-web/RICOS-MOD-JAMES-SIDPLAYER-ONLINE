@@ -193,7 +193,13 @@
     };
     sid.setFilterEnabled=function(value){
       if(!active)return originalSid.setFilterEnabled.apply(sid,arguments);
-      if(engine&&typeof engine.setFilterEnabled==='function')engine.setFilterEnabled(0,!!value);
+      if(engine&&typeof engine.setFilterEnabled==='function'){
+        // TEST189: a few audited Uctumi tunes are dual-SID; apply the UI filter
+        // toggle to both chips. Keep Linus's existing single-chip behavior.
+        var chips=activeUctumi&&typeof engine.getInstalledSids==='function'
+          ?Math.max(1,Math.min(3,engine.getInstalledSids()||1)):1;
+        for(var chip=0;chip<chips;chip++)engine.setFilterEnabled(chip,!!value);
+      }
     };
     hooked=true;
   }
