@@ -1,0 +1,9 @@
+# TEST213 — Canonical Mujer Amante FIX
+
+2026-11-12: after TEST212 passed the listener's 25-second bass test, the original PVM/Chipdisk Nacional Vol.1 `uc-mujer.sid` has become the **only** `Mujer_Amante.sid` in the current `library/packs/musicians/U/Uctumi.zip`. Original source: https://github.com/c64scene-ar/chipdisk-nac-vol.1/blob/master/res/sids/uc-mujer.sid (project Apache-2.0). Its SID-Wizard 1.7 BARE export is 7667 bytes, CRC32 493EB09A, title MUJER AMANTE COVER, init $1000, play $1003.
+
+The former 8003-byte HVSC SID (CRC32 D69AF18D) was **removed from the active ZIP** and is accessible only through Git history. The ZIP retains exactly 99 members, all 98 other SID records copied byte-for-byte. The FIX uses method STORED; other ZIP methods and their bytes are unchanged. `Loco_un_Poco.sid` remains 6641 bytes and retains its previously approved MOS8580 + 2.6x independent output gain.
+
+The database files `library/data/musicians-U.json` and `library/uctumi-chip-profiles.json` now specify 7667 bytes for the existing canonical path. The reSIDfp approved Uctumi Mujer route accepts these 7667 bytes; the TEST212 temporary alternate source override and its JS fixture have been removed. All three player paths that fetch HVSC ZIP archives cache-bust only the changed Uctumi pack, keeping other packs untouched. No changes to playback transition, 5s fade, TEST208 initial kick, TEST206 timer, Linus, or any other track.
+
+**Verification:** 99/99 ZIP members present, 98/98 other ZIP entries preserve CRC, packed size, unpacked size and compression method; only Mujer replaced. Generated ZIP directory and offsets validated. Compiled SID CRC and title verified; JavaScript syntax PASS. Final live listening PASS pending.

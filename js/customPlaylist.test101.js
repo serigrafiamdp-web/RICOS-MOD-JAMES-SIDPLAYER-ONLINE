@@ -7,6 +7,11 @@
   if (!window.sidPlayer || !window.SID) return;
 
   var player = window.sidPlayer;
+  // TEST213: refresh only the Uctumi archive after its canonical Mujer Amante FIX.
+  function hvscArchiveUrl(pack){
+    return pack==='library/packs/musicians/U/Uctumi.zip'
+      ?pack+'?v=test213mujerfix':pack;
+  }
   // TEST133: nickname-first display only; original HVSC credit data stays unchanged.
   function formatArtistCredit(value){
     var v=String(value||'').trim(),m=v.match(/^([^()]+?)\s*\(([^()]+)\)$/);
@@ -3046,7 +3051,7 @@
       function archiveFor(pack){
         if(!archives.has(pack)){
           var job=(async function(){
-            var response=await fetch(pack,{signal:controller.signal});
+            var response=await fetch(hvscArchiveUrl(pack),{signal:controller.signal});
             if(!response.ok)throw Error('HVSC ZIP unavailable ('+response.status+'): '+pack);
             return JSZip.loadAsync(await response.arrayBuffer());
           })().catch(function(error){archives.delete(pack);throw error;});
@@ -3208,7 +3213,7 @@
         }else{
           var archive=packages.get(track.pack);
           if(!archive){
-            var response=await fetch(track.pack);
+            var response=await fetch(hvscArchiveUrl(track.pack));
             if(!response.ok)throw Error('SID pack missing ('+response.status+'): '+track.pack);
             archive=await JSZip.loadAsync(await response.arrayBuffer());
             packages.set(track.pack,archive);
@@ -4991,7 +4996,7 @@
         var promise=packCache.get(sourcePack);
         if(!promise){
           promise=(async function(){
-            var response=await fetch(sourcePack);
+            var response=await fetch(hvscArchiveUrl(sourcePack));
             if(!response.ok)throw Error('SID pack unavailable ('+response.status+').');
             return JSZip.loadAsync(await response.arrayBuffer());
           })();
