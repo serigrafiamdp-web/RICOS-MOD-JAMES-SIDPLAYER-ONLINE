@@ -15,7 +15,7 @@
   "notes": [
     "The SID models are from each original PSID header, not guessed from musical style.",
     "The original ZIP and SID files are unchanged.",
-    "The SpotySid player forces PAL and each trusted file's declared SID chip model through reSIDfp.",
+    "SpotySid reads PAL timing from each original PSID header, and forces only its audited 8580/6581 SID model through reSIDfp (TEST190).",
     "No gain/volume or 8580 filter curve normalization has been applied."
   ],
   "profiles": [
