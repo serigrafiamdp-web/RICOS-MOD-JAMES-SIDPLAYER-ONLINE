@@ -1,0 +1,819 @@
+{
+  "format": "spotysid-hvsc-chip-audit",
+  "version": 1,
+  "author": "Uctumi",
+  "source": "HVSC #85 PSID header inspection",
+  "sourcePack": "library/packs/musicians/U/Uctumi.zip",
+  "sourceZipBlob": "1e871695f56b55db1e3c6cff04c3060b79e4c0be",
+  "total": 99,
+  "clockStandard": "PAL-B (50 Hz)",
+  "summary": {
+    "MOS8580": 97,
+    "MOS6581": 2,
+    "dualSID": 2
+  },
+  "notes": [
+    "The SID models are from each original PSID header, not guessed from musical style.",
+    "The original ZIP and SID files are unchanged.",
+    "The SpotySid player forces PAL and each trusted file's declared SID chip model through reSIDfp.",
+    "No gain/volume or 8580 filter curve normalization has been applied."
+  ],
+  "profiles": [
+    {
+      "file": "4Kindness.sid",
+      "title": "4Kindness",
+      "bytes": 2731,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "A_Dog_in_My_Doorstep_short_version.sid",
+      "title": "A Dog in My Doorstep (shortver.)",
+      "bytes": 2725,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "A_Felicidade.sid",
+      "title": "A Felicidade",
+      "bytes": 3136,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "A_Simple_Day.sid",
+      "title": "A Simple Day",
+      "bytes": 4177,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Amigo.sid",
+      "title": "Amigo",
+      "bytes": 5502,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Amor_clasificado.sid",
+      "title": "Amor clasificado",
+      "bytes": 7333,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Angels_and_Beans.sid",
+      "title": "Angels and Beans",
+      "bytes": 4561,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Another_World_Intro.sid",
+      "title": "Another World Intro",
+      "bytes": 4238,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Anxious.sid",
+      "title": "Anxious",
+      "bytes": 3794,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Arte_Poetica_Testicular.sid",
+      "title": "Arte Poetica Testicular",
+      "bytes": 2501,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Astronomia_Remix.sid",
+      "title": "Astronomia Remix",
+      "bytes": 7208,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Balloon_Country_Bursts.sid",
+      "title": "Balloon Country Bursts",
+      "bytes": 4500,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Barcoded_People.sid",
+      "title": "Barcoded People",
+      "bytes": 5742,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Beautiful_Cruel_World.sid",
+      "title": "Beautiful Cruel World",
+      "bytes": 3150,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Broken_and_Fixed.sid",
+      "title": "Broken and Fixed",
+      "bytes": 2113,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Bye_bye.sid",
+      "title": "Bye bye",
+      "bytes": 4252,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Capybaras_Are_Born.sid",
+      "title": "Capybaras Are Born",
+      "bytes": 4209,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Carito.sid",
+      "title": "Carito",
+      "bytes": 4314,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Certas_Coisas.sid",
+      "title": "Certas Coisas",
+      "bytes": 6568,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Ciiiiid.sid",
+      "title": "Ciiiiid",
+      "bytes": 1744,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Cocktail_Blues.sid",
+      "title": "Cocktail Blues",
+      "bytes": 3165,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Costumbres_argentinas.sid",
+      "title": "Costumbres argentinas",
+      "bytes": 4165,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Courier.sid",
+      "title": "The Courier",
+      "bytes": 3057,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Courier_remix.sid",
+      "title": "The Courier (remix)",
+      "bytes": 4366,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Crazy_Printer_Intro_Music.sid",
+      "title": "Crazy Printer Intro Music",
+      "bytes": 3608,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Cuarentenauta.sid",
+      "title": "Cuarentenauta",
+      "bytes": 3008,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Dance_with_the_Ugliest_One.sid",
+      "title": "Dance with the Ugliest One",
+      "bytes": 6579,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Dancing_Queen.sid",
+      "title": "Dancing Queen",
+      "bytes": 6601,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Der_Computer_Nr_64.sid",
+      "title": "Der Computer Nr. 64",
+      "bytes": 7912,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Digger.sid",
+      "title": "Digger",
+      "bytes": 6870,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Dinosaurios.sid",
+      "title": "Dinosaurios",
+      "bytes": 5872,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Dune_Buggy.sid",
+      "title": "Dune buggy",
+      "bytes": 2635,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Elige_tu_propio_Gauchoide_part_1.sid",
+      "title": "Elige tu propio Gauchoide (p. 1)",
+      "bytes": 12210,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "En_septiembre_fuiste_mia.sid",
+      "title": "En septiembre fuiste mia",
+      "bytes": 3507,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Everywhere_I_Go.sid",
+      "title": "Everywhere I Go",
+      "bytes": 5566,
+      "clock": "PAL",
+      "sidModel": "MOS6581",
+      "sidChips": 1
+    },
+    {
+      "file": "Everywhere_I_Go_final.sid",
+      "title": "Everywhere I Go (final)",
+      "bytes": 6247,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "F600.sid",
+      "title": "F600",
+      "bytes": 4404,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Fico_Assim_Sem_Voce.sid",
+      "title": "Fico Assim Sem Você",
+      "bytes": 5636,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Fluffy_Resistance.sid",
+      "title": "Fluffy Resistance",
+      "bytes": 4206,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Free_Falling.sid",
+      "title": "Free Falling",
+      "bytes": 3217,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Free_Hasel.sid",
+      "title": "Free Hasél",
+      "bytes": 3175,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Frenetstipated.sid",
+      "title": "Frenetstipated",
+      "bytes": 3589,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Full_Contact_Intro.sid",
+      "title": "Full Contact Intro",
+      "bytes": 3619,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Generador_Avanzado_de_Placas_Rojas.sid",
+      "title": "Generador Avanzado/Placa Rojas",
+      "bytes": 3210,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Get_Witchy.sid",
+      "title": "Get Witchy",
+      "bytes": 4256,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Glacial_Heart.sid",
+      "title": "Glacial Heart",
+      "bytes": 3717,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Guilty_Retro_Pleasure.sid",
+      "title": "Guilty Retro Pleasure",
+      "bytes": 5101,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Hacelo_por_mi.sid",
+      "title": "Hacelo por mi",
+      "bytes": 4904,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Helicoid.sid",
+      "title": "Helicoid",
+      "bytes": 5187,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Himno_ar.sid",
+      "title": "Himno.ar",
+      "bytes": 4407,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Hindrance.sid",
+      "title": "Hindrance",
+      "bytes": 6107,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Ideas_del_Culo.sid",
+      "title": "Ideas del Culo",
+      "bytes": 2994,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Illusions_are_Lost.sid",
+      "title": "Illusions are Lost",
+      "bytes": 4149,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Im_Borg_Unit_6581.sid",
+      "title": "I'm Borg Unit 6581",
+      "bytes": 3305,
+      "clock": "PAL",
+      "sidModel": "MOS6581",
+      "sidChips": 1
+    },
+    {
+      "file": "Intro_Evita.sid",
+      "title": "Intro Evita",
+      "bytes": 2518,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Jijiji.sid",
+      "title": "Jijiji",
+      "bytes": 5045,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Juana_Azurduy_Reggae_Mix.sid",
+      "title": "Juana Azurduy Reggae Mix",
+      "bytes": 5021,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "La_Morocha.sid",
+      "title": "La Morocha",
+      "bytes": 2770,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Lamento_Boliviano.sid",
+      "title": "Lamento Boliviano",
+      "bytes": 3945,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Libertongo.sid",
+      "title": "Libertongo",
+      "bytes": 3365,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Loco_un_Poco.sid",
+      "title": "Loco un Poco",
+      "bytes": 6641,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Long_Piano.sid",
+      "title": "Long Piano",
+      "bytes": 4584,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Love_Profusion_C64_gone_wild.sid",
+      "title": "Love Profusion (C64 gone wild)",
+      "bytes": 5663,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Low_Serotonin.sid",
+      "title": "Low Serotonin",
+      "bytes": 4594,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Marcha_Imperial_Peronista.sid",
+      "title": "Marcha Imperial Peronista",
+      "bytes": 3666,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Mechaboy.sid",
+      "title": "Mechaboy",
+      "bytes": 4622,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Menina_Veneno.sid",
+      "title": "Menina Veneno",
+      "bytes": 3887,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Miracle_Room.sid",
+      "title": "Miracle Room",
+      "bytes": 7039,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Mission_Prostol.sid",
+      "title": "Mission Prostol",
+      "bytes": 9103,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Mujer_Amante.sid",
+      "title": "Mujer Amante",
+      "bytes": 8003,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Nada_Punk.sid",
+      "title": "Nada Punk",
+      "bytes": 3088,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Nothing_Is_Free.sid",
+      "title": "Nothing Is Free",
+      "bytes": 6823,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "O_Tempo_Nao_Para.sid",
+      "title": "O Tempo Não Para",
+      "bytes": 5513,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Paesaggio.sid",
+      "title": "Paesaggio",
+      "bytes": 4731,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Pair_of_Lies.sid",
+      "title": "Pair of Lies",
+      "bytes": 3685,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Pop_Goes_the_World.sid",
+      "title": "Pop Goes the World",
+      "bytes": 5187,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Por_una_cabeza.sid",
+      "title": "Por una cabeza",
+      "bytes": 2823,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Power_of_Two_2SID.sid",
+      "title": "Power of Two",
+      "bytes": 6103,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 2,
+      "secondSidAddress": "0xDE00",
+      "secondSidModel": "MOS8580"
+    },
+    {
+      "file": "Profugos.sid",
+      "title": "Profugos",
+      "bytes": 9076,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Pronta_Entrega.sid",
+      "title": "Pronta Entrega",
+      "bytes": 4692,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Que_hago_en_Manila.sid",
+      "title": "Que hago en Manila?",
+      "bytes": 5011,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Que_tendra_el_petiso.sid",
+      "title": "Qué tendrá el petiso",
+      "bytes": 3553,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Radioactive_Tenderness.sid",
+      "title": "Radioactive Tenderness",
+      "bytes": 6242,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Robots_Rumble.sid",
+      "title": "Robots Rumble",
+      "bytes": 3817,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Rue_de_l_abricot.sid",
+      "title": "Rue de l'abricot",
+      "bytes": 2909,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Ryuuju_no_Dengon.sid",
+      "title": "Ryuuju no Dengon",
+      "bytes": 4404,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Se_Voce_Jurar.sid",
+      "title": "Se Voce Jurar",
+      "bytes": 4881,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Seguir_Viviendo_Sin_Tu_Amor.sid",
+      "title": "Seguir Viviendo Sin Tu Amor",
+      "bytes": 5052,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Seminare.sid",
+      "title": "Seminare",
+      "bytes": 3499,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Sola_en_los_bares.sid",
+      "title": "Sola en los bares",
+      "bytes": 3197,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Souls_Lost_to_Poseidon_2SID.sid",
+      "title": "Souls Lost to Poseidon",
+      "bytes": 4091,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 2,
+      "secondSidAddress": "0xD420",
+      "secondSidModel": "MOS8580"
+    },
+    {
+      "file": "Supergeek_to_the_Rescue.sid",
+      "title": "Supergeek to the Rescue",
+      "bytes": 5914,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Tocando_fondo.sid",
+      "title": "Tocando fondo",
+      "bytes": 2990,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Todos_Juntos_Remix.sid",
+      "title": "Todos Juntos Remix",
+      "bytes": 3485,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Un_estate_italiana.sid",
+      "title": "Un'estate italiana",
+      "bytes": 6522,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Whistleblower.sid",
+      "title": "Whistleblower",
+      "bytes": 4982,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Yasashisa_ni_Tsutsumareta_nara.sid",
+      "title": "Yasashisa ni Tsutsumareta nara",
+      "bytes": 5781,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Yo_te_amo.sid",
+      "title": "Yo te amo",
+      "bytes": 3959,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    },
+    {
+      "file": "Zombie_Calavera_Prologue.sid",
+      "title": "Zombie Calavera Prologue",
+      "bytes": 4270,
+      "clock": "PAL",
+      "sidModel": "MOS8580",
+      "sidChips": 1
+    }
+  ]
+}
