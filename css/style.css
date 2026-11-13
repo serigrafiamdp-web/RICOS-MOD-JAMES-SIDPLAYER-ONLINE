@@ -2970,3 +2970,17 @@ body.rico-choose-open #sidControls {z-index:700 !important;}
 #chooseSidDialog > .content > #ricoOurCollectionPanel {
   right:11px !important;
 }
+
+
+/* TEST235 — compact, read-only SID header metadata at the top of STIL sidebar. */
+#sidInfoContent .rico-show-metadata {
+  gap:2px;
+}
+#sidInfoContent .rico-show-metadata-line {
+  overflow-wrap:anywhere;
+  white-space:normal;
+  font:inherit !important;
+}
+#sidInfoContent .rico-show-metadata-label {
+  font-weight:700;
+}
