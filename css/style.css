@@ -2896,3 +2896,37 @@ left: 1px;
 #sidInfoContent .rico-show-publish-button:hover:not(:disabled) {
   background:var(--rico-theme-hover,#333) !important;
 }
+
+
+/* TEST230 — minimal Choose A SID frame, nonmodal playback controls.
+   The existing title-bar X closes Choose; no duplicate bottom CLOSE button. */
+#chooseSidDialog {
+  box-sizing:border-box;
+  border:1px solid var(--rico-theme-border,#777) !important;
+  box-shadow:none !important;
+  max-height:calc(100vh - var(--rico-controls-height,36px) - 20px);
+}
+#chooseSidDialog > .buttons {display:none !important;}
+#chooseSidDialog > .content {
+  bottom:4px !important;
+  right:4px !important;
+  box-sizing:border-box;
+}
+/* Edge grips remain operable but occupy only their own 3px outside the
+   scroll area; the right/bottom frame is the same fine line as the left. */
+#chooseSidDialog .dialogEastresize,
+#chooseSidDialog .dialogNortheastresize,
+#chooseSidDialog .dialogSoutheastresize {
+  right:0 !important;
+  width:3px !important;
+}
+#chooseSidDialog .dialogSouthresize,
+#chooseSidDialog .dialogSoutheastresize,
+#chooseSidDialog .dialogSouthwestresize {
+  bottom:0 !important;
+  height:3px !important;
+}
+#chooseSidDialog .dialogResize {background:transparent !important;}
+/* The menu bar stays usable above Choose and its backdrop only while Choose
+   is displayed. Other dialogs keep their normal layering. */
+body.rico-choose-open #sidControls {z-index:700 !important;}
