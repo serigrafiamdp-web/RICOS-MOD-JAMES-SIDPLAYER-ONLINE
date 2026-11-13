@@ -303,6 +303,56 @@
     addForm(section,kind,key,onSave);
     hub.appendChild(section);
   }
+  // TEST235: restore the original PSID/RSID metadata above the new STIL hub.
+  // Read only the current SID header/parsed fields; do not derive data from STIL.
+  function buildMetadata(hub,entry){
+    var section=el('section','rico-show-section rico-show-metadata');
+    section.appendChild(sectionHeading('SID METADATA'));
+    var info=player.songInfo||{};
+    var bytes=entry&&entry.localBytes;
+    var validHeader=bytes&&typeof bytes.length==='number'&&bytes.length>=0x76;
+    var magic='',version=null,songs=null,start=null;
+    if(validHeader){
+      magic=String.fromCharCode(bytes[0],bytes[1],bytes[2],bytes[3]);
+      validHeader=magic==='PSID'||magic==='RSID';
+      if(validHeader){
+        version=(bytes[4]<<8)|bytes[5];
+        songs=(bytes[0x0e]<<8)|bytes[0x0f];
+        start=(bytes[0x10]<<8)|bytes[0x11];
+      }
+    }
+    function line(label,value){
+      if(value===undefined||value===null||String(value).trim()==='')return;
+      var node=el('div','rico-show-metadata-line');
+      node.appendChild(el('span','rico-show-metadata-label',label+': '));
+      node.appendChild(el('span','rico-show-metadata-value',value));
+      section.appendChild(node);
+    }
+    function credit(value){
+      var text=String(value||'').trim();
+      var match=text.match(/^([^()]+?)\s*\(([^()]+)\)$/);
+      return match&&match[1].trim()&&match[2].trim()?
+        match[2].trim()+' ('+match[1].trim()+')':text;
+    }
+    line('Title',entry&&entry.name||info.songName);
+    line('Author',credit(entry&&entry.author||info.songAuthor));
+    line('Released',entry&&entry.released||info.songReleased);
+    if(validHeader){
+      line('Format',magic+' v'+version);
+      if(songs>0){
+        line('Subtunes',songs+' / default: '+(start>=1&&start<=songs?start:1));
+      }
+    }else if(entry&&entry.localBytes&&entry.sidFormat){
+      line('Format',entry.sidFormat);
+      if(entry.numSubtunes>0)
+        line('Subtunes',entry.numSubtunes+' / default: '+(entry.startSubtune||1));
+    }
+    var size=validHeader?bytes.length:entry&&Number(entry.size);
+    if(Number.isFinite(size)&&size>0)line('File Size',size.toLocaleString('en-US')+' bytes');
+    if(validHeader)
+      line('Duration','Not included in PSID/RSID metadata; AUTO uses the configured fallback.');
+    hub.appendChild(section);
+  }
   function artistLabel(entry){
     return String(entry&&entry.author||player.songInfo&&player.songInfo.songAuthor||
       'Unknown artist').trim().slice(0,120);
@@ -390,6 +440,7 @@
     var entry=currentEntry(),path=getPath(entry),key=artistKey(entry,path);
     var scroll=content.scrollTop;
     var hub=el('div','rico-show-hub');
+    buildMetadata(hub,entry);
     function refresh(){
       var currentScroll=content.scrollTop;
       update();content.scrollTop=currentScroll;
