@@ -2804,3 +2804,46 @@ left: 1px;
 }
 #sidInfoContent .rico-show-message {font-size:10px !important;overflow-wrap:anywhere;}
 #sidInfoContent .rico-show-draft-note {font-size:9px !important;opacity:.7;letter-spacing:.2px;}
+
+
+/* TEST227 — SHOW: full STIL text with an independent, visible scroll thumb. */
+#sidInfoContent {
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  scrollbar-width:auto;
+  scrollbar-gutter:stable;
+  scrollbar-color:var(--rico-theme-fg,#eee) var(--rico-theme-bg,#111);
+}
+#sidInfoContent::-webkit-scrollbar {width:10px;}
+#sidInfoContent::-webkit-scrollbar-track {background:var(--rico-theme-bg,#111);}
+#sidInfoContent::-webkit-scrollbar-thumb {
+  background:var(--rico-theme-fg,#eee);
+  border:2px solid var(--rico-theme-bg,#111);
+  border-radius:5px;
+  outline:none;
+}
+#sidInfoContent .rico-show-stil-copy {
+  max-height:none !important;
+  overflow:visible !important;
+}
+
+/* TEST227 — independent zones for vertical scrolling and horizontal resizing.
+   PLAYLIST's width grip previously covered the list's vertical scrollbar. */
+#ricoLivePlaylist #ricoLivePlaylistItems {
+  margin-right:14px !important;
+  padding-right:0 !important;
+  box-sizing:border-box;
+  scrollbar-gutter:stable;
+}
+#ricoLivePlaylist #ricoLiveWidthGrip {
+  right:0;
+  width:12px;
+  border-left:1px solid var(--rico-theme-border,#777);
+}
+
+/* The original dialog edge-resize strip must not sit over content scrollbars. */
+.dialog .content {
+  right:9px !important;
+  box-sizing:border-box;
+  scrollbar-gutter:stable;
+}
