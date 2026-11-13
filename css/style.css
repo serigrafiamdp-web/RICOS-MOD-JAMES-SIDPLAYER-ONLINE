@@ -2710,3 +2710,97 @@ left: 1px;
   font:inherit !important;
   line-height:1.5 !important;
 }
+
+
+/* TEST225 — Compact SHOW-only artist sidebar; inherits selected theme. */
+#sidInfoContent .rico-show-hub {
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  min-width:0;
+  font:11px/1.4 Tahoma,Arial,Verdana,sans-serif;
+  color:var(--rico-theme-fg,#eee) !important;
+}
+#sidInfoContent .rico-show-section {
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  padding:0 0 10px;
+  margin:0 0 9px;
+  border-bottom:1px solid var(--rico-theme-border,#777);
+  min-width:0;
+}
+#sidInfoContent .rico-show-heading {
+  font-size:11px !important;
+  font-weight:700;
+  letter-spacing:.3px;
+  margin:0 0 1px;
+}
+#sidInfoContent .rico-show-stil-copy {
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  line-height:1.4 !important;
+}
+#sidInfoContent .rico-show-readmore,
+#sidInfoContent .rico-show-add,
+#sidInfoContent .rico-show-save,
+#sidInfoContent .rico-show-cancel {
+  align-self:flex-start;
+  width:auto;
+  max-width:100%;
+  box-sizing:border-box;
+  background:var(--rico-theme-panel,#222) !important;
+  color:var(--rico-theme-fg,#eee) !important;
+  border:1px solid var(--rico-theme-border,#777) !important;
+  padding:3px 6px !important;
+  min-height:20px;
+  font:10px Tahoma,Arial,Verdana,sans-serif !important;
+  text-align:left;
+  cursor:pointer;
+}
+#sidInfoContent .rico-show-readmore {
+  background:transparent !important;
+  border:0 !important;
+  padding:2px 0 !important;
+  text-decoration:underline;
+}
+#sidInfoContent .rico-show-form {
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  min-width:0;
+  margin:1px 0 0;
+}
+#sidInfoContent .rico-show-form[hidden] {display:none !important;}
+#sidInfoContent .rico-show-input {
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  padding:5px;
+  background:var(--rico-theme-bg,#111) !important;
+  color:var(--rico-theme-fg,#eee) !important;
+  border:1px solid var(--rico-theme-border,#777) !important;
+  border-radius:0;
+  font:11px Tahoma,Arial,Verdana,sans-serif !important;
+}
+#sidInfoContent .rico-show-input::placeholder {opacity:.75;color:var(--rico-theme-fg,#eee) !important;}
+#sidInfoContent .rico-show-form-actions {display:flex;gap:5px;flex-wrap:wrap;}
+#sidInfoContent .rico-show-entries {display:flex;flex-direction:column;gap:6px;min-width:0;}
+#sidInfoContent .rico-show-link {
+  display:block;
+  width:100%;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  text-decoration:underline;
+}
+#sidInfoContent .rico-show-art {display:flex;align-items:flex-start;gap:7px;overflow-wrap:anywhere;}
+#sidInfoContent .rico-show-art-thumb {
+  width:50px;
+  height:50px;
+  flex:0 0 50px;
+  object-fit:contain;
+  background:var(--rico-theme-panel,#333);
+  border:1px solid var(--rico-theme-border,#777);
+}
+#sidInfoContent .rico-show-message {font-size:10px !important;overflow-wrap:anywhere;}
+#sidInfoContent .rico-show-draft-note {font-size:9px !important;opacity:.7;letter-spacing:.2px;}
