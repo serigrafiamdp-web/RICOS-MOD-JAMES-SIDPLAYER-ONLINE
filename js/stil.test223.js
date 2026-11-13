@@ -167,6 +167,7 @@
     form.appendChild(message);
     var edit=el('button','rico-show-add','EDIT STIL');
     edit.type='button';
+    edit.disabled=true;
     edit.setAttribute('aria-expanded','false');
     section.appendChild(edit);
     section.appendChild(form);
@@ -201,10 +202,12 @@
       if(entries[path])parts.push(entries[path]);
       if(entries[parent])parts.push('ARTIST NOTES\n'+entries[parent]);
       original=parts.join('\n\n').trim();
+      edit.disabled=false;
       showText(original);
     }).catch(function(error){
       if(token!==serial)return;
       original='';
+      edit.disabled=false;
       showText('');
       if(!Object.prototype.hasOwnProperty.call(readDrafts(key).stilOverrides,path))
         body.textContent='STIL UNAVAILABLE';
@@ -313,7 +316,7 @@
       messages.set(key,'SERVER UPDATE REQUIRED · DRAFTS REMAIN LOCAL');
       update();return;
     }
-    var profile=Object.assign({artistName:label},readDrafts(key));
+    var profile=Object.assign({artistName:state.profile&&state.profile.artistName||label},readDrafts(key));
     if(!profile.links.length&&!profile.csdb.length&&!profile.artwork.length&&
        !Object.keys(profile.stilOverrides).length){
       messages.set(key,'ADD INFORMATION BEFORE PUBLISHING');update();return;
@@ -354,7 +357,7 @@
          JSON.stringify(confirmed.profile)!==JSON.stringify(profile))
         throw Error('SAVE NOT VERIFIED; KEEP YOUR LOCAL DRAFT');
       profiles.set(key,{loading:false,revision:confirmed.revision,profile:confirmed.profile});
-      localStorage.removeItem(DRAFT_PREFIX+key);
+      try{localStorage.removeItem(DRAFT_PREFIX+key);}catch(error){}
       messages.set(key,state.revision?'REPUBLISHED · VERIFIED':'PUBLISHED · VERIFIED');
       if(player.sidInfoVisible&&currentArtistKey()===key)update();
     }catch(error){
