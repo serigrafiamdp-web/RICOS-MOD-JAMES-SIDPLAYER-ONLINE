@@ -460,6 +460,130 @@ async function communityCatalogOrder(request,env,origin){
   }
 }
 
+
+// TEST228 — Artist profiles / SpotySid-only STIL overrides.
+// The official HVSC STIL remains immutable on GitHub Pages.
+// All public edits require the existing beta key and a revision match.
+function validArtistProfileKey(key){
+  if(typeof key!=='string'||key.length<8||key.length>230||key.includes('..'))return false;
+  if(/^hvsc:\/MUSICIANS\/[0-9A-Za-z_-]+\/[0-9A-Za-z_.-]{1,120}$/.test(key))return true;
+  return /^artist:[^\x00-\x1f<>]{2,110}$/u.test(key);
+}
+function sanitizeProfileLinks(items,kind){
+  if(!Array.isArray(items)||items.length>40)return null;
+  const seen=new Set(),clean=[];
+  for(const item of items){
+    if(!item||typeof item.label!=='string'||typeof item.url!=='string')return null;
+    const label=item.label.trim();
+    if(!label||label.length>100||item.url.length>1200)return null;
+    let url;
+    try{url=new URL(item.url);}catch(error){return null;}
+    if(!['http:','https:'].includes(url.protocol)||url.username||url.password)return null;
+    if(kind==='csdb'&&!/^(?:www\.)?csdb\.dk$/i.test(url.hostname))return null;
+    const href=url.href;
+    if(seen.has(href))return null;
+    seen.add(href);
+    clean.push({label,url:href});
+  }
+  return clean;
+}
+function sanitizeArtistProfile(key,profile){
+  if(!profile||typeof profile!=='object'||Array.isArray(profile)||
+     typeof profile.artistName!=='string'||!profile.artistName.trim()||
+     profile.artistName.trim().length>120)return null;
+  const links=sanitizeProfileLinks(profile.links,'links');
+  const csdb=sanitizeProfileLinks(profile.csdb,'csdb');
+  const artwork=sanitizeProfileLinks(profile.artwork,'artwork');
+  if(!links||!csdb||!artwork)return null;
+  const overrides=profile.stilOverrides;
+  if(!overrides||typeof overrides!=='object'||Array.isArray(overrides))return null;
+  const notes=Object.entries(overrides);
+  if(notes.length>150)return null;
+  const out={};
+  const prefix=key.startsWith('hvsc:')?key.slice(5)+'/':null;
+  for(const [path,content] of notes){
+    if(!prefix||!path.startsWith(prefix)||
+       !/^\/MUSICIANS\/[A-Za-z0-9_./-]+\.sid$/i.test(path)||
+       path.includes('..')||typeof content!=='string'||content.length>16000)
+      return null;
+    out[path]=content;
+  }
+  return {artistName:profile.artistName.trim(),links,csdb,artwork,stilOverrides:out};
+}
+async function artistProfiles(request,env,url,origin){
+  if(!env.DB)return text('Artist profile database unavailable',503,origin);
+  const write=request.method!=='GET';
+  if(write){
+    if(origin!==ORIGIN)return text('Origin not allowed',403,origin);
+    if(request.method!=='POST'&&request.method!=='PUT')
+      return text('Method not allowed',405,origin);
+    if(!(await hasValidBetaKey(request,env)))
+      return text('Invalid beta key',403,origin);
+  }
+  try{
+    await env.DB.prepare(
+      'CREATE TABLE IF NOT EXISTS artist_profiles ('+
+      'profile_key TEXT PRIMARY KEY, payload TEXT NOT NULL,'+
+      'revision INTEGER NOT NULL DEFAULT 1, updated_at INTEGER NOT NULL)'
+    ).run();
+    if(!write){
+      const key=url.searchParams.get('key');
+      if(!validArtistProfileKey(key))return text('Invalid artist profile key',400,origin);
+      const row=await env.DB.prepare(
+        'SELECT payload,revision,updated_at FROM artist_profiles WHERE profile_key=?'
+      ).bind(key).first();
+      return json({format:'ricos-artist-profile',version:1,key,
+        profile:row?JSON.parse(row.payload):null,
+        revision:row?Number(row.revision):0,
+        updatedAt:row?Number(row.updated_at):null},200,origin);
+    }
+    if((Number(request.headers.get('Content-Length'))||0)>100000)
+      return text('Profile too large',413,origin);
+    let data;
+    try{
+      const body=await request.text();
+      if(body.length>100000)return text('Profile too large',413,origin);
+      data=JSON.parse(body);
+    }catch(error){return text('Invalid profile request',400,origin);}
+    if(!data||data.format!=='ricos-artist-profile'||data.version!==1||
+       !validArtistProfileKey(data.key)||
+       !Number.isSafeInteger(data.expectedRevision)||data.expectedRevision<0)
+      return text('Invalid artist profile format or revision',400,origin);
+    const profile=sanitizeArtistProfile(data.key,data.profile);
+    if(!profile)return text('Invalid artist profile content',400,origin);
+    const payload=JSON.stringify(profile);
+    const now=Date.now();
+    if(request.method==='POST'){
+      if(data.expectedRevision!==0)return text('Profile already published; use REPUBLISH',409,origin);
+      const old=await env.DB.prepare(
+        'SELECT revision FROM artist_profiles WHERE profile_key=?'
+      ).bind(data.key).first();
+      if(old)return text('Artist profile already published; reload before editing',409,origin);
+      try{
+        await env.DB.prepare(
+          'INSERT INTO artist_profiles(profile_key,payload,revision,updated_at) VALUES(?,?,1,?)'
+        ).bind(data.key,payload,now).run();
+      }catch(error){
+        return text('Artist profile already published or not stored',409,origin);
+      }
+      return json({format:'ricos-artist-profile-receipt',version:1,
+        key:data.key,revision:1,published:true},201,origin);
+    }
+    if(data.expectedRevision===0)return text('Profile not published; use PUBLISH',409,origin);
+    const changed=await env.DB.prepare(
+      'UPDATE artist_profiles SET payload=?,revision=revision+1,updated_at=? '+
+      'WHERE profile_key=? AND revision=?'
+    ).bind(payload,now,data.key,data.expectedRevision).run();
+    if(changed.meta?.changes!==1)
+      return text('Artist profile changed elsewhere; keep your draft and reload before publishing',409,origin);
+    return json({format:'ricos-artist-profile-receipt',version:1,
+      key:data.key,revision:data.expectedRevision+1,updated:true},200,origin);
+  }catch(error){
+    console.error('Artist profile storage failed',error);
+    return text('Artist profile database unavailable',503,origin);
+  }
+}
+
 export default {
  async fetch(request,env){
   const origin=request.headers.get('Origin')||'';
@@ -473,6 +597,7 @@ export default {
   if(request.method==='POST' && origin!==ORIGIN)return text('Origin not allowed',403,origin);
   if(url.pathname==='/catalog-order' && (request.method==='GET'||request.method==='PUT'))
     return communityCatalogOrder(request,env,origin);
+  if(url.pathname==='/artist-profiles')return artistProfiles(request,env,url,origin);
   if(url.pathname==='/no-hvsc')return noHvscArchive(request,env,url,origin);
   // Independent non-HVSC binary collection endpoints.
   if(url.pathname==='/collections'||url.pathname.startsWith('/collections/')||
@@ -487,6 +612,7 @@ export default {
       sidUploadsEnabled:!!(sidUploadProvider(env)&&env.DB&&env.BETA_EDIT_KEY),
       playlistReorder:true,sidCollectionReorder:true,
       playlistTrackAdditions:true,catalogOrder:true,noHvscArchive:true,
+      artistProfiles:!!(env.DB&&env.BETA_EDIT_KEY),
       sidUploadProvider:sidUploadProvider(env)||null,
       sidUploadLimit:sidUploadProvider(env)==='github'?15:40,
       configured:!!env.BETA_EDIT_KEY},200,origin);
