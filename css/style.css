@@ -2949,3 +2949,11 @@ body.rico-choose-open #sidControls {z-index:700 !important;}
 }
 /* All browser panes already have a 10px inset on left/right/bottom.
    Keep that inset symmetrical without widening the scrollbar or resize grip. */
+
+
+/* TEST232 — remove the invisible reserved scrollbar gutter from Choose.
+   TEST227 gave every .dialog .content a stable gutter. Choose now uses
+   overflow:hidden, but stable still reserves pixels on the right side. */
+#chooseSidDialog > .content {
+  scrollbar-gutter:auto !important;
+}
