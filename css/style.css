@@ -2930,3 +2930,22 @@ left: 1px;
 /* The menu bar stays usable above Choose and its backdrop only while Choose
    is displayed. Other dialogs keep their normal layering. */
 body.rico-choose-open #sidControls {z-index:700 !important;}
+
+
+/* TEST231 — evenly spaced 1px frame on all four sides of Choose A SID.
+   TEST230 left the absolute content 4px short on right/bottom, which
+   compounded the existing 10px inner gutters into visibly thick edges. */
+#chooseSidDialog {
+  border-width:1px !important;
+  border-style:solid !important;
+  border-color:var(--rico-theme-border,#777) !important;
+  padding:0 !important;
+}
+#chooseSidDialog > .content {
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  overflow:hidden !important;
+}
+/* All browser panes already have a 10px inset on left/right/bottom.
+   Keep that inset symmetrical without widening the scrollbar or resize grip. */
