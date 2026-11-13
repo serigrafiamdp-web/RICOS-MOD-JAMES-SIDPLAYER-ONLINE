@@ -397,8 +397,9 @@
     buildCategory(hub,'LINKS','links',key,refresh);
     buildCategory(hub,'CSDb','csdb',key,refresh);
     buildCategory(hub,'ARTWORK','artwork',key,refresh);
-    buildPublish(hub,key,artistLabel(entry));
     buildStil(hub,path,key,token,refresh);
+    // Final action at the bottom, after all artist information and STIL.
+    buildPublish(hub,key,artistLabel(entry));
     content.replaceChildren(hub);
     content.scrollTop=scroll;
     fetchProfile(key);
