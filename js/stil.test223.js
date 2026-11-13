@@ -19,8 +19,10 @@
     if(!ref||ref.sidId||typeof ref.pack!=='string'||typeof ref.file!=='string')return null;
     var match=ref.pack.match(/^library\/packs\/(musicians|demos)\/([^/]+)\/(.+)\.zip$/i);
     if(!match||ref.file.includes('..')||ref.file.startsWith('/'))return null;
-    var category=match[1].toUpperCase();
-    return '/'+category+'/'+match[2]+'/'+match[3]+'/'+ref.file;
+    // Musician packs retain the canonical HVSC folder. Demo shelves are
+    // aggregates, so their filenames cannot safely be used as STIL paths.
+    if(match[1].toLowerCase()!=='musicians')return null;
+    return '/MUSICIANS/'+match[2]+'/'+match[3]+'/'+ref.file;
   }
   function artistKey(entry,path){
     if(path){
@@ -218,7 +220,7 @@
     var scroll=content.scrollTop;
     var hub=element('div','rico-show-hub');
     buildStil(hub,path,token);
-    function refresh(){update();content.scrollTop=scroll;}
+    function refresh(){var currentScroll=content.scrollTop;update();content.scrollTop=currentScroll;}
     buildCategory(hub,'LINKS','links',key,refresh);
     buildCategory(hub,'CSDb','csdb',key,refresh);
     buildCategory(hub,'ARTWORK','artwork',key,refresh);
