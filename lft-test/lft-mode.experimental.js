@@ -28,6 +28,9 @@
   // unaltered reSIDfp mixed signal; the traces estimate raw SID oscillators
   // from the *real emulated chip registers*, not from the mono audio mix.
   var voiceFrames=[quiet,quiet,quiet];
+  // TEST236: the scope mirrors LFT's existing voice mute checkboxes.
+  // Visual-only mask; PCM and reSIDfp oscillator/register state stay unchanged.
+  var scopeVoiceMask=7;
   // TEST197: all SID PCM remains the original reSIDfp output.
   // Loco-specific loudness is applied only by a separate Web Audio GainNode,
   // not by editing frames or by modifying the SID's master volume/filter.
@@ -309,11 +312,13 @@
     sid.readFloatSample=function(buffer,index){
       if(!active)return originalSid.readFloatSample.apply(sid,arguments);
       var channel=-101-buffer;
-      return (channel>=0&&channel<3&&index>=0&&index<FRAME)
+      return (channel>=0&&channel<3&&index>=0&&index<FRAME&&
+        (scopeVoiceMask&(1<<channel)))
         ?(voiceFrames[channel][index]||0):0;
     };
     sid.enableVoices=function(mask){
       if(!active)return originalSid.enableVoices.apply(sid,arguments);
+      scopeVoiceMask=mask&7;
       if(engine&&typeof engine.mute==='function'){
         for(var i=0;i<3;i++)engine.mute(0,i,!(mask&(1<<i)));
       }
