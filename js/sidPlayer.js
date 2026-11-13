@@ -1756,11 +1756,11 @@ SidPlayer.prototype = {
     if(show) {
       $('#sidInfo').show();
       this.sidInfoVisible = true;
-      $('#showSIDInfoLink').html('Hide');
+      $('#showSIDInfoLink').html('STIL');
     } else {
       $('#sidInfo').hide();  
       this.sidInfoVisible = false;
-      $('#showSIDInfoLink').html('Show');
+      $('#showSIDInfoLink').html('STIL');
     }
   },
 
@@ -1778,10 +1778,10 @@ SidPlayer.prototype = {
       html += ', ';
       html += '<span class="songInfoLabel">SID Info:</span>&nbsp;<span class="songInfoValue"><span style="color: white; text-decoration: underline; cursor: pointer" id="showSIDInfoLink">';
       if(this.sidInfoVisible) {
-        html += 'Hide';
+        html += 'STIL';
 
       } else {
-        html += 'Show';
+        html += 'STIL';
       }
 
       html += '</span></span>';
