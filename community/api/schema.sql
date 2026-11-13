@@ -44,3 +44,13 @@ CREATE TABLE IF NOT EXISTS sid_provenance (
   hvsc_status TEXT NOT NULL DEFAULT 'unverified',
   first_seen INTEGER NOT NULL
 );
+
+
+-- TEST228: SpotySid community artist profiles, including optional local STIL
+-- presentation overrides. Does not change the official HVSC STIL database.
+CREATE TABLE IF NOT EXISTS artist_profiles (
+  profile_key TEXT PRIMARY KEY,
+  payload TEXT NOT NULL,
+  revision INTEGER NOT NULL DEFAULT 1,
+  updated_at INTEGER NOT NULL
+);
