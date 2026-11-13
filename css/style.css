@@ -2959,14 +2959,14 @@ body.rico-choose-open #sidControls {z-index:700 !important;}
 }
 
 
-/* TEST233 — measured screenshot alignment: the inner panes end 5px too far
-   from the right frame (16px vs 11px left). Equalize the visible inset
-   without moving the frame, scrollbar, or its resize handles. */
+/* TEST234 — exact screenshot correction: left inset = 11px,
+   right inset was 5px in TEST233. Match the three visible margins:
+   left, right and bottom. No change to the outer 1px border. */
 #chooseSidDialog > .content > #chooseSidInfo,
 #chooseSidDialog > .content > #ricoCommunityPanel,
 #chooseSidDialog > .content > #sidListHolder,
 #chooseSidDialog > .content > #ricoHvscPanel,
 #chooseSidDialog > .content > #ricoLibraryPanel,
 #chooseSidDialog > .content > #ricoOurCollectionPanel {
-  right:5px !important;
+  right:11px !important;
 }
