@@ -2847,3 +2847,52 @@ left: 1px;
   box-sizing:border-box;
   scrollbar-gutter:stable;
 }
+
+
+/* TEST228 — Publisher and STIL editor; stays inside the original left sidebar. */
+#sidInfoContent .rico-show-publish-section {
+  display:flex;flex-direction:column;align-items:flex-start;gap:6px;
+  padding:0 0 10px;margin:0 0 9px;
+  border-bottom:1px solid var(--rico-theme-border,#777);
+}
+#sidInfoContent .rico-show-publish-button,
+#sidInfoContent .rico-show-remove {
+  box-sizing:border-box;
+  color:var(--rico-theme-fg,#eee) !important;
+  background:var(--rico-theme-panel,#222) !important;
+  border:1px solid var(--rico-theme-border,#777) !important;
+  font:10px Tahoma,Arial,Verdana,sans-serif !important;
+  cursor:pointer;
+}
+#sidInfoContent .rico-show-publish-button {padding:4px 8px;min-height:23px;}
+#sidInfoContent .rico-show-publish-button:disabled {opacity:.55;cursor:default;}
+#sidInfoContent .rico-show-publish-status,
+#sidInfoContent .rico-show-stil-label {
+  font:9px/1.4 Tahoma,Arial,Verdana,sans-serif !important;
+  overflow-wrap:anywhere;
+  opacity:.8;
+}
+#sidInfoContent .rico-show-stil-label[hidden] {display:none !important;}
+#sidInfoContent .rico-show-textarea {
+  display:block;
+  min-height:105px;
+  resize:vertical;
+  max-height:50vh;
+  line-height:1.4 !important;
+  scrollbar-color:var(--rico-theme-fg,#eee) var(--rico-theme-bg,#111);
+}
+#sidInfoContent .rico-show-entry-row {
+  display:flex;align-items:flex-start;gap:5px;width:100%;min-width:0;
+}
+#sidInfoContent .rico-show-entry-row > .rico-show-link,
+#sidInfoContent .rico-show-entry-row > .rico-show-art {flex:1;min-width:0;}
+#sidInfoContent .rico-show-remove {
+  flex:0 0 18px;
+  width:18px;height:20px;
+  padding:0 !important;line-height:18px;
+  text-align:center;
+}
+#sidInfoContent .rico-show-remove:hover,
+#sidInfoContent .rico-show-publish-button:hover:not(:disabled) {
+  background:var(--rico-theme-hover,#333) !important;
+}
