@@ -4,7 +4,7 @@
   'use strict';
   var player=window.sidPlayer;
   if(!player)return;
-  var stilCache=new Map(),serial=0,activeStilLayout=null;
+  var stilCache=new Map(),serial=0;
   var DRAFT_PREFIX='spotysid:artist-drafts:v1:';
 
   function element(tag,className,text){
@@ -93,45 +93,8 @@
       if(entries[parent])parts.push('ARTIST NOTES\n'+entries[parent]);
       var full=parts.join('\n\n').trim();
       if(!full){body.textContent='NO STIL ENTRY';return;}
-      // TEST226: Show everything that fits below the links in the actual
-      // sidebar viewport. Do not truncate at an arbitrary character count.
+      // TEST227: full STIL text; the existing sidebar scrollbar handles overflow.
       body.textContent=full;
-      var toggle=element('button','rico-show-readmore','READ MORE +');
-      toggle.type='button';
-      toggle.hidden=true;
-      toggle.setAttribute('aria-expanded','false');
-      section.appendChild(toggle);
-      var expanded=false;
-      function fitStil(){
-        if(token!==serial||!player.sidInfoVisible)return;
-        body.style.maxHeight='';
-        body.style.overflow='';
-        if(expanded){
-          toggle.hidden=false;
-          return;
-        }
-        toggle.hidden=true;
-        var panel=document.getElementById('sidInfoContent');
-        if(!panel)return;
-        var height=body.scrollHeight;
-        var available=panel.getBoundingClientRect().bottom-
-          body.getBoundingClientRect().top-10;
-        if(height<=available+1)return;
-        toggle.hidden=false;
-        var buttonHeight=toggle.getBoundingClientRect().height||22;
-        var lineHeight=parseFloat(window.getComputedStyle(body).lineHeight)||15;
-        var lines=Math.max(0,Math.floor((available-buttonHeight-10)/lineHeight));
-        body.style.maxHeight=(lines*lineHeight)+'px';
-        body.style.overflow='hidden';
-      }
-      toggle.addEventListener('click',function(){
-        expanded=!expanded;
-        toggle.textContent=expanded?'READ LESS −':'READ MORE +';
-        toggle.setAttribute('aria-expanded',String(expanded));
-        fitStil();
-      });
-      activeStilLayout=fitStil;
-      fitStil();
     }).catch(function(err){
       if(token!==serial)return;
       body.textContent='STIL UNAVAILABLE';
@@ -244,7 +207,6 @@
     var key=artistKey(entry,path);
     var scroll=content.scrollTop;
     var hub=element('div','rico-show-hub');
-    activeStilLayout=null;
     function refresh(){var currentScroll=content.scrollTop;update();content.scrollTop=currentScroll;}
     buildCategory(hub,'LINKS','links',key,refresh);
     buildCategory(hub,'CSDb','csdb',key,refresh);
@@ -255,9 +217,6 @@
     content.replaceChildren(hub);
     content.scrollTop=scroll;
   }
-  window.addEventListener('resize',function(){
-    if(player.sidInfoVisible&&activeStilLayout)activeStilLayout();
-  });
   var originalDisplay=player.displaySongInfo;
   player.displaySongInfo=function(){
     var value=originalDisplay.apply(this,arguments);
